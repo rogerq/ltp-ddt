@@ -1,0 +1,12 @@
+arm
+hppa
+i386
+ia64
+powerpc64
+powerpc
+s390x
+s390
+sh
+sparc64
+sparc
+x86_64

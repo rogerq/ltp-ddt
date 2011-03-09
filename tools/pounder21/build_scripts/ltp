@@ -1,0 +1,78 @@
+#!/bin/bash
+
+# Builds ltp
+
+# Copyright (C) 2003-2006 IBM
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+
+
+source "$POUNDER_HOME/libpounder.sh"
+
+# Go up two levels to the top ltp dir.
+cd "$POUNDER_HOME/../../"
+
+# Apply a patch if this is Debian/Ubuntu.
+if [ -f /etc/debian_version ]; then
+	# Have we already patched this?
+	if [ ! -e "testcases/network/sctp/func_tests/test_1_to_1_connect.c.pounder" ]; then
+		cp -pRdu testcases/network/sctp/func_tests/test_1_to_1_connect.c testcases/network/sctp/func_tests/test_1_to_1_connect.c.pounder
+		echo "Debian/Ubuntu detected; applying build fixes..."
+		patch -p1 < $POUNDER_SRCDIR/ltp-debian-build.patch
+		RESULT=$?
+		if [ $RESULT -ne 0 ]; then
+			echo Patching failed.
+			exit 1
+		fi
+	fi
+else
+	# We need to _unpatch_ this.
+	if [ -e "testcases/network/sctp/func_tests/test_1_to_1_connect.c.pounder" ]; then
+		rm -rf testcases/network/sctp/func_tests/test_1_to_1_connect.c.pounder
+		echo "Previous Debian/Ubuntu detected; removing build fixes..."
+		patch -p1 -R < $POUNDER_SRCDIR/ltp-debian-build.patch
+		RESULT=$?
+		if [ $RESULT -ne 0 ]; then
+			echo Patching failed.
+			exit 1
+		fi
+	fi
+
+fi
+
+# NAK the setregid EPERM -> EINVAL patch, because it's
+# broken on 2.6!  May be fixed some time after 20050804 release.
+if [ ! -e "testcases/kernel/syscalls/setregid/setregid02.c.pounder" ]; then
+	echo "Patching some holes in ltp..."
+	cp -pRdu testcases/kernel/syscalls/setregid/setregid02.c testcases/kernel/syscalls/setregid/setregid02.c.pounder
+	patch -p1 < $POUNDER_SRCDIR/ltp-setregid-fix.patch
+	RESULT=$?
+	if [ $RESULT -ne 0 ]; then
+		echo Patching failed.
+		exit 1
+	fi
+fi
+
+# Build
+make -j$NR_CPUS
+MK_RET=$?
+
+if [ $MK_RET -eq 0 ]; then
+	make install
+	MK_RET=$?
+fi
+
+exit $MK_RET

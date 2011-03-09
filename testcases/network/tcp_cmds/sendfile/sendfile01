@@ -1,0 +1,137 @@
+#!/bin/sh
+#
+#   Copyright (c) International Business Machines  Corp., 2000
+#
+#   This program is free software;  you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY;  without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
+#   the GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program;  if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+#
+#
+#  FILE   : sendfile
+#
+#  PURPOSE: Copy files from server to client using the sendfile()
+#           function.
+#           
+#
+#  SETUP: The home directory of root on the machine exported as "RHOST"
+#         MUST have a ".rhosts" file with the hostname of the client 
+#         machine, where the test is executed. 
+#
+#  HISTORY:
+#    06/09/2003 Manoj Iyer manjo@mail.utexas.edu
+#    - Modified to use LTP APIs, and added check to if commands used in test
+#    exists.
+#    03/01 Robbie Williamson (robbiew@us.ibm.com)
+#      -Ported
+#
+#
+#***********************************************************************
+
+#-----------------------------------------------------------------------
+#
+# FUNCTION:  exists
+#
+# DESCRIPTION: Check if required commands exits.
+#
+#-----------------------------------------------------------------------
+
+do_setup()
+{
+    TC=sendfile01
+    RHOST=${RHOST:-`hostname`}
+    TCdat=${TCdat:-$LTPROOT/testcases/bin/datafiles}
+    TCtmp=${TCtmp:-$LTPROOT/testcases/bin/$TC${EXEC_SUFFIX}$$}
+    CLIENT="testsf_c${EXEC_SUFFIX}"
+    SERVER="testsf_s${EXEC_SUFFIX}"
+    LTPROOT=${LTPROOT:-../../../..}
+    FILES=${FILES:-"ascii.sm ascii.med ascii.lg ascii.jmb"}
+
+    tst_setup
+
+    exists awk diff gethost grep rsh stat
+
+    if ! IPADDR=$(gethost ${EXEC_SUFFIX:+6} $RHOST | awk 'BEGIN { ec=1 } /addresses:/ {print $2; ec=0 } END { exit ec }'); then
+        # XXX (garrcoop): || exit 1 is there to prevent the test from hanging in the event of an install error.
+        end_testcase "Failed to determine the appropriate IP address for the machine." || exit 1
+    fi
+
+}
+
+
+#=============================================================================
+# FUNCTION NAME:        do_test
+#
+# FUNCTION DESCRIPTION: Perform the test
+#
+# PARAMETERS:       None.
+#
+# RETURNS:          None.
+#=============================================================================
+do_test()
+{
+    tst_resm TINFO "Doing $0."
+  
+    mkdir -p $TCtmp
+    PORT=$$ 
+    if ! rsh -l root $IPADDR "$LTPROOT/testcases/bin/SF_Server $IPADDR $PORT $LTPROOT/testcases/bin $SERVER"; then
+        end_testcase "rsh failed to $IPADDR as root failed"
+    fi
+    sleep 10
+    PID=$(rsh -l root $IPADDR "ps -ef" | awk "\$0 !~ /awk/ && /$SERVER/ && /$PORT/ {print \$2}")
+    [ -n "$PID" ] || end_testcase "Could not start server"
+
+    for clnt_fname in $FILES; do
+        serv_fname=$TCdat/$clnt_fname
+        SIZE=`stat -c '%s' $serv_fname`
+        tst_resm TINFO "Starting $SERVER $IPADDR Client_filename Server_filename Size "
+  
+        $CLIENT $IPADDR $PORT "$TCtmp/$clnt_fname" $serv_fname $SIZE 
+        RetVal=$?
+  
+        [ $RetVal -eq 0 ] || end_testcase "$CLIENT returned error $RetVal"
+
+        diff $serv_fname $TCtmp/$clnt_fname
+        DiffVal=$?
+        [ $DiffVal -gt 1 ] && end_testcase "ERROR: Cannot compare files"
+        [ $DiffVal -eq 1 ] && end_testcase "The file copied differs from the original"
+    done
+
+}
+
+#=============================================================================
+# FUNCTION NAME:        do_cleanup
+#
+# FUNCTION DESCRIPTION: Clean up
+#
+# PARAMETERS:       None.
+#
+# RETURNS:          None.
+#=============================================================================
+
+do_cleanup()
+{
+      PID=$(rsh -n -l root $RHOST "ps -eopid,cmd" | awk "\$0 !~ /awk/ && /$SERVER/ && /$PORT/ {print \$1}")
+      [ -n "$PID" ] && rsh -n -l root $RHOST kill -9 $PID
+      tst_cleanup
+}
+
+#=============================================================================
+# MAIN PROCEDURE
+#=============================================================================
+. net_cmdlib.sh
+
+read_opts $*
+do_setup
+do_test
+end_testcase

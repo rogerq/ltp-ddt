@@ -1,0 +1,76 @@
+################################################################################
+##                                                                            ##
+## Copyright (c) International Business Machines  Corp., 2007                 ##
+##                                                                            ##
+## This program is free software;  you can redistribute it and#or modify      ##
+## it under the terms of the GNU General Public License as published by       ##
+## the Free Software Foundation; either version 2 of the License, or          ##
+## (at your option) any later version.                                        ##
+##                                                                            ##
+## This program is distributed in the hope that it will be useful, but        ##
+## WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY ##
+## or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License   ##
+## for more details.                                                          ##
+##                                                                            ##
+## You should have received a copy of the GNU General Public License          ##
+## along with this program;  if not, write to the Free Software               ##
+## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    ##
+##                                                                            ##
+################################################################################
+
+CONTAINER TESTS AUTOMATION SUITE
+----------------------------
+The tests requires the Kernel to  be compiled with the following config's
+
+CONFIG_NAMESPACES=y
+CONFIG_UTS_NS=y
+CONFIG_IPC_NS=y
+CONFIG_USER_NS=y
+CONFIG_PID_NS=y
+CONFIG_NET_NS=y
+CONFIG_VETH=y
+CONFIG_MACVLAN=y(optional)
+
+The container test automation suite helps run the container functionality
+(e.g: utsname etc..) tests and report results. Please refer the following
+each functionality README file for detail:
+
+sysvipc/*
+	Contains all the testcases related to IPC NS tests.
+posixmq/*
+	Contains all the testcases related to POSIX MQ NS tests.  These
+	are strictly speaking a part of the ipc namespaces, but can be
+	enabled in the kernel without SYSV IPC support.
+utsname/*
+	Contains all the testcases related to utsname tests.
+libclone/*
+	Contains the library API for clone() .
+netns/*
+        Contains the testcases related to the network NS tests. This tests uses
+the routes method to define the network namespaces.
+	The tests uses the library libclone/libnetns.a, netns/parentns.sh and
+netns/childns.sh scripts to define network namespace. 
+
+To run your tests you can execute the runnetnstest.sh .
+
+To run the tests individually :
+
+For Ex: To access a container created
+
+1) You can comment the line in the childns.sh 
+  'cleanup $sshpid $vnet1 ' 
+2)  run the script to create your first namespace. 
+   ./crtchild 
+3) Now you can login into the containers using
+   ssh -p 7890 root@192.168.0.182
+
+Also the same scripts parentns.sh and childns.sh can be used to 
+create a container and write your testcases to test the namespace.
+
+Note:
+	This tests would use the following IPaddresses 
+running sshd on PORT @ 7890 and @ 9876
+	192.168.0.181
+	192.168.0.182
+	192.168.0.183
+	192.168.0.184
