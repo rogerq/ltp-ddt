@@ -20,26 +20,21 @@
 # Garrett Cooper, July 2009
 #
 
-top_srcdir		?= ..
+top_srcdir		?= ../..
 
 include $(top_srcdir)/include/mk/env_pre.mk
 
-INSTALL_DIR		:= runtest
+INSTALL_DIR		:= runtest/ddt
 
-FILTER_OUT_DIRS         := CVS STAX
+FILTER_OUT_DIRS         := 
 
-# We don't want to copy over directories like CVS, STAX, etc, or the Makefile
-# itself.
-UNWANTED_FILES		:= Makefile CVS STAX
+# We don't want to copy over the Makefile
+UNWANTED_FILES		:= Makefile
 
 INSTALL_MODE		:= 00644
 
-ifneq ($(WITH_POWER_MANAGEMENT_TESTSUITE),yes)
-UNWANTED_FILES		+= power_management_tests
-endif
-
-#INSTALL_TARGETS		:= $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
+INSTALL_TARGETS		:= $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
 
 MAKE_TARGETS		:=
 
-include $(top_srcdir)/include/mk/generic_trunk_target.mk
+include $(top_srcdir)/include/mk/generic_leaf_target.mk

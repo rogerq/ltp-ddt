@@ -1,0 +1,6 @@
+armv5
+omapl138
+am180x-evm
+net/eth/davinci_emac
+spi_master/spi_davinci
+

@@ -1,5 +1,5 @@
 #
-#    runtest Makefile.
+#    testcases Makefile.
 #
 #    Copyright (C) 2009, Cisco Systems Inc.
 #
@@ -20,26 +20,11 @@
 # Garrett Cooper, July 2009
 #
 
-top_srcdir		?= ..
+top_srcdir		?= ../..
 
 include $(top_srcdir)/include/mk/env_pre.mk
 
-INSTALL_DIR		:= runtest
-
-FILTER_OUT_DIRS         := CVS STAX
-
-# We don't want to copy over directories like CVS, STAX, etc, or the Makefile
-# itself.
-UNWANTED_FILES		:= Makefile CVS STAX
-
-INSTALL_MODE		:= 00644
-
-ifneq ($(WITH_POWER_MANAGEMENT_TESTSUITE),yes)
-UNWANTED_FILES		+= power_management_tests
-endif
-
-#INSTALL_TARGETS		:= $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
-
-MAKE_TARGETS		:=
+# Define directories to exclude from build/installation
+#FILTER_OUT_DIRS		:= kdump
 
 include $(top_srcdir)/include/mk/generic_trunk_target.mk

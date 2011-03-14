@@ -78,7 +78,7 @@ setup()
     }
     export LTPROOT=${PWD}
     export TMPBASE="/tmp"
-    export PATH="${PATH}:${LTPROOT}/testcases/bin"
+    export PATH="${PATH}:${LTPROOT}/testcases/bin:${LTPROOT}/testcases/bin/ddt:${LTPROOT}/testcases/bin/ddt/helpers"
 
     [ -d "$LTPROOT/testcases/bin" ] ||
     {
@@ -108,7 +108,7 @@ usage()
     usage: ${0##*/} [ -a EMAIL_TO ] [ -c NUM_PROCS ] [ -C FAILCMDFILE ] [ -d TMPDIR ]
     [ -D NUM_PROCS,NUM_FILES,NUM_BYTES,CLEAN_FLAG ] -e [ -f CMDFILES(,...) ] [ -g HTMLFILE]
     [ -i NUM_PROCS ] [ -l LOGFILE ] [ -m NUM_PROCS,CHUNKS,BYTES,HANGUP_FLAG ] 
-    -N -n [ -o OUTPUTFILE ] -p -q [ -r LTPROOT ] [ -s PATTERN ] [ -t DURATION ]
+    -N -n [ -o OUTPUTFILE ] -p [-P platform] -q [ -r LTPROOT ] [ -s PATTERN ] [ -t DURATION ]
     -v [ -w CMDFILEADDR ] [ -x INSTANCES ] [ -b DEVICE ] [-B DEVICE_FS_TYPE]
 	[ -F LOOPS,PERCENTAGE ]
                 
@@ -148,6 +148,7 @@ usage()
     -n              Run LTP with network traffic in background.
     -o OUTPUTFILE   Redirect test output to a file.
     -p              Human readable format logfiles. 
+    -P PLATFORM     Platform to run tests on. Used to filter device driver tests (ddt)
     -q              Print less verbose output to screen.
     -r LTPROOT      Fully qualified path where testsuite is installed.
     -s PATTERN      Only run test cases which match PATTERN.
@@ -206,12 +207,14 @@ main()
     local TAG_RESTRICT_STRING=""
     local PAN_COMMAND=""
     local DEFAULT_FILE_NAME_GENERATION_TIME=`date +"%Y_%b_%d-%Hh_%Mm_%Ss"`
+    local PLATFORM=""
+    local PLATFORMDIR=''
 
     local scenfile=
 
     version_date=$(cat "$LTPROOT/Version")
 
-    while getopts a:c:C:d:D:f:F:ehi:K:g:l:m:M:Nno:pqr:s:S:t:T:w:x:b:B: arg
+    while getopts a:c:C:d:D:f:F:ehi:K:g:l:m:M:Nno:pP:qr:s:S:t:T:w:x:b:B: arg
     do  case $arg in
         a)  EMAIL_TO=$OPTARG
             ALT_EMAIL_OUT=1;;
@@ -389,7 +392,9 @@ main()
             esac ;;
     
         p)  PRETTY_PRT=" -p ";;
-   
+  
+	P)  PLATFORM="$OPTARG";;
+ 
         q)  QUIET_MODE=" -q ";;
     
         r)  LTPROOT=$OPTARG;;
@@ -556,6 +561,32 @@ main()
             echo "WARNING: security of $RHOST may be compromised"
         }
     }
+
+    # If platform was specified, create platform capability files in TMP dir
+    if [ -n "$PLATFORM" -a -f "${LTPROOT}/platforms/${PLATFORM}" ]; then
+        echo "INFO: Filtering testscenarios based on $PLATFORM capabilities"
+        PLATFORMDIR=${TMP}/platform
+	export PLATFORMDIR
+        local i=0; local DRIVERS=""
+        for file in $( cat ${LTPROOT}/platforms/${PLATFORM} ); do
+            mkdir -p ${PLATFORMDIR}/${file}
+            case $i in
+		0) ARCH="$file"
+                   export ARCH ;;
+                1) SOC="$file"
+                   export SOC ;;
+                2) MACHINE="$file"
+                   export MACHINE ;;
+                3) DRIVERS="$file" ;;
+                *) DRIVERS="${DRIVERS},${file}" ;;
+            esac
+	    i=`expr $i + 1`
+        done
+        export DRIVERS
+    elif [ -n "$PLATFORM" -a ! -f "${LTPROOT}/platforms/${PLATFORM}" ]; then
+        echo "FATAL: Directory ${LTPROOT}/platforms/${PLATFORM}. Check -P argument"
+        exit 1
+    fi
     
     # If user does not provide a command file select a default set of testcases
     # to execute.
@@ -590,6 +621,13 @@ main()
                     # files don't exist.
                     [ -f "$scenfile" ] || continue
 
+		    # Filter testscenarios based on platform capabilities
+                    if ( [ -n "$PLATFORM" -a -f "${LTPROOT}/platforms/${PLATFORM}" ] && \
+		    ! check_feature_support "$scenfile" ); then
+                        echo "INFO: Test scenario $scenfile not supported for $PLATFORM"
+		        continue 
+		    fi
+
                     cat $scenfile >> "$TMP/alltests" || {
                         echo "FATAL: unable to append to command file"
                         rm -Rf "$TMP"
@@ -611,6 +649,17 @@ main()
         for scenfile in `echo "$CMDFILES" | tr ',' ' '`
         do
             [ -f "$scenfile" ] || scenfile="$LTPROOT/runtest/$scenfile"
+
+            # Skip over non-existent scenario files
+            [ -f "$scenfile" ] || continue
+
+            # Filter testscenarios based on platform capabilities
+            if ( [ -n "$PLATFORM" -a -f "${LTPROOT}/platforms/${PLATFORM}" ] && \
+            ! check_feature_support "$scenfile" ); then
+                echo "INFO: Test scenario $scenfile not supported for $PLATFORM"
+		continue 
+	    fi
+
             cat "$scenfile" >> ${TMP}/alltests || \
             {
                 echo "FATAL: unable to create command file"
@@ -627,11 +676,17 @@ main()
             echo "FATAL: error while getting the command file with wget (address $CMDFILEADDR)"
             exit 1
         fi
-        cat "${TMP}/wgetcmdfile" >> ${TMP}/alltests || \
-        {
-            echo "FATAL: unable to create command file"
-            exit 1
-        }
+        # Filter testscenarios based on platform capabilities
+        if ( [ -n "$PLATFORM" -a -f "${LTPROOT}/platforms/${PLATFORM}" ] && \
+        ! check_feature_support "${TMP}/wgetcmdfile" ); then
+	    echo "INFO: Test scenario not supported for $PLATFORM"	
+	else
+            cat "${TMP}/wgetcmdfile" >> ${TMP}/alltests || \
+            {
+                echo "FATAL: unable to create command file"
+                exit 1
+            }  
+	fi
     }
 
     # The fsx-linux tests use the SCRATCHDEV environment variable as a location
@@ -661,7 +716,7 @@ main()
             sed -i "/$file/d" ${TMP}/alltests
         done
     fi
-    
+
     # check for required users and groups
     ${LTPROOT}/IDcheck.sh &>/dev/null || \
     {
@@ -964,8 +1019,18 @@ cleanup()
     rm -rf ${TMP}
 }
 
+check_feature_support()
+{
+    cd ${PLATFORMDIR}
+    x=$(awk '/^# +@requires +/' $1)
+    if [ -n "$x" ]; then
+	echo "$x" | awk '{gsub(/^# +@requires/,""); gsub(/\(/,"\\( ");gsub(/\)/," \\)");gsub(/ +\w+/," -e&");gsub(/\|\|/,"-o");gsub(/\&\&/,"-a");print}' | awk '{print "test", $0}' | sh
+    else
+        return 0
+    fi
+}
+set -x
 trap "cleanup" 0
 setup
 main "$@"
-
 #vim: syntax=sh
