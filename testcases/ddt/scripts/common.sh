@@ -32,3 +32,18 @@ format_disk() {
 	test_print_trc "Formatting $DEVICE"
 	
 }
+
+# Extract one return value from name=value list file
+get_return_value() {
+        tmp_ifs=$IFS
+        IFS=$'\n'
+	file=$1
+	name=$2
+        for line in $(cat "$file") ; do
+		TMPNAME=`echo $line | cut -d"=" -f1 | sed 's/^ *//g' | sed 's/ *$//g'`
+		[ "$TMPNAME" == "$name" ] && TMPVAL=`echo $line | cut -d"=" -f2 | \
+                sed 's/^ *//g' | sed 's/ *$//g'` && echo $TMPVAL && IFS=$tmp_ifs && exit 0
+	done
+        IFS=$tmp_ifs
+	exit 1
+}

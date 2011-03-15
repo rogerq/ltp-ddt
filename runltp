@@ -78,7 +78,7 @@ setup()
     }
     export LTPROOT=${PWD}
     export TMPBASE="/tmp"
-    export PATH="${PATH}:${LTPROOT}/testcases/bin:${LTPROOT}/testcases/bin/ddt:${LTPROOT}/testcases/bin/ddt/helpers"
+    export PATH="${PATH}:${LTPROOT}/testcases/bin:${LTPROOT}/testcases/bin/ddt"
 
     [ -d "$LTPROOT/testcases/bin" ] ||
     {
@@ -1029,7 +1029,6 @@ check_feature_support()
         return 0
     fi
 }
-set -x
 trap "cleanup" 0
 setup
 main "$@"
