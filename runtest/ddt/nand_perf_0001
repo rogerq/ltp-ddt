@@ -1,7 +1,6 @@
 # @name Nand Write/Read Performance test
 # @desc Erase Nand MTD partition, mount it as jffs2 and writes to it
-#	By default, it is run on partition 4; but you can specify the partition
-#	in mtd_perf_test.sh for your platform.
+#	By default, the partition number is specified in get_mtd_partition_number.sh; 
 # @requires  nand
 
 #NAND_PERF_0001 mtd_perf_test.sh -n 3 -f jffs2 -s 10 -B "102400 256000" -d "nand"

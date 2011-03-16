@@ -32,7 +32,7 @@ DEV_TYPE=`get_device_type_map.sh $DEVICE_TYPE` || die "error while translating d
 # Default params
 case $DEV_TYPE in
 	mtd)
-		PART=`get_mtd_partition_number.sh "$DEV_NODE"` || die "error getting partition number"
+		PART=`get_mtd_partnum_from_devnode.sh "$DEV_NODE"` || die "error getting partition number"
 		SIZE=`get_mtd_size.sh "$PART"` || die "error while getting the mtd size."
 	 	#size=$MTD_SIZE
 

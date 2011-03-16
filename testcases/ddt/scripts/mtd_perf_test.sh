@@ -4,8 +4,8 @@
 #         f) Filesystem type (i.e. jffs2)
 # @history 2011-03-05: First version
 
-#source "${LTPROOT}/scripts/ddt/common.sh"
 source "common.sh"
+source "mtd_common.sh"
 
 ############################# Functions #######################################
 usage()
@@ -35,44 +35,18 @@ do case $arg in
                 ;;
 esac
 done
+
+############################ USER-DEFINED Params ##############################
+
 : ${FS_TYPE:='jffs2'}
 : ${BUFFER_SIZES:='102400 256000 512000 1048576 5242880'}
 : ${FILE_SIZE:='100'}
 : ${DEVICE_TYPE:='nand'}
+if [ -z $PARTITION ]; then
+	PARTITION=`get_mtd_partition_number.sh "$DEVICE_TYPE"` || die "error while getting mtd partition number"
+fi
 
-case $DEVICE_TYPE in
-	nand)
-		: ${PARTITION:='4'}
-		;;
-	spi)
-		: ${PARTITION:='2'}
-		;;
-	nor)
-		: ${PARTITION:='4'}
-		;;
-	*)	: ${PARTITION:='3'}
-		;;
-esac
-
-############################ USER-DEFINED Params ##############################
-# Try to avoid defining values here, instead see if possible
-# to determine the value dynamically
-case $ARCH in
-esac
-case $DRIVER in
-esac
-case $SOC in
-esac
-case $MACHINE in
-	am3517-evm) 
-		: {PARTITION:='4'}
-		;;
-#	am180x-evm) PARTITION='2';;
-esac
-
-########################### DYNAMICALLY-DEFINED Params ########################
 MNT_POINT=/mnt/partition_$DEVICE_TYPE
-# Use /sys/bus/spi/devices/spi1.0/mtd/mtd info to determine best partition to 
 
 ########################### REUSABLE TEST LOGIC ###############################
 # DO NOT HARDCODE any value. If you need to use a specific value for your setup
@@ -86,8 +60,7 @@ test_print_trc "FILE SIZE:${FILE_SIZE}"
 
 
 # CALL Filesystem Performance helper script
-#export LDTP_ROOT=$LDTP_ROOT
-do_cmd filesystem_perf_test.sh -f "$FS_TYPE" -n "/dev/mtdblock$PARTITION" -m "$MNT_POINT" -B "\"$BUFFER_SIZES\"" -s "$FILE_SIZE" -d "$DEVICE_TYPE"
+do_cmd filesystem_perf_test.sh -f "$FS_TYPE" -n "$MTD_BLK_DEV$PARTITION" -m "$MNT_POINT" -B "\"$BUFFER_SIZES\"" -s "$FILE_SIZE" -d "$DEVICE_TYPE"
 
 #if [ $? -ne 0 ]; then
 #    test_print_err "FATAL: error while running filesystem_perf_test"

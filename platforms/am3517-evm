@@ -1,0 +1,14 @@
+armv7l
+am3517
+am3517-evm
+net/eth/davinci_emac
+nand/omap2-nand
+ehci/ehci-omap
+i2c-adapter/i2c_omap
+mmc_host/mmci-omap-hs
+rtc/rtc-s35390a
+sound/controlC/soc-audio
+watchdog/omap_wdt
+power
+
+

@@ -51,16 +51,8 @@ do case $arg in
 		;;
 esac
 done
-echo "filesize: $FILE_SIZE"
-echo "dev_node: $DEV_NODE"
-echo "mnt_point: $MNT_POINT"
-echo "BUFFERsize: $BUFFER_SIZES"
-: ${FS_TYPE:='jffs2'}
-: ${DEV_NODE:='/dev/mtdblock4'}
-: ${MNT_POINT:="/mnt/mtd"}
 : ${BUFFER_SIZES:='102400 256000 512000 1048576 5242880'}
 : ${FILE_SIZE:='100'}
-: ${DEVICE_TYPE:='nand'}
 
 ############################ USER-DEFINED Params ##############################
 # Try to avoid defining values here, instead see if possible
@@ -108,11 +100,6 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 
 	test_print_trc "Erasing this partition completely"
 	do_cmd erase_partition.sh -d $DEVICE_TYPE -n $DEV_NODE
-#	do_cmd try.sh -d "hello"
-#        if [ $? -ne 0 ]; then
-#            echo "FATAL: error while erasing or formatting partition"
-#            exit 1
-#        fi
 	test_print_trc "Mounting the partition"
 	test_print_trc "mount -t $FS_TYPE $DEV_NODE $MNT_POINT"
 	do_cmd "mount -t $FS_TYPE $DEV_NODE $MNT_POINT"

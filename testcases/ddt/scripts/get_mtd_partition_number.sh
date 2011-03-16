@@ -1,23 +1,61 @@
 #!/bin/sh
 
-# Get partition number from block mtd device node
-# Input: BLK_DEV_NODE like /dev/mtdblock3
+# Get mtd partition number either by default or by command line option based on device type
+# Input: device_type;
+#	 partition number(optional)
 # Output: partition_number
 
 source "st_log.sh"
 source "common.sh"
 
-if [ $# -ne 1 ]; then
-	echo "Error: Invalid Argument Count"
-	echo "Syntax: $0 blk_dev_node"
-	exit 1
+############################### CLI Params ###################################
+if [ $# -lt 1 ]; then
+        echo "Error: Invalid Argument Count"
+        echo "Syntax: $0 <device_type> [partition_number](optional)"
+        exit 1
+fi
+DEVICE_TYPE=$1
+if [ $# -ge 2 -a -n $2 ]; then
+	PARTITION=$2
 fi
 
-BLK_DEV_NODE=$1
+############################ USER-DEFINED Params ##############################
+# Try to avoid defining values here, instead see if possible
+# to determine the value dynamically
+case $ARCH in
+esac
+case $DRIVER in
+esac
+case $SOC in
+esac
+case $MACHINE in
+        # example to redefine the params based on platform
+        am3517-evm)
 
-PART=`echo $BLK_DEV_NODE | awk '{print substr ($0, length($0))}'` || die "mtd partition number is not found"
+                case $DEVICE_TYPE in
+                        nand)
+#                                : ${PARTITION:='8'}
+                                ;;
+                esac
 
-echo $PART
+                ;;
+esac
+
+# If no ARCH/DRIVER/SOC/MACHINE specific value, take the value below
+case $DEVICE_TYPE in
+        nand)
+                : ${PARTITION:='4'}
+                ;;
+        spi)
+                : ${PARTITION:='2'}
+                ;;
+        nor)
+                : ${PARTITION:='3'}
+                ;;
+        *)
+                : ${PARTITION:='3'}
+                ;;
+esac
 
 
-
+echo $PARTITION
