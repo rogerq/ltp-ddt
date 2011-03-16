@@ -20,6 +20,7 @@ usage()
 while getopts  :f:n:d:B:s:d:h arg
 do case $arg in
         f)      FS_TYPE="$OPTARG";;
+	n)	PARTITION="$OPTARG";;
         B)      BUFFER_SIZES="$OPTARG";;
         s)      FILE_SIZE="$OPTARG";;
         d)      DEVICE_TYPE="$OPTARG";;
@@ -63,7 +64,9 @@ esac
 case $SOC in
 esac
 case $MACHINE in
-	am3517-evm) PARTITION='3';;
+	am3517-evm) 
+		: {PARTITION:='4'}
+		;;
 #	am180x-evm) PARTITION='2';;
 esac
 

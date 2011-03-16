@@ -5,9 +5,7 @@
 #	$DEV_NODE	like '/dev/mtdblock3', '/dev/mmcblk0p1', '/dev/sda1'
 #	$FS_TYPE	like 'jffs2', 'ext2', 'vfat'
 
-#source "$LDTP_ROOT/helper/common.sh"
 source "common.sh"
-#source "$LDTP_ROOT/helper/st_log.sh"
 source "st_log.sh"
 
 usage()
@@ -57,7 +55,7 @@ case $MACHINE in
 esac
 
 # translate DEVICE_TYPE to DEV_TYPE (mtd or storage_device)
-do_cmd . helper_device_type_map.sh $DEVICE_TYPE
+DEV_TYPE=`get_device_type_map.sh $DEVICE_TYPE` || die "error while translating device type"
 #if [ $? -ne 0 ]; then
 #    test_print_err "FATAL: error while mapping $DEVICE_TYPE to the type what users see"
 #    exit 1
@@ -72,7 +70,7 @@ exit 0
         do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
 fi
 if [ $DEV_TYPE == "storage_device" ]; then
-        do_cmd "$MKFS $DEVICE_NODE"
+        do_cmd "$MKFS $DEV_NODE"
 fi
 
 

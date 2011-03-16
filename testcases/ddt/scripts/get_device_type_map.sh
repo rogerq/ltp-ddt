@@ -31,11 +31,6 @@ esac
 case $SOC in
 esac
 case $MACHINE in
-        dm365-evm)
-                if [ $DEVICE_TYPE == "spi" ]; then
-                        DEV_TYPE == ""
-                fi
 esac
 
-
-export DEV_TYPE=$DEV_TYPE
+echo $DEV_TYPE

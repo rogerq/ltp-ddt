@@ -5,7 +5,6 @@
 #	DEVICE_TYPE	like 'nand', 'spi', 'mmc', 'usb'
 # Output: DEVICE_PART_SIZE which is the size of the partition
 
-#source "$LTPROOT/scripts/ddt/st_log.sh"
 source "st_log.sh"
 
 size=0
@@ -28,14 +27,13 @@ done
 : ${DEV_NODE:='/dev/mtdblock3'}
 : ${DEVICE_TYPE:='nand'}
 
-#. $LTPROOT/scripts/ddt/helper_device_type_map.sh $DEVICE_TYPE
-do_cmd . helper_device_type_map.sh $DEVICE_TYPE
+DEV_TYPE=`get_device_type_map.sh $DEVICE_TYPE` || die "error while translating device type"
 
+# Default params
 case $DEV_TYPE in
 	mtd)
-		#. $LTPROOT/scripts/ddt/helper_get_mtd_size.sh $DEV_NODE
-		#size=`$LTPROOT/scripts/ddt/helper_get_mtd_size.sh "$DEV_NODE"`
-		size=`helper_get_mtd_size.sh "$DEV_NODE"` || die "error while getting the mtd size."
+		PART=`get_mtd_partition_number.sh "$DEV_NODE"` || die "error getting partition number"
+		SIZE=`get_mtd_size.sh "$PART"` || die "error while getting the mtd size."
 	 	#size=$MTD_SIZE
 
 		# different way to get size; but could not figure out if it is symlink	
@@ -47,17 +45,17 @@ case $DEV_TYPE in
 		;;
 	storage_device)
 		# TODO: figure out a way to find out what the size is
-		size=2040109465
+		SIZE=2040109465
 		if [ $DEVICE_TYPE == "usb" ]; then
-			size=2040109465
+			SIZE=2040109465
 		fi
 		;;
 	*)
-		test_print_wrn "Device type is not found; Size for Device Partition is set to default value: $size"
+		test_print_wrn "Device type is not found; Size for Device Partition is set to default value: $SIZE"
 		exit 1
 		;;
 esac
 
-export DEVICE_PART_SIZE=$size
+echo $SIZE
 
 

@@ -4,8 +4,6 @@
 #         f) Filesystem type (i.e. jffs2)
 # @history 2011-03-05: First version
 
-#source "${LTPROOT}/scripts/ddt/st_log.sh"
-#source "${LTPROOT}/scripts/ddt/common.sh"
 source "st_log.sh"
 source "common.sh"
 
@@ -34,8 +32,6 @@ if [ $# == 0 ]; then
 	exit 1
 fi
 
-echo "number of input: $#"
-echo "inputs: $*"
 while getopts  :f:n:m:B:s:d:h arg
 do case $arg in
 	f)	FS_TYPE="$OPTARG";;
@@ -92,7 +88,7 @@ test_print_trc "FILE SIZE:${FILE_SIZE}MB"
 test_print_trc "DEVICE_TYPE:${DEVICE_TYPE}"
 
 # check if input are valid for this machine
-do_cmd . helper_get_device_part_size.sh -d $DEVICE_TYPE -n $DEV_NODE
+DEVICE_PART_SIZE=`get_device_part_size.sh -d $DEVICE_TYPE -n $DEV_NODE` || die "error while getting device partition size"
 #if [ $? -ne 0 ]; then
 #    test_print_err "FATAL: error while getting device partition size for $DEVICE_TYPE"
 #    exit 1
@@ -111,7 +107,7 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
 
 	test_print_trc "Erasing this partition completely"
-	do_cmd helper_erase_partition.sh -d $DEVICE_TYPE -n $DEV_NODE
+	do_cmd erase_partition.sh -d $DEVICE_TYPE -n $DEV_NODE
 #	do_cmd try.sh -d "hello"
 #        if [ $? -ne 0 ]; then
 #            echo "FATAL: error while erasing or formatting partition"
