@@ -24,8 +24,9 @@
 # http://www.gnu.org/software/hello/manual/autoconf/Particular-Programs.html
 
 # Application specifying variables. You should never have to change these.
-AR			:= ar
-CC			:= gcc
+CROSS_COMPILER          := arm-none-linux-gnueabi-
+AR                      := ${CROSS_COMPILER}ar
+CC                      := ${CROSS_COMPILER}gcc
 LEX			:= flex
 RANLIB			:= ranlib
 STRIP			:= strip

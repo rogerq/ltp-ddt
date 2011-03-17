@@ -1,0 +1,65 @@
+#! /bin/sh
+# @desc Briefly describe what the script does.
+# @params s) sample parameter
+#         a) another sample parameter
+# @returns Describes what the script returns if it does return a value
+# @history 2011-03-05: First version
+
+source "common.sh"  # Import do_cmd(), die() and other functions
+source "st_log.sh"  # Import log functions such as test_print_trc()
+
+############################# Functions #######################################
+usage()
+{
+	echo "Here is the usage of this script"
+	exit 1
+}
+
+################################ CLI Params ####################################
+# Please use getopts
+while getopts  :a:s:h arg
+do case $arg in
+        a)      SAMPLE1="$OPTARG";;
+        s)      SAMPLE2="$OPTARG";;
+        h)      usage;;
+        :)      die "$0: Must supply an argument to -$OPTARG.";; 
+        \?)     die "Invalid Option -$OPTARG ";;
+esac
+done
+# Define default values if possible
+: ${SAMPLE1:='val1'}
+: ${SAMPLE2:='val2'}
+
+############################ USER-DEFINED Params ###############################
+# Try to avoid defining values here, instead see if possible
+# to determine the value dynamically. ARCH, DRIVER, SOC and MACHINE are 
+# initilized and exported by runltp script based on platform option (-P)
+case $ARCH in
+esac
+case $DRIVER in
+esac
+case $SOC in
+esac
+case $MACHINE in
+	am180x-evm) PARTITION='2';;
+esac
+# Define default values for variables being overriden
+: ${PARTITION:='4'}
+
+########################### DYNAMICALLY-DEFINED Params #########################
+# Try to use /sys and /proc information to determine values dynamically.
+# Alternatively you should check if there is an existing script to get the
+# value you want
+ERASE_SIZE=`./get_mtd_erase_size.sh $PARTITION`
+
+########################### REUSABLE TEST LOGIC ###############################
+# DO NOT HARDCODE any value. If you need to use a specific value for your setup
+# use USER-DEFINED Params section above.
+
+# Avoid using echo. Instead use print functions provided by st_log.sh
+test_print_trc "Sample trace log"
+
+# Use do_cmd() (imported from common.sh) to execute your test steps.
+# do_cmd() will check return code and fail the test is return code is non-zero.
+do_cmd echo "hello world!"
+

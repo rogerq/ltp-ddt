@@ -1,0 +1,155 @@
+               DEVICE DRIVER TESTS (DDT) for embedded linux
+================================================================================
+
+1) GOALS:
+================================================================================
+ * Validate the functionality, performance and stability of Device Drivers
+   on embedded Linux systems.
+ * Validate performance and stability of the whole embedded system.
+ * Maximize use of open source software and contribute to improve it.
+ * Maximize code reuse across different platforms.
+ * Make it easy to support new embedded platforms.
+
+2) ARCHITECTURE HIGHLIGHTS:
+================================================================================
+ * Based on LTP http://ltp.sourceforge.net/
+ * Support dynamic selection/filtering of test cases based on platform
+ * Support test parameters overrides based on platform
+
+3) HOW TO ADD NEW DDT TESTS:
+================================================================================
+ You only need to add files to two directories:
+ testcases/ddt: Contains the test logic files (either c code or shell script)
+ runtest/ddt  : Contains the test scenario files. It calls the test logic files.
+ 
+ * If your tests requires compiling c sources, create following directory 
+   testcases/ddt/<your sources dir name>/
+   Add your c sources to the directory created above and make sure that you have
+   a top level Makefile. (Check Makefile of existing directories for examples)
+   Please note that you don't need to add c sources for external tools (such as 
+   iperf, lmbench, etc.), instead external tools should be added to the OE/Arago
+   recipe that builds the test filesystem image.
+ * If your tests use shell scripts, add the shell scripts to the
+   testcases/ddt/scripts/ directory
+ * Write a new test scenario file under runtest/ddt/
+
+4) DDT TESTS IMPLEMENTATION GUIDELINES
+================================================================================
+4.1) TEST CASES
+ * Write you test code using c and/or linux shell scripts.
+ * Beware that the linux shell script should be compatible with the ash shell
+   available in busybox.
+ * Avoid hard-coding values that are specific to your platform, instead try to 
+   determine the right value to use using the information provided by Linux
+   ( /sys and proc/ are your friends)
+ * When not possible to determine values dynamically, define default values and
+   provide appropriate overrides based on either ARCH, DRIVER, SOC or MACHINE.
+   Try to define the override value at the most generic level possible.
+   ARCH, DRIVER, SOC and MACHINE variables are exported by ltprun script. 
+ * Avoid adding logic to define values dynamically in your c code. If the code
+   needs to use different values depending on the platform being tested, then
+   make that value a command line argument and write a shell script wraper
+   that calls your c executable. The shell script wrapper should use the
+   override logic define above to determine the right value to pass to the 
+   c executable.
+ * Use the default shell script template available at 
+   testcases/ddt/scripts/TEMPLATE as a starting point to develop your script.
+ * Instead of developing huge shell scripts, try to partition the logic into
+   several smaller scripts, each such smaller script should execute some 
+   well-defined task and ideally could be used by other people developing 
+   tests. Before you start writing scripts, check the available scripts to see
+   if the logic you need is already available. Scripts that return a value are 
+   named get_*
+ * If your script return a single value, use echo to return the value. If your 
+   script need to return multiple values, consider breaking it into smaller 
+   scripts. If absolutely necessary to return multiple values then write the 
+   name=value pairs (one per line) to file descriptor 10. 
+   See testcases/ddt/scripts/TEMPLATE for an example.
+   
+
+4.2) TEST SCENARIOS
+ * Follow LTP guidelines. The test scenario file is basically made of one or 
+   more test step lines. Each test step line have following format
+   <TAG> <COMMANDS>, where
+   TAG is a string that identifies the test step. Use following convention for
+   TAGs, <AREA>_<TYPE>_<ID>, for example SPI_PERF_0001
+   COMMANDS is a list of one or more shell commands separated by semicolon (;),
+   the test step will pass if the commands return zero, otherwise it fails.
+ * Use the default test scenarion file template available at
+   runtest/ddt/TEMPLATE as a starting point to develop your test scenario.
+ * Use the @requires anotation to specify ARCH, DRIVER, SOC and/or MACHINE 
+   requirements to run the test scenario. You can use (), &&, ||, * to specify
+   the test requirements. Examples:
+   
+   @requires /net/eth/* && spi_master
+   To run this test the platform must have an ethernet driver and a 
+   spi_master driver
+
+   @requires am3517-evm
+   This test can only be run on an am3517 EVM.
+
+   @requires (mmc_host || nand) && armv*
+   This test requires mmc or nand drivers and an ARM architecture
+
+ 
+5) HOW TO ADD NEW PLATFORMS
+================================================================================
+ * Copy the default platform file available at platforms/TEMPLATE to 
+   platforms/<your platform>. <your platform> name is typically the evm name
+ * Modify your platform file based on the capabilities supported by the new evm
+   The platform file identifies the architecture, the SoC, the evm and the
+   supported drivers. The supported drivers lines follow a variation of the
+   hierarchy used in /sys/class but it is not exactly the same. Hence it is 
+   important to use the platforms/TEMPLATE file as your starting point.
+   Please note the first 3 lines of the platform file MUST identify, the 
+   architecture, SoC and EVM respectively, follow by one or more driver lines.
+   Typically the architecture and machine name used in the platform file are
+   the ones reported by uname -a.
+   Sample platform file:
+    armv7l
+    am3517
+    am3517-evm
+    net/eth/davinci_emac
+    nand/omap2-nand
+    ehci/ehci-omap
+    i2c-adapter/i2c_omap
+    mmc_host/mmci-omap-hs
+    rtc/rtc-s35390a
+    watchdog/omap_wdt
+    ...
+ * You might need to define new override values for your new platform in some
+   test case files (see section 4.1 above for details). A reasonable strategy
+   is to try to run an existing test plan and then analyze the test failures
+   to determine probable test cases where you need to define override values.  
+
+6) HOW TO CROSS-COMPILE AND INSTALL
+================================================================================
+ * cd to project root directory
+ * $ cp include/config.h.default include/config.h
+ * $ cp include/mk/config.mk.default include/mk/config.mk
+ * $ cp include/mk/features.mk.default include/mk/features.mk
+ * $ make 
+ * $ make DESTDIR=<destination directory> SKIP_IDCHECK=1 install
+ Note: By default make will use arm-none-linux-gnueabi- prefix for cross
+ compilation. If a different compiler is required, you should set the 
+ CROSS_COMPILER option when calling make. For example:
+ make CROSS_COMPILER=arm-none-linux-gnueabi- 
+
+7) HOW TO RUN TESTS
+================================================================================
+ * Run DDT tests the same way you run LTP tests. Use ltprun program and pass to
+   it the test scenario file in the runtest directory (option -f) to run and the
+   platform (option -P) to use. For example:
+     ./runltp -P am180x-evm -f ddt/lmbench
+   The platform name specified with -P option must exist in the platforms/ dir.
+   It is also possible to run tests without -P option, in such case the ltprun
+   script won't filter test cases and it is possible that tests cases not 
+   supported by the platform you are running on will be called.
+
+8) HELP/SUPPORT
+================================================================================
+   Please submit your queries or comments at the forums http://community.ti.com 
+   or http://support.ti.com.
+   Alternatively, you may send an email to the opentest mailing list at 
+   opentest@arago-project.org
+   

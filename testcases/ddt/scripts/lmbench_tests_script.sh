@@ -763,6 +763,9 @@ elif [ "$V" =  "version" ] ; then
 else
         lmbench_tests
         print_summary
+	if [ $FAIL_COUNT > 0 ]; then
+	        exit $FAIL_COUNT
+	else
+        	exit 0
+	fi
 fi
-
-exit 0

@@ -1,7 +1,7 @@
 # /bin/sh
-#source "$LTPROOT/scripts/ddt/st_log.sh"
 source "st_log.sh"
-########### CONSTANTS DEFINCE ############
+
+########### DEFINE CONSTANTS ############
 MB=1048576
 GB=$((1024*1024*1024))
 
@@ -12,7 +12,6 @@ do_cmd() {
 	test_print_trc "Inside do_cmd:CMD=$CMD"
 	eval $CMD
 	RESULT=$?
-	#echo "return code: $RESULT"
 	if [ $RESULT -ne 0 ]
 	then
 		test_print_err "$CMD failed. Return code is $RESULT"
@@ -29,8 +28,14 @@ die() {
 
 
 # Extract one return value from name=value list file
+# First argument is the file with name=value list
+# Second argument is the name of the value to return
 get_return_value() {
-        tmp_ifs=$IFS
+	if [ $# -ne 2 ]; then
+		die "Wrong number of arguments. \
+                     Usage: get_return_value <file> <value name>"
+	fi
+	tmp_ifs=$IFS
         IFS=$'\n'
         file=$1
         name=$2
@@ -40,6 +45,6 @@ get_return_value() {
                 sed 's/^ *//g' | sed 's/ *$//g'` && echo $TMPVAL && IFS=$tmp_ifs && exit 0
         done
         IFS=$tmp_ifs
-        exit 1
+        die "Value $name not found in $file"
 }
 
