@@ -1,0 +1,11 @@
+# @name Perform flash_eraseall on nand device 
+# @desc Use flash_eraseall to erase all partition 
+#       Partition number is specified in get_mtd_partition_number.sh
+# @requires nand
+
+NAND_MTD_FLASH_ERASEALL_0001 mtd_flash_eraseall.sh -d 'nand'
+
+
+
+
+

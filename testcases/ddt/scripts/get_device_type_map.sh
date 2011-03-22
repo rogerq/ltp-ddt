@@ -4,7 +4,6 @@
 # Input: DEVICE_TYPE like 'nand', 'spi', 'mmc', 'usb'
 # Output: 'mtd' or 'storage_device' or no translation
 
-#source "$LTPROOT/scripts/ddt/st_log.sh"
 source "st_log.sh"
 
 DEVICE_TYPE=$1
@@ -16,7 +15,7 @@ if [ $DEVICE_TYPE == "nand" ] || [ $DEVICE_TYPE == "nor" ] || [ $DEVICE_TYPE == 
 	DEV_TYPE="mtd"
 fi
 if [ $DEVICE_TYPE == "mmc" ] || [ $DEVICE_TYPE == "usb" ] || [ $DEVICE_TYPE == "ata" ]; then
-        DEV_TYPE="storage_device"
+        DEV_TYPE="storage_device_$DEVICE_TYPE"
 fi
 
 

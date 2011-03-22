@@ -69,7 +69,7 @@ exit 0
 	[ ! -c $CHAR_DEV_NODE ] && die "$CHAR_DEV_NODE is not char device" 
         do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
 fi
-if [ $DEV_TYPE == "storage_device" ]; then
+if [ $DEV_TYPE == "storage_device*" ]; then
         do_cmd "$MKFS $DEV_NODE"
 fi
 

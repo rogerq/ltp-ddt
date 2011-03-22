@@ -17,10 +17,7 @@ fi
 PART=$1
 MTD_PROC_ENTRY=`cat /proc/mtd | grep "$MTD_CHAR$PART"` || die "Could not retrieve info from mtd proc entry"
 SIZE=`echo $MTD_PROC_ENTRY | cut -d ' ' -f2` || die "Could not get the mtd size"
-temp=`echo $SIZE | tr "a-z" "A-Z"` || die "Could not convert mtd size from a-z to A-Z"
-SIZE=`echo "ibase=16; ${temp}" | bc` || die "Mtd size could not be converted from Hex to Decimal"
-echo $SIZE
-
-
-
-
+#TEMP=`echo $SIZE | tr "a-z" "A-Z"` || die "Could not convert mtd size from a-z to A-Z"
+#SIZE=`echo "ibase=16; ${TEMP}" | bc` || die "Mtd size could not be converted from Hex to Decimal"
+#echo $SIZE
+echo $((0x$SIZE))

@@ -877,7 +877,7 @@ main()
     # Some tests need to run inside the "bin" directory.
     cd "${LTPROOT}/testcases/bin"
     "${LTPROOT}/bin/ltp-pan" $QUIET_MODE -e -S $INSTANCES $DURATION -a $$ -n $$ $PRETTY_PRT -f ${TMP}/alltests $LOGFILE $OUTPUTFILE $FAILCMDFILE
-     
+    LOGFILE=`echo $LOGFILE | cut -b4-` 
     if [ $? -eq 0 ]; then
       echo "INFO: ltp-pan reported all tests PASS"
       VALUE=0
@@ -1007,9 +1007,11 @@ main()
         
             Done executing testcases."
             LTP Version:  $version_date
+            Result log is in the $LOGFILE "
        ###############################################################"
        
 	EOF
+	cat $LOGFILE
     }
     exit $VALUE
 }

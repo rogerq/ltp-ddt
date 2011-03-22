@@ -53,7 +53,8 @@ case $DEVICE_TYPE in
                 : ${PARTITION:='3'}
                 ;;
         *)
-                : ${PARTITION:='3'}
+                test_print_err "Wrong device_type input in $0 script"
+		exit 1
                 ;;
 esac
 

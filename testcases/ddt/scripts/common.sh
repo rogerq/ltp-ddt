@@ -2,6 +2,7 @@
 source "st_log.sh"
 
 ########### DEFINE CONSTANTS ############
+KB=1024
 MB=1048576
 GB=$((1024*1024*1024))
 

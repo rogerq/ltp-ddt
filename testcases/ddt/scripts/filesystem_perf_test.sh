@@ -51,8 +51,6 @@ do case $arg in
 		;;
 esac
 done
-: ${BUFFER_SIZES:='102400 256000 512000 1048576 5242880'}
-: ${FILE_SIZE:='100'}
 
 ############################ USER-DEFINED Params ##############################
 # Try to avoid defining values here, instead see if possible
@@ -66,6 +64,8 @@ esac
 case $MACHINE in
 esac
 
+: ${BUFFER_SIZES:='102400 256000 512000 1048576 5242880'}
+: ${FILE_SIZE:='100'}
 ########################### DYNAMICALLY-DEFINED Params ########################
 
 ########################### REUSABLE TEST LOGIC ###############################
@@ -99,13 +99,9 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
 
 	test_print_trc "Erasing this partition completely"
-	do_cmd erase_partition.sh -d $DEVICE_TYPE -n $DEV_NODE
+	do_cmd blk_device_erase_partition.sh -d $DEVICE_TYPE -n $DEV_NODE
 	test_print_trc "Mounting the partition"
-	test_print_trc "mount -t $FS_TYPE $DEV_NODE $MNT_POINT"
-	do_cmd "mount -t $FS_TYPE $DEV_NODE $MNT_POINT"
-
-	test_print_trc "Listing all the mounts to see if device mount ok"
-	do_cmd "mount | grep $DEV_NODE"
+	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
 
 	do_cmd filesystem_tests -write -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 	# should do umount and mount before read to force to write to device

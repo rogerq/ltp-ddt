@@ -1,10 +1,12 @@
-# @name mtd erase test
+# @name Nand erase test using mtd_debug
 # @desc Erase Nand MTD partition
 #	The partition number is specified in get_mtd_partition_number.sh
 # @requires nand
 
-#NAND_MTD_ERASE_0001 mtd_debug_erase.sh -n 4 -o 0 -d "nand"
-NAND_MTD_ERASE_0001 mtd_debug_erase.sh -d "nand"
+#NAND_FUNC_ERASE_0001 mtd_debug_erase.sh -n 4 -o 0 -d "nand"
+#NAND_FUNC_ERASE_0001 mtd_debug_erase.sh -d "nand"
+#NAND_FUNC_ERASE_0001 source common.sh;part=`get_mtd_partition_number.sh "nand"` || die "error getting mtd partition number"; mtd_debug_erase.sh -n "$part" -d "nand"
+NAND_FUNC_ERASE_0001 source common.sh;part=`get_mtd_partition_number.sh "nand"` || die "error getting mtd partition number"; erase_size=`get_mtd_erase_size.sh` || die "error getting erase_size" ;mtd_debug erase "/dev/mtd$part" 0 "$erase_size" && exit 0 || exit 1
 
 
 
