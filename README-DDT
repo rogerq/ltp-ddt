@@ -145,6 +145,19 @@
    It is also possible to run tests without -P option, in such case the ltprun
    script won't filter test cases and it is possible that tests cases not 
    supported by the platform you are running on will be called.
+ * In addition to selecting test scenarios using -f option, users can also 
+   filter test cases using -s PATTERN and -S SKIPFILE options. These options
+   select or skip test cases based on the test case TAG specified in the test
+   scenario file.
+ * The runltp script have lot of options. Some useful ones for stress tests are:
+   -t DURATION: Define duration of the test in s,m,h,d.
+   -x INSTANCES: Run multiple test instances in parallel.
+   -c <options>: Run test under additional background CPU load
+   -D <options>: Run test under additional background load on Secondary storage
+   -m <options>: Run test under additional background load on Main memory
+   -i <options>: Run test under additional background load on IO Bus
+   -n          : Run test with network traffic in background.
+
 
 8) HELP/SUPPORT
 ================================================================================
