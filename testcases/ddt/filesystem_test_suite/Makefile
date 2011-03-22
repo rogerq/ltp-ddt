@@ -1,27 +1,40 @@
-#
-#  Copyright (c) International Business Machines  Corp., 2001
-#
-#  This program is free software;  you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY;  without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
-#  the GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program;  if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+# MakeFile function     :: MakeFile for compiling Filesystem test suite 
 
-top_srcdir		?= ../../..
+#USERDEFINES should be included first for the user environment variables.
+-include ../USERDEFINES
 
-include $(top_srcdir)/include/mk/testcases.mk
+CC              = $(TOOL_PREFIX)gcc 
 
-#CPPFLAGS		+= -D_GNU_SOURCE -I$(abs_srcdir)/../include
+#Flags for compilation
+CFLAGS          = -g -Wall -O1 -fomit-frame-pointer
 
-#LDLIBS			+= -lpthread -lrt
+#LD flags
+LDFLAGS         = -g -static
 
-include $(top_srcdir)/include/mk/generic_leaf_target.mk
+#Installation directory - Change based on desired path for placing test suite executable
+INSTDIR         = bin
+
+#Path of header files to be included
+INCLUDES        = -I $(KERNEL_DIR)/include -I src/interface/common -I ../utils/user
+
+#List of source files- Update this on adding a new C file
+SOURCES := \
+        src/testcases/st_filesystem_read_from_file.c \
+        src/testcases/st_filesystem_write_to_file.c \
+        src/testcases/st_filesystem_copy_file.c \
+        src/interface/common/st_filesystem_common.c \
+	../utils/user/st_cpu_load.c \
+	../utils/user/st_timer.c \
+        src/parser/st_filesystem_parser.c
+
+#Rule to build
+all:
+	$(CC) $(CFLAGS) $(LDFLAGS) -o filesystem_tests $(INCLUDES) $(SOURCES) 
+	mkdir -p $(INSTDIR)/$(PLATFORM)
+	mv filesystem_tests $(INSTDIR)/$(PLATFORM)
+
+#Rule to clean
+clean:
+	rm -f  *.o
+	rm -rf  ./$(INSTDIR)/$(PLATFORM) 
+
