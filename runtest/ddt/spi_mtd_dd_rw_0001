@@ -1,0 +1,11 @@
+# @name SPI read write test using dd with erase_size as buffer size
+# @desc Perform nand eraseall first, then do read write and then compare
+#	The partition number is specified in get_mtd_partition_number.sh
+# @requires spi_master
+
+SPI_FUNC_DD_RW_0001 blk_device_dd_readwrite_test.sh -f "jffs2" -b "erase_size" -c 10 -d "spi"
+
+
+
+
+

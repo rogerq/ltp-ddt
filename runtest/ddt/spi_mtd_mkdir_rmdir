@@ -1,0 +1,14 @@
+# @name spi mkdir and rmdir 
+# @desc Perform mkdir and rmdir in spi 
+#	The partition number is specified in get_mtd_partition_number.sh
+# @requires spi_master
+
+SPI_FUNC_MKDIR_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "spi"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "spi" -m "/mnt/spi"; do_cmd mkdir "/mnt/spi/test" 
+SPI_FUNC_CHMOD_0001 source 'common.sh'; do_cmd chmod 777 "/mnt/spi/test"
+SPI_FUNC_RMDIR_0001 source 'common.sh'; do_cmd rmdir "/mnt/spi/test"
+SPI_FUNC_UMOUNT_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "spi"`; dev_node="$MTD_BLK_DEV$part"; do_cmd umount "$dev_node"
+
+
+
+
+

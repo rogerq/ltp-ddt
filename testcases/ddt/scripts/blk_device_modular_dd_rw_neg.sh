@@ -9,7 +9,7 @@ source "mtd_common.sh"
 
 ############################### CLI Params ###################################
 
-while getopts  :d:f:m:n:b:c:i:l:h arg
+while getopts  :d:f:m:n:b:c:i:M:l:h arg
 do case $arg in
         n)      
 		# optional param
@@ -20,6 +20,7 @@ do case $arg in
         b)      DD_BUFSIZE="$OPTARG";;
         c)      DD_CNT="$OPTARG";;
 	i) 	IO_OPERATION="$OPTARG";;
+	M) 	MOD_NAME="$OPTARG";;
 	l) 	TEST_LOOP="$OPTARG";;
         h)      usage;;
         :)      test_print_trc "$0: Must supply an argument to -$OPTARG." >&2
@@ -42,11 +43,6 @@ case $DEV_TYPE in
 			DEV_NODE="$MTD_BLK_DEV$PART"
 			test_print_trc "MTD_BLK_DEV_NODE: $DEV_NODE"
 		fi
-
-		if [ $DD_BUFSIZE == "erase_size" ]; then
-			DD_BUFSIZE=`get_mtd_erase_size.sh $PART` || die "error getting mtd erase size"
-		fi
-
 	;;
 	storage_device*)
 		if [ -z $DEV_NODE ]; then
@@ -76,21 +72,20 @@ while [ $x -lt $TEST_LOOP ]
 do
 	do_cmd date	
 	case $IO_OPERATION in
-		write)
-			do_cmd dd if=/dev/zero of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT
-		;;
 		write_in_bg)
 			do_cmd dd if=/dev/zero of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT &
 		;;
-		read)
+		read_in_bg)
 			do_cmd dd if=/dev/zero of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT
-			do_cmd dd if=$MNT_POINT/test.file of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
+			do_cmd dd if=$MNT_POINT/test.file of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT &
 		;;
 		*)
 		test_print_err "Invalid IO operation type in $0 script"
 		exit 1;
 		;;	
 	esac
+	rmmod $MOD_NAME && exit 1 
+	#rmmod $MOD_NAME && exit 1 || exit 0 
 	do_cmd rm $MNT_POINT/test.file
 	x=$((x+1))
 	do_cmd date

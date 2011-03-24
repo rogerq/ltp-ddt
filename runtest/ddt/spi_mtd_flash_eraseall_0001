@@ -1,0 +1,11 @@
+# @name Perform flash_eraseall on spi device 
+# @desc Use flash_eraseall to erase all partition 
+#       Partition number is specified in get_mtd_partition_number.sh
+# @requires spi_master
+
+SPI_MTD_FLASH_ERASEALL_0001 mtd_flash_eraseall.sh -d 'spi'
+
+
+
+
+

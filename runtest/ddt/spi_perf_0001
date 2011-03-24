@@ -3,7 +3,7 @@
 # @requires spi_master
 
 #SPI_PERF_0001 mtd_helper.sh -d spi -f jffs2
-SPI_PERF_0001 mtd_perf_test.sh -f jffs2 -s 1 -B "102400 25600" -d "spi"
+SPI_PERF_0001 mtd_perf_test.sh -f jffs2 -s 1 -B "102400 256000" -d "spi"
 
 
 

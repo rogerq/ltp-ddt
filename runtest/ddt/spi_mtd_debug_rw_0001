@@ -1,0 +1,11 @@
+# @name mtd debug read write test 
+# @desc Performance mtd debug erase first, then do read write and then compare
+#	The partition number is specified in get_mtd_partition_number.sh
+# @requires spi_master
+
+SPI_MTD_RW_0001 mtd_debug_readwrite_test.sh -l "erase_size" -o "0" -d "spi"
+
+
+
+
+

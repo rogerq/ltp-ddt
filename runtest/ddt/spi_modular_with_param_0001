@@ -1,0 +1,18 @@
+# @name 
+#	SPI modular test with optional params 
+# @desc 
+#       modprobe spi module with params first and then do RW and then rmmod it
+# @requires  spi_master/spi_davinci 
+
+# Notes: this test is not working yet since spi_davinci_busfreq is not recognized.
+
+# The test scenario is made of one or more test steps. Each step is composed of
+# <TAG> <COMMANDS>.
+# Use following convention for TAGs <AREA>_<TYPE>_<ID>
+# The test step pass if the commands return zero, it fails otherwise.
+# For more information please refer to <root>/README-DDT file.
+SPI_INSMOD_0001 source "common.sh"; mod_name=`get_modular_name.sh 'spi'` || die "error getting modular name"; opt_params="spi_davinci_busfreq=10"; do_cmd insmod.sh "$mod_name" "$opt_params" 
+
+SPI_MOD_RW_0002 source "common.sh"; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd part number"; size=`get_mtd_size.sh "$part"` || die "error getting mtd size"; size=$(( $size/MB )) && size=`get_ceiling_divide.sh "$size" 10` || die "error getting divide ceiling"; do_cmd blk_device_dd_readwrite_test.sh -f "jffs2" -b "1M" -c "$size" -l "1" -d "spi" 
+
+SPI_RMMOD_0003 source "common.sh"; mod_name=`get_modular_name.sh 'spi'` || die "error getting modular name"; do_cmd rmmod.sh "$mod_name" 
