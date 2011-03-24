@@ -1,21 +1,23 @@
 # MakeFile function     :: MakeFile for compiling Filesystem test suite 
 
-#USERDEFINES should be included first for the user environment variables.
--include ../USERDEFINES
+top_srcdir              ?= ../../..
 
-CC              = $(TOOL_PREFIX)gcc 
+include $(top_srcdir)/include/mk/env_pre.mk
 
-#Flags for compilation
-CFLAGS          = -g -Wall -O1 -fomit-frame-pointer
+INSTALL_DIR             := testcases/bin/ddt
 
-#LD flags
-LDFLAGS         = -g -static
+FILTER_OUT_DIRS         :=
 
-#Installation directory - Change based on desired path for placing test suite executable
-INSTDIR         = bin
+# We don't want to copy over the Makefile
+UNWANTED_FILES          := Makefile
 
-#Path of header files to be included
-INCLUDES        = -I $(KERNEL_DIR)/include -I src/interface/common -I ../utils/user
+INSTALL_MODE            := 00755
+
+#INSTALL_TARGETS         := $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
+
+CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
+LDFLAGS         += -g -static
+INCLUDES        = -I $(KERNEL_INC) -I src/interface/common -I ../utils/user
 
 #List of source files- Update this on adding a new C file
 SOURCES := \
@@ -23,18 +25,14 @@ SOURCES := \
         src/testcases/st_filesystem_write_to_file.c \
         src/testcases/st_filesystem_copy_file.c \
         src/interface/common/st_filesystem_common.c \
-	../utils/user/st_cpu_load.c \
-	../utils/user/st_timer.c \
+        ../utils/user/st_cpu_load.c \
+        ../utils/user/st_timer.c \
         src/parser/st_filesystem_parser.c
 
-#Rule to build
-all:
-	$(CC) $(CFLAGS) $(LDFLAGS) -o filesystem_tests $(INCLUDES) $(SOURCES) 
-	mkdir -p $(INSTDIR)/$(PLATFORM)
-	mv filesystem_tests $(INSTDIR)/$(PLATFORM)
+MAKE_TARGETS            := filesystem_tests
 
-#Rule to clean
-clean:
-	rm -f  *.o
-	rm -rf  ./$(INSTDIR)/$(PLATFORM) 
+filesystem_tests:
+	$(CC) $(CFLAGS) $(LDFLAGS) -o filesystem_tests ${INCLUDES} ${SOURCES}
+
+include $(top_srcdir)/include/mk/generic_leaf_target.mk
 
