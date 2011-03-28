@@ -5,10 +5,27 @@
 #	DEVICE_TYPE	like 'nand', 'spi', 'mmc', 'usb'
 # Output: DEVICE_PART_SIZE which is the size of the partition
 
-source "st_log.sh"
+source "common.sh"
 
-size=0
-while getopts  :n:d:h: arg
+############################# Functions #######################################
+usage()
+{
+cat <<-EOF >&2
+        usage: ./${0##*/} [-n DEVICE_NODE] [-d DEVICE TYPE]
+        -n DEV_NODE  	block device node like /dev/mtdblock4, /dev/sda1
+        -d DEVICE_TYPE  device type like 'mtd', 'mmc', 'usb' etc
+        -h Help         print this usage
+EOF
+exit 0
+}
+
+if [ $# -lt 1 ]; then
+        echo "Error: Invalid Argument Count"
+	usage
+        exit 1
+fi
+
+while getopts  :n:d:h arg
 do case $arg in
         n)      DEV_NODE="$OPTARG";;
         d)      DEVICE_TYPE="$OPTARG";;
@@ -27,33 +44,32 @@ done
 : ${DEV_NODE:='/dev/mtdblock3'}
 : ${DEVICE_TYPE:='nand'}
 
+SIZE=0
 DEV_TYPE=`get_device_type_map.sh $DEVICE_TYPE` || die "error while translating device type"
-
-# Default params
 case $DEV_TYPE in
 	mtd)
 		PART=`get_mtd_partnum_from_devnode.sh "$DEV_NODE"` || die "error getting partition number"
 		SIZE=`get_mtd_size.sh "$PART"` || die "error while getting the mtd size."
-	 	#size=$MTD_SIZE
 
 		# different way to get size; but could not figure out if it is symlink	
 		#for file in $(find /sys/class/mtd/mtd$PART -type f -name size); do
 		#	test_print_trc "file is:$file"
 		#	size=`cat $file`
-	#        #        echo SIZE=$size
 		#done
-		;;
-	storage_device)
-		# TODO: figure out a way to find out what the size is
-		SIZE=2040109465
-		if [ $DEVICE_TYPE == "usb" ]; then
-			SIZE=2040109465
-		fi
-		;;
+	;;
+	mmc)
+		SIZE=$((1*GB))
+	;;
+	usb)
+		SIZE=$((1*GB))
+	;;
+	ata)
+		SIZE=$((20*GB))
+	;;
 	*)
-		test_print_wrn "Device type is not found; Size for Device Partition is set to default value: $SIZE"
+		die "Device type is not found; Size for Device Partition is set to default value: $SIZE"
 		exit 1
-		;;
+	;;
 esac
 
 echo $SIZE

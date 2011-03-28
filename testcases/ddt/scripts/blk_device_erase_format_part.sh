@@ -8,12 +8,20 @@
 source "common.sh"
 source "st_log.sh"
 
+############################# Functions #######################################
 usage()
 {
-        echo "This is the usage of this script"
+cat <<-EOF >&2
+        usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-d DEVICE TYPE]
+        -f FS_TYPE      filesystem type like jffs2, ext2, etc
+        -n DEV_NODE	device node like /dev/mtdblock3; /dev/sda1 
+        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+        -h Help         print this usage
+EOF
+exit 0
 }
 
-while getopts :d:n:f: arg
+while getopts :d:n:f:h arg
 do case $arg in
         d)
                 DEVICE_TYPE=$OPTARG ;;
@@ -21,18 +29,19 @@ do case $arg in
                 DEV_NODE=$OPTARG ;;
         f)
                 FS_TYPE=$OPTARG ;;
+	h)
+		usage ;;
         \?)
 		echo "Invalid Option -$OPTARG ignored." >&2
                 usage
                 exit 1
                 ;;
 esac
-
 done
-
 
 test_print_trc "DEVICE TYPE: $DEVICE_TYPE"
 test_print_trc "DEVICE NODE: $DEV_NODE"
+test_print_trc "FS TYPE: $FS_TYPE"
 
 ############################ DEFAULT Params #######################
 MKFS="mkfs.$FS_TYPE"
@@ -49,28 +58,27 @@ esac
 case $SOC in
 esac
 case $MACHINE in
-	am3517-evm)
-		MKFS="mkfs.$FS_TYPE"	#Just an example to show how to overwrite the default value.
-		;;
 esac
 
-# translate DEVICE_TYPE to DEV_TYPE (mtd or storage_device)
+# translate DEVICE_TYPE to DEV_TYPE (mtd or not)
 DEV_TYPE=`get_device_type_map.sh $DEVICE_TYPE` || die "error while translating device type"
-#if [ $? -ne 0 ]; then
-#    test_print_err "FATAL: error while mapping $DEVICE_TYPE to the type what users see"
-#    exit 1
-#fi
 
 # do erase or format for following device type.
-if [ $DEV_TYPE == "mtd" ]; then
-exit 0
-	test_print_trc "device type is mtd"
-	CHAR_DEV_NODE=`echo $DEV_NODE | sed s/block//` || die "error while getting mtd char dev_node"
-	[ ! -c $CHAR_DEV_NODE ] && die "$CHAR_DEV_NODE is not char device" 
-        do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
-fi
-if [ $DEV_TYPE == "storage_device*" ]; then
-        do_cmd "$MKFS $DEV_NODE"
-fi
+case $DEV_TYPE in
+	mtd)
+		test_print_trc "device type is mtd"
+		CHAR_DEV_NODE=`echo $DEV_NODE | sed s/block//` || die "error while getting mtd char dev_node"
+		[ ! -c $CHAR_DEV_NODE ] && die "$CHAR_DEV_NODE is not char device"
+	exit 0
+		do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
+	;;
+	*)
+	exit 0
+		do_cmd "$MKFS $DEV_NODE"
+	;;
+esac
+#if [ $DEV_TYPE == "storage_device*" ]; then
+#        do_cmd "$MKFS $DEV_NODE"
+#fi
 
 

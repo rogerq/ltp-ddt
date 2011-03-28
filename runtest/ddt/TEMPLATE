@@ -10,5 +10,5 @@
 # Use following convention for TAGs <AREA>_<TYPE>_<ID>
 # The test step pass if the commands return zero, it fails otherwise.
 # For more information please refer to <root>/README-DDT file.
-NAND_PERF_0001 mtd_perf_test.sh -f jffs2 -s 10 -B "102400 256000" -d "nand"
+NAND_PERF_0001 blk_device_filesystem_perf_test.sh -f jffs2 -s 10 -B "102400 256000" -d "nand"
 

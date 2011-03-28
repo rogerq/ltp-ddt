@@ -3,7 +3,7 @@
 #	The partition number is specified in get_mtd_partition_number.sh
 # @requires nand
 
-NAND_FUNC_DD_RW_0001 blk_device_dd_readwrite_test.sh -f "jffs2" -b "erase_size" -c 10 -d "nand"
+NAND_FUNC_DD_RW_0001 source 'common.sh'; part=`get_mtd_partition_number.sh "nand"` || die "error getting mtd part number"; size=`get_mtd_erase_size.sh "$part"` || die "error getting mtd erase size"; blk_device_dd_readwrite_test.sh -f "jffs2" -b "$size" -c 10 -d "nand"
 
 
 

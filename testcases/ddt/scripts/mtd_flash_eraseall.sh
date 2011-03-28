@@ -7,6 +7,19 @@ source "common.sh"
 source "st_log.sh"
 source "mtd_common.sh"
 
+############################# Functions #######################################
+usage()
+{
+cat <<-EOF >&2
+        usage: ./${0##*/} [-n PART] [-d DEVICE_TYPE] 
+        -n PART     	optional param; partition number
+        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+        -h Help         print this usage
+EOF
+exit 0
+}
+
+
 ############################### CLI Params ###################################
 
 while getopts  :d:s:c:n:h arg
@@ -33,8 +46,6 @@ if [ -z $PART ]; then
 fi
 MTD_CHAR_DEV_NODE="$MTD_CHAR_DEV$PART"
 test_print_trc "MTD_CHAR_DEV_NODE: $MTD_CHAR_DEV$PART"
-
-
 
 ############# Do the work ###########################################
 do_cmd flash_eraseall "$MTD_CHAR_DEV_NODE" 

@@ -1,11 +1,26 @@
 #! /bin/sh
 
-# Perform mtd_debug read 
-# Input $CHAR_DEV_NODE	like '/dev/mtd3'
+# Perform mtd_debug read write 
+# Input 
 
 source "common.sh"
 source "st_log.sh"
 source "mtd_common.sh"
+
+############################# Functions #######################################
+usage()
+{
+cat <<-EOF >&2
+        usage: ./${0##*/} [-n PART] [-d DEVICE_TYPE] [-l LEN] [-o OFFSET] [-h USAGE]
+        -n PART     	optional param; partition number
+        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+        -o OFFSET       offset for mtd_debug erase command
+        -l LEN          length for mtd_debug erase and write command
+        -h Help         print this usage
+EOF
+exit 0
+}
+
 
 ############################### CLI Params ###################################
 
@@ -36,23 +51,11 @@ fi
 MTD_CHAR_DEV_NODE="$MTD_CHAR_DEV$PART"
 echo "MTD_CHAR_DEV_NODE: $MTD_CHAR_DEV$PART"
 
+ERASE_SIZE=`get_mtd_erase_size.sh $PART` || die "error getting whole mtd erase size for partition $PART"
 : ${OFFSET:='0'}
-: ${LEN:='erase_size'}
+: ${LEN:="$ERASE_SIZE"}
 : ${DST_FILE:='read.txt'}
 : ${SRC_FILE:='write.txt'}
-
-# If all/erase, take mtd size or erase size; otherwise, take whatever passed in. 
-case $LEN in
-	mtd_size)
-		LEN=`get_mtd_size.sh $PART ` || die "error getting mtd size"
-		test_print_trc "LEN is set to MTD size which is $LEN"
-	;;
-	erase_size)
-		LEN=`get_mtd_erase_size.sh $PART` || die "error getting whole mtd erase size for partition $PART"
-		test_print_trc "LEN is set to Erase size which is $LEN"
-	;;
-esac
-
 
 ############# Do the work ###########################################
 do_cmd mtd_debug erase "$MTD_CHAR_DEV_NODE" "$OFFSET" "$LEN"

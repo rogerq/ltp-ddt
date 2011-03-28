@@ -7,13 +7,28 @@ source "common.sh"
 source "st_log.sh"
 source "mtd_common.sh"
 
+############################# Functions #######################################
+usage()
+{
+cat <<-EOF >&2
+        usage: ./${0##*/} [-n DEV_NODE] [-d DEVICE_TYPE] [-f FS_TYPE] [-b DD_BUFSIZE] [-c DD_CNT] 
+        -n DEV_NODE     optional param; device node like /dev/mtdblock2; /dev/sda1
+        -f FS_TYPE      filesystem type like jffs2, ext2, etc
+        -b DD_BUFSIZE   dd buffer size for 'bs'
+        -c DD_CNT       dd count for 'count'
+        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+        -h Help         print this usage
+EOF
+exit 0
+}
+
 ############################### CLI Params ###################################
 
 while getopts  :d:f:n:b:c:h arg
 do case $arg in
         n)      
 		# optional param
-		PART="$OPTARG";;
+		DEV_NODE="$OPTARG";;
         d)      DEVICE_TYPE="$OPTARG";;
         f)      FS_TYPE="$OPTARG";;
         b)      DD_BUFSIZE="$OPTARG";;
@@ -31,25 +46,9 @@ esac
 done
 
 ############################ DEFAULT Params #######################
-DEV_TYPE=`get_device_type_map.sh "$DEVICE_TYPE"` || die "error getting device type"
-case $DEV_TYPE in
-	mtd)
-		if [ -z $PART ]; then
-			PART=`get_mtd_partition_number.sh "$DEVICE_TYPE"` || die "error getting mtd partition number"
-		fi
-		MTD_BLK_DEV_NODE="$MTD_BLK_DEV$PART"
-		test_print_trc "MTD_BLK_DEV_NODE: $MTD_BLK_DEV$PART"
-
-		DEV_NODE=$MTD_BLK_DEV_NODE
-	;;
-	storage_device*)
-		DEV_NODE=`get_devnode_for_non_mtd_device.sh $DEVICE_TYPE` || die "error getting mmc blk dev node"
-	;;
-	*)
-		test_print_err "Invalid device type in $0 script"
-		exit 1;
-	;;
-esac
+if [ -z $DEV_NODE ]; then
+	DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE"
+fi
 
 MNT_POINT=/mnt/partition_$DEVICE_TYPE
 : ${FS_TYPE:='jffs2'}
@@ -58,7 +57,7 @@ MNT_POINT=/mnt/partition_$DEVICE_TYPE
 test_print_trc "Checking if the device is already mounted; if yes, unmount it; otherwise, contiune."
 do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
 test_print_trc "Erasing this partition completely"
-do_cmd blk_device_erase_partition.sh -d $DEVICE_TYPE -n $DEV_NODE
+do_cmd blk_device_erase_format_part.sh -d $DEVICE_TYPE -n $DEV_NODE -f $FS_TYPE
 do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
 
 test_print_trc "Doing write concurrence test"

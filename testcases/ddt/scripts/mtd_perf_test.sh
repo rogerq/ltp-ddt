@@ -1,6 +1,6 @@
 #! /bin/sh
 # @desc Determine Write and read performance of MTD devices
-# @params d) device type: NAND, NOR, SPI
+# @params d) device type: nand, nor, spi
 #         f) Filesystem type (i.e. jffs2)
 # @history 2011-03-05: First version
 
@@ -10,9 +10,18 @@ source "mtd_common.sh"
 ############################# Functions #######################################
 usage()
 {
-	echo "Here is the usage of this script"
-	exit 1
+cat <<-EOF >&2
+        usage: ./${0##*/} [-f FS_TYPE] [-n PARTITION_NUMBER] [-B BUFFER SIZES] [-s FILE SIZE] [-d DEVICE TYPE]
+        -f FS_TYPE      filesystem type like jffs2, ext2, etc
+        -n PARTITION_NUM MTD partition nubmer like '2', '4' 
+        -B BUFFER_SIZES buffer sizes for perf test like '102400 256000 512000 1048576 5242880'
+        -s FILE SIZE    file size in MB for perf test
+        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+        -h Help         print this usage
+EOF
+exit 0
 }
+
 
 
 ################################ CLI Params ###################################
@@ -61,9 +70,4 @@ test_print_trc "FILE SIZE:${FILE_SIZE}"
 
 # CALL Filesystem Performance helper script
 do_cmd filesystem_perf_test.sh -f "$FS_TYPE" -n "$MTD_BLK_DEV$PARTITION" -m "$MNT_POINT" -B "\"$BUFFER_SIZES\"" -s "$FILE_SIZE" -d "$DEVICE_TYPE"
-
-#if [ $? -ne 0 ]; then
-#    test_print_err "FATAL: error while running filesystem_perf_test"
-#    exit 1
-#fi
 

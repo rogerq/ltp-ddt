@@ -6,14 +6,8 @@
 # @history 2011-03-22: First version
 
 source "common.sh"  # Import do_cmd(), die() and other functions
-#source "st_log.sh"  # Import log functions such as test_print_trc()
 
 ############################# Functions #######################################
-usage()
-{
-	echo "Here is the usage of this script"
-	exit 1
-}
 
 ################################ CLI Params ####################################
 if [ $# -ne 1 ]; then

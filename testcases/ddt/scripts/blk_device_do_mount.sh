@@ -7,6 +7,19 @@ source "common.sh"
 source "st_log.sh"
 source "mtd_common.sh"
 
+############################# Functions #######################################
+usage()
+{
+cat <<-EOF >&2
+        usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-m MNT_POINT] [-d DEVICE TYPE]
+        -f FS_TYPE      filesystem type like jffs2, ext2, etc
+	-n DEV_NODE	device_node like /dev/mtdblock4
+	-m MNT_POINT	mount point
+        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+        -h Help         print this usage
+EOF
+exit 0
+}
 ############################### CLI Params ###################################
 
 while getopts  :d:f:n:m:h arg

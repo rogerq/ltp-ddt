@@ -7,6 +7,21 @@ source "common.sh"
 source "st_log.sh"
 source "mtd_common.sh"
 
+############################# Functions #######################################
+usage()
+{
+cat <<-EOF >&2
+        usage: ./${0##*/} [-n PART] [-d DEVICE_TYPE]
+        -n PART         optional param; partition number
+        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+	-c CNT		cnt for flash_erase command
+	-s START	start for flash_erase command
+        -h Help         print this usage
+EOF
+exit 0
+}
+
+
 ############################### CLI Params ###################################
 
 while getopts  :d:s:c:n:h arg

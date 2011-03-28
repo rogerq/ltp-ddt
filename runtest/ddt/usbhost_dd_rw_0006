@@ -1,0 +1,11 @@
+# @name USB host device w/r test with fs:ext2 and size:640K (bs=64K;count=10)
+# @desc Perform mkfs first, then do read write 
+#	The device node is specified in get_blk_device_node.sh
+# @requires scsi_host 
+
+USBHOST_FUNC_DD_RW_0001 source 'common.sh'; DEV_NODE=`get_blk_device_node.sh "usb"` || die "error getting devnode for usb"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "64K" -c "10" -d "usb" 
+
+
+
+
+

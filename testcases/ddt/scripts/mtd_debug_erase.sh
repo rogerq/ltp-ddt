@@ -7,6 +7,21 @@ source "common.sh"
 source "st_log.sh"
 source "mtd_common.sh"
 
+############################# Functions #######################################
+usage()
+{
+cat <<-EOF >&2
+        usage: ./${0##*/} [-n PART] [-d DEVICE_TYPE] [-l LEN] [-o OFFSET] [-h USAGE]
+        -n DEV_NODE     optional param; partition number 
+        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+	-o OFFSET	offset for mtd_debug erase command 
+	-l LEN		length for mtd_debug erase command 
+        -h Help         print this usage
+EOF
+exit 0
+}
+
+
 ############################### CLI Params ###################################
 
 while getopts  :d:o:l:n:h arg
@@ -36,14 +51,11 @@ fi
 MTD_CHAR_DEV_NODE="$MTD_CHAR_DEV$PART"
 echo "MTD_CHAR_DEV_NODE: $MTD_CHAR_DEV$PART"
 
+# get erase length 
+ERASE_SIZE=`get_mtd_erase_size.sh $PART` || die "error getting whole mtd erase size for partition $PART"
+
 : ${OFFSET:='0'}
-: ${LEN:='erase_size'}
-
-# get erase length if erase size 
-if [ $LEN == "erase_size" ]; then
-	LEN=`get_mtd_erase_size.sh $PART` || die "error getting whole mtd erase size for partition $PART"
-fi
-
+: ${LEN:="$ERASE_SIZE"}
 
 ############# Do the work
 do_cmd mtd_debug erase $MTD_CHAR_DEV_NODE $OFFSET $LEN

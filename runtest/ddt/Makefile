@@ -31,7 +31,7 @@ FILTER_OUT_DIRS         :=
 # We don't want to copy over the Makefile
 UNWANTED_FILES		:= Makefile
 
-INSTALL_MODE		:= 00644
+INSTALL_MODE		:= 00664
 
 INSTALL_TARGETS		:= $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
 
