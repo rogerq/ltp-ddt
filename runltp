@@ -2,8 +2,9 @@
 ################################################################################
 ##                                                                            ##
 ## Copyright (c) International Business Machines  Corp., 2001                 ##
+## Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/     ##
 ##                                                                            ##
-## This program is free software;  you can redistribute it and#or modify      ##
+## This program is free software;  you can redistribute it and#or modify      ##4
 ## it under the terms of the GNU General Public License as published by       ##
 ## the Free Software Foundation; either version 2 of the License, or          ##
 ## (at your option) any later version.                                        ##
@@ -64,6 +65,12 @@
 #               - Added capability for default Log file generation
 #		Aug 17 2009 - Modified - Subrata Modak
 #		- Added Fault Injection generation Capability through -F Option
+#    		Mar 10 2011 - Modified - Carlos Hernandez
+#               - Added option (-P) to filter test cases based of platform 
+#		  capabilities. Platform capabilities consist of Architecture,
+#		  SoC, Machine and Driver names.
+#		  Test scenarios can optionally specify required capabilities
+#		  using @requires annotation. See runtest/ddt for examples
 #
 #################################################################################
 

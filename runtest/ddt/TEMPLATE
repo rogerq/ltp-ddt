@@ -1,14 +1,21 @@
-# @name Test scenario name. For example:
-#       Nand Write/Read Performance test
-# @desc Test scenario description. For example:
-#       Erase Nand MTD partition, mount it as jffs2 and writes to it
-#	By default, the partition number is specified in get_mtd_partition_number.sh; 
-# @requires  nand 
+# @name Test scenario name (i.e. Nand Write/Read Performance test)
+# @desc Test scenario description.
+# @requires nand 
 
-# The test scenario is made of one or more test steps. Each step is composed of
-# <TAG> <COMMANDS>.
-# Use following convention for TAGs <AREA>_<TYPE>_<ID>
+# PLEASE READ "DDT TESTS IMPLEMENTATION GUIDELINES" section in
+# <ltp-ddt-root>/README-DDT file before writing test cases.
+
 # The test step pass if the commands return zero, it fails otherwise.
-# For more information please refer to <root>/README-DDT file.
-NAND_PERF_0001 blk_device_filesystem_perf_test.sh -f jffs2 -s 10 -B "102400 256000" -d "nand"
+
+# Below you can see a real test scenario example.
+# common.sh defines:
+#  do_cmd(): Use to execute a command and check for return value
+#  die(): Print error message and fails the test (i.e exit e/ non-zero value)
+#  get_return_value(): Use to extract value in cases where a function returns 
+#                      multiple values in a file using key=value pairs.
+# There is a collection of scripts that implement well-defined 'atomic' actions,
+# users are encouraged to check available scripts at 
+# <ltp-ddt-root>testcases/ddt/scripts/ before implementing their own.
+
+NAND_FUNC_DD_RW_0001 source 'common.sh'; part=`get_mtd_partition_number.sh "nand"` || die "error getting mtd part number"; size=`get_mtd_erase_size.sh "$part"` || die "error getting mtd erase size"; blk_device_dd_readwrite_test.sh -f "jffs2" -b "$size" -c 10 -d "nand"
 

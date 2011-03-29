@@ -2,6 +2,7 @@
 #    runtest Makefile.
 #
 #    Copyright (C) 2009, Cisco Systems Inc.
+#    Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,6 +19,10 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 # Garrett Cooper, July 2009
+#
+#    Change Log
+#    Mar 10 2011 - Carlos Hernandez - Modified
+#       - Install only testcases under DDT directory
 #
 
 top_srcdir		?= ..

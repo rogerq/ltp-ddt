@@ -3,6 +3,7 @@
 #
 #    Copyright (C) 2009-2010, Cisco Systems Inc.
 #    Copyright (C) 2010-2011, Linux Test Project.
+#    Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,6 +20,11 @@
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 # Garrett Cooper, July 2009
+# 
+#    Change Log:
+#    03/10/2011, Carlos Hernandez:
+#	Include platforms directory.
+#       Include only testcases/ddt tests
 #
 
 # Force IDcheck.sh to fix any issues found with $(DESTDIR)/etc/group and
