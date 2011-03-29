@@ -58,6 +58,7 @@ esac
 : ${sound="davinci_sound"}
 : ${mmc:="davinci_mmc"}
 : ${spi:="davinci_spi"}
+: ${usb:="musb_hdrc"}
 
 ########################### DYNAMICALLY-DEFINED Params #########################
 # Try to use /sys and /proc information to determine values dynamically.

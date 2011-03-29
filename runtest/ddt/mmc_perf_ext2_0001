@@ -1,0 +1,8 @@
+# @name MMC Write/Read Performance test
+# @desc format mmc device first and then mount it and do read write perf test
+# @requires mmc_host
+
+MMC_PERF_EXT2_0001 blk_device_filesystem_perf_test.sh -f ext2 -s 10 -B "102400 256000" -d "mmc"
+
+
+

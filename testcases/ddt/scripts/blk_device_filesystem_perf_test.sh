@@ -84,10 +84,7 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	test_print_trc "Checking if Buffer Size is valid"
 	[ $BUFFER_SIZE -gt $(( $FILE_SIZE * $MB )) ] && die "Buffer size provided: $BUFFER_SIZE is not less than or equal to File size $FILE_SIZE MB"
 
-	test_print_trc "Checking if it is already mounted; if yes, unmount it; otherwise, contiune."
-	do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
-
-	test_print_trc "Erasing this partition completely"
+	test_print_trc "Erasing or Formatting this partition"
 	do_cmd blk_device_erase_format_part.sh -d $DEVICE_TYPE -n $DEV_NODE -f $FS_TYPE
 	test_print_trc "Mounting the partition"
 	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"

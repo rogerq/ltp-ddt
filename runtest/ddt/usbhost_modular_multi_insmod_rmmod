@@ -1,0 +1,9 @@
+# @name 
+#	USBHOST modular multiple insmod rmmod test 
+# @desc 
+#       modprobe usb module multiple times 
+# @requires  scsi_host 
+
+# The test step pass if the commands return zero, it fails otherwise.
+# For more information please refer to <root>/README-DDT file.
+USBHOST_MODULAR_STRESS_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -l "10" -d "usb" -s

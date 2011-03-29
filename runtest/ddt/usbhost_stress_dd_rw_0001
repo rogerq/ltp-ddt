@@ -3,7 +3,7 @@
 #	The device node is specified in get_blk_device_node.sh
 # @requires scsi_host 
 
-USBHOST_STRESS_DD_RW_0001 source 'common.sh'; DEV_NODE=`get_blk_device_node.sh "usb"` || die "error getting devnode for usb"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "10M" -c "1" -d "usb" -l "3" 
+USBHOST_STRESS_EXT2_DD_RW_0001 source 'common.sh'; DEV_NODE=`get_blk_device_node.sh "usb"` || die "error getting devnode for usb"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "10M" -c "1" -d "usb" -l "3" 
 
 
 

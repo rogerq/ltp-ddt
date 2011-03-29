@@ -63,6 +63,13 @@ esac
 # translate DEVICE_TYPE to DEV_TYPE (mtd or not)
 DEV_TYPE=`get_device_type_map.sh $DEVICE_TYPE` || die "error while translating device type"
 
+# if mount, umount it first before erase or format
+DEVNODE_ENTRY=`get_devnode_entry.sh "$DEV_NODE" "$DEVICE_TYPE"` || die "error getting devnode entry for $DEV_NODE"
+test_print_trc "Umount $DEV_NODE or $DEVNODE_ENTRY if it is mounted"
+do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
+do_cmd "mount" | grep $DEVNODE_ENTRY && do_cmd "umount $DEVNODE_ENTRY"
+sleep 3
+
 # do erase or format for following device type.
 case $DEV_TYPE in
 	mtd)
@@ -73,12 +80,8 @@ case $DEV_TYPE in
 		do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
 	;;
 	*)
-	exit 0
 		do_cmd "$MKFS $DEV_NODE"
 	;;
 esac
-#if [ $DEV_TYPE == "storage_device*" ]; then
-#        do_cmd "$MKFS $DEV_NODE"
-#fi
 
 

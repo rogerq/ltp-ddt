@@ -42,4 +42,5 @@ fi
 # do_cmd() will check return code and fail the test is return code is non-zero.
 do_cmd depmod -a
 do_cmd modprobe $MOD_NAME $OPT_PARAMS
-do_cmd lsmod | grep $MOD_NAME
+do_cmd lsmod | grep $MOD_NAME || die "error when modprobe $MOD_NAME"
+sleep 3

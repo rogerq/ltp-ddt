@@ -54,9 +54,7 @@ MNT_POINT=/mnt/partition_$DEVICE_TYPE
 : ${FS_TYPE:='jffs2'}
 
 ############# Do the work ###########################################
-test_print_trc "Checking if the device is already mounted; if yes, unmount it; otherwise, contiune."
-do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
-test_print_trc "Erasing this partition completely"
+test_print_trc "Erasing or Formatting this partition"
 do_cmd blk_device_erase_format_part.sh -d $DEVICE_TYPE -n $DEV_NODE -f $FS_TYPE
 do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
 

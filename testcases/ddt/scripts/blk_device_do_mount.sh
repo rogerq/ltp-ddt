@@ -47,8 +47,12 @@ done
 : ${MNT_POINT:="/mnt/partition_$DEVICE_TYPE"}
 
 ############# Do the work ###########################################
-test_print_trc "Checking if the device is already mounted; if yes, unmount it; otherwise, contiune."
+DEVNODE_ENTRY=`get_devnode_entry.sh "$DEV_NODE" "$DEVICE_TYPE"` || die "error getting devnode entry for $DEV_NODE"
+test_print_trc "Umount $DEV_NODE or $DEVNODE_ENTRY if it is mounted"
 do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
+do_cmd "mount" | grep $DEVNODE_ENTRY && do_cmd "umount $DEVNODE_ENTRY"
+sleep 2
+#do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
 #test_print_trc "Erasing this partition completely"
 #do_cmd erase_partition.sh -d $DEVICE_TYPE -n $DEV_NODE
 [ -d $MNT_POINT ] || do_cmd mkdir -p $MNT_POINT

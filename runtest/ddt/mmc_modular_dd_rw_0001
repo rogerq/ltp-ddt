@@ -1,0 +1,9 @@
+# @name 
+#	MMC modular read write test 
+# @desc 
+#       modprobe mmmc module first and then do RW and then rmmod it
+# @requires  mmc_host 
+
+# The test step pass if the commands return zero, it fails otherwise.
+# For more information please refer to <root>/README-DDT file.
+MMC_MODULAR_RW_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -f "ext2" -b "1M" -c "10" -l "1" -d "mmc"

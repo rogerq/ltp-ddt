@@ -8,8 +8,8 @@
 # @returns None
 # @history 2011-03-24: First version
 
-#source "common.sh"
-#source "st_log.sh"
+source "common.sh"
+source "st_log.sh"
 
 ############################# Functions #######################################
 usage()
@@ -22,22 +22,6 @@ cat <<-EOF >&2
         -h Help         print this usage
 EOF
 exit 0
-}
-
-get_devnode_entry()
-{
-	DEV_NODE=$1
-	DEVICE_TYPE=$2
-	case $DEVICE_TYPE in
-		mmc)
-			DEVNODE_ENTRY=`echo $DEV_NODE | sed 's/p[0-9]*$//' `
-		;;
-		*)
-			DEVNODE_ENTRY=`echo $DEV_NODE | sed 's/[0-9]*$//' `
-		;;
-	esac
-	[ -z $DEVNODE_ENTRY ] && exit 1
-	echo $DEVNODE_ENTRY
 }
 
 get_end_sector(){
@@ -79,10 +63,10 @@ esac
 FDISK="fdisk"
 
 ########################## Do the work #########################################
-DEVNODE_ENTRY=`get_devnode_entry "$DEV_NODE" "$DEVICE_TYPE"` || echo "error getting devnode entry for $DEV_NODE"
-echo "Umount $DEV_NODE or $DEVNODE_ENTRY if it is mounted"
-mount | grep $DEV_NODE && umount $DEV_NODE 
-mount | grep $DEVNODE_ENTRY && umount $DEVNODE_ENTRY 
+DEVNODE_ENTRY=`get_devnode_entry.sh "$DEV_NODE" "$DEVICE_TYPE"` || die "error getting devnode entry for $DEV_NODE"
+test_print_trc "Umount $DEV_NODE or $DEVNODE_ENTRY if it is mounted"
+do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
+do_cmd "mount" | grep $DEVNODE_ENTRY && do_cmd "umount $DEVNODE_ENTRY"
 sleep 2
 
 CYLINDER_END=`get_end_sector $DEVNODE_ENTRY`
@@ -99,10 +83,10 @@ elif [ "$NUM_PARTS" == '2' ]; then
 	FDISK_DEL_OPTS="p\np\nd\n1\nd\nw\n"
 	FDISK_CREATE_OPTS="p\np\nn\np\n1\n\n${CYLINDER_MIDDLE}\nn\np\n2\n${CYLINDER2_START}\n\nw\n"
 fi
-echo "Delete partition(s) on $DEVNODE_ENTRY"
+test_print_trc "Delete partition(s) on $DEVNODE_ENTRY"
 echo -e $FDISK_DEL_OPTS | $FDISK $DEVNODE_ENTRY
 sleep 3
-echo "Create partition(s) on $DEVNODE_ENTRY"
+test_print_trc "Create partition(s) on $DEVNODE_ENTRY"
 echo -e $FDISK_CREATE_OPTS | $FDISK $DEVNODE_ENTRY
 
 # End Of File

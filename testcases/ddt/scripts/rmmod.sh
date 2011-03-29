@@ -33,5 +33,5 @@ MOD_NAME=$1
 
 # Use do_cmd() (imported from common.sh) to execute your test steps.
 # do_cmd() will check return code and fail the test is return code is non-zero.
-do_cmd rmmod $MOD_NAME
+do_cmd modprobe -r $MOD_NAME
 do_cmd "lsmod | grep $MOD_NAME && die "$MOD_NAME should not be seen in lsmod" || exit 0"
