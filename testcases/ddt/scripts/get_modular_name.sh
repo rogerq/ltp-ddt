@@ -13,7 +13,7 @@
 # 
 # @desc Get modular name for a driver.
 # @params 
-#        Input: driver_name like "nand", "mmc", "spi", "sound" 
+#        Input: device type like "nand", "mmc", "spi", "sound" 
 # @returns Modular name for this driver
 # @history 2011-03-22: First version
 
@@ -24,10 +24,10 @@ source "common.sh"  # Import do_cmd(), die() and other functions
 ################################ CLI Params ####################################
 if [ $# -ne 1 ]; then
         echo "Error: Invalid Argument Count"
-        echo "Syntax: $0 <driver_name>"
+        echo "Syntax: $0 <device_type like 'nand', 'mmc', 'spi', 'rtc'>"
         exit 1
 fi
-DRIVER_NAME=$1
+DEVICE_TYPE=$1
 ############################ USER-DEFINED Params ###############################
 # Try to avoid defining values here, instead see if possible
 # to determine the value dynamically. ARCH, DRIVER, SOC and MACHINE are 
@@ -49,8 +49,10 @@ do
         *davinci-mmc)
             mmc="davinci_mmc";;
 
-        *omap-rtc)
+        *rtc-s35390a)
             rtc="rtc-s35390a";;
+	*omap_rtc)
+	    rtc="rtc-omap";;	
 
         *davinci_spi)
             spi="davinci_spi";;
@@ -85,8 +87,8 @@ esac
 
 # Use do_cmd() (imported from common.sh) to execute your test steps.
 # do_cmd() will check return code and fail the test is return code is non-zero.
-#echo ${!DRIVER_NAME}
-eval MODULE_NAME=\$$DRIVER_NAME
+#echo ${!DEVICE_TYPE}
+eval MODULE_NAME=\$$DEVICE_TYPE
 if [ -z $MODULE_NAME ]; then
 	die 'error module name not found'
 	exit 1

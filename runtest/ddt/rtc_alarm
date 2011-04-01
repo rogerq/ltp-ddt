@@ -1,0 +1,10 @@
+# @name RTC Alarm set,get, enable and disable ioctl test
+# @desc RTC Alarm set,get, enable and disable ioctl test
+# @requires rtc 
+
+RTC_FUNC_ALARM_0001 source 'common.sh'; DEV_NODE=`get_devnode.sh "rtc"` || die "error getting devnode for rtc"; do_cmd rtc_tests -device $DEV_NODE  -ioctltest alarm -ioctltestarg 30 
+
+
+
+
+

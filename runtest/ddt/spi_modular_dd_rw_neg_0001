@@ -9,8 +9,7 @@
 # Use following convention for TAGs <AREA>_<TYPE>_<ID>
 # The test step pass if the commands return zero, it fails otherwise.
 # For more information please refer to <root>/README-DDT file.
-SPI_MODULAR_FUNC_INSMOD_0001 source "common.sh"; mod_name=`get_modular_name.sh 'spi'` || die "error getting modular name"; do_cmd insmod.sh "$mod_name" 
 
-SPI_MODULAR_FUNC_NEG_MOD_RW_0002 source "common.sh"; mod_name=`get_modular_name.sh 'spi'` || die "error getting modular name"; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd part number"; size=`get_mtd_size.sh "$part"` || die "error getting mtd size"; size=$(( $size/MB )) && size=`get_ceiling_divide.sh "$size" 2` || die "error getting divide ceiling"; blk_device_modular_dd_rw_neg.sh -f "jffs2" -b "1M" -c "$size" -l "1" -d "spi" -i "write_in_bg" -M "$mod_name"
+SPI_MODULAR_FUNC_NEG_MOD_RW_0001 source "common.sh"; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd part number"; size=`get_mtd_size.sh "$part"` || die "error getting mtd size"; size=$(( $size/MB )) && size=`get_ceiling_divide.sh "$size" 2` || die "error getting divide ceiling"; blk_device_modular_dd_rw_neg.sh -f "jffs2" -b "1M" -c "$size" -d "spi" -i "write_in_bg" 
 
 #SPI_MODULAR_RMMOD_0003 source "common.sh"; mod_name=`get_modular_name.sh 'spi'` || die "error getting modular name"; do_cmd rmmod.sh "$mod_name" 

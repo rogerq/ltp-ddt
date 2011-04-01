@@ -23,7 +23,7 @@ source "mtd_common.sh"
 usage()
 {
 cat <<-EOF >&2
-        usage: ./${0##*/} [-n DEV_NODE] [-d DEVICE_TYPE] [-f FS_TYPE] [-m MNT_POINT] [-b DD_BUFSIZE] [-c DD_CNT] [-i IO_OPERATION] [-l TEST_LOOP] [-s SKIP_RW]
+        usage: ./${0##*/} [-n DEV_NODE] [-d DEVICE_TYPE] [-f FS_TYPE] [-m MNT_POINT] [-b DD_BUFSIZE] [-c DD_CNT] [-i IO_OPERATION] [-l TEST_LOOP] 
 	-n DEV_NODE	optional param; device node like /dev/mtdblock2; /dev/sda1
         -f FS_TYPE      filesystem type like jffs2, ext2, etc
         -m MNT_POINT	optional param; mount point; if not given, use /mnt/partition_<dev_type> 
@@ -32,7 +32,6 @@ cat <<-EOF >&2
         -i IO_OPERATION	IO operation like 'write', 'read', default is 'read'
         -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
 	-l TEST_LOOP	test loop for r/w. default is 1.
-	-s SKIP_RW	skip rw test, only do insmod/rmmod
         -h Help         print this usage
 EOF
 exit 0
@@ -51,7 +50,6 @@ do case $arg in
         c)      DD_CNT="$OPTARG";;
 	i) 	IO_OPERATION="$OPTARG";;
 	l) 	TEST_LOOP="$OPTARG";;
-	s)	SKIP_RW=1;;
         h)      usage;;
         :)      test_print_trc "$0: Must supply an argument to -$OPTARG." >&2
                 exit 1
@@ -72,29 +70,29 @@ fi
 : ${FS_TYPE:='jffs2'}
 : ${IO_OPERATION:='read'}
 : ${TEST_LOOP:='1'}
-: ${SKIP_RW:=0}
 test_print_trc "DEV_NODE: $DEV_NODE"
 test_print_trc "MNT_POINT: $MNT_POINT"
 test_print_trc "FS_TYPE: $FS_TYPE"
 
 ############# Do the work ###########################################
 test_print_trc "Doing insmod;read/write;rmmod test for $TEST_LOOP times"
-x=0
-while [ $x -lt $TEST_LOOP ]
-do
-
-	MOD_NAME=`get_modular_name.sh "$DEVICE_TYPE"` || die "error getting modular name" 
-	do_cmd insmod.sh "$MOD_NAME"
-
-	if [ !$SKIP_RW ]; then
-		do_cmd blk_device_dd_readwrite_test.sh -f "$FS_TYPE" -b "$DD_BUFSIZE" -c "$DD_CNT" -l "1" -d "$DEVICE_TYPE" -n "$DEV_NODE"
-	fi
-
-	do_cmd rmmod.sh "$MOD_NAME"
-
-        x=$((x+1))
-
-done
+do_cmd do_modular_common.sh -d "$DEVICE_TYPE" -l "$TEST_LOOP" -a "\"do_cmd blk_device_dd_readwrite_test.sh -f "$FS_TYPE" -b "$DD_BUFSIZE" -c "$DD_CNT" -l "1" -d "$DEVICE_TYPE" -n "$DEV_NODE"\" " 
+#x=0
+#while [ $x -lt $TEST_LOOP ]
+#do
+#
+#	MOD_NAME=`get_modular_name.sh "$DEVICE_TYPE"` || die "error getting modular name" 
+#	do_cmd insmod.sh "$MOD_NAME"
+#
+#	if [ !$SKIP_RW ]; then
+#		do_cmd blk_device_dd_readwrite_test.sh -f "$FS_TYPE" -b "$DD_BUFSIZE" -c "$DD_CNT" -l "1" -d "$DEVICE_TYPE" -n "$DEV_NODE"
+#	fi
+#
+#	do_cmd rmmod.sh "$MOD_NAME"
+#
+#        x=$((x+1))
+#
+#done
 
 
 

@@ -1,0 +1,11 @@
+# @name RTC readtime modular test
+# @desc Insert module, then do readtime test, then remove module
+# @requires rtc 
+
+RTC_MODULAR_READTIME_0001 source 'common.sh'; DEV_NODE=`get_devnode.sh "rtc"` || die "error getting devnode for rtc"; do_cmd 'do_modular_common.sh -d "rtc" -a "do_cmd rtc_tests -device $DEV_NODE  -ioctltest readtime"'
+#RTC_MODULAR_READTIME_0001 source 'common.sh'; do_cmd "do_modular_common.sh -d 'rtc' -a 'do_cmd rtc_tests -device $DEV_NODE  -ioctltest readtime'"
+
+
+
+
+

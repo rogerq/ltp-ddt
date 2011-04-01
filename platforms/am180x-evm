@@ -6,4 +6,5 @@ spi_master/spi_davinci
 mmc_host/davinci_mmc
 scsi_host/ahci
 sound/soc-audio
+rtc/omap_rtc
 

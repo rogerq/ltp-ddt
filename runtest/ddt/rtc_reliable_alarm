@@ -1,0 +1,10 @@
+# @name RTC reliable test by using alarm
+# @desc Put Alarm for 8 Hours and check the rtc time is reliable or not
+# @requires rtc 
+
+RTC_STRESS_ALARM_0001 source 'common.sh'; DEV_NODE=`get_devnode.sh "rtc"` || die "error getting devnode for rtc"; do_cmd rtc_tests -device $DEV_NODE  -ioctltest alarm -ioctltestarg 28800 
+
+
+
+
+
