@@ -1,0 +1,11 @@
+# @name Ethernet performance using IPERF
+# @desc Run Iperf as a server in a host PC and as a client in the target machine
+# Test different window sizes, from 8K to 128K
+# @requires net/eth
+
+ETH_M_PERF_IPERF_TCP_8K source 'common.sh'; run_iperf.sh -f M -d -t 60 -w 8K
+ETH_M_PERF_IPERF_TCP_16K source 'common.sh'; run_iperf.sh -f M -d -t 60 -w 16K
+ETH_M_PERF_IPERF_TCP_32K source 'common.sh'; run_iperf.sh -f M -d -t 60 -w 32K
+ETH_M_PERF_IPERF_TCP_64K source 'common.sh'; run_iperf.sh -f M -d -t 60 -w 64K
+ETH_M_PERF_IPERF_TCP_128K source 'common.sh'; run_iperf.sh -f M -d -t 60 -w 128K
+
