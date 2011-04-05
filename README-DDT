@@ -74,13 +74,13 @@
    TAG is a string that identifies the test step.
      Use following convention to named TAGs so that the test cases can be 
      selectively run based on AREA, SCOPE and/or TYPE.  
-     <AREA>_<SCOPE>_<TYPE>_<OPT>_<ID>,
-      i.e. “NAND_S_FUNC_RW_0001”, “NAND_M_PERF_0001” 
+     <AREA>_<SCOPE>_<TYPE>_<OPT_ID>,
+      i.e. “NAND_S_FUNC_RW_8K”, “NAND_M_PERF_ALL-SIZES” 
      The SCOPE tags are used to indicate the amount of time require to run
      the tests, giving users ability to filter test cases based on estimated
      execution time.
      SCOPE TAGS:
-      'S', 'M', 'L' (for Small, Medium and Large tests.
+      'S', 'M', 'L'  (for Small, Medium and Large tests.
 		     Just imagine you are buying clothes ;)
      TYPE TAGS:
       ‘FUNC’, ‘PERF’, ‘STRESS’, ‘USECASE’, ‘COMPLIANCE’, ‘MODULAR’, ‘DOC’
