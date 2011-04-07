@@ -1,8 +1,0 @@
-# @name USB Host Write/Read Performance test
-# @desc format usb device first and then mount it and do read write perf test
-# @requires scsi_host
-
-USBHOST_PERF_EXT2_0001 blk_device_filesystem_perf_test.sh -f ext2 -s 10 -B "102400 256000" -d "usb"
-
-
-
