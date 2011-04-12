@@ -35,7 +35,7 @@ vpath %.c $(abs_srcdir)
 # For config.h, et all.
 CPPFLAGS			+= -I$(top_srcdir)/include -I$(top_builddir)/include
 
-LDFLAGS				+= -L$(top_builddir)/lib --hash-style=gnu
+LDFLAGS				+= -L$(top_builddir)/lib -Wl,--hash-style=gnu -Wl,-O1
 
 ifeq ($(UCLINUX),1)
 CPPFLAGS			+= -D__UCLIBC__ -DUCLINUX
