@@ -7,4 +7,5 @@ mmc_host/davinci_mmc
 scsi_host/ahci
 sound/soc-audio
 rtc/omap_rtc
-
+i2c-dev/i2c-gpio
+watchdog

@@ -2,4 +2,4 @@
 # @desc Run all LMBENCH tests
 # @requires armv*
 
-LMBENCH_PERF_0001 lmbench_tests_script.sh
+LMBENCH_L_PERF_0001 lmbench_tests_script.sh

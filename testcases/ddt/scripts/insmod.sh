@@ -36,22 +36,10 @@ if [ -n "$*" ]; then
 	OPT_PARAMS="$*"
 fi
 ############################ USER-DEFINED Params ###############################
-# Try to avoid defining values here, instead see if possible
-# to determine the value dynamically. ARCH, DRIVER, SOC and MACHINE are 
-# initilized and exported by runltp script based on platform option (-P)
+
 ########################### DYNAMICALLY-DEFINED Params #########################
-# Try to use /sys and /proc information to determine values dynamically.
-# Alternatively you should check if there is an existing script to get the
-# value you want
 
 ########################### REUSABLE TEST LOGIC ###############################
-# DO NOT HARDCODE any value. If you need to use a specific value for your setup
-# use USER-DEFINED Params section above.
-
-# Avoid using echo. Instead use print functions provided by st_log.sh
-
-# Use do_cmd() (imported from common.sh) to execute your test steps.
-# do_cmd() will check return code and fail the test is return code is non-zero.
 do_cmd depmod -a
 do_cmd modprobe $MOD_NAME $OPT_PARAMS
 LSMOD_NAME=`echo $MOD_NAME | sed 's/-/_/g'` || die "error getting lsmod_name"

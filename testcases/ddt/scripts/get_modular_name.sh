@@ -40,7 +40,7 @@ for DRIVER in $DRIVERS
 do
     case $DRIVER in
         *omap2-nand)
-            nand="omap2?";;
+            nand="omap2_nand";; # not sure this is the right one.
         *davinci-nand)
             nand="davinci_nand";;
 
@@ -56,6 +56,9 @@ do
 
         *davinci_spi)
             spi="davinci_spi";;
+
+        *watchdog)
+            wdt="davinci_wdt";;
     esac
 done
 IFS=$IFS_ORIG

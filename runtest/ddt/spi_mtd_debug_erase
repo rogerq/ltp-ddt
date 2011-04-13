@@ -1,7 +1,7 @@
 # @name SPI erase test using mtd_debug
 # @desc Erase SPI MTD partition
 #	The partition number is specified in get_mtd_partition_number.sh
-# @requires spi
+# @requires spi_master
 
 #NAND_FUNC_ERASE_0001 mtd_debug_erase.sh -n 4 -o 0 -d "spi"
 #NAND_FUNC_ERASE_0001 mtd_debug_erase.sh -d "spi"
