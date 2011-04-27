@@ -19,7 +19,6 @@
 # @history 2011-03-05: First version
 
 source "common.sh"  # Import do_cmd(), die() and other functions
-source "st_log.sh"  # Import log functions such as test_print_trc()
 
 ############################# Functions #######################################
 usage()
@@ -27,6 +26,11 @@ usage()
 	echo "Here is the usage of this script"
 	exit 1
 }
+
+############################ Script Variables ##################################
+# Define default valus if possible
+SAMPLE1="val1"
+SAMPLE2="val2"
 
 ################################ CLI Params ####################################
 # Please use getopts
@@ -39,14 +43,15 @@ do case $arg in
         \?)     die "Invalid Option -$OPTARG ";;
 esac
 done
-# Define default values if possible
-: ${SAMPLE1:='val1'}
-: ${SAMPLE2:='val2'}
 
 ############################ USER-DEFINED Params ###############################
 # Try to avoid defining values here, instead see if possible
 # to determine the value dynamically. ARCH, DRIVER, SOC and MACHINE are 
 # initilized and exported by runltp script based on platform option (-P)
+
+# Define default values for variables being overriden
+PARTITION="4"
+
 case $ARCH in
 esac
 case $DRIVER in
@@ -56,8 +61,6 @@ esac
 case $MACHINE in
 	am180x-evm) PARTITION='2';;
 esac
-# Define default values for variables being overriden
-: ${PARTITION:='4'}
 
 ########################### DYNAMICALLY-DEFINED Params #########################
 # Try to use /sys and /proc information to determine values dynamically.
@@ -68,6 +71,10 @@ ERASE_SIZE=`./get_mtd_erase_size.sh $PARTITION`
 ########################### REUSABLE TEST LOGIC ###############################
 # DO NOT HARDCODE any value. If you need to use a specific value for your setup
 # use USER-DEFINED Params section above.
+
+# Uncomment the following line if you want the change the behavior of
+# do_cmd to treat non-zero values as pass and zero as fail.
+# inverted_return="true"
 
 # Avoid using echo. Instead use print functions provided by st_log.sh
 test_print_trc "Sample trace log"
