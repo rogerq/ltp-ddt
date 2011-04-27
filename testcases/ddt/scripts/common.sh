@@ -20,16 +20,29 @@ GB=$((1024*1024*1024))
 
 
 ########### FUNCTIONS #####################
+# Default value for inverted_return is "false" but can
+# be overridden by individual scripts.
+inverted_return="false"
+
 do_cmd() {
 	CMD=$*
 	test_print_trc "Inside do_cmd:CMD=$CMD"
 	eval $CMD
 	RESULT=$?
-	if [ $RESULT -ne 0 ]
-	then
-		test_print_err "$CMD failed. Return code is $RESULT"
-		exit $RESULT
-	fi
+    if [ "$inverted_return" == "false" ]
+    then
+	    if [ $RESULT -ne 0 ]
+	    then
+		    test_print_err "$CMD failed. Return code is $RESULT"
+		    exit $RESULT
+	    fi
+    else
+        if [ $RESULT -eq 0 ]
+        then
+		    test_print_err "$CMD failed. Return code is $RESULT"
+		    exit $RESULT
+        fi
+    fi
 }
 #do_cmd "mount | grep mtdblock4 || echo notmounted"
 
