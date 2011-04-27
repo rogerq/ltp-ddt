@@ -46,6 +46,19 @@ do_cmd() {
 }
 #do_cmd "mount | grep mtdblock4 || echo notmounted"
 
+# Check the given list of parameters and verify that they are set.
+check_mandatory_inputs() {
+    for x in $*
+    do
+        eval t="$"$x
+        if [ "$t" == "" ]
+        then
+            test_print_trc "Mandatory input \"$x\" not specified"
+            exit 1
+        fi
+    done
+}
+
 die() {
 	test_print_err "FATAL: $*"
 	exit 1
