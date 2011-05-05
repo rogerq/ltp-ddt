@@ -1,0 +1,15 @@
+armv7l
+am37x
+am37x-evm
+net/eth/davinci_emac
+nand/omap2-nand
+scsi_host/ehci-omap
+i2c-dev/omap_i2c
+i2c-eeprom
+mmc_host/mmci-omap-hs
+rtc/rtc-s35390a
+sound/controlC/soc-audio
+watchdog/omap_wdt
+power
+
+

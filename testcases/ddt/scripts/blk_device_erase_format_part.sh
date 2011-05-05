@@ -88,8 +88,9 @@ case $DEV_TYPE in
 		test_print_trc "device type is mtd"
 		CHAR_DEV_NODE=`echo $DEV_NODE | sed s/block//` || die "error while getting mtd char dev_node"
 		[ ! -c $CHAR_DEV_NODE ] && die "$CHAR_DEV_NODE is not char device"
-	exit 0
+	#exit 0
 		do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
+		sleep 1
 	;;
 	*)
 		do_cmd "$MKFS $DEV_NODE"

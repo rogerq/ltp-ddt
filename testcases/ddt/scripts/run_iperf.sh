@@ -30,9 +30,9 @@ usage()
 
 ################################ CLI Params ####################################
 # Please use getopts
-while getopts  :a:s:h arg
+while getopts  :H:h arg
 do case $arg in
-        H)      IPERFHOST="$OPTARG";;
+        H)      IPERFHOST="$OPTARG"; shift 2 ;;
         h)      usage;;
         :)      ;; 
         \?)     ;;

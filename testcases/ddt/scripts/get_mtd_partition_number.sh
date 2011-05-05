@@ -46,7 +46,6 @@ case $MACHINE in
 
                 case $DEVICE_TYPE in
                         nand)
-#                                : ${PARTITION:='8'}
                                 ;;
                 esac
 

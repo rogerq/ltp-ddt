@@ -158,6 +158,19 @@ case $MACHINE in
                 esac
 		;;
 
+
+        am37x-evm)
+
+                case $SLAVE_DEVICE in
+			default)
+                                SLAVE_ADDR=0x0 # TODO: fill in the slave addr
+			;;
+			*)
+				die "Unknown slave device! Can not get slave address."
+			;;
+                esac
+		;;
+
         am180x-evm)
 
                 case $SLAVE_DEVICE in

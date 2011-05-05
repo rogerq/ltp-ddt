@@ -1,0 +1,9 @@
+# @name USB Host Write/Read Performance test
+# @desc format usb device first and then mount it and do read write perf test
+# @requires scsi_host
+
+USBHOST_S_PERF_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 10 -B "102400 256000" -d "usb"
+USBHOST_L_PERF_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 100 -B "102400 256000" -d "usb"
+
+
+

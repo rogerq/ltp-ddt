@@ -29,7 +29,7 @@ INSTALL_DIR		:= scenario_groups
 # Don't copy over the Makefile
 UNWANTED_FILES		:= Makefile
 
-INSTALL_MODE		:= 00644
+INSTALL_MODE		:= 00664
 
 INSTALL_TARGETS		:= $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
 

@@ -1,0 +1,16 @@
+# How to use the scripts?
+# Run TCP
+
+1. In 'eth_tcp_test.sh' script, replace the IP addr with your DUT's IP address. Also change to your platform after -P.
+2. In host PC, run 'eth_tcp_test.sh'.
+
+# Run UDP
+# Need run both directions separately
+## DUT to PC 
+1. In 'eth_udp_test_DUTtoPC.sh', change IP address to your DUT IP and platform to your platform.
+2. In host PC, run 'eth_udp_test_DUTtoPC.sh'.
+## PC to DUT
+1. In 'eth_udp_test_PCtoDUT.sh', change IP address to your DUT IP.
+2. In DUT, type 'iperf -s -u -w 128k' to start iperf server.
+3. In host PC, run 'eth_udp_test_PCtoDUT.sh'. 
+	
