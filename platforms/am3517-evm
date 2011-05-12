@@ -1,15 +1,20 @@
 armv7l
 am3517
 am3517-evm
-net/eth/davinci_emac
-nand/omap2-nand
-scsi_host/ehci-omap
-i2c-dev/omap_i2c
-i2c-eeprom
+edma
+i2c
+i2c/eeprom
 mmc_host/mmci-omap-hs
+nand/omap2-nand
+nor
+net/eth10M/davinci_emac
+net/eth100M/davinci_emac
 rtc/rtc-s35390a
-sound/controlC/soc-audio
+sound/capture/alsa
+sound/playback/alsa
+usb/host/msc/
+video/capture
+video/display
 watchdog/omap_wdt
-power
 
 

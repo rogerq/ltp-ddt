@@ -108,6 +108,17 @@
 ================================================================================
  * Copy the default platform file available at platforms/TEMPLATE to 
    platforms/<your platform>. <your platform> name is typically the evm name
+ * Please use the following names for platform files and to compare against 
+   $MACHINE when writing ltp-ddt scripts:
+
+    am180x-evm   arago-armv7         dm355-evm    dm814x-evm
+    am181x-evm   dm365-evm           dm816x-evm
+    am3517-evm   beagleboard         dm368-evm    
+    am37x-evm    c6a814x-evm         dm37x-evm    omap3evm
+    am387x-evm   c6a816x-evm         dm6446-evm   tnetv107x-evm
+    am389x-evm   da830-omapl137-evm  dm6467-evm
+    arago-armv5  da850-omapl138-evm  dm6467t-evm
+
  * Modify your platform file based on the capabilities supported by the new evm
    The platform file identifies the architecture, the SoC, the evm and the
    supported drivers. The supported drivers lines follow a variation of the

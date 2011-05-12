@@ -1,6 +1,6 @@
 armv7l
-am37x
-am37x-evm
+am389x
+am389x-evm
 edma
 i2c
 i2c/eeprom
@@ -11,8 +11,10 @@ net/eth100M/davinci_emac
 power_mgr/cpufreq
 power_mgr/cpuidle
 rtc/rtc-s35390a
+sata/ahci
 sound/capture/alsa
 sound/playback/alsa
+spi_master/omap2_mcspi
 usb/host/msc
 video/capture
 video/display
