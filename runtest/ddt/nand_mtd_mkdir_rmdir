@@ -3,10 +3,10 @@
 #	The partition number is specified in get_mtd_partition_number.sh
 # @requires nand
 
-NAND_FUNC_MKDIR_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nand"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "nand" -m "/mnt/nand"; do_cmd mkdir "/mnt/nand/test" 
-NAND_FUNC_CHMOD_0001 source 'common.sh'; do_cmd chmod 777 "/mnt/nand/test"
-NAND_FUNC_RMDIR_0001 source 'common.sh'; do_cmd rmdir "/mnt/nand/test"
-NAND_FUNC_UMOUNT_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nand"`; dev_node="$MTD_BLK_DEV$part"; do_cmd umount "$dev_node"
+NAND_M_FUNC_MKDIR_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nand"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "nand" -m "/mnt/nand"; do_cmd mkdir "/mnt/nand/test" 
+NAND_M_FUNC_CHMOD_0001 source 'common.sh'; do_cmd chmod 777 "/mnt/nand/test"
+NAND_M_FUNC_RMDIR_0001 source 'common.sh'; do_cmd rmdir "/mnt/nand/test"
+NAND_M_FUNC_UMOUNT_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nand"`; dev_node="$MTD_BLK_DEV$part"; do_cmd umount "$dev_node"
 
 
 

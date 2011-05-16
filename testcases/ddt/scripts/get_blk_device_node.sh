@@ -27,6 +27,43 @@ if [ $# -ne 1 ]; then
 fi
 DEVICE_TYPE=$1
 
+############################ Functions ################################
+# this function is to get SCSI device usb or sata node based on vendor info
+# assume SATA's vendor always ATA; if not, throw error
+# input is either 'sata' or 'usb'
+ 
+find_scsi_node() {
+	SCSI_DEVICE=$1
+	# find the first drive for SATA to test, ignore the second one if any
+	# Assume maximum 2 usb and 2 sata plugged in
+	DRIVES='a b c d'
+	for DRIVE in $DRIVES; do
+		if [ -e /sys/block/sd"$DRIVE"/device/vendor ]; then
+		VENDOR=`cat /sys/block/sd"$DRIVE"/device/vendor`
+		RESULT=`echo $VENDOR | grep -i "ATA"`
+		case $SCSI_DEVICE in
+			sata)
+				if [ -n "$RESULT" ]; then
+					DEV_NODE="/dev/sd"$DRIVE"1"
+					echo $DEV_NODE
+					exit 0				
+				fi
+			;;
+			usb)
+				if [ -z "$RESULT" ]; then
+					DEV_NODE="/dev/sd"$DRIVE"1"
+					echo $DEV_NODE
+					exit 0				
+				fi
+			;;
+		esac
+		fi
+	done
+	# if could not find match, let user know
+	echo "Could not find device node for SCSI device!"
+	exit 1
+}
+
 ############################ Default Params ##############################
 DEV_TYPE=`get_device_type_map.sh "$DEVICE_TYPE"` || die "error getting device type"
 case $DEV_TYPE in
@@ -38,10 +75,14 @@ case $DEV_TYPE in
                 DEV_NODE="/dev/mmcblk0p1"
         ;;
         usb)
-                DEV_NODE="/dev/sda1"
+                #DEV_NODE="/dev/sda1"
+		DEV_NODE=`find_scsi_node "usb"`  
         ;;
         ata)
                 DEV_NODE="/dev/hda1"
+        ;;
+        sata)
+		DEV_NODE=`find_scsi_node "sata"` || die "error getting sata node"
         ;;
         *)
                 die "Invalid device type in $0 script"

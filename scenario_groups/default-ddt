@@ -1,5 +1,3 @@
-ddt/eth_iperf_tcp
-ddt/eth_iperf_udp
 ddt/eth_ping
 ddt/i2c_perf_eeprom
 ddt/i2c_readwrite
@@ -35,6 +33,16 @@ ddt/rtc_reliable_alarm
 ddt/rtc_setgettime
 ddt/rtc_stress_setgettime
 ddt/rtc_updateint
+ddt/sata_dd_rw_ext2
+ddt/sata_dd_rw_vfat
+ddt/sata_dd_rw_vfat-cp
+ddt/sata_modular_dd_rw_ext2
+ddt/sata_modular_dd_rw_vfat
+ddt/sata_modular_multi_insmod_rmmod
+ddt/sata_modular_stress_dd_rw
+ddt/sata_perf_ext2
+ddt/sata_perf_vfat
+ddt/sata_stress_dd_rw_ext2
 ddt/spi_check_mtd_existence
 ddt/spi_check_mtd_proc_entry
 ddt/spi_insmod_rmmod
@@ -58,3 +66,5 @@ ddt/usbhost_modular_stress_dd_rw
 ddt/usbhost_perf_ext2
 ddt/usbhost_perf_vfat
 ddt/usbhost_stress_dd_rw
+ddt/v4l2_cap_func
+ddt/v4l2_cap_perf

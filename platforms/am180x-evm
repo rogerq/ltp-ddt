@@ -11,6 +11,6 @@ rtc/omap_rtc
 sata
 sound/capture/alsa
 sound/playback/alsa
-spi_master/spi_davinci
+spi_master/mtd/spi_davinci
 usb/host/msc
 watchdog

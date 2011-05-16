@@ -2,7 +2,7 @@
 # @desc Check if /proc/mtd is populated
 # @requires nand
 
-NAND_MTD_PROC_ENTRY_0001 cat /proc/mtd | grep 'mtd' && exit 0 || exit 1
+NAND_M_FUNC_MTD_PROC_ENTRY_0001 cat /proc/mtd | grep 'mtd' && exit 0 || exit 1
 
 
 

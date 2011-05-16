@@ -15,7 +15,7 @@ MMC_L_FUNC_EXT2_DD_RW_0005 source 'common.sh'; do_cmd blk_device_dd_readwrite_te
 
 MMC_L_FUNC_EXT2_DD_RW_0006 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "64K" -c "10" -d "mmc"
 
-MMC_S_FUNC_EXT2_DD_RW_0007 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "1M" -c "10" -d "mmc"
+MMC_M_FUNC_EXT2_DD_RW_0007 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "1M" -c "10" -d "mmc"
 
 MMC_L_FUNC_EXT2_DD_RW_0008 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "5M" -c "10" -d "mmc"
 

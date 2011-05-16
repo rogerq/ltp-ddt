@@ -1,8 +1,8 @@
 # @name Check if /proc/mtd is populated 
 # @desc Check if /proc/mtd is populated
-# @requires spi_master 
+# @requires spi_master/mtd 
 
-SPI_MTD_PROC_ENTRY_0001 cat /proc/mtd | grep 'mtd' && exit 0 || exit 1
+SPI_M_FUNC_MTD_PROC_ENTRY_0001 cat /proc/mtd | grep 'mtd' && exit 0 || exit 1
 
 
 

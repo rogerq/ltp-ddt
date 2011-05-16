@@ -1,7 +1,7 @@
 # @name I2C write read performance test on eeprom device
 # @desc I2C write read performance test on eeprom device 
 # @notes Slave address can be found in 'get_i2c_slave_addr'. 
-# @requires i2c-dev && i2c-eeprom 
+# @requires i2c/eeprom 
 
 I2C_L_PERF_RW source 'common.sh'; do_cmd "i2c_tests_perf.sh -d "eeprom" -B "4 8 16 32 64" -s 1024 -p 64"
 

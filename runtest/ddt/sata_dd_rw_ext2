@@ -1,0 +1,29 @@
+# @name SATA device w/r test with fs:ext2
+# @desc Perform mkfs first, then do read write 
+#	The device node is specified in get_blk_device_node.sh
+# @requires sata 
+
+SATA_L_FUNC_EXT2_DD_RW_B001_C001 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "1" -c "1" -d "sata" 
+
+SATA_L_FUNC_EXT2_DD_RW_B512_C001 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "512" -c "1" -d "sata"
+
+SATA_M_FUNC_EXT2_DD_RW_B64K_C001 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "64K" -c "1" -d "sata"
+
+SATA_L_FUNC_EXT2_DD_RW_B512K_C001 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "512K" -c "1" -d "sata"
+
+SATA_L_FUNC_EXT2_DD_RW_B05M_C001 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "5M" -c "1" -d "sata"
+
+SATA_L_FUNC_EXT2_DD_RW_B64K_C010 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "64K" -c "10" -d "sata"
+
+SATA_M_FUNC_EXT2_DD_RW_B01M_C010 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "1M" -c "10" -d "sata"
+
+SATA_L_FUNC_EXT2_DD_RW_B05M_C010 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "5M" -c "10" -d "sata"
+
+SATA_L_FUNC_EXT2_DD_RW_B10M_C010 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "10M" -c "10" -d "sata"
+
+
+
+
+
+
+

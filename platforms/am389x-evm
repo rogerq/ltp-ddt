@@ -14,7 +14,7 @@ rtc/rtc-s35390a
 sata/ahci
 sound/capture/alsa
 sound/playback/alsa
-spi_master/omap2_mcspi
+spi_master/mtd/omap2_mcspi
 usb/host/msc
 video/capture
 video/display

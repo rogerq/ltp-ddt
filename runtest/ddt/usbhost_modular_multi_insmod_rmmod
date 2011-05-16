@@ -2,7 +2,7 @@
 #	USBHOST modular multiple insmod rmmod test 
 # @desc 
 #       modprobe usb module multiple times 
-# @requires  scsi_host 
+# @requires  usb/host 
 
 # The test step pass if the commands return zero, it fails otherwise.
 # For more information please refer to <root>/README-DDT file.

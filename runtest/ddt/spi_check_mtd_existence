@@ -1,8 +1,8 @@
 # @name Check if /dev/mtd entries exist 
 # @desc Check if /dev/mtd entries exist
-# @requires spi_master
+# @requires spi_master/mtd
 
-SPI_MTD_ENTRY_0001 ls /dev/mtd* && exit 0 || exit 1
+SPI_M_FUNC_MTD_ENTRY_0001 ls /dev/mtd* && exit 0 || exit 1
 
 
 

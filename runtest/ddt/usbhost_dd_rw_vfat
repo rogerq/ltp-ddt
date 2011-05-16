@@ -1,7 +1,7 @@
 # @name USB host device w/r test with fs:vfat
 # @desc Perform mkfs first, then do read write 
 #	The device node is specified in get_blk_device_node.sh
-# @requires scsi_host 
+# @requires usb/host 
 
 USBHOST_L_FUNC_VFAT_DD_RW_0001 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1" -c "1" -d "usb" 
 

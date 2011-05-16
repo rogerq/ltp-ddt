@@ -3,9 +3,9 @@
 #	The partition number is specified in get_mtd_partition_number.sh
 # @requires nand
 
-NAND_FUNC_OOBTEST_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nand"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "nand" -m "/mnt/nand"; do_cmd insmod mtd_oobtest.ko dev="$part" 
-NAND_FUNC_OOBTEST_0002 source 'common.sh'; do_cmd rmmod mtd_oobtest.ko
-NAND_FUNC_UMOUNT_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nand"`; dev_node="$MTD_BLK_DEV$part"; do_cmd umount "$dev_node"
+NAND_M_FUNC_OOBTEST_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nand"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "nand" -m "/mnt/nand"; do_cmd insmod mtd_oobtest.ko dev="$part" 
+NAND_M_FUNC_OOBTEST_0002 source 'common.sh'; do_cmd rmmod mtd_oobtest.ko
+NAND_M_FUNC_UMOUNT_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nand"`; dev_node="$MTD_BLK_DEV$part"; do_cmd umount "$dev_node"
 
 
 

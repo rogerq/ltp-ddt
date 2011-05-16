@@ -1,6 +1,6 @@
 # @name Ethernet ping test 
 # @desc Brings net iface up and pings default gw
-# @requires net/eth
+# @requires net
 
 ETH_S_FUNC_PING source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name"; do_cmd "ifconfig ${iface} up"; host=`get_eth_gateway.sh "-i ${iface}"` || die "error getting eth gateway address"; do_cmd "ping ${host} -c 3"
 

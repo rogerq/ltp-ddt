@@ -2,7 +2,7 @@
 # @desc Set and get the time for lots of times
 # @requires rtc 
 
-RTC_STRESS_SETGETTIME_0001 source 'common.sh'; DEV_NODE=`get_devnode.sh "rtc"` || die "error getting devnode for rtc"; do_cmd rtc_tests -device $DEV_NODE  -ioctltest setgettime -loop 100
+RTC_L_STRESS_SETGETTIME_0001 source 'common.sh'; DEV_NODE=`get_devnode.sh "rtc"` || die "error getting devnode for rtc"; do_cmd rtc_tests -device $DEV_NODE  -ioctltest setgettime -loop 100
 
 
 

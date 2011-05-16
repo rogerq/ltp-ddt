@@ -42,10 +42,14 @@ case $SOC in
 esac
 case $MACHINE in
         # example to redefine the params based on platform
-        am3517-evm)
+        am389x-evm)
 
                 case $DEVICE_TYPE in
                         nand)
+                                : ${PARTITION:='7'}
+                                ;;
+                        spi)
+                                : ${PARTITION:='3'}
                                 ;;
                 esac
 

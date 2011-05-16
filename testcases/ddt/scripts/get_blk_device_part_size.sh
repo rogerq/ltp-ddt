@@ -78,6 +78,9 @@ case $DEV_TYPE in
 	ata)
 		SIZE=$((20*GB))
 	;;
+	sata)
+		SIZE=$((20*GB))
+	;;
 	*)
 		die "Device type is not found; Size for Device Partition is set to default value: $SIZE"
 		exit 1

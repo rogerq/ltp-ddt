@@ -1,7 +1,7 @@
 # @name Ethernet performance using IPERF
 # @desc Run Iperf as a server in a host PC and as a client in the target machine
 # Test different window sizes, from 8K to 128K
-# @requires net/eth
+# @requires net
 
 ETH_M_PERF_IPERF_UDP_1M_1500B source 'common.sh'; run_iperf.sh -w 128k -l 1500 -f M -u -t 20 -b 1M
 ETH_M_PERF_IPERF_UDP_5M_1500B source 'common.sh'; run_iperf.sh -w 128k -l 1500 -f M -u -t 20 -b 5M
