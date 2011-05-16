@@ -1,0 +1,34 @@
+# @name FBDEV Display test
+# @desc Display tests with alll combinations of all parameters
+# @requires graphics
+
+FBDEV_S_FUNC source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0"
+FBDEV_L_FUNC source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -loop 1000
+FBDEV_M_FUNC_BPP1 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -bits_per_pixel 1
+FBDEV_M_FUNC_BPP2 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -bits_per_pixel 2
+FBDEV_M_FUNC_BPP4 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -bits_per_pixel 4
+FBDEV_M_FUNC_BPP12 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -bits_per_pixel 12
+FBDEV_M_FUNC_BPP16 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -bits_per_pixel 16
+FBDEV_M_FUNC_BPP24 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -bits_per_pixel 24
+FBDEV_M_FUNC_BPP32 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -bits_per_pixel 32
+FBDEV_M_FUNC_ROT0 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 0
+FBDEV_M_FUNC_ROT90 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 90
+FBDEV_M_FUNC_ROT180 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 180
+FBDEV_M_FUNC_ROT270 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 270
+FBDEV_M_FUNC_ROT0_BPP16 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 0 -bits_per_pixel 16
+FBDEV_M_FUNC_ROT90_BPP16 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 90 -bits_per_pixel 16
+FBDEV_M_FUNC_ROT180_BPP16 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 180 -bits_per_pixel 16 
+FBDEV_M_FUNC_ROT270_BPP16 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 270 -bits_per_pixel 16
+FBDEV_M_FUNC_ROT0_BPP24 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 0 -bits_per_pixel 24
+FBDEV_M_FUNC_ROT90_BPP24 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 90 -bits_per_pixel 24
+FBDEV_M_FUNC_ROT180_BPP24 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 180 -bits_per_pixel 24
+FBDEV_M_FUNC_ROT270_BPP24 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 270 -bits_per_pixel 24
+FBDEV_M_FUNC_ROT0_BPP32 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 0 -bits_per_pixel 32
+FBDEV_M_FUNC_ROT90_BPP32 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 90 -bits_per_pixel 32
+FBDEV_M_FUNC_ROT180_BPP32 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 180 -bits_per_pixel 32
+FBDEV_M_FUNC_ROT270_BPP32 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -rotate 270 -bits_per_pixel 32
+FBDEV_M_FUNC_VGA source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -width 640 -height 480
+FBDEV_M_FUNC_160x120 source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -width 160 -height 120
+
+
+

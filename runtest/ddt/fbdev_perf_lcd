@@ -1,0 +1,6 @@
+# @name FBDEV Performance test
+# @desc Performance tests for cpu load and framerate
+# @requires graphics
+
+FBDEV_M_PERF_VGA source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -width 640 -height 480 -framerate -cpuload -loop 1000
+

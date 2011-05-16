@@ -1,0 +1,9 @@
+armv7l
+omap3
+omap3evm
+sound/omap3-audio
+net/eth/smsc911x
+spi_master/omap2_mcspi
+mmc_host/mmci-omap-hs
+video4linux/display/omap_vout
+graphics/fb0

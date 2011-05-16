@@ -13,7 +13,7 @@
 # 
 # @desc Get modular name for a driver.
 # @params 
-#        Input: device type like "nand", "mmc", "spi", "sound" 
+#        Input: device type like "nand", "mmc", "spi", "sound", "graphics" 
 # @returns Modular name for this driver
 # @history 2011-03-22: First version
 
@@ -24,7 +24,7 @@ source "common.sh"  # Import do_cmd(), die() and other functions
 ################################ CLI Params ####################################
 if [ $# -ne 1 ]; then
         echo "Error: Invalid Argument Count"
-        echo "Syntax: $0 <device_type like 'nand', 'mmc', 'spi', 'rtc'>"
+        echo "Syntax: $0 <device_type like 'nand', 'mmc', 'spi', 'rtc', 'graphics'>"
         exit 1
 fi
 DEVICE_TYPE=$1
@@ -59,16 +59,20 @@ do
 
         *watchdog)
             wdt="davinci_wdt";;
+
+	 *fb0)
+	     graphics="omapfb";;
     esac
 done
 IFS=$IFS_ORIG
 
 case $SOC in
+	am3517-evm)
+	     sound="snd-soc-omap"
+    ;;
 esac
 case $MACHINE in
-    am3517-evm)
-        sound="snd-soc-omap"
-    ;;
+    
 esac
 # Define default values for variables being overriden
 : ${nand:="davinci_nand"}
