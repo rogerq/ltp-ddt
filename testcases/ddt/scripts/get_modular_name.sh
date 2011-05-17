@@ -60,8 +60,11 @@ do
         *watchdog)
             wdt="davinci_wdt";;
 
-	 *fb0)
+	*fb0)
 	     graphics="omapfb";;
+
+	*omap3-audio)
+	     sound='snd_soc_omap3evm';;	
     esac
 done
 IFS=$IFS_ORIG

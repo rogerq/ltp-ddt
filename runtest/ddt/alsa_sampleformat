@@ -1,0 +1,16 @@
+# @name Testing for various sampling formats
+# @desc Do capture and loopback for various sample formats
+# @requires sound
+
+ALSA_S_FUNC_CAP_SMPFMT_S8 		source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -f S8 -F ALSA_S_FUNC_CAP_SMPFMT_S8.snd'; do_cmd 'alsa_tests.sh -t playback -f S8 -F ALSA_S_FUNC_CAP_SMPFMT_S8.snd'
+ALSA_S_FUNC_LOOPBK_SMPFMT_S8 		source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -f S8'
+
+ALSA_S_FUNC_CAP_SMPFMT_S16_LE		source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -f S16_LE -F ALSA_S_FUNC_CAP_SMPFMT_S16_LE.snd'; do_cmd 'alsa_tests.sh -t playback -f S16_LE -F ALSA_S_FUNC_CAP_SMPFMT_S16_LE.snd'
+ALSA_S_FUNC_LOOPBK_SMPFMT_S16_LE 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -f S16_LE'
+
+ALSA_S_FUNC_CAP_SMPFMT_S24_LE 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -f S24_LE -F ALSA_S_FUNC_CAP_SMPFMT_S24_LE.snd'; do_cmd 'alsa_tests.sh -t playback -f S24_LE -F ALSA_S_FUNC_CAP_SMPFMT_S24_LE.snd'
+ALSA_S_FUNC_LOOPBK_SMPFMT_S24_LE 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -f S24_LE'
+
+ALSA_S_FUNC_CAP_SMPFMT_S32_LE 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -f S32_LE -F ALSA_S_FUNC_CAP_SMPFMT_S32_LE.snd'; do_cmd 'alsa_tests.sh -t playback -f S32_LE -F ALSA_S_FUNC_CAP_SMPFMT_S32_LE.snd'
+ALSA_S_FUNC_LOOPBK_SMPFMT_S32_LE 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -f S32_LE'
+

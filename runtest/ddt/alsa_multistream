@@ -1,0 +1,6 @@
+# @name Testing for multistreams
+# @desc Do capture, playback and loopback multiple inputs 
+# @requires sound
+
+ALSA_S_FUNC_MULTISTREAM_0001 source 'common.sh' ; do_cmd 'alsa_multistream.sh -t capture'
+ALSA_S_FUNC_MULTISTREAM_0002 source 'common.sh' ; do_cmd 'alsa_multistream.sh -t playback'

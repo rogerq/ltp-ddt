@@ -1,0 +1,19 @@
+# @name ALSA operation mode
+# @desc Testing Blocking and non-blocking mode of operation.
+# @requires sound
+
+ALSA_S_FUNC_CAP_OPMODE_BLK_01		source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -o 0 -F ALSA_S_FUNC_CAP_OPMODE_BLK_01.snd'; do_cmd 'alsa_tests.sh -t playback -o 0 -F ALSA_S_FUNC_CAP_OPMODE_BLK_01.snd'
+ALSA_S_FUNC_PLAYBK_OPMODE_BLK		source 'common.sh' ; do_cmd 'alsa_tests.sh -t playback -o 0 -F /usr/share/sounds/alsa/Noise.wav'
+ALSA_S_FUNC_LOOPBK_OPMODE_BLK_01	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -o 0 -d 10'
+ALSA_M_FUNC_LOOPBK_OPMODE_BLK_02	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -o 0 -d 60'
+ALSA_L_FUNC_LOOPBK_OPMODE_BLK_03	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -o 0 -d 300'
+
+ALSA_S_FUNC_CAP_OPMODE_NONBLK_01		source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -o 1 -F ALSA_S_FUNC_CAP_OPMODE_NONBLK_01.snd'; do_cmd 'alsa_tests.sh -t playback -o 1 -F ALSA_S_FUNC_CAP_OPMODE_NONBLK_01.snd'
+ALSA_S_FUNC_PLAYBK_OPMODE_NONBLK	source 'common.sh' ; do_cmd 'alsa_tests.sh -t playback -o 1 -F /usr/share/sounds/alsa/Noise.wav'
+
+ALSA_S_FUNC_LOOPBK_OPMODE_NONBLK_01	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -o 1 -d 10'
+ALSA_M_FUNC_LOOPBK_OPMODE_NONBLK_02	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -o 1 -d 60'
+ALSA_L_FUNC_LOOPBK_OPMODE_NONBLK_03	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -o 1 -d 300'
+
+
+
