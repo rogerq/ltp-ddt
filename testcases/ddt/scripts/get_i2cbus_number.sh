@@ -23,7 +23,8 @@ source "common.sh"
 ############################### CLI Params ###################################
 
 ############################ DYNAMIC-DEFINED Params ##############################
-I2CBUS_NUM=`ls /dev/i2c* | cut -f0 | awk '{print substr ($0, length($0))}'` || die "I2C bus number is not found"
+I2C_NODES=`ls /dev/i2c*` || die "No I2C nodes availble"
+I2CBUS_NUM=`echo $I2C_NODES | cut -f1 -d' ' | awk '{print substr ($0, length($0))}'` || die "I2C bus number is not found"
 
 ############################ USER-DEFINED Params ##############################
 # Try to avoid defining values here, instead see if possible

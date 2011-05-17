@@ -38,8 +38,8 @@ video/capture/1080i/v4l2/<drivername>
 video/capture/1080p/v4l2/<drivername>
 video/display/480p/fb/<drivername
 video/display/720p/fb/<drivername>
-video/display/1080i/fb<drivername>
-video/display/1080p/fb<drivername>
+video/display/1080i/fb/<drivername>
+video/display/1080p/fb/<drivername>
 video/display/480p/v4l2/<drivername>
 video/display/720p/v4l2/<drivername>
 video/display/1080i/v4l2/<drivername>

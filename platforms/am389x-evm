@@ -2,7 +2,6 @@ armv7l
 am389x
 am389x-evm
 edma
-i2c
 i2c/eeprom
 mmc_host/mmci-omap-hs
 nand/omap2-nand

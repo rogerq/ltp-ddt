@@ -51,6 +51,7 @@ done
 ############################ DEFAULT Params #######################
 : ${TEST_LOOP:='1'}
 test_print_trc "SLAVE_DEVICE: $SLAVE_DEVICE"
+test_print_trc "if SLAVE_DEVICE is empty, slave device will use the one defined in get_i2c_slave_addr.sh"
 
 ############# Do the work ###########################################
 test_print_trc "Running i2c setget test for $TEST_LOOP times"

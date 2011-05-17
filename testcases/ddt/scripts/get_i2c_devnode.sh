@@ -22,7 +22,8 @@ source "common.sh"
 ############################### CLI Params ###################################
 
 ############################ DYNAMIC-DEFINED Params ##############################
-I2C_DEVNODE=`ls /dev/i2c* | cut -f0` || die "I2C devnode is not found"
+I2C_NODELIST=`ls /dev/i2c*` || die "No I2C nodes available"
+I2C_DEVNODE=`echo $I2C_NODELIST | cut -f1 -d' '` || die "I2C devnode is not found"
 
 ############################ USER-DEFINED Params ##############################
 # Try to avoid defining values here, instead see if possible
