@@ -16,13 +16,16 @@ INSTALL_MODE            := 00755
 #INSTALL_TARGETS         := $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
 
 CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
-LDFLAGS         += -g -static
+LDFLAGS         += -g -static -lpthread
 INCLUDES        = -I $(KERNEL_INC) -I src/interface/common -I ../utils/user
 
 #List of source files- Update this on adding a new C file
 SOURCES := \
         src/testcases/st_fbdev_ioctl_tests.c \
 	src/testcases/st_fbdev_display_tests.c \
+	src/testcases/st_fbdev_alphablending_tests.c \
+	src/testcases/st_fbdev_colorkey_test.c \
+	src/testcases/st_fbdev_pan_display_tests.c \
        src/interface/common/st_fbdev_read_bmp_file.c \
         src/interface/common/st_fbdev_common.c \
         src/interface/common/st_fbdev_interface.c \
@@ -33,7 +36,7 @@ SOURCES := \
 MAKE_TARGETS            := fbdev_tests
 
 fbdev_tests:
-	$(CC) $(CFLAGS) $(LDFLAGS) -o fbdev_tests ${INCLUDES} ${SOURCES}
+	$(CC) -o fbdev_tests ${INCLUDES} ${SOURCES} ${CFLAGS} ${LDFLAGS}
 
 include $(top_srcdir)/include/mk/generic_leaf_target.mk
 
