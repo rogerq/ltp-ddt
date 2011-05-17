@@ -1,0 +1,14 @@
+# @name ALSA Performance test
+# @desc Do capture,playback operations by measuring cpu performance 
+# @requires  sound
+
+# The test scenario is made of one or more test steps. Each step is composed of
+# <TAG> <COMMANDS>.
+# Use following convention for TAGs <AREA>_<TYPE>_<ID>
+# The test step pass if the commands return zero, it fails otherwise.
+# For more information please refer to <root>/README-DDT file.
+ALSA_L_PERF_CAPTURE_0001 source 'common.sh' ; do_cmd 'run_alsa_perf.sh -record 0 -rate 8000 -performance'; do_cmd 'run_alsa_perf.sh -record 0 -rate 11025 -performance' ;do_cmd 'run_alsa_perf.sh -record 0 -rate 16000 -performance';do_cmd 'run_alsa_perf.sh -record 0 -rate 22050 -performance'; do_cmd 'run_alsa_perf.sh -record 0 -rate 24000 -performance'; do_cmd 'run_alsa_perf.sh -record 0 -rate 32000 -performance' ; do_cmd 'run_alsa_perf.sh -record 0 -rate 44100 -performance'; do_cmd 'run_alsa_perf.sh -record 0 -rate 48000 -performance' ; do_cmd 'run_alsa_perf.sh -record 0 -rate 88200 -performance'; do_cmd 'run_alsa_perf.sh -record 0 -rate 96000 -performance';
+ALSA_L_PERF_PLAYBACK_0001 source 'common.sh' ; do_cmd 'run_alsa_perf.sh -playback 0 -rate 8000 -performance'; do_cmd 'run_alsa_perf.sh -playback 0 -rate 11025 -performance'; do_cmd 'run_alsa_perf.sh -playback 0 -rate 16000 -performance'; do_cmd 'run_alsa_perf.sh -playback 0 -rate 22050 -performance'; do_cmd 'run_alsa_perf.sh -playback 0 -rate 24000 -performance'; do_cmd 'run_alsa_perf.sh -playback 0 -rate 32000 -performance'; do_cmd 'run_alsa_perf.sh -playback 0 -rate 44100 -performance'; do_cmd 'run_alsa_perf.sh -playback 0 -rate 48000 -performance'; do_cmd 'run_alsa_perf.sh -playback 0 -rate 88200 -performance'; do_cmd 'run_alsa_perf.sh -playback 0 -rate 96000 -performance';
+
+
+
