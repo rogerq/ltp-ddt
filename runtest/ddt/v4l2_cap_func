@@ -1,19 +1,19 @@
 # @name V4L2 Capture test
 # @desc Capture ioctl tests and buffer tests
-# @requires v4l2_cap
+# @requires video4linux/capture
 
-V4L2CAP_S_FUNC source 'common.sh';do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos 2 -pixelformat 2
-V4L2CAP_S_FUNC_BUFN1 source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos 1 -pixelformat 2
-V4L2CAP_S_FUNC_BUFN32 source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos 32 -pixelformat 2
-V4L2CAP_S_FUNC_IL_QUERY_CAP source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" 2 -ioctl 0
-V4L2CAP_S_FUNC_IL_GET_INPUT source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos 2 -ioctl 1
-V4L2CAP_S_FUNC_IL_ENUM_INPUT source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 2
-V4L2CAP_S_FUNC_IL_SET_INPUT source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 3
-V4L2CAP_S_FUNC_IL_SET_CRTL source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 4
-V4L2CAP_S_FUNC_IL_GET_CRTL source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 5
-V4L2CAP_S_FUNC_IL_GET_STD source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 6
-V4L2CAP_S_FUNC_IL_ENUM_STD source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 7
-V4L2CAP_S_FUNC_IL_GET_FMT source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 8
-V4L2CAP_S_FUNC_IL_SET_FMT source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 9
-V4L2CAP_S_FUNC_IL_REQBUF source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 10
-V4L2CAP_S_FUNC_IL_QUERYBUF source 'common.sh'; do_cmd v4l2_capture_tests -device_disp "/dev/video7"-device_cap "/dev/video2" -buffernos  2 -ioctl 11
+V4L2CAP_S_FUNC source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`;do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -pixelformat 2
+V4L2CAP_M_FUNC_BUFN1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 1 -pixelformat 2
+V4L2CAP_M_FUNC_BUFN32 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 32 -pixelformat 2
+V4L2CAP_M_FUNC_IL_QUERY_CAP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" 2 -ioctl 0
+V4L2CAP_M_FUNC_IL_GET_INPUT source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 1
+V4L2CAP_M_FUNC_IL_ENUM_INPUT source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 2
+V4L2CAP_M_FUNC_IL_SET_INPUT source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 3
+V4L2CAP_M_FUNC_IL_SET_CRTL source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 4
+V4L2CAP_M_FUNC_IL_GET_CRTL source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 5
+V4L2CAP_M_FUNC_IL_GET_STD source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 6
+V4L2CAP_M_FUNC_IL_ENUM_STD source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 7
+V4L2CAP_M_FUNC_IL_GET_FMT source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 8
+V4L2CAP_M_FUNC_IL_SET_FMT source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 9
+V4L2CAP_M_FUNC_IL_REQBUF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 10
+V4L2CAP_M_FUNC_IL_QUERYBUF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -ioctl 11
