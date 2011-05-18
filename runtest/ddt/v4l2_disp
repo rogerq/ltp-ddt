@@ -1,0 +1,131 @@
+# @name V4L2 display tests
+# @desc runs v4l2 display test cases for all display devices and resolutions
+# @requires  video4linux/display
+
+V4L2DISP_S_FUNC_DEV_VID1_DEF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2
+
+V4L2DISP_S_FUNC_RES_640_480 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480
+V4L2DISP_M_FUNC_RES_320_240 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 320 -height 240
+V4L2DISP_M_FUNC_RES_160_120 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 160 -height 120
+
+V4L2DISP_M_FUNC_RES_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 1
+V4L2DISP_M_FUNC_RES_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 2
+V4L2DISP_M_FUNC_RES_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 3
+V4L2DISP_M_FUNC_RES_PXFT4 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 4
+V4L2DISP_M_FUNC_RES_PXFT5 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 5
+
+V4L2DISP_M_FUNC_RES_640_480_ROT_0 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -control_id 1 -control_value 0
+V4L2DISP_M_FUNC_RES_640_480_ROT_90 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -control_id 1 -control_value 90
+V4L2DISP_M_FUNC_RES_640_480_ROT_180 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -control_id 1 -control_value 180
+V4L2DISP_M_FUNC_RES_640_480_ROT_270 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -control_id 1 -control_value 270
+V4L2DISP_M_FUNC_RES_320_240_ROT_0 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 320 -height 240 -control_id 1 -control_value 0
+V4L2DISP_M_FUNC_RES_320_240_ROT_90 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 320 -height 240 -control_id 1 -control_value 90
+V4L2DISP_M_FUNC_RES_320_240_ROT_180 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 320 -height 240 -control_id 1 -control_value 180
+V4L2DISP_M_FUNC_RES_320_240_ROT_270 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 320 -height 240 -control_id 1 -control_value 270
+V4L2DISP_M_FUNC_RES_160_120_ROT_0 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 160 -height 120 -control_id 1 -control_value 0
+V4L2DISP_M_FUNC_RES_160_120_ROT_90 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 160 -height 120 -control_id 1 -control_value 90
+V4L2DISP_M_FUNC_RES_160_120_ROT_180 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 160 -height 120 -control_id 1 -control_value 180
+V4L2DISP_M_FUNC_RES_160_120_ROT_270 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 160 -height 120 -control_id 1 -control_value 270
+
+V4L2DISP_M_FUNC_ROT_0_PXFT_1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 1 -control_id 1 -control_value 0
+V4L2DISP_M_FUNC_ROT_90_PXFT_1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 1 -control_id 1 -control_value 90
+V4L2DISP_M_FUNC_ROT_180_PXFT_1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 1 -control_id 1 -control_value 180
+V4L2DISP_M_FUNC_ROT_270_PXFT_1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 1 -control_id 1 -control_value 270
+
+V4L2DISP_M_FUNC_ROT_0_PXFT_2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 2 -control_id 1 -control_value 0
+V4L2DISP_M_FUNC_ROT_90_PXFT_2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 2 -control_id 1 -control_value 90
+V4L2DISP_M_FUNC_ROT_180_PXFT_2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 2 -control_id 1 -control_value 180
+V4L2DISP_M_FUNC_ROT_270_PXFT_2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 2 -control_id 1 -control_value 270
+
+V4L2DISP_M_FUNC_ROT_0_PXFT_3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 3 -control_id 1 -control_value 0
+V4L2DISP_M_FUNC_ROT_90_PXFT_3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 3 -control_id 1 -control_value 90
+V4L2DISP_M_FUNC_ROT_180_PXFT_3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 3 -control_id 1 -control_value 180
+V4L2DISP_M_FUNC_ROT_270_PXFT_3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -pixelformat 3 -control_id 1 -control_value 270
+
+V4L2DISP_M_FUNC_RES_160_120_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 160 -height 120 -crop_width 100 -crop_height 100 -crop_left 0
+V4L2DISP_M_FUNC_RES_320_240_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 320 -height 240 -crop_width 100 -crop_height 100 -crop_left 0
+V4L2DISP_M_FUNC_RES_640_480_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -crop_width 100 -crop_height 100 -crop_left 0
+
+V4L2DISP_M_FUNC_PXFT1_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 1 -crop_width 100 -crop_height 100 -crop_left 0
+V4L2DISP_M_FUNC_PXFT2_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 2 -crop_width 100 -crop_height 100 -crop_left 0
+V4L2DISP_M_FUNC_PXFT3_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 3 -crop_width 100 -crop_height 100 -crop_left 0
+
+V4L2DISP_M_FUNC_PXFT1_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 1 -crop_width 640 -crop_height 480 -crop_left 0 -crop_left 0 -fmt_width 320 -fmt_height 240 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_PXFT1_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 1 -crop_width 640 -crop_height 480 -crop_left 0 -crop_left 0 -fmt_width 160 -fmt_height 120 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_PXFT1_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 1 -crop_width 640 -crop_height 480 -crop_left 0 -crop_left 0 -fmt_width 80 -fmt_height 60 -fmt_top 0 -fmt_left 0
+
+V4L2DISP_M_FUNC_PXFT2_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 2 -crop_width 640 -crop_height 480 -crop_left 0 -crop_left 0 -fmt_width 320 -fmt_height 240 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_PXFT2_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 2 -crop_width 640 -crop_height 480 -crop_left 0 -crop_left 0 -fmt_width 160 -fmt_height 120 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_PXFT2_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 2 -crop_width 640 -crop_height 480 -crop_left 0 -crop_left 0 -fmt_width 80 -fmt_height 60 -fmt_top 0 -fmt_left 0
+
+V4L2DISP_M_FUNC_PXFT3_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 3 -crop_width 640 -crop_height 480 -crop_left 0 -crop_left 0 -fmt_width 320 -fmt_height 240 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_PXFT3_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 3 -crop_width 640 -crop_height 480 -crop_left 0 -crop_left 0 -fmt_width 160 -fmt_height 120 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_PXFT3_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 640 -height 480 -pixelformat 3 -crop_width 640 -crop_height 480 -crop_left 0 -crop_left 0 -fmt_width 80 -fmt_height 60 -fmt_top 0 -fmt_left 0
+
+V4L2DISP_M_FUNC_UPSCALE_80x60_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 80 -fmt_height 60 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_120x90_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 120 -fmt_height 90 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_160x120_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 160 -fmt_height 120 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_200x150_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 200 -fmt_height 150 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_240x180_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 240 -fmt_height 180 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_280x210_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 280 -fmt_height 210 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_320x240_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 320 -fmt_height 240 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_360x270_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 360 -fmt_height 270 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_400x300_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 400 -fmt_height 300 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_440x330_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 440 -fmt_height 330 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_480x360_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 480 -fmt_height 360 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_520x390_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 520 -fmt_height 390 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_560x420_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 560 -fmt_height 420 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_600x460_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 600 -fmt_height 460 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_640x480_PXFT2 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 2 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 640 -fmt_height 480 -fmt_top 0 -fmt_left 0
+
+V4L2DISP_M_FUNC_UPSCALE_80x60_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 80 -fmt_height 60 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_120x90_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 120 -fmt_height 90 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_160x120_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 160 -fmt_height 120 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_200x150_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 200 -fmt_height 150 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_240x180_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 240 -fmt_height 180 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_280x210_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 280 -fmt_height 210 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_320x240_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 320 -fmt_height 240 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_360x270_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 360 -fmt_height 270 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_400x300_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 400 -fmt_height 300 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_440x330_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 440 -fmt_height 330 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_480x360_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 480 -fmt_height 360 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_520x390_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 520 -fmt_height 390 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_560x420_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 560 -fmt_height 420 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_600x460_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 600 -fmt_height 460 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_640x480_PXFT1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 1 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 640 -fmt_height 480 -fmt_top 0 -fmt_left 0
+
+V4L2DISP_M_FUNC_UPSCALE_80x60_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 80 -fmt_height 60 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_120x90_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 120 -fmt_height 90 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_160x120_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 160 -fmt_height 120 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_200x150_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 200 -fmt_height 150 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_240x180_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 240 -fmt_height 180 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_280x210_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 280 -fmt_height 210 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_320x240_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 320 -fmt_height 240 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_360x270_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 360 -fmt_height 270 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_400x300_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 400 -fmt_height 300 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_440x330_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 440 -fmt_height 330 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_480x360_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 480 -fmt_height 360 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_520x390_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 520 -fmt_height 390 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_560x420_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 560 -fmt_height 420 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_600x460_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 600 -fmt_height 460 -fmt_top 0 -fmt_left 0
+V4L2DISP_M_FUNC_UPSCALE_640x480_PXFT3 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -width 80 -height 60 -pixelformat 3 -crop_width 80 -crop_height 60 -crop_left 0 -crop_left 0 -fmt_width 640 -fmt_height 480 -fmt_top 0 -fmt_left 0
+
+V4L2DISP_M_FUNC_BUF0 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 0 -width 640 -height 480 -pixelformat 1
+V4L2DISP_M_FUNC_BUF1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 1 -width 640 -height 480 -pixelformat 1
+V4L2DISP_M_FUNC_BUF5 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 5 -width 640 -height 480 -pixelformat 1
+V4L2DISP_M_FUNC_BUF10 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 10 -width 640 -height 480 -pixelformat 1
+V4L2DISP_M_FUNC_BUF32 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 32 -width 640 -height 480 -pixelformat 1
+V4L2DISP_M_FUNC_BUF100 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 100 -width 640 -height 480 -pixelformat 1
+
+
+
+
+
+
+
+
+
+
+
+
+

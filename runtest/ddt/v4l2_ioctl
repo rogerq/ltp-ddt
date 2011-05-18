@@ -1,0 +1,17 @@
+# @name V4L2 display ioctl tests
+# @desc runs v4l2 display tests for all ioctls
+# @requires  video4linux/display
+
+V4L2DISP_M_FUNC_CROP_CAP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 0 
+V4L2DISP_M_FUNC_QUERY_CAP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 1 
+V4L2DISP_M_FUNC_TRY_FMT source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 2 
+V4L2DISP_M_FUNC_G_FMT source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 3
+V4L2DISP_M_FUNC_M_FMT source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 4
+V4L2DISP_M_FUNC_G_CTRL source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -control_id 1 -control_value 90 -ioctl 5
+V4L2DISP_M_FUNC_M_CTRL source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -control_id 1 -ioctl 6
+V4L2DISP_M_FUNC_G_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 7
+V4L2DISP_M_FUNC_M_CROP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -crop_width 100 -crop_height 100 -crop_top 0 -crop_left 0 -ioctl 8
+V4L2DISP_M_FUNC_REQBUF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 10
+V4L2DISP_M_FUNC_QUERYBUF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 11
+V4L2DISP_M_FUNC_ENQBUF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 12
+V4L2DISP_M_FUNC_STREAM_ON_OFF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 12
