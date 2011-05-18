@@ -8,45 +8,45 @@ ALSA_M_FUNC_LOOPBK_PRDSIZE_1	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopb
 ALSA_M_FUNC_CAP_PRDSIZE_2 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 2 -F ALSA_M_FUNC_CAP_PRDSIZE_2.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 2 -F ALSA_M_FUNC_CAP_PRDSIZE_2.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_2	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 2 -d 60'
 
-ALSA_S_FUNC_CAP_PRDSIZE_4 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 4 -F ALSA_S_FUNC_CAP_PRDSIZE_4.snd';do_cmd 'alsa_tests.sh -t playback -p 4 -F ALSA_S_FUNC_CAP_PRDSIZE_4.snd'
-ALSA_S_FUNC_LOOPBK_PRDSIZE_4	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 4'
+ALSA_M_FUNC_CAP_PRDSIZE_4 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 4 -F ALSA_M_FUNC_CAP_PRDSIZE_4.snd';do_cmd 'alsa_tests.sh -t playback -p 4 -F ALSA_M_FUNC_CAP_PRDSIZE_4.snd'
+ALSA_M_FUNC_LOOPBK_PRDSIZE_4	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 4'
 
-ALSA_M_FUNC_CAP_PRDSIZE_8 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 8 -F ALSA_S_FUNC_CAP_PRDSIZE_8.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 8 -F ALSA_S_FUNC_CAP_PRDSIZE_8.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_8 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 8 -F ALSA_M_FUNC_CAP_PRDSIZE_8.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 8 -F ALSA_M_FUNC_CAP_PRDSIZE_8.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_8	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 8 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_16 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 16 -F ALSA_S_FUNC_CAP_PRDSIZE_16.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 16 -F ALSA_S_FUNC_CAP_PRDSIZE_16.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_16 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 16 -F ALSA_M_FUNC_CAP_PRDSIZE_16.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 16 -F ALSA_M_FUNC_CAP_PRDSIZE_16.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_16	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 16 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_32 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 32 -F ALSA_S_FUNC_CAP_PRDSIZE_32.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 32 -F ALSA_S_FUNC_CAP_PRDSIZE_32.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_32 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 32 -F ALSA_M_FUNC_CAP_PRDSIZE_32.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 32 -F ALSA_M_FUNC_CAP_PRDSIZE_32.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_32	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 32 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_64 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 64 -F ALSA_S_FUNC_CAP_PRDSIZE_64.snd -d 60';do_cmd 'alsa_tests.sh -t playback -p 64 -F ALSA_S_FUNC_CAP_PRDSIZE_64.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_64 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 64 -F ALSA_M_FUNC_CAP_PRDSIZE_64.snd -d 60';do_cmd 'alsa_tests.sh -t playback -p 64 -F ALSA_M_FUNC_CAP_PRDSIZE_64.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_64	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 64 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_128 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 128 -F ALSA_S_FUNC_CAP_PRDSIZE_128.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 128 -F ALSA_S_FUNC_CAP_PRDSIZE_128.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_128 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 128 -F ALSA_M_FUNC_CAP_PRDSIZE_128.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 128 -F ALSA_M_FUNC_CAP_PRDSIZE_128.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_128	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 128 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_256 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 256 -F ALSA_S_FUNC_CAP_PRDSIZE_256.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 256 -F ALSA_S_FUNC_CAP_PRDSIZE_256.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_256 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 256 -F ALSA_M_FUNC_CAP_PRDSIZE_256.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 256 -F ALSA_M_FUNC_CAP_PRDSIZE_256.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_256	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 256 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_512 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 512 -F ALSA_S_FUNC_CAP_PRDSIZE_512.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 512 -F ALSA_S_FUNC_CAP_PRDSIZE_512.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_512 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 512 -F ALSA_M_FUNC_CAP_PRDSIZE_512.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 512 -F ALSA_M_FUNC_CAP_PRDSIZE_512.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_512	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 512 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_1024 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 1024 -F ALSA_S_FUNC_CAP_PRDSIZE_1024.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 1024 -F ALSA_S_FUNC_CAP_PRDSIZE_1024.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_1024 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 1024 -F ALSA_M_FUNC_CAP_PRDSIZE_1024.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 1024 -F ALSA_M_FUNC_CAP_PRDSIZE_1024.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_1024	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 1024 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_2046 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 2046 -F ALSA_S_FUNC_CAP_PRDSIZE_2046.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 2046 -F ALSA_S_FUNC_CAP_PRDSIZE_2046.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_2046 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 2046 -F ALSA_M_FUNC_CAP_PRDSIZE_2046.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 2046 -F ALSA_M_FUNC_CAP_PRDSIZE_2046.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_2046	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 2046 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_4096 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 4096 -F ALSA_S_FUNC_CAP_PRDSIZE_4096.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 4096 -F ALSA_S_FUNC_CAP_PRDSIZE_4096.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_4096 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 4096 -F ALSA_M_FUNC_CAP_PRDSIZE_4096.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 4096 -F ALSA_M_FUNC_CAP_PRDSIZE_4096.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_4096	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 4096 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_8192 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 8192 -F ALSA_S_FUNC_CAP_PRDSIZE_8192.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 8192 -F ALSA_S_FUNC_CAP_PRDSIZE_8192.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_8192 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 8192 -F ALSA_M_FUNC_CAP_PRDSIZE_8192.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 8192 -F ALSA_M_FUNC_CAP_PRDSIZE_8192.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_8192	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 8192 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_16384 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 16384 -F ALSA_S_FUNC_CAP_PRDSIZE_16384.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 16384 -F ALSA_S_FUNC_CAP_PRDSIZE_16384.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_16384 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 16384 -F ALSA_M_FUNC_CAP_PRDSIZE_16384.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 16384 -F ALSA_M_FUNC_CAP_PRDSIZE_16384.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_16384	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 16384 -d 60'
 
-ALSA_M_FUNC_CAP_PRDSIZE_32768 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 32768 -F ALSA_S_FUNC_CAP_PRDSIZE_32768.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 32768 -F ALSA_S_FUNC_CAP_PRDSIZE_32768.snd -d 60'
+ALSA_M_FUNC_CAP_PRDSIZE_32768 	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -p 32768 -F ALSA_M_FUNC_CAP_PRDSIZE_32768.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -p 32768 -F ALSA_M_FUNC_CAP_PRDSIZE_32768.snd -d 60'
 ALSA_M_FUNC_LOOPBK_PRDSIZE_32768	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -p 32768 -d 60'
 

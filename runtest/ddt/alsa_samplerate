@@ -2,22 +2,22 @@
 # @desc Do capture and loopback for various sample rates
 # @requires sound
 
-ALSA_M_FUNC_CAP_SMPRT_8000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 8000 -F ALSA_S_FUNC_CAP_SMPRT_8000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 8000 -F ALSA_S_FUNC_CAP_SMPRT_8000.snd -d 60'
+ALSA_M_FUNC_CAP_SMPRT_8000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 8000 -F ALSA_M_FUNC_CAP_SMPRT_8000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 8000 -F ALSA_M_FUNC_CAP_SMPRT_8000.snd -d 60'
 ALSA_M_FUNC_LOOPBK_SMPRT_8000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -r 8000 -d 60'
 
-ALSA_M_FUNC_CAP_SMPRT_11025	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 11025 -F ALSA_S_FUNC_CAP_SMPRT_11025.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 11025 -F ALSA_S_FUNC_CAP_SMPRT_11025.snd -d 60'
+ALSA_M_FUNC_CAP_SMPRT_11025	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 11025 -F ALSA_M_FUNC_CAP_SMPRT_11025.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 11025 -F ALSA_M_FUNC_CAP_SMPRT_11025.snd -d 60'
 ALSA_M_FUNC_LOOPBK_SMPRT_11025	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -r 11025 -d 60'
 
-ALSA_M_FUNC_CAP_SMPRT_16000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 16000 -F ALSA_S_FUNC_CAP_SMPRT_16000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 16000 -F ALSA_S_FUNC_CAP_SMPRT_16000.snd -d 60'
+ALSA_M_FUNC_CAP_SMPRT_16000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 16000 -F ALSA_M_FUNC_CAP_SMPRT_16000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 16000 -F ALSA_M_FUNC_CAP_SMPRT_16000.snd -d 60'
 ALSA_M_FUNC_LOOPBK_SMPRT_16000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -r 16000 -d 60'
 
-ALSA_M_FUNC_CAP_SMPRT_22050	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 22050 -F ALSA_S_FUNC_CAP_SMPRT_22050.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 22050 -F ALSA_S_FUNC_CAP_SMPRT_22050.snd -d 60'
+ALSA_M_FUNC_CAP_SMPRT_22050	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 22050 -F ALSA_M_FUNC_CAP_SMPRT_22050.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 22050 -F ALSA_M_FUNC_CAP_SMPRT_22050.snd -d 60'
 ALSA_M_FUNC_LOOPBK_SMPRT_22050	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -r 22050 -d 60'
 
-ALSA_M_FUNC_CAP_SMPRT_24000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 24000 -F ALSA_S_FUNC_CAP_SMPRT_24000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 24000 -F ALSA_S_FUNC_CAP_SMPRT_24000.snd -d 60'
+ALSA_M_FUNC_CAP_SMPRT_24000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 24000 -F ALSA_M_FUNC_CAP_SMPRT_24000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 24000 -F ALSA_M_FUNC_CAP_SMPRT_24000.snd -d 60'
 ALSA_M_FUNC_LOOPBK_SMPRT_24000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -r 24000 -d 60'
 
-ALSA_M_FUNC_CAP_SMPRT_32000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 32000 -F ALSA_S_FUNC_CAP_SMPRT_32000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 32000 -F ALSA_S_FUNC_CAP_SMPRT_32000.snd -d 60'
+ALSA_M_FUNC_CAP_SMPRT_32000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 32000 -F ALSA_M_FUNC_CAP_SMPRT_32000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 32000 -F ALSA_M_FUNC_CAP_SMPRT_32000.snd -d 60'
 ALSA_M_FUNC_LOOPBK_SMPRT_32000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -r 32000 -d 60'
 
 ALSA_S_FUNC_CAP_SMPRT_44100	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 44100 -F ALSA_S_FUNC_CAP_SMPRT_44100.snd'; do_cmd 'alsa_tests.sh -t playback -r 44100 -F ALSA_S_FUNC_CAP_SMPRT_44100.snd'
@@ -26,10 +26,10 @@ ALSA_S_FUNC_LOOPBK_SMPRT_44100	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loo
 ALSA_S_FUNC_CAP_SMPRT_48000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 48000 -F ALSA_S_FUNC_CAP_SMPRT_48000.snd'; do_cmd 'alsa_tests.sh -t playback -r 48000 -F ALSA_S_FUNC_CAP_SMPRT_48000.snd'
 ALSA_S_FUNC_LOOPBK_SMPRT_48000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -r 48000'
 
-ALSA_M_FUNC_CAP_SMPRT_88200	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 88200 -F ALSA_S_FUNC_CAP_SMPRT_88200.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 88200 -F ALSA_S_FUNC_CAP_SMPRT_88200.snd -d 60'
+ALSA_M_FUNC_CAP_SMPRT_88200	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 88200 -F ALSA_M_FUNC_CAP_SMPRT_88200.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 88200 -F ALSA_M_FUNC_CAP_SMPRT_88200.snd -d 60'
 ALSA_M_FUNC_LOOPBK_SMPRT_88200	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -r 88200 -d 60'
 
-ALSA_M_FUNC_CAP_SMPRT_96000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 96000 -F ALSA_S_FUNC_CAP_SMPRT_96000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 96000 -F ALSA_S_FUNC_CAP_SMPRT_96000.snd -d 60'
+ALSA_M_FUNC_CAP_SMPRT_96000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -r 96000 -F ALSA_M_FUNC_CAP_SMPRT_96000.snd -d 60'; do_cmd 'alsa_tests.sh -t playback -r 96000 -F ALSA_M_FUNC_CAP_SMPRT_96000.snd -d 60'
 ALSA_M_FUNC_LOOPBK_SMPRT_96000	source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -r 96000 -d 60'
 
 

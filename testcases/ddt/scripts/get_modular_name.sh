@@ -65,6 +65,10 @@ do
 
 	*omap3-audio)
 	     sound='snd_soc_omap3evm';;	
+
+        *soc-audio)
+             sound='snd-soc-evm';;
+
     esac
 done
 IFS=$IFS_ORIG

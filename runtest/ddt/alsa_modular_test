@@ -3,7 +3,7 @@
 # @requires sound
 
 
-ALSA_S_MODULAR_SPKR_TST_01  source "common.sh"; do_cmd 'do_modular_common.sh -d sound -a "run_speaker_test.sh -c 2 -t wave -l 5"'
+ALSA_M_MODULAR_SPKR_TST_01  source "common.sh"; do_cmd 'do_modular_common.sh -d sound -a "run_speaker_test.sh -c 2 -t wave -l 5"'
 ALSA_M_MODULAR_CAP_TST_01  source "common.sh"; do_cmd 'do_modular_common.sh -d sound -a "alsa_tests.sh -t capture -a 0 -F ALSA_M_MODULAR_CAP_TST_01.snd"'
 ALSA_M_MODULAR_CAP_MMAP_TST_01  source "common.sh"; do_cmd 'do_modular_common.sh -d sound -a "alsa_tests.sh -t capture -a 1 -F ALSA_M_MODULAR_CAP_MMAP_TST_01.snd"'
 

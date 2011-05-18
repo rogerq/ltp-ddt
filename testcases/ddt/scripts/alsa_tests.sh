@@ -111,12 +111,15 @@ esac
 case $SOC in
 esac
 case $MACHINE in
-am37x-evm|omap3evm)
+*am37x-evm|omap3evm)
 	amixer cset name='Analog Left AUXL Capture Switch' 1
 	amixer cset name='Analog Right AUXR Capture Switch' 1
 	amixer cset name='HeadsetL Mixer AudioL1' on
 	amixer cset name='HeadsetR Mixer AudioR1' on
 	amixer cset name='Headset Playback Volume' 3
+;;
+*da850-omapl138-evm)
+	amixer cset name='PCM Playback Volume' 127,127 
 ;;
 esac
 
