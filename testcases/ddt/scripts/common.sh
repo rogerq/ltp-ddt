@@ -40,7 +40,7 @@ do_cmd() {
         if [ $RESULT -eq 0 ]
         then
 		    test_print_err "$CMD failed. Return code is $RESULT"
-		    exit $RESULT
+		    exit 1
         fi
     fi
 }
