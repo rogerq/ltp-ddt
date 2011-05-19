@@ -12,10 +12,14 @@ ddt/alsa_sampleformat
 ddt/alsa_samplerate
 ddt/alsa_speaker_test
 ddt/alsa_stress
+ddt/edma_absync
+ddt/edma_async
+ddt/edma_chain_absync
+ddt/edma_chain_async
+ddt/edma_link_abysnc
+ddt/edma_link_async
 ddt/eth_iperf_tcp
 ddt/eth_iperf_udp
-ddt/eth_iperf_udp_nfs
-ddt/eth_iperf_udp_private
 ddt/eth_ping
 ddt/fbdev_disp
 ddt/fbdev_ioctl
@@ -26,7 +30,6 @@ ddt/i2c_readwrite
 ddt/i2c_stress_rw
 ddt/i2c_write_in_bg
 ddt/lmbench
-ddt/Makefile
 ddt/mmc_dd_rw_ext2
 ddt/mmc_dd_rw_vfat
 ddt/mmc_modular_dd_rw_ext2
@@ -90,3 +93,7 @@ ddt/usbhost_perf_vfat
 ddt/usbhost_stress_dd_rw
 ddt/v4l2_cap_func
 ddt/v4l2_cap_perf
+ddt/v4l2_disp
+ddt/v4l2_disp_modular
+ddt/v4l2_disp_perf
+ddt/v4l2_ioctl
