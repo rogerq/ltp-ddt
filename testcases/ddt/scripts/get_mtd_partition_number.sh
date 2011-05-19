@@ -31,6 +31,21 @@ if [ $# -ge 2 -a -n $2 ]; then
 	PARTITION=$2
 fi
 
+############################# Functions #######################################
+# Assume the type is always nand for nand device
+# this function is to check if the device /dev/mtd$partition is nand based on /sys entry
+# if this /sys/ entry doesn't exist, don't do any check. 
+is_nand() {
+        MTD_DEV="/mtdblock$1"
+        if [ -e /sys/block/$MTD_DEV/device/type ]; then
+                TYPE=`cat /sys/block/$MTD_DEV/device/type`
+                if [ $TYPE != 'nand' ]; then
+                        return 1
+                fi
+        fi
+        return 0
+}
+
 ############################ USER-DEFINED Params ##############################
 # Try to avoid defining values here, instead see if possible
 # to determine the value dynamically
@@ -68,10 +83,32 @@ case $DEVICE_TYPE in
                 : ${PARTITION:='3'}
                 ;;
         *)
-                test_print_err "Wrong device_type input in $0 script"
-		exit 1
+                die "Wrong device_type input in $0 script"
                 ;;
 esac
 
+# Make sure partition number matches device
+is_nand $PARTITION
+RST=$?
+case $DEVICE_TYPE in
+        nand)
+		if [ $RST -ne 0 ]; then
+			die "mtd$PARTITION is not nand device"
+		fi
+                ;;
+        spi)
+		if [ $RST -eq 0 ]; then
+			die "mtd$PARTITION is nand instead of spi"
+		fi
+                ;;
+        nor)
+		if [ $RST -eq 0 ]; then
+			die "mtd$PARTITION is nand instead of nor"
+		fi
+                ;;
+        *)
+                die "Wrong device_type input in $0 script"
+                ;;
+esac
 
 echo $PARTITION
