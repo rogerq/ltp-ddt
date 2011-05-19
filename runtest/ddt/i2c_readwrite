@@ -6,7 +6,6 @@
 # @requires i2c 
 
 I2C_S_FUNC_RW source 'common.sh'; do_cmd i2c_setget.sh 
-#I2C_S_FUNC_RW source 'common.sh'; SLAVE_ADDRESS=`get_i2c_slave_addr.sh` || die "error getting slave address for i2c"; REGOFFSET=`get_i2c_slave_regoffset.sh` || die "error getting slave regoffset"; REGVALUE=`get_i2c_slave_regvalue.sh` || die "error getting slave regvalue"; I2CBUS=`get_i2cbus_number.sh` || die "error getting i2cbus number"; do_cmd i2cset -y "$I2CBUS" "$SLAVE_ADDRESS" "$REGOFFSET" "$REGVALUE"; do_cmd "i2cget -y "$I2CBUS" "$SLAVE_ADDRESS" "$REGOFFSET" | grep "$REGVALUE""
 
 
 

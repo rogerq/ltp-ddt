@@ -59,10 +59,10 @@ x=0
 while [ $x -lt $TEST_LOOP ]
 do
 
-	SLAVE_ADDRESS=`get_i2c_slave_addr.sh "$SLAVE_DEVICE"` || die "error getting slave address for i2c"
+	SLAVE_ADDRESS=`get_i2c_slave_addr.sh "$SLAVE_DEVICE"` || die "error getting slave address for i2c: $SLAVE_ADDRESS"
 	REGOFFSET=`get_i2c_slave_regoffset.sh "$SLAVE_DEVICE"` || die "error getting slave regoffset" 
 	REGVALUE=`get_i2c_slave_regvalue.sh "$SLAVE_DEVICE"` || die "error getting slave regvalue" 
-	I2CBUS=`get_i2cbus_number.sh` || die "error getting i2cbus number" 
+	I2CBUS=`get_i2cbus_number.sh` || die "error getting i2cbus number: $I2CBUS" 
 	do_cmd i2cset -y "$I2CBUS" "$SLAVE_ADDRESS" "$REGOFFSET" "$REGVALUE" 
 	do_cmd "i2cget -y "$I2CBUS" "$SLAVE_ADDRESS" "$REGOFFSET" | grep "$REGVALUE""
 
