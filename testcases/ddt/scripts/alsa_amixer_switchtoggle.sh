@@ -73,6 +73,10 @@ am3517-evm)
 	CAPTURE_SWITCH_NAME_1="Digital Capture Switch";
 	PLAYBACK_SWITCH_NAME_1="Digital Playback Switch"
 	;;	
+da850-omapl138-evm)
+	CAPTURE_SWITCH_NAME_1="PGA Capture Switch";
+	PLAYBACK_SWITCH_NAME_1="Line Playback Switch"
+	;;	
 esac
 
 ########################### REUSABLE TEST LOGIC ###############################

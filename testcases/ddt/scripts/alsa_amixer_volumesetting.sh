@@ -78,6 +78,14 @@ am3517-evm)
 		MAXVAL=31
 		STEP=5
 		;;
+da850-omapl138-evm)
+                CAPTURE_NAME="PGA Capture Volume";
+                PLAYBACK_NAME="PCM Playback Volume"
+                MINVAL=0
+                MAXVAL=127
+                STEP=30
+                ;;
+
 esac
 
 
