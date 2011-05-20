@@ -412,17 +412,17 @@ static int st_process_fbdev_display_test_options(int argc, char **argv)
 
 	if (ioctl_test == TRUE)
 		ret = st_fbdev_ioctl_test(&testoptions);
-	/*#else if (testoptions.file_name)
-	#	ret = st_fbdev_display_bmp_test(&testoptions);
-	#else if ((pan_display == TRUE) || (testoptions.cpuload == TRUE) ||
-	#		(testoptions.framerate == TRUE))
-	#	ret = st_fbdev_pan_display_test(&testoptions);
-	#else if (ck_display == TRUE) 
-	#	ret =  st_fbdev_colorkey_test(&testoptions);
-        #else if (alpha_display == TRUE)
-         #       ret =  st_fbdev_alphablending_test(&testoptions);
-	#else
-	#	ret = st_fbdev_display_test(&testoptions);*/
+	else if (testoptions.file_name)
+		ret = st_fbdev_display_bmp_test(&testoptions);
+	else if ((pan_display == TRUE) || (testoptions.cpuload == TRUE) ||
+			(testoptions.framerate == TRUE))
+		ret = st_fbdev_pan_display_test(&testoptions);
+	else if (ck_display == TRUE) 
+		ret =  st_fbdev_colorkey_test(&testoptions);
+       else if (alpha_display == TRUE)
+             ret =  st_fbdev_alphablending_test(&testoptions);
+	else
+	ret = st_fbdev_display_test(&testoptions);
 	return ret;
 }
 
