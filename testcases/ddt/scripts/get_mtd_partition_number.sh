@@ -77,7 +77,7 @@ case $DEVICE_TYPE in
                 : ${PARTITION:='4'}
                 ;;
         spi)
-                : ${PARTITION:='2'}
+                : ${PARTITION:='4'}
                 ;;
         nor)
                 : ${PARTITION:='3'}
