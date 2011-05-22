@@ -3,8 +3,9 @@ omapl138
 am180x-evm
 can/<drivername>
 edma/<drivername>
+sdma/<drivername>
 graphics/<drivername>
-i2c/<drivername>
+i2c/non_eeprom/<drivername>
 i2c/eeprom/<drivername>
 mmc_host/<drivername>
 nand/<drivername>

@@ -2,7 +2,7 @@ armv5
 omapl138
 am180x-evm
 edma
-i2c
+i2c/non_eeprom
 mmc_host/davinci_mmc
 net/eth10M/davinci_emac
 net/eth100M/davinci_emac
