@@ -9,13 +9,11 @@ net/eth10M/davinci_emac
 net/eth100M/davinci_emac
 power_mgr/cpufreq
 power_mgr/cpuidle
-rtc/rtc-s35390a
 sata/ahci
 sound/capture/alsa
 sound/playback/alsa
 spi_master/mtd/omap2_mcspi
 usb/host/msc
-video/capture
 video/display
 watchdog/omap_wdt
 

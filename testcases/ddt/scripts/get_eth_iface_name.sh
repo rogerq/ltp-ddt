@@ -49,7 +49,7 @@ esac
 # Try to use /sys and /proc information to determine values dynamically.
 # Alternatively you should check if there is an existing script to get the
 # value you want
-: ${IFACE_NAME:=`ls /sys/class/net/ | awk -v RS=SPACE '/.*eth.*/{print $1}'`}
+: ${IFACE_NAME:=`ls /sys/class/net/ | awk '/.*eth.*/{print $1}'`}
 
 ########################### REUSABLE TEST LOGIC ###############################
 # DO NOT HARDCODE any value. If you need to use a specific value for your setup

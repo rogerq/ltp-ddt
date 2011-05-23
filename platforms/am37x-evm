@@ -2,7 +2,7 @@ armv7l
 am37x
 am37x-evm
 sdma
-i2c/eeprom
+i2c/non_eeprom
 mmc_host/mmci-omap-hs
 nand/omap2-nand
 net/eth10M/davinci_emac

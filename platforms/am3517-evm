@@ -1,8 +1,8 @@
 armv7l
 am3517
 am3517-evm
-edma
-i2c/eeprom
+sdma
+i2c/non_eeprom
 mmc_host/mmci-omap-hs
 nand/omap2-nand
 nor
