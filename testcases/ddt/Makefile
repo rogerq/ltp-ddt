@@ -27,4 +27,35 @@ include $(top_srcdir)/include/mk/env_pre.mk
 # Define directories to exclude from build/installation
 #FILTER_OUT_DIRS		:= kdump
 
+ifeq ($(PLATFORM),dm6467)
+FILTER_OUT_DIRS			+= fbdev_display_test_suite
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+endif
+
+ifeq ($(PLATFORM),dm6446)
+FILTER_OUT_DIRS                 += fbdev_display_test_suite
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+endif
+
+ifeq ($(PLATFORM),dm368)
+FILTER_OUT_DIRS                 += fbdev_display_test_suite
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+endif
+
+ifeq ($(PLATFORM),dm365)
+FILTER_OUT_DIRS                 += fbdev_display_test_suite
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+endif
+
+ifeq ($(PLATFORM),dm355)
+FILTER_OUT_DIRS                 += fbdev_display_test_suite
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+endif
+
+
 include $(top_srcdir)/include/mk/generic_trunk_target.mk

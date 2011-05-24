@@ -151,12 +151,12 @@
  * $ cp include/config.h.default include/config.h
  * $ cp include/mk/config.mk.default include/mk/config.mk
  * $ cp include/mk/features.mk.default include/mk/features.mk
- * $ make make CROSS_COMPILE=<CC PREFIX> SKIP_IDCHECK=1 KERNEL_INC=<Kernel
-     include directory>
+ * $ make CROSS_COMPILE=<CC PREFIX> SKIP_IDCHECK=1 KERNEL_INC=<Kernel
+     include directory> PLATFORM=<Platform name>
    For Example:
    $ make CROSS_COMPILE=arm-none-linux-gnueabi- SKIP_IDCHECK=1 KERNEL_INC=/home/
-   a0850405local/oe/arago-tmp/sysroots/armv5te-none-linux-gnueabi/kernel/include
- * $ make DESTDIR=<destination directory> SKIP_IDCHECK=1 install
+   a0850405local/oe/arago-tmp/sysroots/armv5te-none-linux-gnueabi/kernel/include PLATFORM=omapl138
+ * $ make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install
 
 7) HOW TO RUN TESTS
 ================================================================================
