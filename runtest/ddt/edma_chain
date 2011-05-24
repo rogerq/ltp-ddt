@@ -1,0 +1,10 @@
+# @name EDMA ASYNC/ABSYNC mode test
+# @desc Mem to Mem copy using chaining mechanism in ASYNC/ABSYNC mode with different count values (acnt, bcnt, ccnt)
+# @requires edma
+
+EDMA_S_FUNC_CHAIN_ASYNC edma.sh -i edma_chain_async -c "1024 10 5"
+EDMA_M_FUNC_CHAIN_ASYNC edma.sh -i edma_chain_async
+EDMA_S_FUNC_CHAIN_ABSYNC edma.sh -i edma_chain_absync -c "1024 10 5"
+EDMA_M_FUNC_CHAIN_ABSYNC edma.sh -i edma_chain_absync
+
+

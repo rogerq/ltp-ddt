@@ -1,8 +1,0 @@
-# @name EDMA ASYNC mode test
-# @desc Mem to Mem copy in ASYNC mode with different count values (acnt, bcnt, ccnt)
-# @requires (da830-omapl137-evm || da850-omapl138-evm || dm355-evm || dm365-evm || dm368-evm || dm6446-evm || dm6467-evm || dm814x-evm || dm816x-evm)
-
-EDMA_M_FUNC_ASYNC edma.sh -i edma_async
-
-
-

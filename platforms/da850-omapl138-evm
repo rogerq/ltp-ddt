@@ -4,3 +4,4 @@ da850-omapl138-evm
 net/eth/davinci_emac
 rtc/omap_rtc
 sound/soc-audio
+edma

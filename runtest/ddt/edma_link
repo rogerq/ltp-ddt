@@ -1,0 +1,10 @@
+# @name EDMA ASYNC/ABSYNC mode test
+# @desc Mem to Mem copy using linking mechanism in ASYNC/ABSYNC mode with different count values (acnt, bcnt, ccnt)
+# @requires edma
+
+EDMA_S_FUNC_LINK_ASYNC edma.sh -i edma_link_async -c "1024 10 5"
+EDMA_M_FUNC_LINK_ASYNC edma.sh -i edma_link_async
+EDMA_S_FUNC_LINK_ABSYNC edma.sh -i edma_link_absync -c "1024 10 5"
+EDMA_M_FUNC_LINK_ABSYNC edma.sh -i edma_link_absync
+
+
