@@ -151,12 +151,20 @@
  * $ cp include/config.h.default include/config.h
  * $ cp include/mk/config.mk.default include/mk/config.mk
  * $ cp include/mk/features.mk.default include/mk/features.mk
+ * Update testcases/ddt/alsa_test_suite/Makefile with alsa include and 
+   lib paths.
+   For example:
+	  ALSA_INCPATH=/home/useraccount/usr/include
+	  ALSA_LIBPATH=/home/useraccount/usr/lib
+   (In case the filesystem does not contain ALSA include and lib refer step 7 
+    for installation)
+
  * $ make CROSS_COMPILE=<CC PREFIX> SKIP_IDCHECK=1 KERNEL_INC=<Kernel
      include directory> PLATFORM=<Platform name>
    For Example:
    $ make CROSS_COMPILE=arm-none-linux-gnueabi- SKIP_IDCHECK=1 KERNEL_INC=/home/
    a0850405local/oe/arago-tmp/sysroots/armv5te-none-linux-gnueabi/kernel/include PLATFORM=am180x-evm
- * $ make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install
+ * $ sudo make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install
 
 7) HOW TO INSTALL ALSA INCLUDES AND LIBS
    Install following packages on to your filesystem

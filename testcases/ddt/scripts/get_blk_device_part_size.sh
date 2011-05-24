@@ -76,16 +76,19 @@ case $DEV_TYPE in
 		SIZE=$((1*GB))
 	;;
 	ata)
-		SIZE=$((20*GB))
+		SIZE=$((1*GB))
 	;;
 	sata)
-		SIZE=$((20*GB))
+		SIZE=$((1*GB))
 	;;
 	*)
 		die "Device type is not found; Size for Device Partition is set to default value: $SIZE"
-		exit 1
 	;;
 esac
+
+if [ $SIZE -le 0 ]; then
+	die "Size is not greater than zero: $SIZE"
+fi
 
 echo $SIZE
 

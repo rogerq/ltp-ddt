@@ -85,7 +85,7 @@ test_print_trc "FILE SIZE:${FILE_SIZE}MB"
 test_print_trc "DEVICE_TYPE:${DEVICE_TYPE}"
 
 # check if input are valid for this machine
-DEVICE_PART_SIZE=`get_blk_device_part_size.sh -d $DEVICE_TYPE -n $DEV_NODE` || die "error while getting device partition size"
+DEVICE_PART_SIZE=`get_blk_device_part_size.sh -d $DEVICE_TYPE -n $DEV_NODE` || die "error while getting device partition size: $DEVICE_PART_SIZE"
 test_print_trc "Device Partition Size is $DEVICE_PART_SIZE"
 [ $(( $FILE_SIZE * $MB )) -gt $DEVICE_PART_SIZE ] && die "File Size: $FILE_SIZE MB is not less than or equal to Device Partition Size: $DEVICE_PART_SIZE"
 
