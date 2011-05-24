@@ -158,7 +158,18 @@
    a0850405local/oe/arago-tmp/sysroots/armv5te-none-linux-gnueabi/kernel/include PLATFORM=am180x-evm
  * $ make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install
 
-7) HOW TO RUN TESTS
+7) HOW TO INSTALL ALSA INCLUDES AND LIBS
+   Install following packages on to your filesystem
+       	alsa-dev (e.g. alsa-dev_1.0.18-r0.1_armv5te.ipk)
+	alsa-lib-dev (e.g. alsa-lib-dev_1.0.18-r0.1_armv5te.ipk)
+	libasound2 (e.g. libasound2_1.0.18-r0.1_armv5te.ipk)
+   To unpack the .ipk files use following commands
+	$ ar -p alsa-dev_1.0.18-r0.1_armv5te.ipk data.tar.gz | tar -zx
+	$ ar -p libasound2_1.0.18-r0.1_armv5te.ipk data.tar.gz | tar -zx
+	$ ar -p alsa-lib-dev_1.0.18-r0.1_armv5te.ipk data.tar.gz | tar -zx
+   (http://arago-project.org/wiki/index.php/Crosscompiling_Outside_of_Arago)
+
+8) HOW TO RUN TESTS
 ================================================================================
  * Run DDT tests the same way you run LTP tests. Use ltprun program and pass to
    it the test scenario file in the runtest directory (option -f) to run and the
@@ -182,7 +193,7 @@
    -n          : Run test with network traffic in background.
 
 
-8) HELP/SUPPORT
+9) HELP/SUPPORT
 ================================================================================
    Please submit your queries or comments at the forums http://community.ti.com 
    or http://support.ti.com.
