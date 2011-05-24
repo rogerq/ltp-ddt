@@ -57,5 +57,22 @@ FILTER_OUT_DIRS                 += v4l2_capture_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_test_suite
 endif
 
+ifeq ($(PLATFORM),am180x-evm)
+FILTER_OUT_DIRS                 += fbdev_display_test_suite
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+endif
+
+ifeq ($(PLATFORM),da850-omapl138-evm)
+FILTER_OUT_DIRS                 += fbdev_display_test_suite
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+endif
+
+ifeq ($(PLATFORM),da830-omapl137-evm)
+FILTER_OUT_DIRS                 += fbdev_display_test_suite
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+endif
 
 include $(top_srcdir)/include/mk/generic_trunk_target.mk
