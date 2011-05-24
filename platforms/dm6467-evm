@@ -1,0 +1,10 @@
+armv5tejl
+dm6467
+dm6467-evm
+sound/soc-audio
+net/eth/davinci_emac
+nand/davinci_nand
+i2c/eeprom
+spi_master/mtd/spi_davinci
+usb/host/musb_hdrc
+edma/

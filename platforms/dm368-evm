@@ -1,0 +1,12 @@
+armv5tejl
+dm368
+dm368-evm
+sound/soc-audio
+net/eth/davinci_emac
+mmc_host/davinci_mmc
+nand/davinci_nand
+spi_master/mtd/spi_davinci
+usb/host/msc/musb_hdrc
+i2c/non_eeprom
+i2c/eeprom/
+edma/
