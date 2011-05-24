@@ -2,6 +2,7 @@ armv7l
 am37x
 am37x-evm
 sdma
+graphics/fb0
 i2c/non_eeprom
 mmc_host/mmci-omap-hs
 nand/omap2-nand
@@ -14,7 +15,7 @@ sound/capture/alsa
 sound/playback/alsa
 usb/host/msc
 video/display/*/v4l2/omap_vout
-video/capture/*/v4l2/ OMAP3 ISP CCDC output
+video/capture/*/v4l2/OMAP3 ISP CCDC output
 watchdog/omap_wdt
 
 
