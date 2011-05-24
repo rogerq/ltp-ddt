@@ -1,6 +1,6 @@
 # @name V4L2 Capture performance test
 # @desc Capture framerate and cpuload measurement tests
-# @requires video4linux/capture
+# @requires video/capture/*/v4l2
 
 V4L2CAP_M_PERF_NTSC source 'common.sh';disp=`get_video_node.sh -d "y"`; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -width 720 -height 480 -buffernos 2 -framerate -cpuload -loop 1000 -pixelformat 2
 V4L2CAP_M_PERF_PAL source 'common.sh'; disp=`get_video_node.sh -d "y"`; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -width 720 -height 576 -buffernos 2 -framerate -cpuload -loop 1000 -pixelformat 2

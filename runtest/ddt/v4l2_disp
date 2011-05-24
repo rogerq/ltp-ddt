@@ -1,6 +1,6 @@
 # @name V4L2 display tests
 # @desc runs v4l2 display test cases for all display devices and resolutions
-# @requires  video4linux/display
+# @requires  video/display/*/v4l2
 
 V4L2DISP_S_FUNC_DEV_VID1_DEF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2
 

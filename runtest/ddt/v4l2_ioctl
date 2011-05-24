@@ -1,6 +1,6 @@
 # @name V4L2 display ioctl tests
 # @desc runs v4l2 display tests for all ioctls
-# @requires  video4linux/display
+# @requires  video/display/*/v4l2
 
 V4L2DISP_M_FUNC_CROP_CAP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 0 
 V4L2DISP_M_FUNC_QUERY_CAP source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 1 
@@ -15,3 +15,4 @@ V4L2DISP_M_FUNC_REQBUF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_
 V4L2DISP_M_FUNC_QUERYBUF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 11
 V4L2DISP_M_FUNC_ENQBUF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 12
 V4L2DISP_M_FUNC_STREAM_ON_OFF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -buffernos 2 -buf_type 1 -ioctl 12
+

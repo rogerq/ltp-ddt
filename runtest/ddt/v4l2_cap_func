@@ -1,6 +1,6 @@
 # @name V4L2 Capture test
 # @desc Capture ioctl tests and buffer tests
-# @requires video4linux/capture
+# @requires video/capture/*/v4l2
 
 V4L2CAP_S_FUNC source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`;do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 2 -pixelformat 2
 V4L2CAP_M_FUNC_BUFN1 source 'common.sh'; disp=`get_video_node.sh -d "y"` ; cap=`get_video_node.sh -d "n"`; do_cmd v4l2_capture_tests -device_disp "$disp" -device_cap "$cap" -buffernos 1 -pixelformat 2

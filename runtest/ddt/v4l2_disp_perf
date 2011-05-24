@@ -1,6 +1,6 @@
 # @name V4L2 display performance tests
 # @desc runs v4l2 display test for framerate and cpuload measurement
-# @requires  video4linux/display
+# @requires  video/display/*/v4l2
 
 V4L2DISP_M_PERF source 'common.sh'; disp=`get_video_node.sh -d "y"` ; do_cmd v4l2_display_tests -device_disp "$disp" -width 640 -height 480 -loop 1000 -framerate -cpuload
 

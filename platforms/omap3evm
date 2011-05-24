@@ -5,6 +5,6 @@ sound/omap3-audio
 net/eth/smsc911x
 spi_master/omap2_mcspi
 mmc_host/mmci-omap-hs
-video4linux/display/omap_vout
-video4linux/capture/OMAP3 ISP CCDC output
 graphics/fb0
+video/capture/*/v4l2/OMAP3 ISP CCDC output
+video/display/*/v4l2/omap_vout

@@ -1,6 +1,6 @@
 # @name V4L2 display modular tests
 # @desc runs v4l2 display test when v4l2 display driver is built as a module
-# @requires  video4linux/display
+# @requires  video/display/*/v4l2
 
 V4L2DISP_M_MOD source 'common.sh'; disp=`get_video_node.sh -d "y"` || die "error getting devnode" ; do_cmd 'do_modular_common.sh -d "video4linux" -a "do_cmd v4l2_display_tests -device_disp $disp -buffernos 2"'
 
