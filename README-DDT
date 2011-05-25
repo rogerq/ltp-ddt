@@ -31,7 +31,8 @@
    recipe that builds the test filesystem image.
  * If your tests use shell scripts, add the shell scripts to the
    testcases/ddt/scripts/ directory
- * Write a new test scenario file under runtest/ddt/
+ * Write a new test scenario file under runtest/ddt/. Also add a new line with
+   the name of your new scenario file to scenario_groups/default-ddt.
 
 4) DDT TESTS IMPLEMENTATION GUIDELINES
 ================================================================================
@@ -151,6 +152,7 @@
  * $ cp include/config.h.default include/config.h
  * $ cp include/mk/config.mk.default include/mk/config.mk
  * $ cp include/mk/features.mk.default include/mk/features.mk
+ * echo "ltp-ddt_x.x.x" > ChangeLog
  * Update testcases/ddt/alsa_test_suite/Makefile with alsa include and 
    lib paths.
    For example:
@@ -158,7 +160,6 @@
 	  ALSA_LIBPATH=/home/useraccount/usr/lib
    (In case the filesystem does not contain ALSA include and lib refer step 7 
     for installation)
-
  * $ make CROSS_COMPILE=<CC PREFIX> SKIP_IDCHECK=1 KERNEL_INC=<Kernel
      include directory> PLATFORM=<Platform name>
    For Example:
