@@ -76,11 +76,22 @@ done
 test_print_trc "STARTING  EDMA Test for $IOCTL"
 test_print_trc "IOCTL_TYPE:${IOCTL}"
 test_print_trc "NUMTC:${NUMTC}"
-test_print_trc "Inserting timer module"
-do_cmd insmod ddt/kSt_timer.ko
-test_print_trc "Inserting edma test module"
-do_cmd insmod ddt/edma_test.ko
-
+test_print_trc "Inserting timer module. Please wait..."
+do_cmd lsmod | grep kSt_timer
+if [ $? = 1 ]; then
+	do_cmd insmod ddt/kSt_timer.ko
+        sleep 5
+else
+	do_cmd echo Module already inserted
+fi
+test_print_trc "Inserting edma test module. Please wait..."
+do_cmd lsmod | grep edma_test
+if [ $? = 1 ]; then
+	do_cmd insmod ddt/edma_test.ko
+        sleep 5
+else
+	do_cmd echo Module already inserted
+fi
 if [ -z "$CNTS" ]; then
 	for CNT in "$CNT1" "$CNT2" "$CNT3" "$CNT4" "$CNT5" "$CNT6" "$CNT7" "$CNT8" ; do
 		set -- $CNT
@@ -101,9 +112,11 @@ else
 		do_cmd edma_tests -device /dev/edma -acnt $1 -bcnt $2 -ccnt $3 -numtcs $NUMTC -ioctl $IOCTL 
 	done
 fi
-test_print_trc "Removing edma test module"
+test_print_trc "Removing edma test module. Please wait..."
 do_cmd rmmod edma_test.ko
-test_print_trc "Removing timer module"
+sleep 5
+test_print_trc "Removing timer module. Please wait..."
 do_cmd rmmod kSt_timer.ko
+sleep 5
 
 
