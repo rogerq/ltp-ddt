@@ -1,9 +1,9 @@
-# @name 
+# @name SD card: 
 #	MMC modular read write test 
 # @desc 
 #       modprobe mmmc module first and then do RW and then rmmod it
-# @requires  mmc_host 
+# @requires  mmc_host/sd 
 
 # The test step pass if the commands return zero, it fails otherwise.
 # For more information please refer to <root>/README-DDT file.
-MMC_MODULAR_STRESS_RW_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -f "ext2" -b "1M" -c "10" -l "10" -d "mmc"
+MMC_L_MODULAR_SD_STRESS_RW_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -f "ext2" -b "1M" -c "10" -l "10" -d "mmc"

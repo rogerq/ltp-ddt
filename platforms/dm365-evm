@@ -1,6 +1,6 @@
 armv5tejl
-dm355
-dm355-evm
+dm365
+dm365-evm
 sound/soc-audio
 net/eth/dm9000
 nand/davinci_nand

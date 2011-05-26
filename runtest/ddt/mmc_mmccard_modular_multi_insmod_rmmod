@@ -1,0 +1,10 @@
+# @name MMC card: 
+#	MMC modular multiple insmod rmmod test 
+# @desc 
+#       modprobe mmc module multiple times 
+# @requires  mmc_host/mmc 
+
+# The test step pass if the commands return zero, it fails otherwise.
+# For more information please refer to <root>/README-DDT file.
+#MMC_L_MODULAR_MMC_STRESS_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -l "10" -d "mmc" -s
+MMC_L_MODULAR_MMC_MULTI_0001 source "common.sh"; do_cmd do_modular_common.sh -l "3" -d "mmc" 

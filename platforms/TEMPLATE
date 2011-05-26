@@ -7,7 +7,10 @@ sdma/<drivername>
 graphics/<drivername>
 i2c/non_eeprom/<drivername>
 i2c/eeprom/<drivername>
-mmc_host/<drivername>
+mmc_host/sd/<drivername>
+mmc_host/mmc/<drivername>
+mmc_host/sdhc/<drivername>
+mmc_host/sdio/<drivername>
 nand/<drivername>
 nor/<drivername>
 net/eth10M/<drivername (i.e.davinci_emac)>

@@ -3,7 +3,8 @@ am389x
 am389x-evm
 edma
 i2c/eeprom
-mmc_host/mmci-omap-hs
+mmc_host/sd/mmci-omap-hs
+mmc_host/sdhc/mmci-omap-hs
 nand/omap2-nand
 net/eth10M/davinci_emac
 net/eth100M/davinci_emac

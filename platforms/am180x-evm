@@ -3,7 +3,9 @@ omapl138
 am180x-evm
 edma
 i2c/non_eeprom
-mmc_host/davinci_mmc
+mmc_host/sd/davinci_mmc
+mmc_host/mmc/davinci_mmc
+mmc_host/sdhc/davinci_mmc
 net/eth10M/davinci_emac
 net/eth100M/davinci_emac
 pru
