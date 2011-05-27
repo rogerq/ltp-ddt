@@ -1,8 +1,0 @@
-# @name SDHC card: MMC Write/Read Performance test
-# @desc format mmc device first and then mount it and do read write perf test
-# @requires mmc_host/sdhc
-
-MMC_M_PERF_SDHC_EXT2_0001 blk_device_filesystem_perf_test.sh -f ext2 -s 100 -B "102400 256000 512000 1048576 5242880" -d "mmc"
-
-
-
