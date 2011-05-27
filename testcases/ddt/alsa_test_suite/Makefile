@@ -8,11 +8,11 @@ INSTALL_DIR             := testcases/bin/ddt
 
 FILTER_OUT_DIRS         :=
 
-#Path of ALSA include - Change to the path where alsa include folder is present.
-ALSA_INCPATH=
+#Path of ALSA include (must include -I). Change to the path where alsa include folder is present.
+ALSA_LOCAL_INCPATH=
 
-#Path of ALSA library - Change to the path where libasound library is installed.
-ALSA_LIBPATH=
+#Path of ALSA library (must include -L) Change to the path where libasound library is installed.
+ALSA_LOCAL_LIBPATH=
 
 
 # We don't want to copy over the Makefile
@@ -24,7 +24,7 @@ INSTALL_MODE            := 00755
 
 CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
 LDFLAGS         += -g 
-INCLUDES        = -I $(KERNEL_INC) -I src/interface/common -I ../utils/user -I $(ALSA_INCPATH)
+INCLUDES        = -I $(KERNEL_INC) -I src/interface/common -I ../utils/user $(ALSA_LOCAL_INCPATH)
 
 #List of source files- Update this on adding a new C file
 SOURCES := \
@@ -41,7 +41,8 @@ SOURCES := \
 MAKE_TARGETS            := alsa_perf_tests
 
 alsa_perf_tests:
-	$(CC) $(CFLAGS) $(LDFLAGS) -o alsa_perf_tests ${INCLUDES} ${SOURCES} -lasound -L$(ALSA_LIBPATH)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o alsa_perf_tests ${INCLUDES} ${SOURCES} -lasound $(ALSA_LOCAL_LIBPATH)
+
 
 include $(top_srcdir)/include/mk/generic_leaf_target.mk
 
