@@ -8,11 +8,11 @@ INSTALL_DIR             := testcases/bin/ddt
 
 FILTER_OUT_DIRS         :=
 
-#Path of ALSA include - Change to the path where alsa include folder is present.
-ALSA_INCPATH=
+#Path to ALSA library headers. Change to the path where alsa include folder is present.
+ALSA_INCPATH ?= /usr/include
 
-#Path of ALSA library - Change to the path where libasound library is installed.
-ALSA_LIBPATH=
+#Path to ALSA library. Change to the path where libasound library is installed.
+ALSA_LIBPATH ?= /usr/lib
 
 
 # We don't want to copy over the Makefile
@@ -42,6 +42,7 @@ MAKE_TARGETS            := alsa_perf_tests
 
 alsa_perf_tests:
 	$(CC) $(CFLAGS) $(LDFLAGS) -o alsa_perf_tests ${INCLUDES} ${SOURCES} -lasound -L$(ALSA_LIBPATH)
+
 
 include $(top_srcdir)/include/mk/generic_leaf_target.mk
 
