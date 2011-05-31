@@ -8,10 +8,10 @@ INSTALL_DIR             := testcases/bin/ddt
 
 FILTER_OUT_DIRS         :=
 
-#Path of ALSA include (must include -I). Change to the path where alsa include folder is present.
+#Path to ALSA library headers. Change to the path where alsa include folder is present.
 ALSA_INCPATH ?= /usr/include
 
-#Path of ALSA library (must include -L) Change to the path where libasound library is installed.
+#Path to ALSA library. Change to the path where libasound library is installed.
 ALSA_LIBPATH ?= /usr/lib
 
 
