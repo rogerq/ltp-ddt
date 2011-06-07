@@ -1,6 +1,7 @@
 # @name Test scenario name (i.e. Nand Write/Read Performance test)
 # @desc Test scenario description.
 # @requires nand 
+# @setup_requires 
 
 # PLEASE READ "DDT TESTS IMPLEMENTATION GUIDELINES" section in
 # <ltp-ddt-root>/README-DDT file before writing test cases.

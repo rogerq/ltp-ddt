@@ -3,6 +3,7 @@
 # @desc 
 #       modprobe usb module multiple times 
 # @requires  usb/host 
+# @setup_requires usbhostmsc
 
 # The test step pass if the commands return zero, it fails otherwise.
 # For more information please refer to <root>/README-DDT file.

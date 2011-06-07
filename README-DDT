@@ -90,7 +90,8 @@
 
  * Use the default test scenario file template available at
    runtest/ddt/TEMPLATE as a starting point to develop your test scenario.
- * Use the @requires anotation to specify ARCH, DRIVER, SOC and/or MACHINE 
+
+ * Use the @requires annotation to specify ARCH, DRIVER, SOC and/or MACHINE 
    requirements to run the test scenario. You can use (), &&, ||, * to specify
    the test requirements. Examples:
    
@@ -103,6 +104,15 @@
 
    @requires (mmc_host || nand) && armv*
    This test requires mmc or nand drivers and an ARM architecture
+
+ * Use the @setup_requires annotation to specify test setup requirements.
+   Some test cases like USB and Video capture requires special peripherals, such as 
+   USB flash drives, DVD players, video cameras, etc., to be connected to the DUT.
+   Using @setup_requires the test developer highlights such test setup requirements. 
+   This information might be used by test automation frameworks to allocate test requests
+   to DUTs that have the appropriate peripherals connected to them.
+   Please follow the naming conventions identified in section 9) of this document
+   if the test scenario needs to identify any setup requirements.
 
  
 5) HOW TO ADD NEW PLATFORMS
@@ -201,11 +211,24 @@
    -i <options>: Run test under additional background load on IO Bus
    -n          : Run test with network traffic in background.
 
-
-9) HELP/SUPPORT
+9) @setup_requires Naming Conventions
 ================================================================================
-   Please submit your queries or comments at the forums http://community.ti.com 
-   or http://support.ti.com.
-   Alternatively, you may send an email to the opentest mailing list at 
+As discussed in section 4.2 above, @setup_requires is used to highlight test scenarios' setup
+requirements. The following @setup_requires tags are currently defined.
+If required, please feel free to define a new tag below and send a patch to the Opentest mailing list.
+
+* Video Related:
+videocapturentsc, videocapturepal, videocapture720p, videocapture1080i, videocapture1080p
+
+* USB Related:
+usbhostmsc, usbhosthid, usbhostaudio, usbhostvideo, usbslavefbs, usbslavecdc, usbslaverndis, usbslaveasync
+
+* Storage Related:
+sd, sdhc, mmc, sata
+
+
+10) HELP/SUPPORT
+================================================================================
+   Please submit your queries or comments to the opentest mailing list at 
    opentest@arago-project.org
    
