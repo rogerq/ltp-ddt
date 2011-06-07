@@ -65,7 +65,7 @@ done
 
 ############################ DEFAULT Params #######################
 if [ -z $DEV_NODE ]; then
-	DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE"
+	DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"
 fi
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
 : ${FS_TYPE:='jffs2'}
