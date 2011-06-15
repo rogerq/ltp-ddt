@@ -64,7 +64,7 @@ omap3evm)
 		amixer cset numid=25 1,1
 		amixer cset numid=28 1,1		
 		;;		
-am37x-evm)		
+am37x-evm|beagleboard)		
 		CAPTURE_NAME="Analog Capture Volume";
 		PLAYBACK_NAME="Headset Playback Volume"
 		MINVAL=0

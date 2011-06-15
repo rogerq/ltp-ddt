@@ -64,7 +64,7 @@ omap3evm)
 	amixer cset numid=25 1,1
 	amixer cset numid=28 1,1	
 	;;
-am37x-evm)
+am37x-evm|beagleboard)
 	CAPTURE_SWITCH_NAME_1="Analog Right AUXR Capture Switch";
 	CAPTURE_SWITCH_NAME_2="Analog Left AUXL Capture Switch";	
 	PLAYBACK_SWITCH_NAME_1="DAC2 Analog Playback Switch"

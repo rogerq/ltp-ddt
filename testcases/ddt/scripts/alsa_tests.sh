@@ -111,7 +111,7 @@ esac
 case $SOC in
 esac
 case $MACHINE in
-*am37x-evm|omap3evm)
+*am37x-evm|omap3evm|beagleboard)
 	amixer cset name='Analog Left AUXL Capture Switch' 1
 	amixer cset name='Analog Right AUXR Capture Switch' 1
 	amixer cset name='HeadsetL Mixer AudioL1' on
