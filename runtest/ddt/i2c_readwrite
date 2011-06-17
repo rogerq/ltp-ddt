@@ -5,7 +5,7 @@
 # 	script can return the addr for that slave device
 # @requires i2c/non_eeprom 
 
-I2C_S_FUNC_RW source 'common.sh'; do_cmd i2c_setget.sh 
+I2C_S_FUNC_RW_SETGET source 'common.sh'; do_cmd i2c_setget.sh 
 
 
 

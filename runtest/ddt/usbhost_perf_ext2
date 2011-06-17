@@ -3,7 +3,6 @@
 # @requires usb/host
 # @setup_requires usbhostmsc
 
-USBHOST_M_PERF_EXT2_0001 blk_device_filesystem_perf_test.sh -f ext2 -s 10 -B "102400 256000" -d "usb"
 USBHOST_L_PERF_EXT2_0001 blk_device_filesystem_perf_test.sh -f ext2 -s 100 -B "102400 256000 512000 1048576 5242880" -d "usb"
 
 

@@ -4,10 +4,4 @@
 #       modprobe spi module and then rmmod it
 # @requires  spi_master 
 
-# The test scenario is made of one or more test steps. Each step is composed of
-# <TAG> <COMMANDS>.
-# Use following convention for TAGs <AREA>_<TYPE>_<ID>
-# The test step pass if the commands return zero, it fails otherwise.
-# For more information please refer to <root>/README-DDT file.
-SPI_INSMOD_0001 source "common.sh"; mod_name=`get_modular_name.sh 'spi'` || die "error getting modular name"; do_cmd insmod.sh "$mod_name" 
-SPI_RMMOD_0002 source "common.sh"; mod_name=`get_modular_name.sh 'spi'` || die "error getting modular name"; do_cmd rmmod.sh "$mod_name" 
+SPI_M_MODULAR_INSMOD_RMMOD source "common.sh"; mod_name=`get_modular_name.sh 'spi'` || die "error getting modular name: $mod_name"; do_cmd insmod.sh "$mod_name"; do_cmd rmmod.sh "$mod_name" 
