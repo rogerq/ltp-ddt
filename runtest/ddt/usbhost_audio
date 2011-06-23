@@ -1,0 +1,14 @@
+# @name USB Host Audio class. 
+# @desc Test cases corresponding to USB Host loopback/playback Audio class. 
+# @requires usb/host/iso/usbaudio
+# @setup_requires usbhostaudio
+
+
+USB_S_FUNC_Audio_LOOPBACK_ACCESSTYPE_MMAP_01	 source 'common.sh' ; do_cmd 'usb_host_audio.sh -t loopback -a 1 -d 10'
+USB_M_FUNC_Audio_LOOPBACK_ACCESSTYPE_MMAP_02	 source 'common.sh' ; do_cmd 'usb_host_audio.sh -t loopback -a 1 -d 60'
+USB_L_FUNC_Audio_LOOPBACK_ACCESSTYPE_MMAP_03	 source 'common.sh' ; do_cmd 'usb_host_audio.sh -t loopback -a 1 -d 300'
+
+USB_M_FUNC_Audio_PLAYBACK_ACCESSTYPE_NONINTER_01 source 'common.sh' ; do_cmd 'usb_host_audio.sh -t playback -a 0 -F /usr/share/sounds/alsa/Noise.wav'  
+USB_M_FUNC_Audio_PLAYBACK_ACCESSTYPE_MMAP_01	 source 'common.sh' ; do_cmd 'usb_host_audio.sh -t playback -a 1 -F /usr/share/sounds/alsa/Noise.wav'
+
+

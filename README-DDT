@@ -218,7 +218,7 @@ requirements. The following @setup_requires tags are currently defined.
 If required, please feel free to define a new tag below and send a patch to the Opentest mailing list.
 
 * Video Related:
-videocapturentsc, videocapturepal, videocapture720p, videocapture1080i, videocapture1080p
+usbhostmsc, usbhosthid_mouse, usbhosthid_keyboard, usbhostaudio, usbhostvideo, usbslavefbs, usbslavecdc, usbslaverndis, usbslaveasync
 
 * USB Related:
 usbhostmsc, usbhosthid, usbhostaudio, usbhostvideo, usbslavefbs, usbslavecdc, usbslaverndis, usbslaveasync
