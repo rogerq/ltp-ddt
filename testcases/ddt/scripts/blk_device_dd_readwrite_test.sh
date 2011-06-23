@@ -19,11 +19,12 @@ source "common.sh"
 source "st_log.sh"
 source "mtd_common.sh"
 
+SKIP_FORMAT=0
 ############################# Functions #######################################
 usage()
 {
 cat <<-EOF >&2
-        usage: ./${0##*/} [-n DEV_NODE] [-d DEVICE_TYPE] [-f FS_TYPE] [-m MNT_POINT] [-b DD_BUFSIZE] [-c DD_CNT] [-i IO_OPERATION] [-l TEST_LOOP]
+        usage: ./${0##*/} [-n DEV_NODE] [-d DEVICE_TYPE] [-f FS_TYPE] [-m MNT_POINT] [-b DD_BUFSIZE] [-c DD_CNT] [-i IO_OPERATION] [-l TEST_LOOP] [-s SKIP_FORMAT]
 	-n DEV_NODE	optional param; device node like /dev/mtdblock2; /dev/sda1
         -f FS_TYPE      filesystem type like jffs2, ext2, etc
         -m MNT_POINT	mount point 
@@ -32,6 +33,7 @@ cat <<-EOF >&2
         -i IO_OPERATION	IO operation like 'write', 'read', default is 'read'
         -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
 	-l TEST_LOOP	test loop for r/w. default is 1.
+	-s SKIP_FORMAT  skip erase/format part and just do r/w 
         -h Help         print this usage
 EOF
 exit 0
@@ -39,7 +41,7 @@ exit 0
 
 ############################### CLI Params ###################################
 
-while getopts  :d:f:m:n:b:c:i:l:h arg
+while getopts  :d:f:m:n:b:c:i:l:sh arg
 do case $arg in
         n)      
 		# optional param
@@ -51,6 +53,7 @@ do case $arg in
         c)      DD_CNT="$OPTARG";;
 	i) 	IO_OPERATION="$OPTARG";;
 	l) 	TEST_LOOP="$OPTARG";;
+	s)	SKIP_FORMAT=1;;
         h)      usage;;
         :)      test_print_trc "$0: Must supply an argument to -$OPTARG." >&2
                 exit 1
@@ -76,9 +79,15 @@ test_print_trc "MNT_POINT: $MNT_POINT"
 test_print_trc "FS_TYPE: $FS_TYPE"
 
 ############# Do the work ###########################################
-test_print_trc "Erasing or Formatting this partition"
-do_cmd blk_device_erase_format_part.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE"
-do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
+#do_cmd "mount" | grep $DEV_NODE 
+#if [ $? -ne 0]; then
+#	test_print_trc "Erasing/Formatting this partition and then mount it"
+#	do_cmd blk_device_erase_format_part.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE"
+#	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
+#fi
+if [ $SKIP_FORMAT -ne 1 ]; then 
+	do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
+fi
 
 test_print_trc "Doing read/write test for $TEST_LOOP times"
 x=0
@@ -105,8 +114,9 @@ do
 	x=$((x+1))
 	do_cmd date
 done
-test_print_trc "Umounting device"
-do_cmd "umount $DEV_NODE"
+#test_print_trc "Umounting device"
+#do_cmd "umount $DEV_NODE"
+[ $SKIP_FORMAT -eq 1 ] || do_cmd blk_device_umount.sh -n "$DEV_NODE" -d "$DEVICE_TYPE"
 
 
 

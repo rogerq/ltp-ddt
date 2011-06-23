@@ -1,0 +1,9 @@
+# @name Worstcase Latency with net load by using cyclictest
+# @desc By using iperf/ping to create net load and under this load to measure latency using cyclictest
+# @requires armv*
+# @setup_requires  
+# @notes iperf server need to be started in NFS host pc before run net_load test
+
+REALTIME_L_PERF_CYCLICTEST_PING_LOAD source 'common.sh';NFS_HOST=`get_nfs_host.sh`;run_test_with_background_loads.sh -d "do_cmd ping ${NFS_HOST} -q" -a "cyclictest -m -p99 -a -t -i500 -d500 -l1000000 -n -q"
+REALTIME_L_PERF_CYCLICTEST_IPERF_LOAD source 'common.sh';run_test_with_background_loads.sh -d "run_iperf.sh -m -M 1500 -f M -d -t 120 -w 8K" -a "cyclictest -m -p99 -a -t -i500 -d500 -l1000000 -n -q"
+

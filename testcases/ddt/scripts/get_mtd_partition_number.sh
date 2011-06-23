@@ -69,6 +69,16 @@ case $MACHINE in
                 esac
 
                 ;;
+        am181x-evm)
+
+                case $DEVICE_TYPE in
+                        spi)
+                                : ${PARTITION:='2'}
+                                ;;
+                esac
+
+                ;;
+
 esac
 
 # If no ARCH/DRIVER/SOC/MACHINE specific value, take the value below

@@ -1,0 +1,9 @@
+# @name Worstcase Latency with storage IO load by using cyclictest
+# @desc Measure latency under externel usbdisk IO load using cyclictest
+# @requires spi_master/mtd 
+# @setup_requires 
+
+REALTIME_L_PERF_CYCLICTEST_SPI_LOAD source 'common.sh'; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd part number: $part"; size=`get_mtd_erase_size.sh "$part"` || die "error getting mtd erase size: $size"; do_cmd blk_device_prepare_format.sh -f "jffs2" -d "spi";run_test_with_background_loads.sh -d "blk_device_dd_readwrite_test.sh -f "jffs2" -b "$size" -c 10 -d "spi" -s" -a "cyclictest -m -p99 -a -t -i500 -d500 -l1000000 -n -q"; do_cmd blk_device_umount.sh -d "spi"
+#REALTIME_L_PERF_CYCLICTEST_SPI_LOAD source 'common.sh'; run_test_with_background_loads.sh -d "/usr/runltp -f ddt/spi_mtd_dd_rw -s 'SPI_S_FUNC_DD_RW_ERASESIZE' -P $MACHINE" -a "cyclictest -m -p99 -a -t -i500 -d500 -l100000 -n -q"
+#REALTIME_L_PERF_CYCLICTEST_SPI_LOAD source 'common.sh';run_test_with_background_loads.sh -d "dd if=/dev/zero of=/dev/mtd$PART bs=1K count=10 >/dev/null 2>&1, dd if=/dev/mtd$PART of=/dev/null bs=1K count=10 >/dev/null 2>&1" -a "cyclictest -m -p99 -a -t -i500 -d500 -l10 -n -q"
+

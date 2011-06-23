@@ -1,0 +1,7 @@
+# @name Worstcase Latency with cpu load by using cyclictest
+# @desc Measure latency under cpu load by spawning n procs spinning on sqrt() 
+# @requires armv*
+# @setup_requires 
+
+REALTIME_L_PERF_CYCLICTEST_CPU_LOAD source 'common.sh';/usr/runltp -f ddt/realtime_cyclictest_no_load -P $MACHINE -c 8 
+
