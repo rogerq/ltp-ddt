@@ -1,0 +1,6 @@
+# @name media controller test for video capture
+# @desc video capture test 
+# @requires video/capture/1080p/mc/davinci_video_ccdc_output
+# @setup_requires videocomponentinput && videocomponentoutput
+
+MC_S_FUNC_TVP7002 source 'common.sh'; do_cmd mc_capture -i 1

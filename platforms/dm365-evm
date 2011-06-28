@@ -9,3 +9,5 @@ spi_master/mtd/spi_davinci
 usb/host/msc/musb_hdrc
 mmc_host/davinci_mmc
 edma/
+video/capture/480p/mc/davinci_video_ccdc_output
+video/capture/1080p/mc/davinci_video_ccdc_output
