@@ -1,0 +1,7 @@
+# @name Worstcase Latency with various load by using cyclictest
+# @desc Measure latency under various loads using cyclictest
+# @requires armv* 
+# @setup_requires 
+# @notes iperf server need to be started in NFS host pc before run net_load test
+
+REALTIME_L_PERF_CYCLICTEST_STRESS_LOAD source 'common.sh'; NFS_HOST=`get_nfs_host.sh`;run_test_with_background_loads.sh -d "do_cmd ping $NFS_HOST -q" -a "/usr/runltp -f ddt/realtime_cyclictest_no_load -P $MACHINE -c 4 -m 2,1,8388608,0" 

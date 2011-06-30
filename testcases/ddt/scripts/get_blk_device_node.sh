@@ -65,10 +65,10 @@ find_scsi_node() {
 }
 
 ############################ Default Params ##############################
-DEV_TYPE=`get_device_type_map.sh "$DEVICE_TYPE"` || die "error getting device type"
+DEV_TYPE=`get_device_type_map.sh "$DEVICE_TYPE"` || die "error getting device type: $DEV_TYPE"
 case $DEV_TYPE in
         mtd)
-		PART=`get_mtd_partition_number.sh "$DEVICE_TYPE"` || die "error getting mtd partition number"
+		PART=`get_mtd_partition_number.sh "$DEVICE_TYPE"` || die "error getting mtd partition number: $PART"
 		DEV_NODE="$MTD_BLK_DEV$PART"
         ;;
         mmc)
@@ -82,7 +82,7 @@ case $DEV_TYPE in
                 DEV_NODE="/dev/hda1"
         ;;
         sata)
-		DEV_NODE=`find_scsi_node "sata"` || die "error getting sata node"
+		DEV_NODE=`find_scsi_node "sata"` || die "error getting sata node: $DEV_NODE"
         ;;
         *)
                 die "Invalid device type in $0 script"

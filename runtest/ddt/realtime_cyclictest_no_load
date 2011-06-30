@@ -1,0 +1,7 @@
+# @name Worstcase Latency with no load by using cyclictest
+# @desc Measure latency without extra load using cyclictest
+# @requires armv*
+# @setup_requires 
+
+REALTIME_L_PERF_CYCLICTEST_NO_LOAD source 'common.sh';do_cmd "cyclictest -m -p99 -a -t -i500 -d500 -l1000000 -n -q"
+

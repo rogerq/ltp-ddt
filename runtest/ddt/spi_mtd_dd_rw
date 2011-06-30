@@ -3,9 +3,9 @@
 #	The partition number is specified in get_mtd_partition_number.sh
 # @requires spi_master/mtd
 
-SPI_S_FUNC_DD_RW_0001 source 'common.sh'; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd part number: $part"; size=`get_mtd_erase_size.sh "$part"` || die "error getting mtd erase size: $size"; blk_device_dd_readwrite_test.sh -f "jffs2" -b "$size" -c 10 -d "spi"
+SPI_S_FUNC_DD_RW_ERASESIZE source 'common.sh'; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd part number: $part"; size=`get_mtd_erase_size.sh "$part"` || die "error getting mtd erase size: $size"; blk_device_dd_readwrite_test.sh -f "jffs2" -b "$size" -c 10 -d "spi"
 
-SPI_L_FUNC_DD_RW_0001 source 'common.sh'; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd part number: $part"; size=`get_mtd_size.sh "$part"` || die "error getting mtd size: $size"; size=$(( $size/MB )) && size=`get_ceiling_divide.sh "$size" 2` || die "error getting divide ceiling: $size"; do_cmd blk_device_dd_readwrite_test.sh -f "jffs2" -b "1M" -c "$size" -d "spi"
+SPI_L_FUNC_DD_RW_BIGSIZE source 'common.sh'; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd part number: $part"; size=`get_mtd_size.sh "$part"` || die "error getting mtd size: $size"; size=$(( $size/MB )) && size=`get_ceiling_divide.sh "$size" 2` || die "error getting divide ceiling: $size"; do_cmd blk_device_dd_readwrite_test.sh -f "jffs2" -b "1M" -c "$size" -d "spi"
 
 
 

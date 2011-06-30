@@ -2,6 +2,7 @@
 # @desc Perform mkfs first, then do read write 
 #	The device node is specified in get_blk_device_node.sh
 # @requires mmc_host/sdhc 
+# @setup_requires sdhc
 
 MMC_L_FUNC_SDHC_EXT2_DD_RW_0001 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "1" -c "1" -d "mmc" 
 

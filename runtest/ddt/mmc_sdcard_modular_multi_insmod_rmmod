@@ -3,8 +3,7 @@
 # @desc 
 #       modprobe mmc module multiple times 
 # @requires  mmc_host/sd 
+# @setup_requires sd
 
-# The test step pass if the commands return zero, it fails otherwise.
-# For more information please refer to <root>/README-DDT file.
 #MMC_L_MODULAR_SD_STRESS_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -l "10" -d "mmc" -s
 MMC_L_MODULAR_SD_MULTI_0001 source "common.sh"; do_cmd do_modular_common.sh -l "3" -d "mmc" 

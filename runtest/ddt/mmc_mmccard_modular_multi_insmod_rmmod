@@ -3,6 +3,7 @@
 # @desc 
 #       modprobe mmc module multiple times 
 # @requires  mmc_host/mmc 
+# @setup_requires mmc
 
 # The test step pass if the commands return zero, it fails otherwise.
 # For more information please refer to <root>/README-DDT file.

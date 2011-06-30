@@ -2,7 +2,7 @@
 # @desc Use flash_erase to erase one unit
 # @requires spi_master/mtd
 
-SPI_M_FUNC_MTD_FLASH_ERASE_0001 mtd_flash_erase.sh -s '0' -c '1' -d 'spi'
+SPI_M_FUNC_MTD_FLASH_ERASE mtd_flash_erase.sh -s '0' -c '1' -d 'spi'
 
 
 

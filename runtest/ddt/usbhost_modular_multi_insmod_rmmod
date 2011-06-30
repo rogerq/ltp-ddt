@@ -3,7 +3,8 @@
 # @desc 
 #       modprobe usb module multiple times 
 # @requires  usb/host 
+# @setup_requires usbhostmsc
 
 # The test step pass if the commands return zero, it fails otherwise.
 # For more information please refer to <root>/README-DDT file.
-USBHOST_MODULAR_MULTI_0001 source "common.sh"; do_cmd do_modular_common.sh -l "10" -d "usb"
+USBHOST_L_MODULAR_MULTI_0001 source "common.sh"; do_cmd do_modular_common.sh -l "10" -d "usb"
