@@ -11,3 +11,4 @@ mmc_host/davinci_mmc
 edma/
 video/capture/480p/mc/davinci_video_ccdc_output
 video/capture/1080p/mc/davinci_video_ccdc_output
+video/display/480p/v4l2/davinci_display_driver
