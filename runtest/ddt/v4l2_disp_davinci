@@ -1,0 +1,6 @@
+# @name V4L2 Display test on Davinci 
+# @desc displays 2 colors
+# @requires video/display/480p/v4l2/davinci_display_driver
+# @setup_requires videocompositeinput && videocompositeoutput
+
+V4L2DISPDAVINCI_S_FUNC source 'common.sh'; do_cmd davinci_v4l2_display
