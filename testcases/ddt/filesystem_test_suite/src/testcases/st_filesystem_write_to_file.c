@@ -35,10 +35,13 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 					 char *test_id)
 {
 	int fdes = 0;
+	int srcfdes = 0;
 	char *buff_ptr = NULL;
+        char *srcfile_ptr = NULL;
 	char *file_ptr = NULL;
 	int result = SUCCESS;
 	int res_close = SUCCESS;
+	int read_ret = 0;
 	int write_ret = 0;
 	int i = 0;
 	int bsize = 0;
@@ -52,6 +55,7 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 	float percentage_cpu_load = 0;
 
 	file_ptr = info->filename;
+        srcfile_ptr = info->src;
 	totalsize = info->file_size * 1024 * 1024;
 	bsize = info->buffer_size;
 
@@ -64,6 +68,37 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 		result = FAILURE;
 		goto end;
 
+	}
+
+	srcfdes = open((const char *)srcfile_ptr, O_RDONLY);
+	if (-1 == srcfdes) {
+		perror("\n open");
+		TEST_PRINT_ERR("src file open failed ");
+		result = FAILURE;
+		//srcfileopenflag = 1;
+		goto free_mem;
+	}
+
+	//filling buffer with the srcfile
+	TEST_PRINT_TRC("filling buffer with srcfile ");
+	for (i = 0; i < loopcount; i++) {
+		read_ret = read(srcfdes, buff_ptr, bsize);
+		if (bsize != read_ret) {
+			perror("\n read");
+			TEST_PRINT_ERR("file read failed ");
+			result = FAILURE;
+			goto free_mem;
+		}
+
+	}
+	if(remainder) {
+		read_ret = read(srcfdes, buff_ptr, remainder);
+		if (remainder != read_ret) {
+			perror("\n read");
+			TEST_PRINT_ERR("file read failed ");
+			result = FAILURE;
+			goto free_mem;
+		}
 	}
 
 	fdes = open((const char *)file_ptr, O_WRONLY | O_CREAT);
