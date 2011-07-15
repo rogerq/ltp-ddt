@@ -69,6 +69,18 @@ case $MACHINE in
                 esac
 
                 ;;
+        am387x-evm)
+
+                case $DEVICE_TYPE in
+                        nand)
+                                : ${PARTITION:='9'}
+                                ;;
+                        spi)
+                                : ${PARTITION:='4'}
+                                ;;
+                esac
+
+                ;;
         am181x-evm)
 
                 case $DEVICE_TYPE in
