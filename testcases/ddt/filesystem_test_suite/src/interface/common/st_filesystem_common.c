@@ -22,6 +22,7 @@
 #define DEFAULT_FILENAME "mnt/filesystem/file"
 #define DEFAULT_BUFFER_SIZE  102400
 #define DEFAULT_FILE_SIZE 100
+#define DEFAULT_SRCFILE_SIZE 10
 
 /* Global Variables */
 struct st_filesystem_testparams testoptions;
@@ -39,6 +40,7 @@ void st_init_filesystem_test_params()
 
 	testoptions.buffer_size = DEFAULT_BUFFER_SIZE;
 	testoptions.file_size = DEFAULT_FILE_SIZE;
+	testoptions.srcfile_size = DEFAULT_SRCFILE_SIZE;
 	testoptions.filename = NULL;
 	testoptions.iomode = FALSE;
 
@@ -53,12 +55,13 @@ void st_init_filesystem_test_params()
  */
 void st_display_filesystem_test_suite_help(void)
 {
-	printf( "filesystem_tests -file [-write] [-read] [-buffer_size] [-file_size] [-performance] "
+	printf( "filesystem_tests -file [-write] [-read] [-buffer_size] [-file_size] [-srcfile_size] [-performance] "
 		"[-id] [-h/elp] [-v/ersion] \n\n"
 		"-file        :  Name of the file to read from or write to"
 		" -/mnt/file\n"
 		"-buffer_size :  Application buffer size in bytes [102400]\n"
-		"-file_size   :  Total file size in MB [100]\n"
+		"-file_size   :  Total file size in MB [100], it should be divided by srcfile_size\n"
+		"-srcfile_size   :  Src file size in MB [10]\n"
 		"-read        :  I/O direction mode is read\n"
 		"                no argument value required\n"
 		"-write       :  I/O direction mode is write\n"
@@ -97,6 +100,7 @@ void st_print_filesystem_test_params(struct st_filesystem_testparams
 		TEST_PRINT_TRC("Iomode|read");
 	} else if (testoptions->iomode == 'w') {
 		TEST_PRINT_TRC("Iomode|write");
+		TEST_PRINT_TRC("srcfile size in MB|%d", testoptions->srcfile_size);
 	} else {
 		TEST_PRINT_TRC("Iomode|copy");
 		TEST_PRINT_TRC("The src file name|%s", testoptions->src);

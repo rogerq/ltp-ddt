@@ -49,6 +49,7 @@ int st_filesystem_performance_read_test(struct st_filesystem_testparams *info,
 	unsigned long elapsed_usecs = 0;
 	struct proc_stat cpu_status_id;
 	float percentage_cpu_load = 0;
+        float throughput = 0;
 
 	file_ptr = info->filename;
 	totalsize = info->file_size * 1024 * 1024;
@@ -114,11 +115,10 @@ int st_filesystem_performance_read_test(struct st_filesystem_testparams *info,
 	if (info->throughput_flag && result == SUCCESS) {
 		/* Stop the Timer and get the usecs elapsed */
 		elapsed_usecs = stop_timer(&start_time);
+		throughput = (float)(((float)totalsize / (float)elapsed_usecs));
 		TEST_PRINT_TRC("fileread | Durartion in usecs | %ld",
 			       elapsed_usecs);
-		TEST_PRINT_TRC("fileread | Mega Bytes/Sec | %lf",
-			       (float)(((float)totalsize /
-					(float)elapsed_usecs)));
+		TEST_PRINT_TRC("fileread | Mega Bytes/Sec | %lf",throughput);
 	}
 	if (info->cpuload_flag && result == SUCCESS) {
 
@@ -136,6 +136,7 @@ int st_filesystem_performance_read_test(struct st_filesystem_testparams *info,
 		result = FAILURE;
 	}
 
+        TEST_PRINT_TRC("|PERFDATA|bsize:%d|iomode:read|throughput:%.2lfMB/S|cpuload:%.2f%%|", bsize, throughput, percentage_cpu_load);
 
       free_mem:
 	/* Free  memory for the buff_ptr */

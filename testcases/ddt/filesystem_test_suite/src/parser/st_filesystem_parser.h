@@ -51,7 +51,8 @@
 /* I/O mode is copy */
 #define OPTION_COPY            		11
 
-
+/* Total srcfile size in MB */ 
+#define OPTION_SRCFILE_SIZE		12		
     
 /* Displays the version of LFTB package */ 
 #define OPTION_VERSION       	'v'

@@ -41,6 +41,8 @@ struct st_filesystem_testparams {
 	int buffer_size;
 	/* File size */
 	int file_size;
+	/* srcFile size */
+	int srcfile_size;
 	/* Test name */
 	char *test_name;
 	/* throughput enable flag */

@@ -53,6 +53,8 @@ static int st_process_filesystem_test_options(int argc, char **argv)
 			 OPTION_BUFFER_SIZE},
 			{"file_size", required_argument, NULL,
 			 OPTION_FILE_SIZE},
+			{"srcfile_size", required_argument, NULL,
+			 OPTION_SRCFILE_SIZE},
 			{"id", required_argument, NULL, OPTION_TESTCASE_ID},
 			{"read", no_argument, NULL, OPTION_READ},
 			{"write", no_argument, NULL, OPTION_WRITE},
@@ -121,6 +123,13 @@ static int st_process_filesystem_test_options(int argc, char **argv)
 			}
 			break;
 
+		case OPTION_SRCFILE_SIZE:
+			if (optarg != NULL) {
+				testoptions.srcfile_size = atoi(optarg);
+			} else if (optind < argc && ('-' != argv[optind][0])) {
+				testoptions.srcfile_size = atoi(argv[optind]);
+			}
+			break;
 		case OPTION_TESTCASE_ID:
 			if (optarg != NULL) {
 				testcaseid = optarg;

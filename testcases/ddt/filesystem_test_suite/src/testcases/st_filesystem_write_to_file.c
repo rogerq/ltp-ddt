@@ -44,8 +44,10 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 	int read_ret = 0;
 	int write_ret = 0;
 	int i = 0;
+	int j = 0;
 	int bsize = 0;
 	int totalsize = 0;
+	int srcfile_size = 0;
 	int loopcount = 0;
 	int remainder = 0;
 	int totbytwrite = 0;
@@ -53,22 +55,22 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 	unsigned long elapsed_usecs = 0;
 	struct proc_stat cpu_status_id;
 	float percentage_cpu_load = 0;
+	float throughput = 0;
 
 	file_ptr = info->filename;
         srcfile_ptr = info->src;
 	totalsize = info->file_size * 1024 * 1024;
+	srcfile_size = info->srcfile_size * 1024 * 1024;
+	//srcfile_size = 10 * 1024 * 1024;
 	bsize = info->buffer_size;
 
-	loopcount = totalsize / bsize;
-	remainder = totalsize % bsize;
-
-	buff_ptr = (char *)malloc(bsize * (sizeof(char)));
-	if (NULL == buff_ptr) {
-		perror("\n malloc");
+	if ((totalsize % srcfile_size) != 0) {
+		TEST_PRINT_ERR("totalsize is not divided by srcfile_size. ");
 		result = FAILURE;
 		goto end;
-
 	}
+	loopcount = srcfile_size / bsize;
+	remainder = srcfile_size % bsize;
 
 	srcfdes = open((const char *)srcfile_ptr, O_RDONLY);
 	if (-1 == srcfdes) {
@@ -76,30 +78,16 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 		TEST_PRINT_ERR("src file open failed ");
 		result = FAILURE;
 		//srcfileopenflag = 1;
-		goto free_mem;
+		goto end;
 	}
 
-	//filling buffer with the srcfile
-	TEST_PRINT_TRC("filling buffer with srcfile ");
-	for (i = 0; i < loopcount; i++) {
-		read_ret = read(srcfdes, buff_ptr, bsize);
-		if (bsize != read_ret) {
-			perror("\n read");
-			TEST_PRINT_ERR("file read failed ");
-			result = FAILURE;
-			goto free_mem;
-		}
-
+	//map srcfile
+        buff_ptr = mmap(NULL, srcfile_size, PROT_READ, MAP_PRIVATE, srcfdes, 0);
+	if((void*)buff_ptr == (void*) -1) {
+		printf("MMAP failed\n");
+		goto end;
 	}
-	if(remainder) {
-		read_ret = read(srcfdes, buff_ptr, remainder);
-		if (remainder != read_ret) {
-			perror("\n read");
-			TEST_PRINT_ERR("file read failed ");
-			result = FAILURE;
-			goto free_mem;
-		}
-	}
+	TEST_PRINT_TRC("mmap srcfile ");
 
 	fdes = open((const char *)file_ptr, O_WRONLY | O_CREAT);
 	if (-1 == fdes) {
@@ -119,8 +107,10 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 		start_timer(&start_time);
 	}
 
+	for (j = 0; j < totalsize/srcfile_size; j++){
+
 	for (i = 0; i < loopcount; i++) {
-		write_ret = write(fdes, buff_ptr, bsize);
+		write_ret = write(fdes, buff_ptr+i*bsize, bsize);
 		totbytwrite = totbytwrite + write_ret;
 		if (bsize != write_ret) {
 			perror("\n write");
@@ -132,7 +122,7 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 	}
 
 	if (remainder) {
-		write_ret = write(fdes, buff_ptr, remainder);
+		write_ret = write(fdes, buff_ptr+loopcount*bsize, remainder);
 		totbytwrite = totbytwrite + write_ret;
 		if (remainder != write_ret) {
 			perror("\n write");
@@ -141,6 +131,7 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 			goto close_file;
 
 		}
+	}
 	}
       close_file:
 	res_close = fsync(fdes);
@@ -154,11 +145,11 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 	if (info->throughput_flag) {
 		/* Stop the Timer and get the usecs elapsed */
 		elapsed_usecs = stop_timer(&start_time);
+		throughput = (float)(((float)totalsize / (float)elapsed_usecs));
 		TEST_PRINT_TRC("filewrite | Durartion in usecs | %ld",
 			       elapsed_usecs);
 		TEST_PRINT_TRC("filewrite | Mega Bytes/Sec | %lf",
-			       (float)(((float)totalsize /
-					(float)elapsed_usecs)));
+				throughput);
 	}
 	if (info->cpuload_flag) {
 		/* Get CPU Load figures */
@@ -176,11 +167,10 @@ int st_filesystem_performance_write_test(struct st_filesystem_testparams *info,
 
 	}
 
-      free_mem:
+	TEST_PRINT_TRC("|PERFDATA|bsize:%d|iomode:write|throughput:%.2lfMB/S|cpuload:%.2f%%|", bsize, throughput, percentage_cpu_load); 
 
-	if (NULL != buff_ptr) {
-		free(buff_ptr);
-	}
+      free_mem:
+	munmap(buff_ptr, srcfile_size);
 
       end:
 

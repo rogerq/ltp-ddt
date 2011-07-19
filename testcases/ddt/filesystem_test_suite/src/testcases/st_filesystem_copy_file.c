@@ -188,6 +188,7 @@ int st_filesystem_performance_copy_test(struct st_filesystem_testparams *info,
 		TEST_PRINT_TRC("filecopy | Mega Bytes/Sec | %lf",
 				(float)(throughput/(float)(throughputcnt)));
 	}
+	TEST_PRINT_TRC("|PERFDATA|bsize:%d|iomode:copy|throughput:%.2lfMB/S|", bsize, (float)(throughput/(float)(throughputcnt)));
 	
 free_mem:
 	if(dstfileopenflag) {

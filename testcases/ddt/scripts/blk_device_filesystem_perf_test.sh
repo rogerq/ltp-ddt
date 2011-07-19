@@ -28,8 +28,9 @@ cat <<-EOF >&2
 	-f FS_TYPE	filesystem type like jffs2, ext2, etc
 	-n DEVICE_NODE	optional param, block device node like /dev/mtdblock4, /dev/sda1
 	-m MNT_POINT	optional param, mount point like /mnt/mmc
-	-B BUFFER_SIZES	optional param, buffer sizes for perf test like '102400 256000 512000 1048576 5242880'
+	-B BUFFER_SIZES	optional param, buffer sizes for perf test like '102400 262144 524288 1048576 5242880'
 	-s FILE SIZE 	optional param, file size in MB for perf test
+	-c SRCFILE SIZE 	optional param, srcfile size in MB for writing to device
 	-d DEVICE_TYPE	device type like 'nand', 'mmc', 'usb' etc
 	-h Help 	print this usage
 EOF
@@ -45,13 +46,14 @@ if [ $# == 0 ]; then
 	exit 1
 fi
 
-while getopts  :f:n:m:B:s:d:h arg
+while getopts  :f:n:m:B:s:c:d:h arg
 do case $arg in
 	f)	FS_TYPE="$OPTARG";;
 	n)	DEV_NODE="$OPTARG";;
 	m)	MNT_POINT="$OPTARG";;
 	B)	BUFFER_SIZES="$OPTARG";;
 	s)	FILE_SIZE="$OPTARG";;
+	c)	SRCFILE_SIZE="$OPTARG";;
 	d)	DEVICE_TYPE="$OPTARG";;
 	h)	usage;;
 	:)	test_print_trc "$0: Must supply an argument to -$OPTARG." >&2
@@ -66,8 +68,9 @@ esac
 done
 
 ########################### DYNAMICALLY-DEFINED Params ########################
-: ${BUFFER_SIZES:='102400 256000 512000 1048576 5242880'}
+: ${BUFFER_SIZES:='102400 262144 524288 1048576 5242880'}
 : ${FILE_SIZE:='100'}
+: ${SRCFILE_SIZE:='10'}
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
 if [ -z $DEV_NODE ]; then
         DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error while getting device node"
@@ -82,6 +85,7 @@ test_print_trc "DEV_NODE:${DEV_NODE}"
 test_print_trc "MOUNT POINT:${MNT_POINT}"
 test_print_trc "BUFFER SIZES:${BUFFER_SIZES}"
 test_print_trc "FILE SIZE:${FILE_SIZE}MB"
+test_print_trc "SRCFILE SIZE:${SRCFILE_SIZE}MB"
 test_print_trc "DEVICE_TYPE:${DEVICE_TYPE}"
 
 # check if input are valid for this machine
@@ -101,11 +105,13 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	test_print_trc "Mounting the partition"
 	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
 
-        test_print_trc "Creating test file..."
-        TMP_FILE='/test_file'
-        do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$FILE_SIZE"
+        test_print_trc "Creating src test file..."
+        TMP_FILE='/srctest_file'
+        do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$SRCFILE_SIZE"
 
-	do_cmd filesystem_tests -write -src_file $TMP_FILE -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
+	do_cmd filesystem_tests -write -src_file $TMP_FILE -srcfile_size $SRCFILE_SIZE -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
+	do_cmd "rm -f $TMP_FILE"
+
 	do_cmd "sync"
 	# should do umount and mount before read to force to write to device
 	do_cmd "umount $DEV_NODE"
@@ -114,6 +120,10 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	do_cmd filesystem_tests -read -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 
 	do_cmd "sync"
+
+        test_print_trc "Creating test file..."
+        TMP_FILE='/test_file'
+        do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$FILE_SIZE"
 
 	do_cmd filesystem_tests -copy -src_file $TMP_FILE -dst_file $MNT_POINT/test_file -duration 30 -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 
