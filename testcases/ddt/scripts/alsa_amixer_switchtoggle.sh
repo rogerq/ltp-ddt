@@ -77,6 +77,10 @@ da850-omapl138-evm)
 	CAPTURE_SWITCH_NAME_1="PGA Capture Switch";
 	PLAYBACK_SWITCH_NAME_1="Line Playback Switch"
 	;;	
+am387x-evm|am389x-evm)
+        CAPTURE_SWITCH_NAME_1="PGA Capture Switch";
+        PLAYBACK_SWITCH_NAME_1="HP Playback Switch"
+        ;;
 esac
 
 ########################### REUSABLE TEST LOGIC ###############################

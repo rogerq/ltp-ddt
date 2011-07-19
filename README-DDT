@@ -170,12 +170,20 @@
 	  ALSA_LIBPATH=/home/useraccount/usr/lib
    (In case the filesystem does not contain ALSA include and lib refer step 7 
     for installation)
- * $ make CROSS_COMPILE=<CC PREFIX> SKIP_IDCHECK=1 KERNEL_INC=<Kernel
+    NOTE: Alternatively instead of updating the Makefile user can supply 
+          ALSA_INCPATH and  ALSA_LIBPATH as arguements to make 
+ * Do headers_install in kernel install directory
+       e.g.
+        $cd linux-xx.xx.xx.xx
+        $make CROSS_COMPILE=arm-none-linux-gnueabi- headers_install
+ * $ make CROSS_COMPILE=<CC PREFIX> SKIP_IDCHECK=1 KERNEL_INC=<Kernel usr
      include directory> PLATFORM=<Platform name>
    For Example:
    $ make CROSS_COMPILE=arm-none-linux-gnueabi- SKIP_IDCHECK=1 KERNEL_INC=/home/
-   a0850405local/oe/arago-tmp/sysroots/armv5te-none-linux-gnueabi/kernel/include PLATFORM=am180x-evm
+   a0850405local/oe/arago-tmp/sysroots/armv5te-none-linux-gnueabi/kernel/usr/include PLATFORM=am180x-evm
  * $ sudo make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install
+   For example:
+   $sudo make DESTDIR=/opt/filesystem/home/root/ltp-ddt-install SKIP_IDCHECK=1 PLATFORM=am180x-evm install	
 
 7) HOW TO INSTALL ALSA INCLUDES AND LIBS
    Install following packages on to your filesystem
