@@ -24,9 +24,9 @@
 /* Media entity names */
 #define E_VIDEO_CCDC_OUT_NAME	"DAVINCI VIDEO CCDC output"
 #define E_VIDEO_PRV_OUT_NAME	"DAVINCI VIDEO PRV output"
-#define E_VIDEO_PRV_IN_NAME	"DAVINCI VIDEO PRV input"
+#define E_VIDEO_PRV_IN_NAME		"DAVINCI VIDEO PRV input"
 #define E_VIDEO_RSZ_OUT_NAME	"DAVINCI VIDEO RSZ output"
-#define E_VIDEO_RSZ_IN_NAME	"DAVINCI VIDEO RSZ input"
+#define E_VIDEO_RSZ_IN_NAME		"DAVINCI VIDEO RSZ input"
 #define E_TVP514X_NAME		"tvp514x"
 #define E_TVP7002_NAME		"tvp7002"
 #define E_MT9T111_NAME		"mt9t111"
@@ -99,6 +99,8 @@ struct media_dev {
 	int tvp5146;
 	int tvp7002;
 	int mt9t111;
+	int prv;
+	int rsz;
 	int hd;
 	/* Total number of entities */
 	unsigned int num_entities;
@@ -108,7 +110,7 @@ struct media_dev {
 /* capture buffer addresses stored here */
 #define BYTESPERPIXEL	2
 
-struct media_entity_desc	entity[10];
+struct media_entity_desc	entity[15];
 struct media_links_enum		links;
 int				entities_count;
 
@@ -117,6 +119,9 @@ extern int media_device_open(struct media_dev *media);
 extern int enumerate_all_entities(struct media_dev *media);
 extern int reset_media_links(struct media_dev *media);
 extern int setup_media_links(struct media_dev *media);
+extern int enumerate_all_entities_prv(struct media_dev *media);
+extern int setup_media_links_rsz(struct media_dev *media);
+extern int enumerate_all_entities_rsz(struct media_dev *media);
 
 #define OPTION_TVP514X 1
 #define SUCCESS 0
@@ -134,4 +139,7 @@ struct mc_capture_testparams {
 
 extern int mc_tvp514_test(struct mc_capture_testparams *testoptions);
 extern int mc_tvp7002_test(struct mc_capture_testparams *testoptions);
+extern int prv();
+extern int mc_tvp514_prv_rzr(struct mc_capture_testparams *testoptions);
+
 

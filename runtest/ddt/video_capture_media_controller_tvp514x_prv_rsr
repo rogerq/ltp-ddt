@@ -1,0 +1,7 @@
+# @name media controller test for video capture previewer and resizer using tvp514x
+# @desc video capture test 
+# @requires video/capture/480p/mc/davinci_video_prv_output && video/capture/480p/mc/davinci_video_rsz_output && video/display/480p/v4l2/davinci_display_driver
+# @setup_requires videocompositeinput && videocompositeoutput
+
+MC_M_FUNC_TVP514x_PRV_RSZ_QCIF source 'common.sh'; do_cmd mc_capture -w 176 -h 144 -i 3
+MC_M_FUNC_TVP514x_PRV_RSZ_CIF source 'common.sh'; do_cmd mc_capture -w 352 -h 288 -i 3

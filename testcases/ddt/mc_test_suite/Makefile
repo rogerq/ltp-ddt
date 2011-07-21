@@ -19,15 +19,19 @@ LDFLAGS         += -g -static
 INCLUDES        = -I $(KERNEL_INC) -I src
 
 #List of source files- Update this on adding a new C file
-SOURCES := 	src/mc_tvp514.c \
+SOURCES := 	src/mc_prv_rsr_tvp514.c \
+		src/mc_tvp514.c \
 		src/mc_tvp7002.c \
+		src/mc_prv_tvp514.c \
 		src/common.c \
-		src/parser.c
+		src/parser.c \
+
 
 MAKE_TARGETS            := mc_capture
 
 mc_capture:
-	$(CC) $(CFLAGS) $(LDFLAGS) -o mc_capture ${INCLUDES} ${SOURCES}
+	$(CC) $(CFLAGS) $(LDFLAGS) -o mc_capture ${INCLUDES} ${SOURCES} 
+
 
 include $(top_srcdir)/include/mk/generic_leaf_target.mk
 
