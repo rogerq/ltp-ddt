@@ -3,8 +3,8 @@
 #	By default, the partition number is specified in get_mtd_partition_number.sh; 
 # @requires  nand
 
-NAND_S_PERF_0001 blk_device_filesystem_perf_test.sh -f jffs2 -s 10 -B "102400 256000" -d "nand"
-NAND_L_PERF_0001 blk_device_filesystem_perf_test.sh -f jffs2 -s 100 -B "102400 256000 512000 1048576 5242880" -d "nand"
+NAND_S_PERF_0001 blk_device_filesystem_perf_test.sh -f jffs2 -s 10 -B "262144" -d "nand"
+NAND_L_PERF_0001 blk_device_filesystem_perf_test.sh -f jffs2 -s 100 -B "102400 262144 524288 1048576 5242880" -d "nand"
 
 
 

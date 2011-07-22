@@ -3,8 +3,8 @@
 # @requires usb/host
 # @setup_requires usbhostmsc
 
-USBHOST_S_PERF_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 10 -B "102400 256000" -d "usb"
-USBHOST_L_PERF_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 100 -B "102400 256000 512000 1048576 5242880" -d "usb"
+USBHOST_S_PERF_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 10 -B "102400 262144" -d "usb"
+USBHOST_L_PERF_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 100 -B "102400 262144 524288 1048576 5242880" -d "usb"
 
 
 

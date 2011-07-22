@@ -106,7 +106,7 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
 
         test_print_trc "Creating src test file..."
-        TMP_FILE='/srctest_file'
+        TMP_FILE='/dev/shm/srctest_file'
         do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$SRCFILE_SIZE"
 
 	do_cmd filesystem_tests -write -src_file $TMP_FILE -srcfile_size $SRCFILE_SIZE -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
@@ -121,13 +121,14 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 
 	do_cmd "sync"
 
-        test_print_trc "Creating test file..."
-        TMP_FILE='/test_file'
-        do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$FILE_SIZE"
-
-	do_cmd filesystem_tests -copy -src_file $TMP_FILE -dst_file $MNT_POINT/test_file -duration 30 -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
+        #test_print_trc "Creating file..."
+       # TMP_FILE='/test_file'
+       # do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$FILE_SIZE"
+	do_cmd "echo 3 > /proc/sys/vm/drop_caches"
+	do_cmd filesystem_tests -copy -src_file $MNT_POINT/test_file -dst_file $MNT_POINT/dst_test_file -duration 30 -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 
 	do_cmd "rm -f $MNT_POINT/test_file"
+	do_cmd "rm -f $MNT_POINT/dst_test_file"
 	do_cmd "rm -f $TMP_FILE"
 	test_print_trc "Unmount the device"
 	do_cmd "umount $DEV_NODE"

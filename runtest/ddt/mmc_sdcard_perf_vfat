@@ -3,8 +3,8 @@
 # @requires mmc_host/sd
 # @setup_requires sd
 
-MMC_S_PERF_SD_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 10 -B "102400 256000" -d "mmc"
-MMC_L_PERF_SD_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 100 -B "102400 256000 512000 1048576 5242880" -d "mmc"
+MMC_S_PERF_SD_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 10 -B "102400 262144" -d "mmc"
+MMC_L_PERF_SD_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 100 -B "102400 262144 524288 1048576 5242880" -d "mmc"
 
 
 
