@@ -2,7 +2,7 @@
 # @desc Run Iperf as a server in a host PC and as a client in the target machine
 # Test different window sizes, from 8K to 128K
 # @requires net
-
+# TODO: don't hardcode eth0 here. may move ethtool command to script
 ETH_M_PERF_IPERF_TCP_8K_1448B source 'common.sh'; run_iperf.sh -m -M 1500 -f M -d -t 60 -w 8K
 ETH_M_PERF_IPERF_TCP_16K_1448B source 'common.sh'; run_iperf.sh -m -f M -d -t 60 -w 16K
 ETH_M_PERF_IPERF_TCP_32K_1448B source 'common.sh'; run_iperf.sh -m -f M -d -t 60 -w 32K
@@ -20,3 +20,23 @@ ETH_L_PERF_IPERF_TCP_16K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d
 ETH_L_PERF_IPERF_TCP_32K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d -t 60 -w 32K
 ETH_L_PERF_IPERF_TCP_64K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d -t 60 -w 64K
 ETH_L_PERF_IPERF_TCP_128K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d -t 60 -w 128K
+
+
+ETH_M_PERF_IPERF_TCP_INTPACING_8K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface"; do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 1500 -f M -d -t 60 -w 8K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_M_PERF_IPERF_TCP_INTPACING_16K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -f M -d -t 60 -w 16K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_M_PERF_IPERF_TCP_INTPACING_32K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -f M -d -t 60 -w 32K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_M_PERF_IPERF_TCP_INTPACING_64K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -f M -d -t 60 -w 64K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_M_PERF_IPERF_TCP_INTPACING_128K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -f M -d -t 60 -w 128K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+
+ETH_L_PERF_IPERF_TCP_INTPACING_8K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 8K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_16K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 16K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_32K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 32K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_64K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 64K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_128K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 128K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+
+ETH_L_PERF_IPERF_TCP_INTPACING_8K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 8K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_16K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 16K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_32K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 32K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_64K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 64K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_128K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "ethtool -C ${iface} rx-usecs 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 128K; do_cmd "ethtool -C ${iface} rx-usecs 16"
+
