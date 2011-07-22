@@ -1019,6 +1019,7 @@ main()
        
 	EOF
 	cat $LOGFILE
+	rm -f $LOGFILE
     }
     exit $VALUE
 }
@@ -1026,6 +1027,7 @@ main()
 cleanup()
 {
     rm -rf ${TMP}
+    rm -f $LOGFILE
 }
 
 check_feature_support()
