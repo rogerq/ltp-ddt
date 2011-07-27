@@ -29,82 +29,17 @@ if [ $# -ne 1 ]; then
 fi
 DEVICE_TYPE=$1
 ############################ USER-DEFINED Params ###############################
-# Try to avoid defining values here, instead see if possible
-# to determine the value dynamically. ARCH, DRIVER, SOC and MACHINE are 
-# initilized and exported by runltp script based on platform option (-P)
-case $ARCH in
-esac
-IFS_ORIG=$IFS
-IFS=","
-for DRIVER in $DRIVERS
-do
-    case $DRIVER in
-        *omap2-nand)
-            nand="omap2_nand";; # not sure this is the right one.
-        *davinci-nand)
-            nand="davinci_nand";;
-
-        *mmci-omap-hs)
-            mmc="omap_hsmmc";;
-        *davinci-mmc)
-            mmc="davinci_mmc";;
-
-        *rtc-s35390a)
-            rtc="rtc-s35390a";;
-	*omap_rtc)
-	    rtc="rtc-omap";;	
-
-        *davinci_spi)
-            spi="davinci_spi";;
-
-        *watchdog)
-            wdt="davinci_wdt";;
-
-	*fb0)
-	     graphics="omapfb";;
-
-	*omap3-audio)
-	     sound='snd_soc_omap3evm';;	
-
-        *soc-audio)
-             sound='snd-soc-evm';;
-
-    esac
-done
-IFS=$IFS_ORIG
-
-case $SOC in
-	am3517-evm)
-	     sound="snd-soc-omap"
-    ;;
-esac
-case $MACHINE in
-    
-esac
-# Define default values for variables being overriden
-: ${nand:="davinci_nand"}
-: ${sound="davinci_sound"}
-: ${mmc:="davinci_mmc"}
-: ${spi:="davinci_spi"}
-: ${usb:="musb_hdrc"}
-
-########################### DYNAMICALLY-DEFINED Params #########################
-# Try to use /sys and /proc information to determine values dynamically.
-# Alternatively you should check if there is an existing script to get the
-# value you want
 
 ########################### REUSABLE TEST LOGIC ###############################
 # DO NOT HARDCODE any value. If you need to use a specific value for your setup
 # use USER-DEFINED Params section above.
 
-# Avoid using echo. Instead use print functions provided by st_log.sh
+# TODO: return all module names in the future. this requires the changes in several
+#       modular scripts. Now, only return the last module name from MODULE_CONFIG_NAMES
 
-# Use do_cmd() (imported from common.sh) to execute your test steps.
-# do_cmd() will check return code and fail the test is return code is non-zero.
-#echo ${!DEVICE_TYPE}
-eval MODULE_NAME=\$$DEVICE_TYPE
-if [ -z $MODULE_NAME ]; then
-	die 'error module name not found'
-	exit 1
-fi
-echo $MODULE_NAME
+MODULE_CONFIG_NAMES=`get_modular_config_names.sh "$DEVICE_TYPE"` || die "error getting config and module names: "$MODULE_CONFIG_NAMES" "
+#echo "MODULE_CONFIG_NAMES: $MODULE_CONFIG_NAMES"
+for pair in $MODULE_CONFIG_NAMES; do
+        MODULE_NAME=`echo $pair | cut -d':' -f2`
+done
+echo "$MODULE_NAME"
