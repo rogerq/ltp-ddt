@@ -1021,6 +1021,7 @@ main()
 	cat $LOGFILE
 	rm -f $LOGFILE
     }
+    echo $LOGFILE | grep ' PASS ' || exit 1
     exit $VALUE
 }
 
