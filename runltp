@@ -1019,10 +1019,15 @@ main()
        
 	EOF
 	cat $LOGFILE
-	rm -f $LOGFILE
     }
-    echo $LOGFILE | grep ' PASS ' || exit 1
-    exit $VALUE
+    cat $LOGFILE | grep ' PASS ' 
+    if [ $? -ne 0 ]; then
+      rm -f $LOGFILE 
+      exit 1
+    else
+	    rm -f $LOGFILE
+      exit $VALUE
+    fi
 }
 
 cleanup()
