@@ -111,21 +111,22 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 
 	do_cmd filesystem_tests -write -src_file $TMP_FILE -srcfile_size $SRCFILE_SIZE -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 	do_cmd "rm -f $TMP_FILE"
-
 	do_cmd "sync"
 	# should do umount and mount before read to force to write to device
 	do_cmd "umount $DEV_NODE"
 	do_cmd "echo 3 > /proc/sys/vm/drop_caches"
+
 	do_cmd "mount -t $FS_TYPE $DEV_NODE $MNT_POINT"
 	do_cmd filesystem_tests -read -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
-
 	do_cmd "sync"
-
-        #test_print_trc "Creating file..."
-       # TMP_FILE='/test_file'
-       # do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$FILE_SIZE"
 	do_cmd "echo 3 > /proc/sys/vm/drop_caches"
-	do_cmd filesystem_tests -copy -src_file $MNT_POINT/test_file -dst_file $MNT_POINT/dst_test_file -duration 30 -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
+
+  # For copy test, only do half of file size to avoid out of space problem.
+	test_print_trc "Creating file which is half size of $FILE_SIZE on $MNT_POINT to test copyfile"
+	# TMP_FILE='/test_file'
+	HALF_FILE_SIZE=`expr $FILE_SIZE / 2`
+	do_cmd "dd if=/dev/urandom of=$MNT_POINT/test_file bs=512K count=$FILE_SIZE"
+	do_cmd filesystem_tests -copy -src_file $MNT_POINT/test_file -dst_file $MNT_POINT/dst_test_file -duration 30 -buffer_size $BUFFER_SIZE -file_size $HALF_FILE_SIZE -performance 
 
 	do_cmd "rm -f $MNT_POINT/test_file"
 	do_cmd "rm -f $MNT_POINT/dst_test_file"
