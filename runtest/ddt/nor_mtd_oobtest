@@ -1,0 +1,11 @@
+# @name NOR mtd oobtest
+# @desc Insmod mtd_oobtest and then rmmod it 
+# @requires  nor
+# The partition number is specified in get_mtd_partition_number.sh
+
+NOR_L_FUNC_OOBTEST_0001 source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nor"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "nor" -m "/mnt/partition_nor"; do_cmd insmod mtd_oobtest.ko dev="$part"; do_cmd rmmod mtd_oobtest.ko; do_cmd umount "$dev_node" 
+
+
+
+
+

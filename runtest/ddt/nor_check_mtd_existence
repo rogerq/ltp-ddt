@@ -1,0 +1,10 @@
+# @name Check if /dev/mtd entries exist 
+# @desc Check if /dev/mtd entries exist
+# @requires  nor
+
+NOR_M_FUNC_MTD_ENTRY_0001 ls /dev/mtd* && exit 0 || exit 1
+
+
+
+
+

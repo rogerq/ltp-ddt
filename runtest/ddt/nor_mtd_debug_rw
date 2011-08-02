@@ -1,0 +1,11 @@
+# @name mtd debug read write test 
+# @desc Performance mtd debug erase first, then do read write and then compare
+# @requires  nor
+# The partition number is specified in get_mtd_partition_number.sh
+
+NOR_M_FUNC_MTD_DEBUGRW_0001 source 'common.sh'; part=`get_mtd_partition_number.sh "nor"` || die "error getting mtd part number: $part"; size=`get_mtd_erase_size.sh "$part"` || die "error getting mtd erase size: $size"; mtd_debug_readwrite_test.sh -l "$size" -o "0" -d "nor"
+
+
+
+
+

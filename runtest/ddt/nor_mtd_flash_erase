@@ -1,0 +1,10 @@
+# @name Use flash_erase to erase one unit 
+# @desc Use flash_erase to erase one unit
+# @requires  nor
+
+NOR_M_FUNC_MTD_FLASH_ERASE_0001 mtd_flash_erase.sh -s '0' -c '1' -d 'nor'
+
+
+
+
+

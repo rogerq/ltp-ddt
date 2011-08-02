@@ -1,0 +1,12 @@
+# @name NOR mkdir and rmdir 
+# @desc Perform mkdir and rmdir in NOR
+# @requires  nor
+# The partition number is specified in get_mtd_partition_number.sh
+
+
+NOR_M_FUNC_MKDIR_RMDIR source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "nor"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "nor" -m "/mnt/partition_nor"; do_cmd mkdir "/mnt/partition_nor/test"; do_cmd chmod 777 "/mnt/partition_nor/test"; do_cmd rmdir "/mnt/partition_nor/test"; do_cmd umount "$dev_node" 
+
+
+
+
+

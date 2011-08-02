@@ -66,6 +66,10 @@ case $MACHINE in
                         spi)
                                 : ${PARTITION:='3'}
                                 ;;
+                        nor)
+                                : ${PARTITION:='3'}
+                                ;;
+
                 esac
 
                 ;;

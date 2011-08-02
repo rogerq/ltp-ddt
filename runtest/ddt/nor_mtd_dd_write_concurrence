@@ -1,0 +1,12 @@
+# @name NOR write concurrence test using dd with dd_cnt being half of mtd size 
+# @desc Perform NOR eraseall first, then do one write in backgroud and one write
+# @requires  nor
+# in foreground; and then check the file size
+# The partition number is specified in get_mtd_partition_number.sh
+
+NOR_L_FUNC_DD_WR_CONCURRENCE_0001 source 'common.sh'; part=`get_mtd_partition_number.sh "nor"` || die "error getting mtd part number: $part"; size=`get_mtd_size.sh "$part"` || die "error getting mtd size: $size"; size=$(( $size/MB )) && size=`get_ceiling_divide.sh "$size" 4` || die "error getting divide ceiling"; do_cmd blk_device_dd_write_concurrence.sh -f "jffs2" -b "1M" -c "$size" -d "nor"
+
+
+
+
+

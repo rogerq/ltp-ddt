@@ -1,0 +1,11 @@
+# @name Perform flash_eraseall on NOR device 
+# @desc Use flash_eraseall to erase all partition 
+# @requires  nor
+# Partition number is specified in get_mtd_partition_number.sh
+
+NOR_M_FUNC_MTD_FLASH_ERASEALL_0001 mtd_flash_eraseall.sh -d 'nor'
+
+
+
+
+
