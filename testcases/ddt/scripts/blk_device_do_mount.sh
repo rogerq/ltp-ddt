@@ -62,7 +62,7 @@ done
 DEVNODE_ENTRY=`get_devnode_entry.sh "$DEV_NODE" "$DEVICE_TYPE"` || die "error getting devnode entry for $DEV_NODE"
 test_print_trc "Umount $DEV_NODE or $DEVNODE_ENTRY if it is mounted"
 do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
-do_cmd "mount" | grep $DEVNODE_ENTRY && do_cmd "umount $DEVNODE_ENTRY"
+do_cmd "mount" | grep $DEVNODE_ENTRY' ' && do_cmd "umount $DEVNODE_ENTRY"
 sleep 2
 #do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
 #test_print_trc "Erasing this partition completely"
