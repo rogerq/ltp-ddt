@@ -26,7 +26,7 @@ if [ $# -ne 1 ]; then
 fi
 
 PART=$1
-MTD_PROC_ENTRY=`cat /proc/mtd | grep "mtd$PART"` || die "Could not retrieve info from mtd proc entry"
+MTD_PROC_ENTRY=`cat /proc/mtd | grep "mtd$PART"` || die "Could not retrieve info from mtd proc entry for mtd$PART"
 SIZE=`echo $MTD_PROC_ENTRY | cut -d ' ' -f3` || die "Could not get the mtd erase size"
 #temp=`echo $SIZE | tr "a-z" "A-Z"` || die "Could not convert mtd erase size from a-z to A-Z"
 #SIZE=`echo "ibase=16; ${temp}" | bc` || die "Mtd erase size could not be converted from Hex to Decimal"
