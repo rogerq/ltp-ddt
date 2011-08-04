@@ -3,7 +3,7 @@
 #	The partition number is specified in get_mtd_partition_number.sh
 # @requires spi_master/mtd
 
-SPI_M_FUNC_MKDIR_RMDIR source 'common.sh'; source 'mtd_common.sh'; part=`get_mtd_partition_number.sh "spi"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "spi" -m "/mnt/spi"; do_cmd mkdir "/mnt/spi/test";  do_cmd chmod 777 "/mnt/spi/test";    do_cmd rmdir "/mnt/spi/test";   do_cmd umount "$dev_node" 
+SPI_M_FUNC_MKDIR_RMDIR source "common.sh"; install_modules.sh "spi"; source "mtd_common.sh"; part=`get_mtd_partition_number.sh "spi"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "spi" -m "/mnt/spi"; do_cmd mkdir "/mnt/spi/test";  do_cmd chmod 777 "/mnt/spi/test";    do_cmd rmdir "/mnt/spi/test";   do_cmd umount "$dev_node" 
 
 
 

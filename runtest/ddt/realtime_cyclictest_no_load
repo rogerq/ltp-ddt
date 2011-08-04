@@ -3,5 +3,6 @@
 # @requires armv*
 # @setup_requires 
 
-REALTIME_L_PERF_CYCLICTEST_NO_LOAD source 'common.sh';do_cmd "cyclictest -m -p99 -a -t -i500 -d500 -l1000000 -n -q"
+#REALTIME_L_PERF_CYCLICTEST_NO_LOAD source 'common.sh';do_cmd "cyclictest -m -p99 -a -t -i500 -d500 -l1000000 -n -q"
+REALTIME_L_PERF_CYCLICTEST_NO_LOAD source 'common.sh';do_cmd "cyclictest -m -p99 -a -t -i2000 -l100000 -n -q"
 

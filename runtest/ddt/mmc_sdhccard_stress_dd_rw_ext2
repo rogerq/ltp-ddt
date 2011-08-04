@@ -4,7 +4,7 @@
 # @requires mmc_host/sdhc 
 # @setup_requires sdhc
 
-MMC_L_STRESS_SDHC_EXT2_DD_RW_0001 source 'common.sh'; DEV_NODE=`get_blk_device_node.sh "mmc"` || die "error getting devnode for mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "10M" -c "1" -d "mmc" -l "3" 
+MMC_L_STRESS_SDHC_EXT2_DD_RW_0001 source "common.sh"; install_modules.sh "mmc"; DEV_NODE=`get_blk_device_node.sh "mmc";` || die "error getting devnode for mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "10M" -c "1" -d "mmc" -l "3" 
 
 
 

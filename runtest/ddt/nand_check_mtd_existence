@@ -2,7 +2,7 @@
 # @desc Check if /dev/mtd entries exist
 # @requires nand
 
-NAND_M_FUNC_MTD_ENTRY_0001 ls /dev/mtd* && exit 0 || exit 1
+NAND_M_FUNC_MTD_ENTRY_0001 source "common.sh"; install_modules.sh "nand"; ls /dev/mtd* && exit 0 || exit 1
 
 
 

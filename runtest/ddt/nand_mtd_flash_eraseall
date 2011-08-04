@@ -3,7 +3,7 @@
 #       Partition number is specified in get_mtd_partition_number.sh
 # @requires nand
 
-NAND_M_FUNC_MTD_FLASH_ERASEALL_0001 mtd_flash_eraseall.sh -d 'nand'
+NAND_M_FUNC_MTD_FLASH_ERASEALL_0001 source "common.sh"; install_modules.sh "nand"; mtd_flash_eraseall.sh -d "nand"
 
 
 

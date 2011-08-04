@@ -4,5 +4,5 @@
 # @setup_requires
 # @notes size for mem load 8*1024*1024=8388608 
 
-REALTIME_L_PERF_CYCLICTEST_MEM_LOAD source 'common.sh';/usr/runltp -f ddt/realtime_cyclictest_no_load -m 2,1,8388608,0
+REALTIME_L_PERF_CYCLICTEST_MEM_LOAD source 'common.sh';/opt/ltp/runltp -f ddt/realtime_cyclictest_no_load -m 2,1,8388608,0
 

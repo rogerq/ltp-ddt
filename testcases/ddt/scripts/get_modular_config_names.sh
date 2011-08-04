@@ -27,9 +27,9 @@ source "common.sh"  # Import do_cmd(), die() and other functions
 
 ################################ CLI Params ####################################
 if [ $# -ne 1 ]; then
-        echo "Error: Invalid Argument Count"
-        echo "Syntax: $0 <device_type like 'nand', 'mmc', 'spi', 'rtc', 'graphics'>"
-        exit 1
+  echo "Error: Invalid Argument Count"
+  echo "Syntax: $0 <device_type like 'nand', 'mmc', 'spi', 'rtc', 'graphics'>"
+  exit 1
 fi
 DEVICE_TYPE=$1
 ############################ USER-DEFINED Params ###############################
@@ -44,25 +44,27 @@ for DRIVER in $DRIVERS
 do
   case $DRIVER in
     *omap2-nand)
-      nand="CONFIG_JFFS2_FS:jffs2 CONFIG_MTD_NAND_OMAP2:omap2_nand";; # not sure this is the right one.
+      nand="CONFIG_JFFS2_FS:jffs2 CONFIG_MTD_NAND_OMAP2:omap2";; # not sure this is the right one.
     *davinci-nand)
       nand=":davinci_nand";;
 
     *mmci-omap-hs)
       mmc="CONFIG_MMC_OMAP_HS:omap_hsmmc";;
     *davinci-mmc)
-      mmc=":davinci_mmc";;
+      mmc="CONFIG_MMC_DAVINCI:davinci_mmc";;
 
     *rtc-s35390a)
       rtc=":rtc-s35390a";;
 	  *omap_rtc)
-	    rtc=":rtc-omap";;	
+	    rtc="CONFIG_RTC_DRV_OMAP:rtc-omap";;	
 
     *davinci_spi)
-      spi=":davinci_spi";;
+      spi="CONFIG_SPI_DAVINCI:davinci_spi";;
+    *omap2_mcspi)
+      spi="CONFIG_SPI_OMAP24XX:omap2_mcspi";;
 
     *watchdog)
-      wdt=":davinci_wdt";;
+      wdt="CONFIG_DAVINCI_WATCHDOG:davinci_wdt";;
 
 	  *fb0)
 	    graphics=":omapfb";;
@@ -104,6 +106,5 @@ esac
 eval MODULE_NAME=\$$DEVICE_TYPE
 if [ -z "$MODULE_NAME" ]; then
 	die 'Config Option and Module name not found'
-	exit 1
 fi
 echo "$MODULE_NAME"

@@ -3,5 +3,5 @@
 # @requires nand 
 # @setup_requires 
 
-REALTIME_L_PERF_CYCLICTEST_NAND_LOAD source 'common.sh'; run_test_with_background_loads.sh -d "/usr/runltp -f ddt/nand_mtd_dd_rw_jffs2 -s 'NAND_S_FUNC_DD_RW_JFFS2_ERASESIZE' -P $MACHINE" -a "cyclictest -m -p99 -a -t -i500 -d500 -l1000000 -n -q"
+REALTIME_L_PERF_CYCLICTEST_NAND_LOAD source 'common.sh'; run_test_with_background_loads.sh -d "/opt/ltp/runltp -f ddt/nand_mtd_dd_rw_jffs2 -s 'NAND_S_FUNC_DD_RW_JFFS2_ERASESIZE' -P $MACHINE" -a "cyclictest -m -p99 -a -t -i500 -d500 -l1000000 -n -q"
 

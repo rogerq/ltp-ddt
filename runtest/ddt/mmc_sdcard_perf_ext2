@@ -3,7 +3,7 @@
 # @requires mmc_host/sd
 # @setup_requires sd
 
-MMC_L_PERF_SD_EXT2_0001 blk_device_filesystem_perf_test.sh -f ext2 -s 100 -B "102400 262144 524288 1048576 5242880" -d "mmc"
+MMC_L_PERF_SD_EXT2_0001 source "common.sh"; install_modules.sh "mmc"; blk_device_filesystem_perf_test.sh -f ext2 -s 100 -B "102400 262144 524288 1048576 5242880" -d "mmc"
 
 
 
