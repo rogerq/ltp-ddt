@@ -1,0 +1,7 @@
+# @name media controller test for video capture
+# @desc video capture test 
+# @requires video/capture/*/v4l2/OMAP3_ISP_CCDC_output
+# @setup_requires videocompositeinput
+
+MC_S_FUNC_TVP514x_OMAP source 'common.sh'; do_cmd mc_capture -i 0
+

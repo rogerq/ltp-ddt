@@ -16,10 +16,41 @@ INSTALL_MODE            := 00755
 
 CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
 LDFLAGS         += -g -static
-INCLUDES        = -I $(KERNEL_INC) -I src
+#INCLUDES        = -I $(KERNEL_INC) -I src
+
+ifeq ("$(PLATFORM)", "omap3evm")
+  CFLAGS += -DCONFIG_OMAP3530
+  FILTER_OUT_DIRS += src
+  SOURCES :=  	src_omap/mc_tvp514.c \
+		src_omap/parser.c \
+             	src_omap/common.c
+  INCLUDES = -I $(KERNEL_INC) -I src_omap
+endif
+
+ifeq ("$(PLATFORM)", "am3517-evm")
+  CFLAGS += -DCONFIG_AM3517
+  FILTER_OUT_DIRS += src
+  SOURCES := src_omap/mc_tvp514.c \
+             src_omap/parser.c \
+             src_omap/common.c
+  INCLUDES = -I $(KERNEL_INC) -I src_omap
+endif
+
+ifeq ("$(PLATFORM)","dm365-evm")
+  FILTER_OUT_DIS += src_omap
+  SOURCES :=      src/mc_prv_rsr_tvp514.c \
+                src/mc_tvp514.c \
+                src/mc_tvp7002.c \
+                src/mc_prv_tvp514.c \
+                src/common.c \
+                src/parser.c
+  INCLUDES = -I $(KERNEL_INC) -I src
+endif
+
+
 
 #List of source files- Update this on adding a new C file
-SOURCES := 	src/mc_prv_rsr_tvp514.c \
+#SOURCES := 	src/mc_prv_rsr_tvp514.c \
 		src/mc_tvp514.c \
 		src/mc_tvp7002.c \
 		src/mc_prv_tvp514.c \
