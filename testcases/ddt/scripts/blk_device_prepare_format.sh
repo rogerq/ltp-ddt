@@ -59,14 +59,18 @@ if [ -z $DEV_NODE ]; then
 	DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"
 fi
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
-: ${FS_TYPE:='jffs2'}
 test_print_trc "DEV_NODE: $DEV_NODE"
 test_print_trc "MNT_POINT: $MNT_POINT"
 test_print_trc "FS_TYPE: $FS_TYPE"
 
 ############# Do the work ###########################################
-test_print_trc "Erasing/Formatting this partition and then mount it"
-do_cmd blk_device_erase_format_part.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE"
-do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
+if [ -n "$FS_TYPE" ]; then
+	test_print_trc "Erasing/Formatting this partition and then mount it"
+	do_cmd blk_device_erase_format_part.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE"
+	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
+else
+	test_print_trc "Mount the partition with the existing FS on device"
+	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -m "$MNT_POINT" 
+fi
 
 

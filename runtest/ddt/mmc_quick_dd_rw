@@ -1,0 +1,16 @@
+# @name SD card: MMC device w/r test with whatever fs in card 
+# @desc Quick read write test 
+#	The device node is specified in get_blk_device_node.sh
+# @requires mmc_host/sd 
+# @setup_requires sd
+
+
+MMC_S_FUNC_SD_DD_RW_QUICK source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -b "1M" -c "10" -d "mmc"
+
+
+
+
+
+
+
+

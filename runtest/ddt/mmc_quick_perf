@@ -1,0 +1,9 @@
+# @name SD card: MMC Write/Read Quick Performance test
+# @desc Mount the existing fs on card and do read write perf test
+# @requires mmc_host/sd
+# @setup_requires sd
+
+MMC_S_PERF_SD_SANITY source "common.sh"; install_modules.sh "mmc"; blk_device_filesystem_perf_test.sh -s 10 -B "262144" -d "mmc"
+
+
+

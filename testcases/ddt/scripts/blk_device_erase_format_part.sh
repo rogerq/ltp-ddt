@@ -94,7 +94,9 @@ case $DEV_TYPE in
 		sleep 1
 	;;
 	*)
-		do_cmd "$MKFS $DEV_NODE"
+		if [ -n "$FS_TYPE" ]; then
+			do_cmd "$MKFS $DEV_NODE"
+		fi
 	;;
 esac
 

@@ -100,14 +100,24 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	test_print_trc "Checking if Buffer Size is valid"
 	[ $BUFFER_SIZE -gt $(( $FILE_SIZE * $MB )) ] && die "Buffer size provided: $BUFFER_SIZE is not less than or equal to File size $FILE_SIZE MB"
 
-	test_print_trc "Erasing or Formatting this partition"
-	do_cmd blk_device_erase_format_part.sh -d $DEVICE_TYPE -n $DEV_NODE -f $FS_TYPE
-	test_print_trc "Mounting the partition"
-	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
+	#test_print_trc "Erasing or Formatting this partition"
+	#do_cmd blk_device_erase_format_part.sh -d $DEVICE_TYPE -n $DEV_NODE -f $FS_TYPE
+	#test_print_trc "Mounting the partition"
+	#do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
+	if [ -n "$FS_TYPE" ]; then
+    do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
+  else
+    do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -m "$MNT_POINT"
+  fi
+	# find out what is FS in the device
+	if [ -z "$FS_TYPE" ]; then
+		FS_TYPE=`mount | grep $DEV_NODE | cut -d' ' -f5`
+		test_print_trc "existing FS_TYPE: ${FS_TYPE}"
+	fi
 
-        test_print_trc "Creating src test file..."
-        TMP_FILE='/dev/shm/srctest_file'
-        do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$SRCFILE_SIZE"
+	test_print_trc "Creating src test file..."
+	TMP_FILE='/dev/shm/srctest_file'
+	do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$SRCFILE_SIZE"
 
 	do_cmd filesystem_tests -write -src_file $TMP_FILE -srcfile_size $SRCFILE_SIZE -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 	do_cmd "rm -f $TMP_FILE"

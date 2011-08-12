@@ -23,12 +23,13 @@ source "mtd_common.sh"
 usage()
 {
 cat <<-EOF >&2
-        usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-m MNT_POINT] [-d DEVICE TYPE]
-        -f FS_TYPE      filesystem type like jffs2, ext2, etc
+	usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-m MNT_POINT] [-d DEVICE TYPE]
+	-f FS_TYPE      filesystem type like jffs2, ext2, etc. if not specified, try
+									all fs type.
 	-n DEV_NODE	device_node like /dev/mtdblock4
 	-m MNT_POINT	mount point
-        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
-        -h Help         print this usage
+	-d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+	-h Help         print this usage
 EOF
 exit 0
 }
@@ -55,10 +56,10 @@ esac
 done
 
 ############################ DEFAULT Params #######################
-: ${FS_TYPE:='jffs2'}
 : ${MNT_POINT:="/mnt/partition_$DEVICE_TYPE"}
 
 ############# Do the work ###########################################
+# DEVNODE_ENTRY is something like /dev/mmcblk0, /dev/sda etc
 DEVNODE_ENTRY=`get_devnode_entry.sh "$DEV_NODE" "$DEVICE_TYPE"` || die "error getting devnode entry for $DEV_NODE"
 test_print_trc "Umount $DEV_NODE or $DEVNODE_ENTRY if it is mounted"
 do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
@@ -69,6 +70,33 @@ sleep 2
 #do_cmd erase_partition.sh -d $DEVICE_TYPE -n $DEV_NODE
 [ -d $MNT_POINT ] || do_cmd mkdir -p $MNT_POINT
 test_print_trc "Mounting the partition"
-do_cmd "mount -t $FS_TYPE $DEV_NODE $MNT_POINT"
-do_cmd "mount | grep $DEV_NODE"
+if [ -n "$FS_TYPE" ]; then
+	do_cmd "mount -t $FS_TYPE $DEV_NODE $MNT_POINT"
+	do_cmd "mount | grep $DEV_NODE"
+else
+	case $DEVICE_TYPE in
+		nand|nor|spi)
+			fs_to_try="jffs2"
+		;;
+		mmc|ata|usb|sata)
+			fs_to_try="vfat:ext2:ext3"
+		;; 
+		*)
+			fs_to_try="vfat:ext2:ext3:jffs2"
+		;;
+	esac	
+	# try all fs to mount
+	oldIFS=$IFS 
+	IFS=":"
+	for FS in $fs_to_try; do
+  	echo "---$FS---"
+		test_print_trc "Try to mount $FS"	
+		mount -t $FS $DEV_NODE $MNT_POINT
+		mount | grep $DEV_NODE
+		if [ $? -eq 0 ]; then
+			break
+		fi
+	done
+	IFS=$oldIFS	
+fi
 

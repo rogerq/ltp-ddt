@@ -63,12 +63,13 @@ if [ -z $DEV_NODE ]; then
 fi
 
 MNT_POINT=/mnt/partition_$DEVICE_TYPE
-: ${FS_TYPE:='jffs2'}
 
 ############# Do the work ###########################################
-test_print_trc "Erasing or Formatting this partition"
-do_cmd blk_device_erase_format_part.sh -d $DEVICE_TYPE -n $DEV_NODE -f $FS_TYPE
-do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
+if [ -n "$FS_TYPE" ]; then
+	do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
+else
+	do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -m "$MNT_POINT"
+fi
 
 test_print_trc "Doing write concurrence test"
 do_cmd dd if=/dev/zero of=$MNT_POINT/test1.file bs=$DD_BUFSIZE count=$DD_CNT &

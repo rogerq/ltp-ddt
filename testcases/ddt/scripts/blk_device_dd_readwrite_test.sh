@@ -71,7 +71,6 @@ if [ -z $DEV_NODE ]; then
 	DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"
 fi
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
-: ${FS_TYPE:='jffs2'}
 : ${IO_OPERATION:='read'}
 : ${TEST_LOOP:='1'}
 test_print_trc "DEV_NODE: $DEV_NODE"
@@ -86,7 +85,11 @@ test_print_trc "FS_TYPE: $FS_TYPE"
 #	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
 #fi
 if [ $SKIP_FORMAT -ne 1 ]; then 
-	do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
+	if [ -n "$FS_TYPE" ]; then
+		do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
+	else
+		do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -m "$MNT_POINT"
+	fi
 fi
 
 test_print_trc "Doing read/write test for $TEST_LOOP times"
