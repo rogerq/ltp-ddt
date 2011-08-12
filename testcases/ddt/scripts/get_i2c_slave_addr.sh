@@ -166,7 +166,7 @@ case $MACHINE in
 
                 case $SLAVE_DEVICE in
 			default)
-                                SLAVE_ADDR=0x0 # TODO: fill in the slave addr
+                                SLAVE_ADDR=0x5d 
 			;;
 			*)
 				die "Unknown slave device! Can not get slave address."
