@@ -71,6 +71,9 @@
 #		  SoC, Machine and Driver names.
 #		  Test scenarios can optionally specify required capabilities
 #		  using @requires annotation. See runtest/ddt for examples
+#		Aug 15 2011 - Modified - Franklin Cooper
+#		- Included the ability for platform capabilities file to allow 
+#		  for shell script style comments (#)
 #
 #################################################################################
 
@@ -575,7 +578,13 @@ main()
         PLATFORMDIR=${TMP}/platform
 	export PLATFORMDIR
         local i=0; local DRIVERS=""
-        for file in $( cat ${LTPROOT}/platforms/${PLATFORM} ); do
+        while read -r file
+	do
+          
+            echo $file | grep -e "^#.*" > /dev/null
+            if [ "$?" == "0" ]; then
+            	continue
+            fi	
             mkdir -p ${PLATFORMDIR}/${file}
             case $i in
 		0) ARCH="$file"
@@ -588,7 +597,9 @@ main()
                 *) DRIVERS="${DRIVERS},${file}" ;;
             esac
 	    i=`expr $i + 1`
-        done
+
+	done < ${LTPROOT}/platforms/${PLATFORM}
+	
         export DRIVERS
     elif [ -n "$PLATFORM" -a ! -f "${LTPROOT}/platforms/${PLATFORM}" ]; then
         echo "FATAL: Directory ${LTPROOT}/platforms/${PLATFORM}. Check -P argument"
@@ -1020,20 +1031,12 @@ main()
 	EOF
 	cat $LOGFILE
     }
-    cat $LOGFILE | grep ' PASS ' 
-    if [ $? -ne 0 ]; then
-      rm -f $LOGFILE 
-      exit 1
-    else
-	    rm -f $LOGFILE
-      exit $VALUE
-    fi
+    exit $VALUE
 }
 
 cleanup()
 {
     rm -rf ${TMP}
-    rm -f $LOGFILE
 }
 
 check_feature_support()
