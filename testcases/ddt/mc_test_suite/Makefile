@@ -27,6 +27,15 @@ ifeq ("$(PLATFORM)", "omap3evm")
   INCLUDES = -I $(KERNEL_INC) -I src_omap
 endif
 
+ifeq ("$(PLATFORM)", "am37x-evm")
+  CFLAGS += -DCONFIG_OMAP3530
+  FILTER_OUT_DIRS += src
+  SOURCES :=    src_omap/mc_tvp514.c \
+                src_omap/parser.c \
+                src_omap/common.c
+  INCLUDES = -I $(KERNEL_INC) -I src_omap
+endif
+
 ifeq ("$(PLATFORM)", "am3517-evm")
   CFLAGS += -DCONFIG_AM3517
   FILTER_OUT_DIRS += src

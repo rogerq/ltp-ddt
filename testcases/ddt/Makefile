@@ -32,7 +32,6 @@ FILTER_OUT_DIRS			+= fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_test_suite
 FILTER_OUT_DIRS                 += mc_test_suite
-FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
 ifeq ($(PLATFORM),dm6446-evm)
@@ -40,7 +39,6 @@ FILTER_OUT_DIRS                 += fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_test_suite
 FILTER_OUT_DIRS                 += mc_test_suite
-FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
 ifeq ($(PLATFORM),dm368-evm)
@@ -48,14 +46,12 @@ FILTER_OUT_DIRS                 += fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_test_suite
 FILTER_OUT_DIRS                 += mc_test_suite
-FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
 ifeq ($(PLATFORM),dm365-evm)
 FILTER_OUT_DIRS                 += fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_test_suite
-FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
 ifeq ($(PLATFORM),dm355-evm)
@@ -63,15 +59,12 @@ FILTER_OUT_DIRS                 += fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_test_suite
 FILTER_OUT_DIRS                 += mc_test_suite
-FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
 ifeq ($(PLATFORM),am180x-evm)
-FILTER_OUT_DIRS                 += fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_test_suite
 FILTER_OUT_DIRS                 += mc_test_suite
-FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
 ifeq ($(PLATFORM),am181x-evm)
@@ -85,16 +78,12 @@ endif
 ifeq ($(PLATFORM),am3517-evm)
 FILTER_OUT_DIRS                 += fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
-FILTER_OUT_DIRS                 += v4l2_display_test_suite
-FILTER_OUT_DIRS                 += mc_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
 ifeq ($(PLATFORM),am37x-evm)
 FILTER_OUT_DIRS                 += fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
-FILTER_OUT_DIRS                 += v4l2_display_test_suite
-FILTER_OUT_DIRS                 += mc_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
@@ -125,8 +114,6 @@ endif
 ifeq ($(PLATFORM),beagleboard)
 FILTER_OUT_DIRS                 += fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
-FILTER_OUT_DIRS                 += v4l2_display_test_suite
-FILTER_OUT_DIRS                 += mc_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
