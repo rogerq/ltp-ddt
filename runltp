@@ -1031,12 +1031,20 @@ main()
 	EOF
 	cat $LOGFILE
     }
-    exit $VALUE
+    cat $LOGFILE | grep ' PASS ' 
+    if [ $? -ne 0 ]; then
+      rm -f $LOGFILE 
+      exit 1
+    else
+      rm -f $LOGFILE
+      exit $VALUE
+    fi
 }
 
 cleanup()
 {
     rm -rf ${TMP}
+    rm -f $LOGFILE
 }
 
 check_feature_support()
