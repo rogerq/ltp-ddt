@@ -22,7 +22,7 @@ LDFLAGS         += -g
 SOURCES := \
         src/testcases/usb_video_capture.c \
 
-MAKE_TARGETS            := capture
+MAKE_TARGETS            := usb_video_capture
 
 all:
 	 $(CC) $(CFLAGS)  -o usb_video_capture  ${SOURCES}
