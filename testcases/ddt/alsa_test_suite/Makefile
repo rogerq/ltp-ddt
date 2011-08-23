@@ -1,4 +1,4 @@
-# MakeFile function     :: MakeFile for compiling Filesystem test suite 
+# MakeFile function     :: MakeFile for compiling ALSA Audio test suite 
 
 top_srcdir              ?= ../../..
 

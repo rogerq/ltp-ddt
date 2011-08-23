@@ -1,6 +1,7 @@
 # @name ALSA stress test
 # @desc Doing long duration test for capture,playback and loopback.
+
 # @requires sound
 
-ALSA_L_STRESS_CAPTURE  source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -d 1000 -F ALSA_L_STRESS_CAPTURE.snd'; do_cmd 'alsa_tests.sh -t playback -d 1000 -F ALSA_L_STRESS_CAPTURE.snd'
-ALSA_L_STRESS_LOOPBACK source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -d 1000'
+ALSA_L_STRESS_CAPTURE  source 'common.sh' ; do_cmd install_modules.sh 'sound' ;do_cmd 'alsa_tests.sh -t capture -d 1000 -F ALSA_L_STRESS_CAPTURE.snd'; do_cmd 'alsa_tests.sh -t playback -d 1000 -F ALSA_L_STRESS_CAPTURE.snd'
+ALSA_L_STRESS_LOOPBACK source 'common.sh' ; do_cmd install_modules.sh 'sound' ;do_cmd 'alsa_tests.sh -t loopback -d 1000'

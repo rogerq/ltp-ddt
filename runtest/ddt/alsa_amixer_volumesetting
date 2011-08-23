@@ -3,5 +3,6 @@
 #	amixer cset name is passed as an argument to the alsa_amixer.sh.
 # @requires sound
 
-ALSA_M_FUNC_AMIXER_VOLUMESETTING source "common.sh"; do_cmd 'alsa_amixer_volumesetting.sh'
+
+ALSA_M_FUNC_AMIXER_VOLUMESETTING source "common.sh"; do_cmd install_modules.sh 'sound' ;do_cmd 'alsa_amixer_volumesetting.sh'
 

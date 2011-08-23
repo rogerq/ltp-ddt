@@ -2,5 +2,5 @@
 # @desc Do capture, playback and loopback multiple inputs 
 # @requires sound
 
-ALSA_M_FUNC_MULTISTREAM_0001 source 'common.sh' ; do_cmd 'alsa_multistream.sh -t capture'
-ALSA_M_FUNC_MULTISTREAM_0002 source 'common.sh' ; do_cmd 'alsa_multistream.sh -t playback'
+ALSA_M_FUNC_MULTISTREAM_0001 source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_multistream.sh -t capture'
+ALSA_M_FUNC_MULTISTREAM_0002 source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_multistream.sh -t playback'

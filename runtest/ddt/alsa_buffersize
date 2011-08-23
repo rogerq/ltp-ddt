@@ -3,20 +3,20 @@
 #       In loopback arecord will do capture with various buffer sizes 
 # @requires sound
 
-ALSA_M_FUNC_CAPTURE_BUFSZ_64		source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -b 64 -F ALSA_M_FUNC_CAP_BUFSZ_64.snd'; do_cmd 'alsa_tests.sh -t playback -b 64 -F ALSA_M_FUNC_CAP_BUFSZ_64.snd'
-ALSA_M_FUNC_PLAYBACK_BUFSZ_64		source 'common.sh' ; do_cmd 'alsa_tests.sh -t playback -b 64 -F /usr/share/sounds/alsa/Noise.wav'
-ALSA_M_FUNC_LOOPBK_BUFSZ_64		source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -b 64'
+ALSA_M_FUNC_CAPTURE_BUFSZ_64		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t capture -b 64 -F ALSA_M_FUNC_CAP_BUFSZ_64.snd'; do_cmd 'alsa_tests.sh -t playback -b 64 -F ALSA_M_FUNC_CAP_BUFSZ_64.snd'
+ALSA_M_FUNC_PLAYBACK_BUFSZ_64		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t playback -b 64 -F /usr/share/sounds/alsa/Noise.wav'
+ALSA_M_FUNC_LOOPBK_BUFSZ_64		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t loopback -b 64'
 
-ALSA_M_FUNC_CAPTURE_BUFSZ_512		source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -b 512 -F LSA_M_FUNC_CAP_BUFSZ_512.snd';do_cmd 'alsa_tests.sh -t playback -b 512 -F LSA_M_FUNC_CAP_BUFSZ_512.snd'
-ALSA_M_FUNC_PLAYBACK_BUFSZ_512		source 'common.sh' ; do_cmd 'alsa_tests.sh -t playback -b 512 -F /usr/share/sounds/alsa/Noise.wav'
-ALSA_M_FUNC_LOOPBK_BUFSZ_512		source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -b 512'
+ALSA_M_FUNC_CAPTURE_BUFSZ_512		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t capture -b 512 -F LSA_M_FUNC_CAP_BUFSZ_512.snd';do_cmd 'alsa_tests.sh -t playback -b 512 -F LSA_M_FUNC_CAP_BUFSZ_512.snd'
+ALSA_M_FUNC_PLAYBACK_BUFSZ_512		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t playback -b 512 -F /usr/share/sounds/alsa/Noise.wav'
+ALSA_M_FUNC_LOOPBK_BUFSZ_512		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t loopback -b 512'
 
-ALSA_M_FUNC_CAPTURE_BUFSZ_32768		source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -b 32768 -F ALSA_M_FUNC_CAP_BUFSZ_32768'; do_cmd 'alsa_tests.sh -t playback -b 32768 -F ALSA_M_FUNC_CAP_BUFSZ_32768'
-ALSA_M_FUNC_PLAYBACK_BUFSZ_32768	source 'common.sh' ; do_cmd 'alsa_tests.sh -t playback -b 512 -F /usr/share/sounds/alsa/Noise.wav'
-ALSA_M_FUNC_LOOPBK_BUFSZ_32768		source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -b 32768'
+ALSA_M_FUNC_CAPTURE_BUFSZ_32768		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t capture -b 32768 -F ALSA_M_FUNC_CAP_BUFSZ_32768'; do_cmd 'alsa_tests.sh -t playback -b 32768 -F ALSA_M_FUNC_CAP_BUFSZ_32768'
+ALSA_M_FUNC_PLAYBACK_BUFSZ_32768	source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t playback -b 512 -F /usr/share/sounds/alsa/Noise.wav'
+ALSA_M_FUNC_LOOPBK_BUFSZ_32768		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t loopback -b 32768'
 
-ALSA_M_FUNC_CAPTURE_BUFSZ_65536		source 'common.sh' ; do_cmd 'alsa_tests.sh -t capture -b 65536 -F ALSA_M_FUNC_CAP_BUFSZ_65536.snd';do_cmd 'alsa_tests.sh -t playback capture -b 65536 -F ALSA_M_FUNC_CAP_BUFSZ_65536.snd'
-ALSA_M_FUNC_PLAYBACK_BUFSZ_65536	source 'common.sh' ; do_cmd 'alsa_tests.sh -t playback -b 65536 -F /usr/share/sounds/alsa/Noise.wav'
-ALSA_M_FUNC_LOOPBK_BUFSZ_65536		source 'common.sh' ; do_cmd 'alsa_tests.sh -t loopback -b 65536'
+ALSA_M_FUNC_CAPTURE_BUFSZ_65536		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t capture -b 65536 -F ALSA_M_FUNC_CAP_BUFSZ_65536.snd';do_cmd 'alsa_tests.sh -t playback capture -b 65536 -F ALSA_M_FUNC_CAP_BUFSZ_65536.snd'
+ALSA_M_FUNC_PLAYBACK_BUFSZ_65536	source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t playback -b 65536 -F /usr/share/sounds/alsa/Noise.wav'
+ALSA_M_FUNC_LOOPBK_BUFSZ_65536		source 'common.sh' ; do_cmd install_modules.sh 'sound' ; do_cmd 'alsa_tests.sh -t loopback -b 65536'
 
 

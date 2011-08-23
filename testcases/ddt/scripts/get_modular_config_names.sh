@@ -55,8 +55,8 @@ do
 
     *rtc-s35390a)
       rtc=":rtc-s35390a";;
-	  *omap_rtc)
-	    rtc="CONFIG_RTC_DRV_OMAP:rtc-omap";;	
+    *omap_rtc)
+      rtc="CONFIG_RTC_DRV_OMAP:rtc-omap";;	
 
     *davinci_spi)
       spi="CONFIG_SPI_DAVINCI:davinci_spi";;
@@ -66,11 +66,11 @@ do
     *watchdog)
       wdt="CONFIG_DAVINCI_WATCHDOG:davinci_wdt";;
 
-	  *fb0)
-	    graphics=":omapfb";;
+    *fb0)
+      graphics=":omapfb";;
 
-	  *omap3-audio)
-	    sound=':snd_soc_omap3evm';;	
+    *omap3-audio)
+      sound='CONFIG_SND_OMAP_SOC_OMAP3EVM:snd_soc_omap3evm';;	
 
     *soc-audio)
       sound=':snd-soc-evm';;
@@ -84,6 +84,8 @@ IFS=$IFS_ORIG
 case $SOC in
 esac
 case $MACHINE in
+	am387x-evm|am389x-evm)
+                sound='CONFIG_SND_SOC:snd-soc-evm CONFIG_SND_DAVINCI_SOC_MCASP:snd-soc-davinci-mcasp CONFIG_SND_TI81XX_SOC:snd-soc-davinci ';;
 esac
 
 # Define default values for variables being overriden
