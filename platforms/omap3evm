@@ -10,3 +10,4 @@ mmc_host/sdhc/mmci-omap-hs
 graphics/fb0
 video/capture/*/v4l2/OMAP3_ISP_CCDC_output
 video/display/*/v4l2/omap_vout
+rtc/rtc_twl

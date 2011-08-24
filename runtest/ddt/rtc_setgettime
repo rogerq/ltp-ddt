@@ -2,7 +2,7 @@
 # @desc RTC set and get time test
 # @requires rtc 
 
-RTC_S_FUNC_SETGETTIME_0001 source 'common.sh'; DEV_NODE=`get_devnode.sh "rtc"` || die "error getting devnode for rtc"; do_cmd rtc_tests -device $DEV_NODE  -ioctltest setgettime
+RTC_S_FUNC_SETGETTIME_0001 source 'common.sh'; do_cmd install_modules.sh 'rtc' ; DEV_NODE=`get_devnode.sh "rtc"` || die "error getting devnode for rtc"; do_cmd rtc_tests -device $DEV_NODE  -ioctltest setgettime
 
 
 

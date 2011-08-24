@@ -57,6 +57,8 @@ do
       rtc=":rtc-s35390a";;
     *omap_rtc)
       rtc="CONFIG_RTC_DRV_OMAP:rtc-omap";;	
+    *rtc_twl)
+      rtc="CONFIG_RTC_DRV_TWL4030:rtc_twl";;
 
     *davinci_spi)
       spi="CONFIG_SPI_DAVINCI:davinci_spi";;
