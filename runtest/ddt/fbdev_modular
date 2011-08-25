@@ -2,5 +2,5 @@
 # @desc Display Modular tests for display in a loop of 100 and checking for proc entries
 # @requires graphics
 
-FBDEV_M_MOD source 'common.sh'; do_cmd "do_modular_common.sh -d 'graphics' -a 'do_cmd fbdev_display_tests -device /dev/fb0'"
+FBDEV_M_MOD source 'common.sh'; do_cmd "do_modular_common.sh -d 'graphics' -a 'do_cmd fbdev_tests -device /dev/fb0'"
 

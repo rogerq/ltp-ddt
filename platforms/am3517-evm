@@ -2,7 +2,7 @@ armv7l
 am3517
 am3517-evm
 sdma
-graphics/fb0
+graphics/fb0/omapfb
 i2c/non_eeprom
 mmc_host/sd/mmci-omap-hs
 mmc_host/mmc/mmci-omap-hs

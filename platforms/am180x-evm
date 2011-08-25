@@ -16,3 +16,4 @@ sound/playback/alsa
 spi_master/mtd/spi_davinci
 usb/host/msc
 watchdog
+graphics/fb0/DA8xx_FB_Drv

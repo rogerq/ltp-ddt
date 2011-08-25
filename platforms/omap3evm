@@ -7,7 +7,7 @@ spi_master/omap2_mcspi
 mmc_host/sd/mmci-omap-hs
 mmc_host/mmc/mmci-omap-hs
 mmc_host/sdhc/mmci-omap-hs
-graphics/fb0
+graphics/fb0/omapfb
 video/capture/*/v4l2/OMAP3_ISP_CCDC_output
 video/display/*/v4l2/omap_vout
 rtc/rtc_twl

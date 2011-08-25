@@ -2,10 +2,10 @@
 # @desc Tests for all ioctls
 # @requires graphics
 
-FBDEV_M_FUNC_GETVSCREENINFO source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 0
-FBDEV_M_FUNC_PUTVSCREENINFO source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 1
-FBDEV_M_FUNC_GETFSCREENINFO source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 2
-FBDEV_M_FUNC_BLANK source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 3
-FBDEV_M_FUNC_GETCMAP source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 4
-FBDEV_M_FUNC_PUTCMAP source 'common.sh'; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 5
+FBDEV_M_FUNC_GETVSCREENINFO source 'common.sh'; install_modules.sh "graphics"; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 0
+FBDEV_M_FUNC_PUTVSCREENINFO source 'common.sh'; install_modules.sh "graphics"; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 1
+FBDEV_M_FUNC_GETFSCREENINFO source 'common.sh'; install_modules.sh "graphics"; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 2
+FBDEV_M_FUNC_BLANK source 'common.sh'; install_modules.sh "graphics"; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 3
+FBDEV_M_FUNC_GETCMAP source 'common.sh'; install_modules.sh "graphics"; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 4
+FBDEV_M_FUNC_PUTCMAP source 'common.sh'; install_modules.sh "graphics"; do_cmd fbdev_tests -device "/dev/fb0" -ioctl 5
 

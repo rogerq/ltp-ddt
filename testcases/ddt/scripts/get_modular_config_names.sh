@@ -68,8 +68,10 @@ do
     *watchdog)
       wdt="CONFIG_DAVINCI_WATCHDOG:davinci_wdt";;
 
-    *fb0)
-      graphics=":omapfb";;
+    *omapfb)
+      graphics="CONFIG_FB_OMAP2:omapfb";;
+    *DA8xx_FB_Drv)
+      graphics="CONFIG_FB_DA8XX:da8xx-fb";;
 
     *omap3-audio)
       sound='CONFIG_SND_OMAP_SOC_OMAP3EVM:snd_soc_omap3evm';;	
