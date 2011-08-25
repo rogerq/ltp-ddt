@@ -14,6 +14,6 @@ sata/ahci
 sound/capture/alsa
 sound/playback/alsa
 spi_master/mtd/omap2_mcspi
-usb/host/msc
-
-
+usb/host/msc/musb_ti81xx
+usb/host/iso/musb_ti81xx
+usb/host/hid/musb_ti81xx

@@ -10,7 +10,7 @@ mmc_host/mmc/davinci_mmc
 mmc_host/sdhc/davinci_mmc
 nand/davinci_nand
 spi_master/mtd/spi_davinci
-usb/host/msc/musb_hdrc
-usb/host/hid/usbhid
-usb/host/iso/usbaudio
-usb/host/iso/usbvideo
+usb/host/msc/musb_davinci
+usb/host/hid/musb_davinci
+usb/host/iso/musb_davinci
+

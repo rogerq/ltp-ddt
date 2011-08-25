@@ -79,6 +79,13 @@ do
     *soc-audio)
       sound=':snd-soc-evm';;
 
+    *musb_ti81xx)
+      usb="CONFIG_USB_MUSB_HDRC:musb_hdrc CONFIG_USB_MUSB_TI81XX_GLUE:ti81xx";;
+
+    *musb_davinci)
+      usb="CONFIG_USB_MUSB_HDRC:musb_hdrc CONFIG_USB_MUSB_DAVINCI_GLUE:davinci";;
+
+
   esac
 done
 IFS=$IFS_ORIG

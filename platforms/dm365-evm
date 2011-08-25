@@ -6,7 +6,9 @@ net/eth/dm9000
 nand/davinci_nand
 i2c/eeprom/
 spi_master/mtd/spi_davinci
-usb/host/msc/musb_hdrc
+usb/host/msc/musb_davinci
+usb/host/hid/musb_davinci
+usb/host/iso/musb_davinci
 mmc_host/davinci_mmc
 edma/
 video/capture/480p/mc/davinci_video_ccdc_output
