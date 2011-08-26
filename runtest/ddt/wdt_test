@@ -1,0 +1,13 @@
+# @name Watchdog Timer getsupport,settimeout,getstatus,keepalive ioctl and write test
+# @desc Watchdog Timer getsupport,settimeout,getstatus,keepalive ioctl and write test
+# @requires watchdog
+
+WDT_S_FUNC_0001 source 'common.sh'; do_cmd install_modules.sh 'wdt' ; DEV_NODE=`get_devnode.sh "wdt"` || die "error getting devnode for wdt"; do_cmd wdt_tests -device $DEV_NODE -ioctl getsupport
+WDT_M_FUNC_0002 source 'common.sh'; do_cmd install_modules.sh 'wdt' ; DEV_NODE=`get_devnode.sh "wdt"` || die "error getting devnode for wdt"; do_cmd wdt_tests -device $DEV_NODE -ioctl settimeout -ioctlarg 120
+WDT_S_FUNC_0003 source 'common.sh'; do_cmd install_modules.sh 'wdt' ; DEV_NODE=`get_devnode.sh "wdt"` || die "error getting devnode for wdt"; do_cmd wdt_tests -device $DEV_NODE -ioctl gettimeout
+WDT_S_FUNC_0004 source 'common.sh'; do_cmd install_modules.sh 'wdt' ; DEV_NODE=`get_devnode.sh "wdt"` || die "error getting devnode for wdt"; do_cmd wdt_tests -device $DEV_NODE -ioctl getstatus
+WDT_S_FUNC_0005 source 'common.sh'; do_cmd install_modules.sh 'wdt' ; DEV_NODE=`get_devnode.sh "wdt"` || die "error getting devnode for wdt"; do_cmd wdt_tests -device $DEV_NODE -ioctl getbootstatus
+WDT_M_FUNC_0006 source 'common.sh'; do_cmd install_modules.sh 'wdt' ; DEV_NODE=`get_devnode.sh "wdt"` || die "error getting devnode for wdt"; do_cmd wdt_tests -device $DEV_NODE -ioctl keepalive -loop 120
+WDT_S_FUNC_0007 source 'common.sh'; do_cmd install_modules.sh 'wdt' ; DEV_NODE=`get_devnode.sh "wdt"` || die "error getting devnode for wdt"; do_cmd wdt_tests -device $DEV_NODE -ioctl -write
+WDT_M_FUNC_0008 source 'common.sh'; do_cmd install_modules.sh 'wdt' ;DEV_NODE=`get_devnode.sh "wdt"` || die "error getting devnode for wdt"; do_cmd wdt_tests -device $DEV_NODE -ioctl -write -loop 120
+

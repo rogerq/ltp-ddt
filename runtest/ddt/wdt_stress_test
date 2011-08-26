@@ -1,0 +1,6 @@
+# @name Watchdog Timer keepalive ioctl
+# @desc Watchdog Timer stress keepalive ioctl test
+# @requires watchdog
+
+WDT_L_STRESS_0001 source 'common.sh'; do_cmd install_modules.sh 'wdt' ; DEV_NODE=`get_devnode.sh "wdt"` || die "error getting devnode for wdt"; do_cmd wdt_tests -device $DEV_NODE -ioctl keepalive -loop 28800
+

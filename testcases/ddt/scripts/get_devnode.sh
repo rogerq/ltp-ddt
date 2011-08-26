@@ -33,6 +33,9 @@ case $DEVICE_TYPE in
 	i2c)
 		DEV_NODE="/dev/i2c-1"
 	;;
+	wdt)
+		DEV_NODE="/dev/watchdog"
+	;;
         *)
 		DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting $DEV_TYPE devnode"
         ;;

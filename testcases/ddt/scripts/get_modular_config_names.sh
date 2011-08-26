@@ -67,6 +67,8 @@ do
 
     *watchdog)
       wdt="CONFIG_DAVINCI_WATCHDOG:davinci_wdt";;
+    *omap_wdt)
+      wdt="CONFIG_OMAP_WATCHDOG:omap_wdt";;
 
     *omapfb)
       graphics="CONFIG_FB_OMAP2:omapfb";;
