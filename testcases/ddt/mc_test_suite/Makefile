@@ -16,7 +16,7 @@ INSTALL_MODE            := 00755
 
 CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
 LDFLAGS         += -g -static
-#INCLUDES        = -I $(KERNEL_INC) -I src
+KERNEL_INCLUDES        = -I $(KERNEL_INC) -I $(KERNEL_USR_INC) 
 
 ifeq ("$(PLATFORM)", "omap3evm")
   CFLAGS += -DCONFIG_OMAP3530
@@ -24,7 +24,7 @@ ifeq ("$(PLATFORM)", "omap3evm")
   SOURCES :=  	src_omap/mc_tvp514.c \
 		src_omap/parser.c \
              	src_omap/common.c
-  INCLUDES = -I $(KERNEL_INC) -I src_omap
+  INCLUDES = $(KERNEL_INCLUDES) -I src_omap
 endif
 
 ifeq ("$(PLATFORM)", "am37x-evm")
@@ -33,7 +33,7 @@ ifeq ("$(PLATFORM)", "am37x-evm")
   SOURCES :=    src_omap/mc_tvp514.c \
                 src_omap/parser.c \
                 src_omap/common.c
-  INCLUDES = -I $(KERNEL_INC) -I src_omap
+  INCLUDES = $(KERNEL_INCLUDES) -I src_omap
 endif
 
 ifeq ("$(PLATFORM)", "am3517-evm")
@@ -42,7 +42,7 @@ ifeq ("$(PLATFORM)", "am3517-evm")
   SOURCES := src_omap/mc_tvp514.c \
              src_omap/parser.c \
              src_omap/common.c
-  INCLUDES = -I $(KERNEL_INC) -I src_omap
+  INCLUDES = $(KERNEL_INCLUDES) -I src_omap
 endif
 
 ifeq ("$(PLATFORM)","dm365-evm")
@@ -53,7 +53,7 @@ ifeq ("$(PLATFORM)","dm365-evm")
                 src/mc_prv_tvp514.c \
                 src/common.c \
                 src/parser.c
-  INCLUDES = -I $(KERNEL_INC) -I src
+  INCLUDES = $(KERNEL_INCLUDES) -I src
 endif
 
 
