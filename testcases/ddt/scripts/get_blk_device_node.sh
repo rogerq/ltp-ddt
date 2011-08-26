@@ -76,7 +76,7 @@ case $DEV_TYPE in
         ;;
         usb)
                 #DEV_NODE="/dev/sda1"
-		DEV_NODE=`find_scsi_node "usb"`  
+		DEV_NODE=`find_scsi_node "usb"` || die "error getting usb node: $DEV_NODE" 
         ;;
         ata)
                 DEV_NODE="/dev/hda1"

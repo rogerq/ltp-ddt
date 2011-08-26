@@ -5,4 +5,4 @@
 # @requires  sata 
 # @setup_requires sata
 
-SATA_MODULAR_RW_VFAT_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -f "vfat" -b "1M" -c "10" -l "1" -d "sata"
+SATA_M_MODULAR_RW_VFAT_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -f "vfat" -b "1M" -c "10" -l "1" -d "sata"
