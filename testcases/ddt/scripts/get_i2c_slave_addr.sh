@@ -188,6 +188,21 @@ case $MACHINE in
 			;;
                 esac
 		;;
+	  am335xevm)
+
+                case $SLAVE_DEVICE in
+                        io_expander)
+                                SLAVE_ADDR=0x50
+                        ;;
+			default)
+                                SLAVE_ADDR=0x50
+			;;
+			*)
+				die "Unknown slave device! Can not get slave address."
+			;;
+                esac
+		;;
+
 
 	*)
 		die "Invalid Machine name! No I2C slave addr found"
