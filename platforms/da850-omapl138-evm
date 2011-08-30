@@ -5,3 +5,6 @@ net/eth/davinci_emac
 rtc/omap_rtc
 sound/soc-audio
 edma
+usb/host/msc/musb_da8xx
+usb/host/iso/musb_da8xx
+usb/host/hid/musb_da8xx

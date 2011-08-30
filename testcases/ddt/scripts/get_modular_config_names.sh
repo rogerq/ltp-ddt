@@ -82,10 +82,14 @@ do
       sound=':snd-soc-evm';;
 
     *musb_ti81xx)
-      usb="CONFIG_USB_MUSB_HDRC:musb_hdrc CONFIG_USB_MUSB_TI81XX_GLUE:ti81xx";;
-
+      usb="CONFIG_USB_MUSB_TI81XX_GLUE:ti81xx";;
     *musb_davinci)
-      usb="CONFIG_USB_MUSB_HDRC:musb_hdrc CONFIG_USB_MUSB_DAVINCI_GLUE:davinci";;
+      usb="CONFIG_USB_MUSB_DAVINCI_GLUE:davinci";;
+    *musb_da8xx)
+      usb="CONFIG_USB_MUSB_da8xx_GLUE:da8xx";;
+    *musb_omap2430)
+      usb="CONFIG_USB_MUSB_OMAP2PLUS_GLUE:omap2430";;
+
 
 
   esac

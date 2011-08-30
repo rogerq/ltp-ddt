@@ -12,3 +12,7 @@ video/capture/*/v4l2/OMAP3_ISP_CCDC_output
 video/display/*/v4l2/omap_vout
 rtc/rtc_twl
 watchdog/omap_wdt
+usb/host/msc/musb_omap2430
+usb/host/iso/musb_omap2430
+usb/host/hid/musb_omap2430
+
