@@ -25,7 +25,7 @@ SOURCES := \
 MAKE_TARGETS            := usb_video_capture
 
 all:
-	 $(CC) $(CFLAGS)  -o usb_video_capture  ${SOURCES}
+	 $(CC) $(CFLAGS) $(LDFLAGS) -o usb_video_capture  ${SOURCES}
 
 
 include $(top_srcdir)/include/mk/generic_leaf_target.mk
