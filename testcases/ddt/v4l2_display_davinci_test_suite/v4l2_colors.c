@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 	int output_type = 0;
 	char *buffer[4];
 	int buff_index;
-	int n;
+	int n=1;
 	int width = 0, height = 0;
 	struct v4l2_output output;
 	struct v4l2_format format;
@@ -197,7 +197,7 @@ int main(int argc, char* argv[]) {
 				exit(0);
 			}
 		}
-		return 0;
-		}
+	}	
+	return 0;
 	}
 	

@@ -147,4 +147,5 @@ extern void media_device_close(int media_fd);
 extern int set_subdev_format(struct media_dev *media,struct capture_dev *capture);
 extern void close_video_dev(int capture_fd);
 extern int capture_display_prepare_buffers(struct mem_allocator_dev *mem_allocator);
+extern int mc_tvp514();
 

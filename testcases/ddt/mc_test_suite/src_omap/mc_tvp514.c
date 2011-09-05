@@ -1,41 +1,7 @@
 #include "common.h"
-/*
-void usage(void)
-{
-	printf("Usage: saMmapLoopback [-i <tvp input>] [-h help]");
-	printf("\t[-i <S-Vid/CVBS>]	: 0: CVBS 1 - S-Video\n");
-}
-int timeval_subtract(struct timeval *result, struct timeval *x,
-		                     struct timeval *y)
-{
-	// Perform the carry for the later subtraction by updating y.
-	 
-	if (x->tv_usec < y->tv_usec) {
-		int nsec = (y->tv_usec - x->tv_usec) /
-			1000000 + 1;
-		y->tv_usec -= 1000000 *	nsec;
-		y->tv_sec += nsec;
-	}
-	if (x->tv_usec - y->tv_usec > 1000000) {
-		int nsec = (x->tv_usec - y->tv_usec) /
-			1000000;
-		y->tv_usec += 1000000 * nsec;
-		y->tv_sec -= nsec;
-	}
-
-	// Compute the time remaining to wait.	   tv_usec is certainly positive.
-	result->tv_sec = x->tv_sec - y->tv_sec;
-	result->tv_usec = x->tv_usec - y->tv_usec;
-
-	// Return 1 if result is negative. 
-	return x->tv_sec < y->tv_sec;
-}
-*/
-//int main(int argc, char *argv[])
 int mc_tvp514()
 {
-	char shortoptions[] = "s:l:n:i:h:";
-	int i = 0, ret = 0, a, c, index;
+	int i = 0, ret = 0, a;
 	unsigned int loop_cnt = MAXLOOPCOUNT;
 	struct media_dev media;
 	struct capture_dev capture;
@@ -53,40 +19,7 @@ int mc_tvp514()
 	capture.num_bufs = CAPTURE_MAX_BUFFER;
 	/* Display */
 	display.num_bufs = DISPLAY_MAX_BUFFER;
-/*
-	for (;;) {
-		c = getopt_long(argc, argv, shortoptions, (void *) NULL,
-				&index);
-		if (-1 == c)
-			break;
-		switch (c) {
-			case 0:
-				break;
-			case 's':
-			case 'S':
-				media.input_source = atoi(optarg);
-				break;
-			case 'l':
-			case 'L':
-				loop_cnt = atoi(optarg);
-				break;
-			case 'n':
-			case 'N':
-				capture.num_bufs = display.num_bufs = atoi(optarg);
-				break;
-			case 'i':
-			case 'I':
-				capture.tvp_input = atoi(optarg);
-				break;
-			case 'h':
-			case 'H':
-			default:
-				usage();
-				exit(1);
-		}
-
-	}
-*/
+	
 	for(i = 0; i < capture.num_bufs; i++) {
 		capture_buff_info[i].start = NULL;
 	}
@@ -102,7 +35,6 @@ int mc_tvp514()
 	 * Display channel is opened with the same standard that is detected at
 	 * capture channel.
 	 * */
-#if defined (CONFIG_OMAP3530)
 	/* Open the Media device */
 	ret  = media_device_open(&media);
 	if (ret < 0)
@@ -118,7 +50,7 @@ int mc_tvp514()
 		goto err_0;
 
 	media_device_close(media.media_fd);
-#endif
+	
 	/* Open the capture device */
 	ret = open_video_dev((const char *)CAPTURE_DEVICE, &capture.capture_fd);
 	if (ret < 0)
@@ -132,14 +64,13 @@ int mc_tvp514()
 	display.width = capture.width;
 	display.height = capture.height;
 
-#if defined (CONFIG_OMAP3530)
 	/*
 	 * Now set the detected format at each pad
 	 */
 	ret = set_subdev_format(&media, &capture);
 	if (ret < 0)
 		goto err_2;
-#endif
+	
 	ret = capture_prepare_streaming(&capture);
 	if(ret < 0)
 		goto err_3;
@@ -278,11 +209,8 @@ err_2:
 	/* Close the file handle */
 	close_video_dev(capture.capture_fd);
 err_1:
-#if defined (CONFIG_OMAP3530)
-	/*TODO: Must reset the media before exiting here */
 	reset_media_links(&media);
 err_0:
 	media_device_close(media.media_fd);
-#endif
 	return 0;
 }

@@ -7,9 +7,7 @@ void usage()
 int main(int argc, char *argv[])
 {
 	int ret = 0;
-	int help = 1;
-	int tvp514 = 0;
-	int c, device, index;
+	int c, index;
 	char shortoptions[] = "i:w:h:";
 	int func=0;
 
