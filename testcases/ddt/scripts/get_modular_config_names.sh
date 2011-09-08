@@ -75,8 +75,6 @@ do
     *DA8xx_FB_Drv)
       graphics="CONFIG_FB_DA8XX:da8xx-fb";;
 
-    *omap3-audio)
-      sound='CONFIG_SND_OMAP_SOC_OMAP3EVM:snd_soc_omap3evm';;	
 
     *soc-audio)
       sound=':snd-soc-evm';;
@@ -103,6 +101,10 @@ esac
 case $MACHINE in
 	am387x-evm|am389x-evm)
                 sound='CONFIG_SND_SOC:snd-soc-evm CONFIG_SND_DAVINCI_SOC_MCASP:snd-soc-davinci-mcasp CONFIG_SND_TI81XX_SOC:snd-soc-davinci ';;
+	omap3evm)
+		sound='CONFIG_SND_OMAP_SOC_OMAP3EVM:snd_soc_omap3evm';;
+	am3517-evm)
+		sound='CONFIG_SND_OMAP_SOC_AM3517EVM:snd-soc-am3517evm';;
 esac
 
 # Define default values for variables being overriden
