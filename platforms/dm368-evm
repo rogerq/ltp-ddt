@@ -1,7 +1,8 @@
 armv5tejl
 dm368
 dm368-evm
-sound/soc-audio
+sound/capture/alsa/soc-audio
+sound/playback/alsa/soc-audio
 net/eth/davinci_emac
 i2c/eeprom/
 edma/

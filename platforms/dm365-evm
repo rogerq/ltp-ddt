@@ -1,7 +1,8 @@
 armv5tejl
 dm365
 dm365-evm
-sound/soc-audio
+sound/capture/alsa/soc-audio
+sound/playback/alsa/soc-audio
 net/eth/dm9000
 nand/davinci_nand
 i2c/eeprom/

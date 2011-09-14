@@ -1,7 +1,8 @@
 armv7l
 omap3
 omap3evm
-sound/soc-audio
+sound/capture/alsa/soc-audio
+sound/playback/alsa/soc-audio
 net/eth/smsc911x
 spi_master/omap2_mcspi
 mmc_host/sd/mmci-omap-hs

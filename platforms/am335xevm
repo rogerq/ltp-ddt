@@ -10,3 +10,5 @@ spi_master/mtd/omap2_mcspi
 graphics/fb0/DA8xx_FB_Drv
 sound/capture/alsa
 sound/playback/alsa
+sound/capture/alsa/hisamplingrate
+sound/playback/alsa/hisamplingrate

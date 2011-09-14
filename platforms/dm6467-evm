@@ -1,7 +1,8 @@
 armv5tejl
 dm6467
 dm6467-evm
-sound/soc-audio
+sound/capture/alsa/soc-audio
+sound/playback/alsa/soc-audio
 net/eth/davinci_emac
 nand/davinci_nand
 i2c/eeprom
