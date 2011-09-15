@@ -85,7 +85,7 @@ da850-omapl138-evm)
                 MAXVAL=127
                 STEP=30
                 ;;
-am387x-evm|am389x-evm)
+am387x-evm|am389x-evm|am335xevm)
                 CAPTURE_NAME="PGA Capture Volume";
                 PLAYBACK_NAME="PCM Playback Volume"
                 MINVAL=0
