@@ -119,5 +119,6 @@
 
 /* put color map table */
 #define OPTION_IOCTL_PUTCMAP		5
+#define OPTION_IOCTL_PANDISPLAY		6
 
 #endif	/* #ifndef _ST_FBDEV_PARSER_H_ */

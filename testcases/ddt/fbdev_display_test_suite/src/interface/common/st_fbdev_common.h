@@ -69,6 +69,9 @@
 
 struct fbdev_display_testparams;
 
+
+
+
 /* Function pointer table for platform specific API's */
 struct fbdev_func_table {
 	int (*wait_for_vsync)(int fd);

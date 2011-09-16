@@ -406,8 +406,9 @@ exit:
 	return ret;
 }
 
+
 /*
- * IOCTL test cases: Based on IOCTL no, it executes perticular IOCTL. Please
+ * IOCTL test cases: Based on IOCTL no, it executes particular IOCTL. Please
  * refer to the help for more details on ioctl no.s
  */
 
