@@ -4,7 +4,7 @@
 # @requires usb/host 
 # @setup_requires usbhostmsc
 
-BHOST_L_FUNC_VFAT_DD_RW_0001 source 'common.sh'; do_cmd install_modules.sh 'usb'; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1" -c "1" -d "usb" 
+USBHOST_L_FUNC_VFAT_DD_RW_0001 source 'common.sh'; do_cmd install_modules.sh 'usb'; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1" -c "1" -d "usb" 
 
 USBHOST_L_FUNC_VFAT_DD_RW_0002 source 'common.sh'; do_cmd install_modules.sh 'usb'; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "512" -c "1" -d "usb"
 
