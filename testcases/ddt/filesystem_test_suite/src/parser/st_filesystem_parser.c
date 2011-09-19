@@ -117,17 +117,17 @@ static int st_process_filesystem_test_options(int argc, char **argv)
 			break;
 		case OPTION_FILE_SIZE:
 			if (optarg != NULL) {
-				testoptions.file_size = atoi(optarg);
+				testoptions.file_size = atof(optarg);
 			} else if (optind < argc && ('-' != argv[optind][0])) {
-				testoptions.file_size = atoi(argv[optind]);
+				testoptions.file_size = atof(argv[optind]);
 			}
 			break;
 
 		case OPTION_SRCFILE_SIZE:
 			if (optarg != NULL) {
-				testoptions.srcfile_size = atoi(optarg);
+				testoptions.srcfile_size = atof(optarg);
 			} else if (optind < argc && ('-' != argv[optind][0])) {
-				testoptions.srcfile_size = atoi(argv[optind]);
+				testoptions.srcfile_size = atof(argv[optind]);
 			}
 			break;
 		case OPTION_TESTCASE_ID:

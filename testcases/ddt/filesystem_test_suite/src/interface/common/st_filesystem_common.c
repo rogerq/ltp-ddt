@@ -60,7 +60,7 @@ void st_display_filesystem_test_suite_help(void)
 		"-file        :  Name of the file to read from or write to"
 		" -/mnt/file\n"
 		"-buffer_size :  Application buffer size in bytes [102400]\n"
-		"-file_size   :  Total file size in MB [100], it should be divided by srcfile_size\n"
+		"-file_size   :  Total file size in MB [100], it should be divisible by srcfile_size\n"
 		"-srcfile_size   :  Src file size in MB [10]\n"
 		"-read        :  I/O direction mode is read\n"
 		"                no argument value required\n"
@@ -95,12 +95,12 @@ void st_print_filesystem_test_params(struct st_filesystem_testparams
 	TEST_PRINT_TRC("The file name|%s", testoptions->filename);
 	TEST_PRINT_TRC("The application buffer size in bytes|%d",
 		       testoptions->buffer_size);
-	TEST_PRINT_TRC("file size in MB|%d", testoptions->file_size);
+	TEST_PRINT_TRC("file size in MB|%.2f", testoptions->file_size);
 	if (testoptions->iomode == 'r') {
 		TEST_PRINT_TRC("Iomode|read");
 	} else if (testoptions->iomode == 'w') {
 		TEST_PRINT_TRC("Iomode|write");
-		TEST_PRINT_TRC("srcfile size in MB|%d", testoptions->srcfile_size);
+		TEST_PRINT_TRC("srcfile size in MB|%.2f", testoptions->srcfile_size);
 	} else {
 		TEST_PRINT_TRC("Iomode|copy");
 		TEST_PRINT_TRC("The src file name|%s", testoptions->src);

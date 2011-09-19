@@ -3,7 +3,7 @@
 #	The partition number is specified in get_mtd_partition_number.sh
 # @requires spi_master/mtd
 
-SPI_M_FUNC_DEBUG_ERASE source "common.sh"; install_modules.sh "spi"; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd partition number: $part"; erase_size=`get_mtd_erase_size.sh` || die "error getting mtd erase size: $erase_size" ;mtd_debug erase "/dev/mtd$part" 0 "$erase_size" && exit 0 || exit 1
+SPI_M_FUNC_DEBUG_ERASE source "common.sh"; install_modules.sh "spi"; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd partition number: $part"; erase_size=`get_mtd_erase_size.sh $part` || die "error getting mtd erase size: $erase_size" ;mtd_debug erase "/dev/mtd$part" 0 "$erase_size" && exit 0 || exit 1
 
 
 

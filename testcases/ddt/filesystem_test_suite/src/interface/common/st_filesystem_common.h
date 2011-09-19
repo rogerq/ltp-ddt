@@ -40,9 +40,9 @@ struct st_filesystem_testparams {
 	/* Buffer size */
 	int buffer_size;
 	/* File size */
-	int file_size;
+	float file_size;
 	/* srcFile size */
-	int srcfile_size;
+	float srcfile_size;
 	/* Test name */
 	char *test_name;
 	/* throughput enable flag */
