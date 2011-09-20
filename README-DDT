@@ -127,8 +127,8 @@
     am3517-evm   beagleboard         dm368-evm    
     am37x-evm    c6a814x-evm         dm37x-evm    omap3evm
     am387x-evm   c6a816x-evm         dm6446-evm   tnetv107x-evm
-    am389x-evm   da830-omapl137-evm  dm6467-evm
-    arago-armv5  da850-omapl138-evm  dm6467t-evm
+    am389x-evm   da830-omapl137-evm  dm6467-evm   am335xevm
+    arago-armv5  da850-omapl138-evm  dm6467t-evm  
 
  * Modify your platform file based on the capabilities supported by the new evm
    The platform file identifies the architecture, the SoC, the evm and the
@@ -156,7 +156,21 @@
    is to try to run an existing test plan and then analyze the test failures
    to determine probable test cases where you need to define override values.  
 
-6) HOW TO CROSS-COMPILE AND INSTALL
+6) Building LTP-DDT
+================================================================================
+
+6.1) Environment Setup for LTP-DDT build
+================================================================================
+ In order to cross compile LTP-DDT, CodeSourcery cross-compiler tool-chain is required.
+ Download and install toolchain from following location:
+ https://sourcery.mentor.com/sgpp/portal/release1039
+ Set the environment variable PATH to contain the binaries of the CodeSourcery cross-compiler tool-chain.
+     For example, in bash: 
+	     $ export PATH=/opt/toolchain/2009-q1/bin:$PATH 
+ Test if PATH is set properly by running following command 
+ 	$arm-none-linux-gnueabi-gcc -v
+
+6.2) HOW TO CROSS-COMPILE AND INSTALL
 ================================================================================
  * cd to project root directory
  * $ cp include/config.h.default include/config.h
