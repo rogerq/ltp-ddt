@@ -54,7 +54,7 @@ do
       mmc="CONFIG_MMC_DAVINCI:davinci_mmc";;
 
     *rtc-s35390a)
-      rtc=":rtc-s35390a";;
+      rtc="CONFIG_RTC_DRV_S35390A:rtc-s35390a";; #not sure this is the right one.
     *omap_rtc)
       rtc="CONFIG_RTC_DRV_OMAP:rtc-omap";;	
     *rtc_twl)
@@ -77,7 +77,7 @@ do
 
 
     *soc-audio)
-      sound=':snd-soc-evm';;
+      sound=':snd-soc-evm';; #covered in below switch case for MACHINE
 
     *musb_ti81xx)
       usb="CONFIG_USB_MUSB_TI81XX_GLUE:ti81xx";;
@@ -107,6 +107,10 @@ case $MACHINE in
 		sound='CONFIG_SND_OMAP_SOC_AM3517EVM:snd-soc-am3517evm';;
 	am335xevm)
 	    sound='CONFIG_SND_SOC_TLV320AIC3X:snd-soc-tlv320aic3x CONFIG_SND_SOC:snd-soc-evm CONFIG_SND_DAVINCI_SOC_MCASP:snd-soc-davinci-mcasp CONFIG_SND_TI81XX_SOC_EVM:snd-soc-davinci';;
+	am180x-evm|am181x-evm|da850-omapl138-evm)
+		sound='CONFIG_SND_DA850_SOC_EVM:snd-soc-evm';;
+	dm6467-evm)
+		sound='CONFIG_SND_DM6467_SOC_EVM:snd-soc-evm';;
 esac
 
 # Define default values for variables being overriden
