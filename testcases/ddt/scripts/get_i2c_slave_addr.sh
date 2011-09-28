@@ -188,19 +188,19 @@ case $MACHINE in
 			;;
                 esac
 		;;
-	  am335xevm)
+    am335x-evm)
 
-                case $SLAVE_DEVICE in
-                        io_expander)
-                                SLAVE_ADDR=0x50
-                        ;;
-			default)
-                                SLAVE_ADDR=0x50
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
-                esac
+          case $SLAVE_DEVICE in
+              temp_sensor)
+                  SLAVE_ADDR=0x48
+              ;;
+			        default)
+                  SLAVE_ADDR=0x48
+			        ;;
+			        *)
+				          die "Unknown slave device! Can not get slave address."
+			        ;;
+          esac
 		;;
 
 
