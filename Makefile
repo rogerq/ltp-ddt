@@ -76,7 +76,7 @@ $(1):: | $$(abs_top_builddir)/$$(basename $$(subst -,.,$(1)))
 endif
 endef
 
-COMMON_TARGETS		+= tools testcases/ddt
+COMMON_TARGETS		+= tools testcases/ddt testcases/kernel/timers
 # Don't want to nuke the original files if we're installing in-build-tree.
 ifneq ($(BUILD_TREE_STATE),$(BUILD_TREE_SRCDIR_INSTALL))
 INSTALL_TARGETS		+= runtest scenario_groups testscripts platforms
