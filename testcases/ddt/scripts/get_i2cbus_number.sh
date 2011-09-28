@@ -37,6 +37,7 @@ case $SOC in
 esac
 case $MACHINE in
   am37x-evm) I2CBUS_NUM=3;;
+  #am335x-evm) I2CBUS_NUM=2;;
 esac
 
 #: ${I2CBUS_NUM:=1}
