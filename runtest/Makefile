@@ -44,6 +44,8 @@ UNWANTED_FILES		+= power_management_tests
 endif
 
 #INSTALL_TARGETS		:= $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
+# Add PROMOTED LTP test scenario files that should be installed with ltp-ddt
+INSTALL_TARGETS   := timers
 
 MAKE_TARGETS		:=
 
