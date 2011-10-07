@@ -16,8 +16,12 @@ rtc/rtc-s35390a
 sound/capture/alsa
 sound/playback/alsa
 usb/host/msc
+usb/host/hid
+usb/host/iso
+usb/otg
+usb/slave/msc
+usb/slave/cdc
 video/display/*/v4l2/omap_vout
-video/capture/*/v4l2/OMAP3 ISP CCDC output
+video/capture/*/v4l2/OMAP3
 watchdog/omap_wdt
-
 
