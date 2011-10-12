@@ -1,0 +1,9 @@
+# @name 
+#	NAND modular multiple insmod rmmod test 
+# @desc 
+#       modprobe nand module multiple times 
+# @requires  nand 
+# @setup_requires 
+
+#NAND_MODULAR_STRESS_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -l "10" -d "nand" -s
+NAND_L_MODULAR_MULTI_0001 source "common.sh"; do_cmd do_modular_common.sh -l "10" -d "nand" 
