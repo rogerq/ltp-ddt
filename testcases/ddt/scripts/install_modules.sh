@@ -40,6 +40,7 @@ OPTIONS="$*"
 #  die "/proc/config.gz doesn't exist"
 #fi
 
+IS_BUILT_IN='false'
 MODULE_CONFIG_NAMES=`get_modular_config_names.sh "$DEVICE_TYPE"` || die "error getting config and module names: "$MODULE_CONFIG_NAMES" "
 echo "MODULE_CONFIG_NAMES: $MODULE_CONFIG_NAMES"
 for pair in $MODULE_CONFIG_NAMES; do
@@ -63,6 +64,7 @@ for pair in $MODULE_CONFIG_NAMES; do
     esac
   fi
 	
+  # if don't know is_built_in, do insmod anyway.
   if [ $IS_BUILT_IN != 'true' ]; then
 		do_cmd insmod.sh $MODULE_NAME $OPTIONS
   fi	
