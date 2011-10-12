@@ -62,7 +62,6 @@
 #include <sys/stat.h>
 
 /* V4L2 specific header file */
-#include <linux/videodev.h>
 #include <linux/videodev2.h>
 
 /* Framebuffer module header file */
