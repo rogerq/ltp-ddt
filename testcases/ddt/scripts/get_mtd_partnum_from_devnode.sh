@@ -27,7 +27,8 @@ fi
 
 BLK_DEV_NODE=$1
 
-PART=`echo $BLK_DEV_NODE | awk '{print substr ($0, length($0))}'` || die "mtd partition number is not found"
+#PART=`echo $BLK_DEV_NODE | awk '{print substr ($0, length($0))}'` || die "mtd partition number is not found"
+PART=`echo $BLK_DEV_NODE | sed s/"\/dev\/mtdblock"//` || die "mtd partition number is not found"
 
 echo $PART
 
