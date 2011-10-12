@@ -67,9 +67,12 @@ do
 		do_cmd "$ACTION" 
 	fi
 
+  # before doing modprobe remove, need make sure device is not mounted
+  DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"  
+  do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
 	do_cmd rmmod.sh "$MOD_NAME"
 
-        x=$((x+1))
+  x=$((x+1))
 
 done
 
