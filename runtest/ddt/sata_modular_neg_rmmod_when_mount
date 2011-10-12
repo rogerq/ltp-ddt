@@ -1,0 +1,7 @@
+# @name
+#       SATA modular negative test
+# @desc
+#       modprobe sata module first and then do mount and rmmod 
+# @requires  sata
+
+SATA_L_MODULAR_NEG_RMMOD_WHEN_MOUNT source "common.sh"; do_cmd insmod.sh "sata"; DEV_NODE=`get_blk_device_node.sh "sata"` || die "error getting devnode for sata: $DEV_NODE"; do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "vfat" -d "sata" -m "/mnt/sata"; rmmod.sh "sata" && exit 1 || exit 0

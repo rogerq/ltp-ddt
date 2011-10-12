@@ -1,0 +1,11 @@
+# @name SATA Simultanously Write/Read Performance test
+# @desc Run performance test on sda1 and sdb1 simultanously. 
+#       Note: this test doesn't format SATA device. the user need format the device to
+#             the desired filesystem. This test use whatever fs in the device. Will add
+#             format part later if needed.
+#     
+# @requires sata
+# @setup_requires sata
+
+SATA_L_PERF_SIMULT_EXT2 source 'common.sh'; do_cmd blk_device_prepare_format.sh -d "sata" -n "/dev/sda1" -f "ext2" -m "/mnt/partition_sata_sda1"; do_cmd blk_device_prepare_format.sh -d "sata" -n "/dev/sdb1" -f "ext2" -m "/mnt/partition_sata_sdb1"; blk_device_filesystem_perf_test.sh -n "/dev/sda1" -s 1000 -B "102400" -d "sata" -m "/mnt/partition_sata_sda1" & blk_device_filesystem_perf_test.sh -n "/dev/sdb1" -s 1000 -B "102400" -d "sata" -m "/mnt/partition_sata_sdb1"
+
