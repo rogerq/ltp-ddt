@@ -127,7 +127,7 @@
     am3517-evm   beagleboard         dm368-evm    
     am37x-evm    c6a814x-evm         dm37x-evm    omap3evm
     am387x-evm   c6a816x-evm         dm6446-evm   tnetv107x-evm
-    am389x-evm   da830-omapl137-evm  dm6467-evm   am335xevm
+    am389x-evm   da830-omapl137-evm  dm6467-evm   am335x-evm
     arago-armv5  da850-omapl138-evm  dm6467t-evm  
 
  * Modify your platform file based on the capabilities supported by the new evm
