@@ -41,7 +41,7 @@ SOURCES := \
 MAKE_TARGETS            := alsa_perf_tests
 
 alsa_perf_tests:
-	$(CC) $(CFLAGS) $(LDFLAGS) -o alsa_perf_tests ${INCLUDES} ${SOURCES} -lasound -L$(ALSA_LIBPATH)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o alsa_perf_tests ${INCLUDES} ${SOURCES} -lasound -lm -L$(ALSA_LIBPATH)
 
 
 include $(top_srcdir)/include/mk/generic_leaf_target.mk

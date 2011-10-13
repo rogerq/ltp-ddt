@@ -108,8 +108,8 @@ case $MACHINE in
 		sound='CONFIG_SND_OMAP_SOC_OMAP3EVM:snd_soc_omap3evm';;
 	am3517-evm)
 		sound='CONFIG_SND_OMAP_SOC_AM3517EVM:snd-soc-am3517evm';;
-	am335xevm)
-	    sound='CONFIG_SND_SOC_TLV320AIC3X:snd-soc-tlv320aic3x CONFIG_SND_SOC:snd-soc-evm CONFIG_SND_DAVINCI_SOC_MCASP:snd-soc-davinci-mcasp CONFIG_SND_TI81XX_SOC_EVM:snd-soc-davinci';;
+	am335x-evm)
+	        sound='CONFIG_SND_SOC_TLV320AIC3X:snd-soc-tlv320aic3x CONFIG_SND_AM335X_SOC_EVM:snd-soc-evm CONFIG_SND_DAVINCI_SOC_MCASP:snd-soc-davinci-mcasp CONFIG_SND_AM33XX_SOC:snd-soc-davinci';;	
 	am180x-evm|am181x-evm|da850-omapl138-evm)
 		sound='CONFIG_SND_DA850_SOC_EVM:snd-soc-evm';;
 	dm6467-evm)

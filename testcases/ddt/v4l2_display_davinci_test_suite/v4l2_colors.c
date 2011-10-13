@@ -48,7 +48,8 @@ int main(int argc, char* argv[]) {
 			perror("VIDIOC_ENUMOUTPUT:");
 			exit(0);
 		}
-		if(strcmp(output.name, "Composite") == 0) {
+//		if(strcmp(output.name, "Composite") == 0) {
+		if(output.name == (__u8*)"Composite"){	
 			output_type = output.type;
 			printf("1\n");
 			break;
@@ -57,7 +58,7 @@ int main(int argc, char* argv[]) {
 	}
 	printf("Output selected is %s\n\n",output.name);
 	
-	if(strcmp(output.name, "Composite") == 0) {
+	if(output.name == (__u8*)"Composite") {
 		
 		printf("Setting output\n");
 		output_type = 0; //V4L2_OUTPUT_TYPE_ANALOG;
