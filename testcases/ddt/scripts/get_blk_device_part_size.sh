@@ -18,6 +18,7 @@
 # Output: DEVICE_PART_SIZE which is the size of the partition
 
 source "common.sh"
+source "blk_device_common.sh"
 
 ############################# Functions #######################################
 usage()
@@ -60,8 +61,8 @@ SIZE=0
 DEV_TYPE=`get_device_type_map.sh $DEVICE_TYPE` || die "error while translating device type"
 case $DEV_TYPE in
 	mtd)
-		PART=`get_mtd_partnum_from_devnode.sh "$DEV_NODE"` || die "error getting partition number"
-		SIZE=`get_mtd_size.sh "$PART"` || die "error while getting the mtd size."
+		PART=`get_mtd_partnum_from_devnode.sh "$DEV_NODE"` || die "error getting partition number: $PART"
+		SIZE=`get_mtd_size.sh "$PART"` || die "error while getting the mtd size: $SIZE"
 
 		# different way to get size; but could not figure out if it is symlink	
 		#for file in $(find /sys/class/mtd/mtd$PART -type f -name size); do
@@ -70,7 +71,8 @@ case $DEV_TYPE in
 		#done
 	;;
 	mmc)
-		SIZE=$((1*GB))
+		#SIZE=$((1*GB))
+    SIZE=`get_part_size_of_devnode "$DEV_NODE"` || die "error getting partition size for mmc $DEV_NODE: $SIZE"
 	;;
 	usb)
 		SIZE=$((1*GB))
@@ -85,10 +87,6 @@ case $DEV_TYPE in
 		die "Device type is not found; Size for Device Partition is set to default value: $SIZE"
 	;;
 esac
-
-if [ $SIZE -le 0 ]; then
-	die "Size is not greater than zero: $SIZE"
-fi
 
 echo $SIZE
 

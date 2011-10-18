@@ -69,6 +69,7 @@ done
 ############################ DEFAULT Params #######################
 if [ -z $DEV_NODE ]; then
 	DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"
+  test_print_trc "DEV_NODE returned from get_blk_device_node is: $DEV_NODE"
 fi
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
 : ${IO_OPERATION:='read'}

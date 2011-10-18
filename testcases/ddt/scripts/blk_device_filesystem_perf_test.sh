@@ -74,6 +74,7 @@ done
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
 if [ -z $DEV_NODE ]; then
         DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error while getting device node"
+        test_print_trc "DEV_NODE return from get_blk_device_node is: $DEV_NODE" 
 fi
 
 ########################### REUSABLE TEST LOGIC ###############################
