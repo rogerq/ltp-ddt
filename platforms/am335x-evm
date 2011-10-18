@@ -22,9 +22,9 @@ sound/playback/alsa
 sound/capture/alsa/hisamplingrate
 sound/playback/alsa/hisamplingrate
 spi_master/mtd/omap2_mcspi
-usb/host/msc
-usb/host/hid
-usb/host/iso
+usb/host/msc/musb_ti81xx
+usb/host/hid/musb_ti81xx
+usb/host/iso/musb_ti81xx
 usb/otg
 usb/slave/msc
 usb/slave/cdc
