@@ -110,3 +110,6 @@ ddt/v4l2_disp
 ddt/v4l2_disp_modular
 ddt/v4l2_disp_perf
 ddt/v4l2_ioctl
+ddt/wdt_test
+ddt/wdt_stress_test
+
