@@ -5,6 +5,7 @@
 
 NAND_S_PERF_0001 source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 10 -B "262144" -d "nand"
 NAND_L_PERF_0001 source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 100 -B "102400 262144 524288 1048576 5242880" -d "nand"
+NAND_L_PERF_MNT_SYNC source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 100 -o 'sync' -B "102400 262144 524288 1048576 5242880" -d "nand"
 
 
 
