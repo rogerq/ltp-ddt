@@ -23,26 +23,28 @@ source "mtd_common.sh"
 usage()
 {
 cat <<-EOF >&2
-	usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-m MNT_POINT] [-d DEVICE TYPE]
+	usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-m MNT_POINT] [-d DEVICE TYPE] [-o MNT_MODE]
 	-f FS_TYPE      filesystem type like jffs2, ext2, etc. if not specified, try
 									all fs type.
 	-n DEV_NODE	device_node like /dev/mtdblock4
 	-m MNT_POINT	mount point
 	-d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+  -o MNT_MODE     mount mode: either 'sync' or 'async'. default is 'async'
 	-h Help         print this usage
 EOF
 exit 0
 }
 ############################### CLI Params ###################################
 
-while getopts  :d:f:n:m:h arg
+while getopts  :d:f:n:m:o:h arg
 do case $arg in
         n)      
-		# optional param
-		DEV_NODE="$OPTARG";;
+                # optional param
+                DEV_NODE="$OPTARG";;
         d)      DEVICE_TYPE="$OPTARG";;
         f)      FS_TYPE="$OPTARG";;
         m)      MNT_POINT="$OPTARG";;
+        o)      MNT_MODE="$OPTARG";;
         h)      usage;;
         :)      test_print_trc "$0: Must supply an argument to -$OPTARG." >&2
                 exit 1
@@ -57,6 +59,7 @@ done
 
 ############################ DEFAULT Params #######################
 : ${MNT_POINT:="/mnt/partition_$DEVICE_TYPE"}
+: ${MNT_MODE:="async"}
 
 ############# Do the work ###########################################
 # DEVNODE_ENTRY is something like /dev/mmcblk0, /dev/sda etc
@@ -71,7 +74,7 @@ sleep 2
 [ -d $MNT_POINT ] || do_cmd mkdir -p $MNT_POINT
 test_print_trc "Mounting the partition"
 if [ -n "$FS_TYPE" ]; then
-	do_cmd "mount -t $FS_TYPE $DEV_NODE $MNT_POINT"
+	do_cmd "mount -t $FS_TYPE -o $MNT_MODE $DEV_NODE $MNT_POINT"
 	do_cmd "mount | grep $DEV_NODE"
 else
 	case $DEVICE_TYPE in
@@ -91,7 +94,7 @@ else
 	for FS in $fs_to_try; do
   	echo "---$FS---"
 		test_print_trc "Try to mount $FS"	
-		mount -t $FS $DEV_NODE $MNT_POINT
+		mount -t $FS -o $MNT_MODE $DEV_NODE $MNT_POINT
 		mount | grep $DEV_NODE
 		if [ $? -eq 0 ]; then
 			break

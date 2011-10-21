@@ -24,7 +24,7 @@ source "common.sh"
 usage()
 {
 cat <<-EOF >&2
-	usage: ./${0##*/} [-f FS_TYPE] [-n DEVICE_NODE] [-m MOUNT POINT] [-B BUFFER SIZES] [-s FILE SIZE] [-d DEVICE TYPE]
+	usage: ./${0##*/} [-f FS_TYPE] [-n DEVICE_NODE] [-m MOUNT POINT] [-B BUFFER SIZES] [-s FILE SIZE] [-d DEVICE TYPE] [-o SYNC or ASYNC]
 	-f FS_TYPE	filesystem type like jffs2, ext2, etc
 	-n DEVICE_NODE	optional param, block device node like /dev/mtdblock4, /dev/sda1
 	-m MNT_POINT	optional param, mount point like /mnt/mmc
@@ -32,6 +32,7 @@ cat <<-EOF >&2
 	-s FILE SIZE 	optional param, file size in MB for perf test
 	-c SRCFILE SIZE 	optional param, srcfile size in MB for writing to device
 	-d DEVICE_TYPE	device type like 'nand', 'mmc', 'usb' etc
+  -o MNT_MODE     mount mode: sync or async. default is async
 	-h Help 	print this usage
 EOF
 exit 0
@@ -46,7 +47,7 @@ if [ $# == 0 ]; then
 	exit 1
 fi
 
-while getopts  :f:n:m:B:s:c:d:h arg
+while getopts  :f:n:m:B:s:c:d:o:h arg
 do case $arg in
 	f)	FS_TYPE="$OPTARG";;
 	n)	DEV_NODE="$OPTARG";;
@@ -55,6 +56,7 @@ do case $arg in
 	s)	FILE_SIZE="$OPTARG";;
 	c)	SRCFILE_SIZE="$OPTARG";;
 	d)	DEVICE_TYPE="$OPTARG";;
+	o)	MNT_MODE="$OPTARG";;
 	h)	usage;;
 	:)	test_print_trc "$0: Must supply an argument to -$OPTARG." >&2
 		exit 1 
@@ -71,6 +73,7 @@ done
 : ${BUFFER_SIZES:='102400 262144 524288 1048576 5242880'}
 : ${FILE_SIZE:='100'}
 : ${SRCFILE_SIZE:='10'}
+: ${MNT_MODE:='async'}
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
 if [ -z $DEV_NODE ]; then
         DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error while getting device node"
@@ -106,9 +109,9 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	#test_print_trc "Mounting the partition"
 	#do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
 	if [ -n "$FS_TYPE" ]; then
-    do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
+    do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT" -o "$MNT_MODE"
   else
-    do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -m "$MNT_POINT"
+    do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -m "$MNT_POINT" -o "$MNT_MODE"
   fi
 	# find out what is FS in the device
 	if [ -z "$FS_TYPE" ]; then
@@ -127,7 +130,7 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	do_cmd "umount $DEV_NODE"
 	do_cmd "echo 3 > /proc/sys/vm/drop_caches"
 
-	do_cmd "mount -t $FS_TYPE $DEV_NODE $MNT_POINT"
+	do_cmd "mount -t $FS_TYPE -o $MNT_MODE $DEV_NODE $MNT_POINT"
 	do_cmd filesystem_tests -read -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 	do_cmd "sync"
 	do_cmd "echo 3 > /proc/sys/vm/drop_caches"
