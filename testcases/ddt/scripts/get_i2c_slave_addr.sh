@@ -194,6 +194,9 @@ case $MACHINE in
               temp_sensor)
                   SLAVE_ADDR=0x48
               ;;
+              eeprom)
+                  SLAVE_ADDR=0x52 # LCD eeprom
+              ;;
 			        default)
                   SLAVE_ADDR=0x48
 			        ;;
