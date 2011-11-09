@@ -8,18 +8,22 @@ ETH_M_PERF_IPERF_TCP_16K_1448B source 'common.sh'; run_iperf.sh -m -f M -d -t 60
 ETH_M_PERF_IPERF_TCP_32K_1448B source 'common.sh'; run_iperf.sh -m -f M -d -t 60 -w 32K
 ETH_M_PERF_IPERF_TCP_64K_1448B source 'common.sh'; run_iperf.sh -m -f M -d -t 60 -w 64K
 ETH_M_PERF_IPERF_TCP_128K_1448B source 'common.sh'; run_iperf.sh -m -f M -d -t 60 -w 128K
+ETH_M_PERF_IPERF_TCP_256K_1448B source 'common.sh'; run_iperf.sh -m -f M -d -t 60 -w 256K
 
 ETH_L_PERF_IPERF_TCP_8K_76B source 'common.sh'; run_iperf.sh -m -M 88 -f M -d -t 60 -w 8K
 ETH_L_PERF_IPERF_TCP_16K_76B source 'common.sh'; run_iperf.sh -m -M 88 -f M -d -t 60 -w 16K
 ETH_L_PERF_IPERF_TCP_32K_76B source 'common.sh'; run_iperf.sh -m -M 88 -f M -d -t 60 -w 32K
 ETH_L_PERF_IPERF_TCP_64K_76B source 'common.sh'; run_iperf.sh -m -M 88 -f M -d -t 60 -w 64K
 ETH_L_PERF_IPERF_TCP_128K_76B source 'common.sh'; run_iperf.sh -m -M 88 -f M -d -t 60 -w 128K
+ETH_L_PERF_IPERF_TCP_256K_76B source 'common.sh'; run_iperf.sh -m -M 88 -f M -d -t 60 -w 256K
+
 
 ETH_L_PERF_IPERF_TCP_8K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d -t 60 -w 8K
 ETH_L_PERF_IPERF_TCP_16K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d -t 60 -w 16K
 ETH_L_PERF_IPERF_TCP_32K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d -t 60 -w 32K
 ETH_L_PERF_IPERF_TCP_64K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d -t 60 -w 64K
 ETH_L_PERF_IPERF_TCP_128K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d -t 60 -w 128K
+ETH_L_PERF_IPERF_TCP_256K_200B source 'common.sh'; run_iperf.sh -m -M 212 -f M -d -t 60 -w 256K
 
 
 ETH_M_PERF_IPERF_TCP_INTPACING_8K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface"; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 1500 -f M -d -t 60 -w 8K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
@@ -27,16 +31,20 @@ ETH_M_PERF_IPERF_TCP_INTPACING_16K_1448B source 'common.sh'; iface=`get_eth_ifac
 ETH_M_PERF_IPERF_TCP_INTPACING_32K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -f M -d -t 60 -w 32K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_M_PERF_IPERF_TCP_INTPACING_64K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -f M -d -t 60 -w 64K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_M_PERF_IPERF_TCP_INTPACING_128K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -f M -d -t 60 -w 128K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
+ETH_M_PERF_IPERF_TCP_INTPACING_256K_1448B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -f M -d -t 60 -w 256K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
+
 
 ETH_L_PERF_IPERF_TCP_INTPACING_8K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 8K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_L_PERF_IPERF_TCP_INTPACING_16K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 16K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_L_PERF_IPERF_TCP_INTPACING_32K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 32K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_L_PERF_IPERF_TCP_INTPACING_64K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 64K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_L_PERF_IPERF_TCP_INTPACING_128K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 128K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_256K_76B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 88 -f M -d -t 60 -w 256K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 
 ETH_L_PERF_IPERF_TCP_INTPACING_8K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 8K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_L_PERF_IPERF_TCP_INTPACING_16K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 16K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_L_PERF_IPERF_TCP_INTPACING_32K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 32K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_L_PERF_IPERF_TCP_INTPACING_64K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 64K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 ETH_L_PERF_IPERF_TCP_INTPACING_128K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 128K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
+ETH_L_PERF_IPERF_TCP_INTPACING_256K_200B source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name: $iface";  do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 250"; run_iperf.sh -m -M 212 -f M -d -t 60 -w 256K; do_cmd "set_ethtool_coalesce_options.sh -d $iface -p 'rx-usecs' -n 16"
 
