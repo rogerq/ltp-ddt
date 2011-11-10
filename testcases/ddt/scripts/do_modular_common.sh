@@ -67,9 +67,13 @@ do
 		do_cmd "$ACTION" 
 	fi
 
-  # before doing modprobe remove, need make sure device is not mounted
-  DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"  
-  do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
+	IS_BLK_DEVICE=`isBlockDevice.sh "$DEVICE_TYPE"` || die "Invalid device type:$DEVICE_TYPE"
+  	if [$IS_BLK_DEVICE == "yes"]
+	then
+  	    # before doing modprobe remove, need make sure device is not mounted
+  	    DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"  
+  	    do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
+	fi	    
 	do_cmd rmmod.sh "$MOD_NAME"
 
   x=$((x+1))

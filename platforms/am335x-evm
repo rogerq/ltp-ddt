@@ -16,7 +16,7 @@ power_mgr/cpufreq/performance
 power_mgr/cpufreq/powersave
 power_mgr/cpufreq/ondemand
 power_mgr/cpuidle
-rtc
+rtc/omap_rtc
 sound/capture/alsa
 sound/playback/alsa
 sound/capture/alsa/hisamplingrate
