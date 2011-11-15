@@ -62,12 +62,15 @@ esac
 ########################### REUSABLE TEST LOGIC ###############################
 # DO NOT HARDCODE any value. If you need to use a specific value for your setup
 # use USER-DEFINED Params section above.
-CUR_VAL=`ethtool -c $ETH_IFACE | grep $ETH_PARAM: |cut -d' ' -f2` 
-if [ $CUR_VAL -ne $PARAM_VAL ]; then
-  test_print_trc "Set $ETH_PARAM to $PARAM_VAL"
-  do_cmd "ethtool -C $ETH_IFACE $ETH_PARAM $PARAM_VAL"
+pacing_support=`ethtool -c $ETH_IFACE | grep $ETH_PARAM: | cut -d ' ' -f1`
+if [ $pacing_support == "$ETH_PARAM:" ]; then
+    CUR_VAL=`ethtool -c $ETH_IFACE | grep $ETH_PARAM: |cut -d' ' -f2`
+    if [ $CUR_VAL -ne $PARAM_VAL ]; then
+        test_print_trc "Set $ETH_PARAM to $PARAM_VAL"
+          do_cmd "ethtool -C $ETH_IFACE $ETH_PARAM $PARAM_VAL"
+    else
+          test_print_trc "The current $ETH_PARAM is already set to $PARAM_VAL so skipping calling ethtool!"
+    fi
 else
-  test_print_trc "The current $ETH_PARAM is already set to $PARAM_VAL so skipping calling ethtool!"
+  die "DUT does not have support PACING"
 fi
-
-
