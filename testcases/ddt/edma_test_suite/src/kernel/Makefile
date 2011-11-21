@@ -4,7 +4,7 @@ LDFLAGS         += -g -static
 INCLUDES        = -I src/user/parser -I src/user/interface/common -I ../utils/user  -I $(KERNEL_DIR)/include
 EXTRA_CFLAGS := -I$(src)/../../../utils/kernel
 EXTRA_CFLAGS += -I$(src)/interface/common
-EXTRA_CFLAGS += -I$(src)/interface/$(MACHINE)
+EXTRA_CFLAGS += -I$(src)/interface/$(PLATFORM)
 
 #List of source files for kernel module - Update this on adding a new C file
 SOURCES_KERNEL := \
@@ -21,6 +21,9 @@ MAKE_TARGETS		:= modules
 
 modules:
 	$(MAKE) -C $(KERNEL_DIR) ARCH=arm SUBDIRS=$(PWD) modules
+	cp edma_test.ko  ../../
+	cp ../../../utils/kernel/kSt_timer.ko  ../../
+
 
 clean:
 	rm -f */*.o
