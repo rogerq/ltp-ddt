@@ -28,5 +28,5 @@ usb/host/iso/musb_ti81xx
 usb/otg
 usb/slave/msc
 usb/slave/cdc
-watchdog
+watchdog/omap_wdt
 
