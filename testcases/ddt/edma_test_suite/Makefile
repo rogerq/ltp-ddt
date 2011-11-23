@@ -15,12 +15,12 @@ INSTALL_MODE            := 00755
 
 #INSTALL_TARGETS         := $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
 
-#CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
+CFLAGS          += -g -Wall 
 LDFLAGS         += -g -static
-INCLUDES        = -I src/user/parser -I src/user/interface/common -I ../utils/user  -I $(KERNEL_DIR)/include
+INCLUDES        = -I src/user/parser -I src/user/interface/common -I ../utils/user  -I $(KERNEL_INC)
 EXTRA_CFLAGS := -I$(src)/../utils/kernel
 EXTRA_CFLAGS += -I$(src)/src/kernel/interface/common
-EXTRA_CFLAGS += -I$(src)/src/kernel/interface/$(MACHINE)
+EXTRA_CFLAGS += -I$(src)/src/kernel/interface/$(PLATFORM)
 
 #List of source files for kernel module - Update this on adding a new C file
 SOURCES_KERNEL := \
