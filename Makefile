@@ -206,6 +206,22 @@ else
 	@echo "*******************************************************"
 endif
 
+## Compile Modules
+MODULE_TARGETS          := testcases/ddt/edma_test_suite
+
+define PROGRAM_template
+ $(1):
+	@echo "Going to compile test kernel modules for $1"
+	cd $(1)/src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE) KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM)
+endef
+
+$(foreach moddir,$(MODULE_TARGETS),$(eval $(call PROGRAM_template,$(moddir))))
+
+modules: $(MODULE_TARGETS)
+	@echo "MODULE_TARGETS is set to: $(MODULE_TARGETS)"
+	@echo "Compiled test kernel modules"
+
+
 ## Misc targets.
 
 ## Help

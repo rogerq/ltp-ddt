@@ -47,7 +47,6 @@ MAKE_TARGETS		:= edma_tests  edma_test.ko kSt_timer.ko
 
 all:
 	$(CC) $(CFLAGS) $(LDFLAGS) -o edma_tests ${INCLUDES} ${SOURCES_USER}
-	cd src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE)    KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM); cd -
 
 include $(top_srcdir)/include/mk/generic_leaf_target.mk
 
