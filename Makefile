@@ -217,10 +217,16 @@ endef
 
 $(foreach moddir,$(MODULE_TARGETS),$(eval $(call PROGRAM_template,$(moddir))))
 
-modules: $(MODULE_TARGETS)
+modulesnext: $(MODULE_TARGETS)
 	@echo "MODULE_TARGETS is set to: $(MODULE_TARGETS)"
 	@echo "Compiled test kernel modules"
 
+# Implementing this way for now becase modulesnext target's logic did not work
+modules: modules_edma
+
+modules_edma:
+	@echo "Going to compile edma test kernel modules"
+	cd testcases/ddt/edma_test_suite/src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE) KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM)
 
 ## Misc targets.
 
