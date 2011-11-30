@@ -46,28 +46,28 @@
 #include <st_log.h>
 #include "st_wdt_common.h"
 
-#define ST_WDT_WRITEBUFF_LEN 1
-
-/****************************************************************************
- * Function             - st_wdt_write_test
- * Functionality        - This function recieves the test params and calls
- *                        the write
- * Input Params         -  info,test_id
- * Return Value         -  0: SUCCESS, -1: FAILURE
- * Note                 -  None
- ****************************************************************************/
-int st_wdt_write_test(struct st_wdt_testparams *info, char *test_id, int fileDesc)
+int st_wdt_open(struct st_wdt_testparams *info)
 {
-	int result = SUCCESS;
-	int retVal = 0;
+	int file_Desc = 0;	
+        int result = SUCCESS;
+        int retVal = 0;
+        file_Desc = st_open(info->device, O_RDWR);
+        if (FAILURE == file_Desc) {
+                TEST_PRINT_ERR("file open failed ");
+                result = FAILURE;
+        }
+        return file_Desc;
+}
 
-	do {
-		retVal = st_write(fileDesc, NULL, ST_WDT_WRITEBUFF_LEN);
-		if (FAILURE == retVal) {
-			TEST_PRINT_ERR("file write failed ");
-			result = FAILURE;
-		}
-	} while (0);
-	return result;
+int st_wdt_close(int file_Desc)
+{
+        int result = SUCCESS;
+        int retVal = 0;
+        retVal = st_close(file_Desc);
+        if (FAILURE == retVal) {
+                TEST_PRINT_ERR("file close failed ");
+                result = FAILURE;
+        }
+        return result;
 }
 

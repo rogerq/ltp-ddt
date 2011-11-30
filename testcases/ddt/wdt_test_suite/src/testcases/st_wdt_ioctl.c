@@ -60,10 +60,9 @@ extern struct supportinfo_table supportinfo_table[];
  * Return Value		- 0: SUCCESS, -1: FAILURE
  * Note			- None
  ****************************************************************************/
-int st_wdt_ioctl_test(struct st_wdt_testparams *info, char *test_id)
+int st_wdt_ioctl_test(struct st_wdt_testparams *info, char *test_id,int fileDesc)
 {
 	int result = SUCCESS;
-	int fileDesc = 0;
 	int retVal = 0;
 	int i = 0;
 	int timeout_val = 0;
@@ -71,7 +70,6 @@ int st_wdt_ioctl_test(struct st_wdt_testparams *info, char *test_id)
 	int defaulttimeut_val = ST_WDT_TIMEOUT_VAL;
 
 	do {
-		fileDesc = st_open(info->device, O_RDWR);
 		if (FAILURE == fileDesc) {
 			TEST_PRINT_ERR("file open failed ");
 			result = FAILURE;
@@ -177,12 +175,6 @@ int st_wdt_ioctl_test(struct st_wdt_testparams *info, char *test_id)
 					break;	
 				}
 			}
-		}
-		retVal = st_close(fileDesc);
-		if (FAILURE == retVal) {
-			TEST_PRINT_ERR("file close failed ");
-			result = FAILURE;
-			break;
 		}
 	} while (0);
 	return result;

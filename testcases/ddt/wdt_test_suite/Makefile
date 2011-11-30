@@ -29,6 +29,7 @@ SOURCES := \
         src/interface/common/st_wdt_common.c \
         src/parser/st_wdt_parser.c \
         src/testcases/st_wdt_ioctl.c \
+        src/testcases/st_wdt_open_close.c \
         src/testcases/st_wdt_write.c
 
 MAKE_TARGETS            := wdt_tests

@@ -53,6 +53,7 @@ unsigned long st_get_unsigned(const char *str);
 
 /* Macro Definations */
 #define DEFAULT_LOOP_COUNT    1
+extern int fileDes;
 
 /****************************************************************************
  * Function		- st_process_wdt_test_options 
@@ -65,15 +66,17 @@ unsigned long st_get_unsigned(const char *str);
 static int st_process_wdt_test_options(int argc, char **argv)
 {
 	int error = TRUE;
+	int timeout=0;
 	int version = FALSE;
 	int help = FALSE;
-	int ioctl = FALSE;
-	int write = FALSE;
+	int is_ioctl = FALSE;
+	int is_write = FALSE;
 	int ret_val1 = SUCCESS;
 	int ret_val2 = SUCCESS;
 	int result = SUCCESS;
 	int loop_count = 0;
 	int i = 0;
+	int fileDesc = 0;
 	char ioctl_name[ST_IOCTL_NAME_LEN];
 	for (;;) {
 		int option_index = 0;
@@ -115,11 +118,11 @@ static int st_process_wdt_test_options(int argc, char **argv)
 			}
 			break;
 		case OPTION_WRITE:
-			write = TRUE;
+			is_write = TRUE;
 			testoptions.iomode = ST_WDT_IOMODE_WRITE;
 			break;
 		case OPTION_IOCTL:
-			ioctl = TRUE;
+			is_ioctl = TRUE;
 			if (optarg != NULL) {
 				strcpy(ioctl_name, optarg);
 			} else if ((optind < argc && ('-' != argv[optind][0]))) {
@@ -166,8 +169,8 @@ static int st_process_wdt_test_options(int argc, char **argv)
 		}
 	}
 	/* If no test is specified, execute the defaut test case */
-	if(ioctl == FALSE && write == FALSE) {
-		write = TRUE;
+	if(is_ioctl == FALSE && is_write == FALSE) {
+		is_write = TRUE;
 		testoptions.iomode = ST_WDT_IOMODE_WRITE;
 	}
 	if (error == TRUE || help == TRUE) {
@@ -180,21 +183,22 @@ static int st_process_wdt_test_options(int argc, char **argv)
 	} else {
 		TEST_PRINT_TST_START(testcaseid);
 		st_print_wdt_test_params(&testoptions, testcaseid);
+		fileDesc = st_wdt_open(&testoptions);
 		while (testoptions.loop > loop_count) {
-			if (write == TRUE) {
+			if (is_write == TRUE) {
 				ret_val1 =
-				    st_wdt_write_test(&testoptions, testcaseid);
+				    st_wdt_write_test(&testoptions, testcaseid, fileDesc);
 			}
-			if (ioctl == TRUE) {
+			if (is_ioctl == TRUE) {
 				ret_val2 =
-				    st_wdt_ioctl_test(&testoptions, testcaseid);
+				    st_wdt_ioctl_test(&testoptions, testcaseid, fileDesc);
 			}
 			sleep(1);
 			if ((SUCCESS != ret_val1) || (SUCCESS != ret_val2)) {
 				result = FAILURE;
 				break;
 			}
-			if (TRUE == write
+			if (TRUE == is_write
 			    || (WDIOC_KEEPALIVE == testoptions.ioctl)) {
 				TEST_PRINT_TRC
 				    ("Keeping WDT alive, sleep counter -%u(sec)",
@@ -202,8 +206,17 @@ static int st_process_wdt_test_options(int argc, char **argv)
 			}
 			loop_count++;
 		}
+		//result = st_wdt_close(fileDesc);
 		TEST_PRINT_TST_RESULT(result, testcaseid);
 		TEST_PRINT_TST_END(testcaseid);
+		ioctl(fileDesc, WDIOC_GETTIMEOUT, &timeout);
+	    	TEST_PRINT_TRC("EVM will be rebooted after %d seconds",timeout);
+		while(1)
+		{
+			timeout--;
+	    		TEST_PRINT_TRC("%d seconds remaining before reboot",timeout);
+			sleep (1);
+		}
 	}
 	return result;
 }

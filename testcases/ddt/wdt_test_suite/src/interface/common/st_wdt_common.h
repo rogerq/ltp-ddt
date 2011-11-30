@@ -65,6 +65,8 @@
 #define ST_TESTCASEID_LEN   100
 #define ST_WDT_IOCTL_NONE   999
 
+int fileDes;
+
 enum st_wdt_iomode {
 	ST_WDT_IOMODE_NONE = 0,
 	ST_WDT_IOMODE_WRITE
@@ -145,7 +147,7 @@ void st_init_wdt_test_params(void);
  * Return Value         -  0: SUCCESS, -1: FAILURE
  * Note                 -  None
  ****************************************************************************/
-int st_wdt_write_test(struct st_wdt_testparams *info, char *test_id);
+int st_wdt_write_test(struct st_wdt_testparams *info, char *test_id, int fileDesc);
 
 /****************************************************************************
  * Function             - st_wdt_ioctl_test
@@ -155,7 +157,28 @@ int st_wdt_write_test(struct st_wdt_testparams *info, char *test_id);
  * Return Value         -  0: SUCCESS, -1: FAILURE
  * Note                 -  None
  ****************************************************************************/
-int st_wdt_ioctl_test(struct st_wdt_testparams *info, char *test_id);
+int st_wdt_ioctl_test(struct st_wdt_testparams *info, char *test_id, int fileDesc);
+
+/****************************************************************************
+ * Function             - st_wdt_open
+ * Functionality        - This function recieves the test params, opens 
+                          watchdog timer device and returns the descriptor 
+                          for the device
+ * Input Params         - info
+ * Return Value         - File decriptor : SUCCESS, -1: FAILURE
+ * Note                 - None
+ ****************************************************************************/
+int st_wdt_open(struct st_wdt_testparams *info);
+
+/****************************************************************************
+ * Function             - st_wdt_close
+ * Functionality        - This function recieves file descriptor for watchdog 
+			  timer and closes the device
+ * Input Params         - file descripto
+ * Return Value         - 0 : SUCCESS, -1: FAILURE
+ * Note                 - None
+ ****************************************************************************/
+int st_wdt_close(int fileDesc);
 
 #endif /*ST_WDT_COMMON_H_ */
 
