@@ -207,33 +207,18 @@ else
 endif
 
 ## Compile Modules
-MODULE_TARGETS          := testcases/ddt/edma_test_suite
+MODULES_TO_BUILD :=
+PLATFORMSwEDMA   := am180x-evm|am181x-evm|am389x-evm|am387x-evm|am335x-evm
 
-define PROGRAM_template
- $(1):
-	@echo "Going to compile test kernel modules for $1"
-	cd $(1)/src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE) KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM)
-endef
-
-$(foreach moddir,$(MODULE_TARGETS),$(eval $(call PROGRAM_template,$(moddir))))
-
-modulesnext: $(MODULE_TARGETS)
-	@echo "MODULE_TARGETS is set to: $(MODULE_TARGETS)"
-	@echo "Compiled test kernel modules"
-
-# Implementing this way for now becase modulesnext target's logic did not work
-modules: modules_edma
+ifneq (,$(findstring $(PLATFORM),$(PLATFORMSwEDMA)))
+MODULES_TO_BUILD += modules_edma
+endif
 
 modules_edma:
-	case $PLATFORM in
-	 am108x-evm|am181x-evm|am389x-evm|am387x-evm|am335x-evm )
-	  	@echo "Going to compile edma test kernel modules"
-	   cd testcases/ddt/edma_test_suite/src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE) KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM)
-	   ;;
-	 * )
-	   @echo "Skipping compilation of edma test kernel modules"
-	   ;;
-	esac
+	@echo "Going to compile edma test kernel modules for $(PLATFORM)"
+	cd testcases/ddt/edma_test_suite/src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE) KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM)
+
+modules: $(MODULES_TO_BUILD)
 
 ## Misc targets.
 
