@@ -225,8 +225,15 @@ modulesnext: $(MODULE_TARGETS)
 modules: modules_edma
 
 modules_edma:
-	@echo "Going to compile edma test kernel modules"
-	cd testcases/ddt/edma_test_suite/src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE) KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM)
+	case $PLATFORM in
+	 am108x-evm|am181x-evm|am389x-evm|am387x-evm|am335x-evm )
+	  	@echo "Going to compile edma test kernel modules"
+	   cd testcases/ddt/edma_test_suite/src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE) KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM)
+	   ;;
+	 * )
+	   @echo "Skipping compilation of edma test kernel modules"
+	   ;;
+	esac
 
 ## Misc targets.
 
