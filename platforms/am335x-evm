@@ -8,6 +8,7 @@ i2c/eeprom
 mmc_host/sd/mmci-omap-hs
 mmc_host/sdhc/mmci-omap-hs
 nand/omap2-nand
+ubifs
 net/eth10M
 net/eth100M
 net/eth1G

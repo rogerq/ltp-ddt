@@ -12,6 +12,7 @@ mmc_host/mmc/<drivername>
 mmc_host/sdhc/<drivername>
 mmc_host/sdio/<drivername>
 nand/<drivername>
+ubifs
 nor/<drivername>
 net/eth10M/<drivername (i.e.davinci_emac)>
 net/eth100M/<drivername>

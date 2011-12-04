@@ -58,14 +58,12 @@ if [ -z $DEV_NODE ]; then
 fi
 ############# Do the work ###########################################
 # TODO: don't hardcode ubi node and volume name
-test_print_trc "Umounting device"
+do_cmd blk_device_umount.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE"
+
 if [ "$FS_TYPE" = "ubifs" ]; then
-  DEV_NODE="ubi0:test"
+  do_cmd ubirmvol /dev/ubi0 -N test
+  do_cmd ubidetach -d 0
 fi
-test_print_trc "DEV_NODE: $DEV_NODE"
-
-do_cmd "umount $DEV_NODE"
-
 
 
 

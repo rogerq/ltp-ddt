@@ -1,0 +1,15 @@
+# @name Nand read write test using dd on ubifs filesystem 
+# @desc Perform nand eraseall first, then do read write and then compare
+#	The partition number is specified in get_mtd_partition_number.sh
+# @requires nand && ubifs
+
+# erase_size as buffer size
+NAND_S_FUNC_DD_RW_UBIFS_ERASESIZE_0001 source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"` || die "error getting mtd part number: $part"; size=`get_mtd_erase_size.sh "$part"` || die "error getting mtd erase size: $size"; blk_device_dd_readwrite_test.sh -f "ubifs" -b "$size" -c 10 -d "nand"
+
+# partial mtd size as count
+NAND_L_FUNC_DD_RW_UBIFS_BIGSIZE_0001 source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"` || die "error getting mtd part number: $part"; size=`get_mtd_size.sh "$part"` || die "error getting mtd size: $size"; size=$(( $size/MB )) && size=`get_ceiling_divide.sh "$size" 2` || die "error getting divide ceiling"; do_cmd blk_device_dd_readwrite_test.sh -f "ubifs" -b "1M" -c "$size" -d "nand"
+
+
+
+
+
