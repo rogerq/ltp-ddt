@@ -120,7 +120,7 @@ do
 done
 #test_print_trc "Umounting device"
 #do_cmd "umount $DEV_NODE"
-[ $SKIP_FORMAT -eq 1 ] || do_cmd blk_device_umount.sh -n "$DEV_NODE" -d "$DEVICE_TYPE"
+[ $SKIP_FORMAT -eq 1 ] || do_cmd blk_device_unprepare.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE"
 
 
 

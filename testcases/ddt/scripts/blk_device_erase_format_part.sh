@@ -90,7 +90,41 @@ case $DEV_TYPE in
 		CHAR_DEV_NODE=`echo $DEV_NODE | sed s/block//` || die "error while getting mtd char dev_node"
 		[ ! -c $CHAR_DEV_NODE ] && die "$CHAR_DEV_NODE is not char device"
 	#exit 0
-		do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
+    PART=`get_mtd_partnum_from_devnode.sh "$DEV_NODE"` || die "error getting partition number: $PART"
+    if [ "$FS_TYPE" = "ubifs" ]; then
+      # TODO: volume name is set to 'test'. Later on, get the name from proc mtd or sys entry.
+      # TODO: assume we only test one partition attched to ubi0, so hardcode to ubi0. 
+      #       need to add ubi device number as input option
+      UBI_DEVICE_NUM=0
+      UBI_VOLUME_NUM=0
+      VOL_NAME="test"
+
+      # need erase all blocks with option -e since some blocks may contain non-ubifs data 
+      MTD_ERASEBLOCKS=`get_mtd_eraseblocks.sh $PART` || die "error getting how many eraseblocks mtd$PART have: $MTD_ERASEBLOCKS"
+      test_print_trc "mtd eraseblocks: $MTD_ERASEBLOCKS"
+      # before format, make sure it is not attached.
+      test_print_trc "Detach $CHAR_DEV_NODE and ubi$UBI_DEVICE_NUM"
+      umount "ubi$UBI_DEVICE_NUM:$VOL_NAME"
+      ubidetach -p "$CHAR_DEV_NODE"
+      ubidetach -d $UBI_DEVICE_NUM
+      ls /dev/ub*
+      # For now, temp hard code -s and -O.
+      do_cmd "ubiformat "$CHAR_DEV_NODE" -s 512 -O 2048 -e $MTD_ERASEBLOCKS -y"
+      do_cmd "ubiattach /dev/ubi_ctrl -m "$PART" -O 2048"
+      do_cmd "ls /dev/ub*"
+      
+      # before mk vol, need remove the existing one
+      # First find out the name of existing volume name if it exists
+      if [ -e /sys/class/ubi/ubi"$UBI_DEVICE_NUM"_"$UBI_VOLUME_NUM" ]; then
+        $VOLUME_NAME=`cat /sys/class/ubi/ubi"$UBI_DEVICE_NUM"_"$UBI_VOLUME_NUM"/name`  
+        do_cmd "ubirmvol /dev/ubi$UBI_DEVICE_NUM -N "$VOLUME_NAME" "
+      fi
+      LEB_CNT=`cat /sys/class/ubi/ubi0/avail_eraseblocks`
+      #do_cmd "ubimkvol /dev/ubi0 -N test -s 200MiB"
+      do_cmd "ubimkvol /dev/ubi$UBI_DEVICE_NUM -N "$VOL_NAME" -S $LEB_CNT"
+    else
+		  do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
+    fi
 		sleep 1
 	;;
 	*)

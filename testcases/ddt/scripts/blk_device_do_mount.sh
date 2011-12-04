@@ -62,10 +62,19 @@ done
 : ${MNT_MODE:="async"}
 
 ############# Do the work ###########################################
+if [ "$FS_TYPE" = "ubifs" ]; then
+  # TODO: pass in ubi0 instead of hardcode
+  # TODO: need check what dev_node is attached to. It may not be ubi0_0.
+  VOLUME_NAME=`cat /sys/class/ubi/ubi0_0/name` || die "error getting volume name for ubi0_0"
+  MNT_DEV_NODE="ubi0:$VOLUME_NAME"
+else
+  MNT_DEV_NODE="$DEV_NODE"
+fi
+
 # DEVNODE_ENTRY is something like /dev/mmcblk0, /dev/sda etc
 DEVNODE_ENTRY=`get_devnode_entry.sh "$DEV_NODE" "$DEVICE_TYPE"` || die "error getting devnode entry for $DEV_NODE"
-test_print_trc "Umount $DEV_NODE or $DEVNODE_ENTRY if it is mounted"
-do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
+test_print_trc "Umount $MNT_DEV_NODE or $DEVNODE_ENTRY if it is mounted"
+do_cmd "mount" | grep $MNT_DEV_NODE && do_cmd "umount $MNT_DEV_NODE"
 do_cmd "mount" | grep $DEVNODE_ENTRY' ' && do_cmd "umount $DEVNODE_ENTRY"
 sleep 2
 #do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
@@ -74,18 +83,18 @@ sleep 2
 [ -d $MNT_POINT ] || do_cmd mkdir -p $MNT_POINT
 test_print_trc "Mounting the partition"
 if [ -n "$FS_TYPE" ]; then
-	do_cmd "mount -t $FS_TYPE -o $MNT_MODE $DEV_NODE $MNT_POINT"
-	do_cmd "mount | grep $DEV_NODE"
+  do_cmd "mount -t $FS_TYPE -o $MNT_MODE $MNT_DEV_NODE $MNT_POINT"
+  do_cmd "mount | grep $MNT_DEV_NODE"
 else
 	case $DEVICE_TYPE in
 		nand|nor|spi)
-			fs_to_try="jffs2"
+			fs_to_try="jffs2:ubifs"
 		;;
 		mmc|ata|usb|sata)
 			fs_to_try="vfat:ext2:ext3"
 		;; 
 		*)
-			fs_to_try="vfat:ext2:ext3:jffs2"
+			fs_to_try="vfat:ext2:ext3:jffs2:ubifs"
 		;;
 	esac	
 	# try all fs to mount
@@ -94,8 +103,8 @@ else
 	for FS in $fs_to_try; do
   	echo "---$FS---"
 		test_print_trc "Try to mount $FS"	
-		mount -t $FS -o $MNT_MODE $DEV_NODE $MNT_POINT
-		mount | grep $DEV_NODE
+		mount -t $FS -o $MNT_MODE $MNT_DEV_NODE $MNT_POINT
+		mount | grep $MNT_DEV_NODE
 		if [ $? -eq 0 ]; then
 			break
 		fi
