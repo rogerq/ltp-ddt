@@ -1,4 +1,4 @@
- @name Nand Write/Read Performance test
+# @name Nand Ubifs Write/Read Performance test
 # @desc Erase Nand MTD partition, mount it as ubifs and writes to it
 #	By default, the partition number is specified in get_mtd_partition_number.sh; 
 # @requires  nand && ubifs
