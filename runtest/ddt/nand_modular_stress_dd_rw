@@ -3,6 +3,5 @@
 # @desc 
 #       modprobe nand module first and then do RW and then rmmod it
 # @requires  nand 
-# @setup_requires nand
 
 NAND_L_MODULAR_STRESS_RW_JFFS2 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -f "jffs2" -b "1M" -c "10" -l "10" -d "nand"
