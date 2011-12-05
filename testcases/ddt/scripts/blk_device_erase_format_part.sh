@@ -109,7 +109,7 @@ case $DEV_TYPE in
       ubidetach -d $UBI_DEVICE_NUM
       ls /dev/ub*
       # For now, temp hard code -s and -O.
-      do_cmd "ubiformat "$CHAR_DEV_NODE" -s 512 -O 2048 -e $MTD_ERASEBLOCKS -y"
+      do_cmd "ubiformat "$CHAR_DEV_NODE" -s 512 -O 2048 -e $MTD_ERASEBLOCKS -y -q"
       do_cmd "ubiattach /dev/ubi_ctrl -m "$PART" -O 2048"
       do_cmd "ls /dev/ub*"
       
