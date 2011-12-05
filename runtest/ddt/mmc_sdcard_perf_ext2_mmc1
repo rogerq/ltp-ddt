@@ -1,0 +1,9 @@
+# @name SD card: MMC1 Write/Read Performance test
+# @desc format mmc device first and then mount it and do read write perf test
+# @requires mmc_host/sd
+# @setup_requires mmc1sd
+
+MMC_M_PERF_SD_EXT2_MMC1 source "common.sh"; install_modules.sh "mmc"; blk_device_filesystem_perf_test.sh -f vfat -s 10 -B "262144" -d "mmc" -n "/dev/mmcblk1p1"
+
+
+
