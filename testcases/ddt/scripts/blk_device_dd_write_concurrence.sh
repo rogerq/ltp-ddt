@@ -83,7 +83,8 @@ echo `get_file_size.sh $MNT_POINT/test2.file` | grep $FILE_SIZE || die "error: f
 do_cmd rm $MNT_POINT/test1.file $MNT_POINT/test2.file
 
 test_print_trc "Umounting device"
-do_cmd "umount $DEV_NODE"
+do_cmd blk_device_umount.sh -d "$DEVICE_TYPE" -f "$FS_TYPE" -n "$DEV_NODE"
+#do_cmd "umount $DEV_NODE"
 
 
 
