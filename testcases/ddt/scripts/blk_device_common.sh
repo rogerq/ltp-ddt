@@ -49,7 +49,7 @@ find_part_with_biggest_size() {
   IFS=$TMP_IFS
 
   if [ $SIZE_BIGGEST -le 0 ]; then
-    echo "Could not find the biggest partition!"
+    die "Could not find the biggest partition!"
   fi
   #echo biggestsize: $SIZE_BIGGEST
   #echo part: $PART_DEVNODE
