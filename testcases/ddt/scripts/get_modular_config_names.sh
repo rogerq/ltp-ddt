@@ -67,6 +67,8 @@ do
       spi="CONFIG_SPI_DAVINCI:davinci_spi";;
     *omap2_mcspi)
       spi="CONFIG_SPI_OMAP24XX:omap2_mcspi";;
+    *spi-omap2-mcspi)
+      spi="CONFIG_SPI_OMAP24XX:spi-omap2-mcspi";; #Not sure if Ne/Ce is the same as SA.
 
     *watchdog)
       wdt="CONFIG_DAVINCI_WATCHDOG:davinci_wdt";;

@@ -1,0 +1,7 @@
+# @name  
+#	    SPI modular multiple insmod rmmod test 
+# @desc 
+#     modprobe spi module multiple times 
+# @requires  spi_master
+
+SPI_L_MODULAR_MULTI source "common.sh"; install_modules.sh "spi"; do_cmd do_modular_common.sh -l "10" -d "spi" 

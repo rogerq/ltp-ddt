@@ -93,6 +93,12 @@ if [ $SKIP_FORMAT -ne 1 ]; then
 	fi
 fi
 
+# find out what is FS in the device
+if [ -z "$FS_TYPE" ]; then
+  FS_TYPE=`mount | grep $DEV_NODE | cut -d' ' -f5`
+  test_print_trc "Current FS_TYPE: ${FS_TYPE}"
+fi
+
 test_print_trc "Doing read/write test for $TEST_LOOP times"
 x=0
 while [ $x -lt $TEST_LOOP ]
