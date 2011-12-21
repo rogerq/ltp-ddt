@@ -204,8 +204,12 @@
  * $ sudo make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install
    For example:
    $sudo make DESTDIR=/opt/filesystem/home/root/ltp-ddt-install SKIP_IDCHECK=1 PLATFORM=am180x-evm install
-
-7) HOW TO INSTALL ALSA INCLUDES AND LIBS
+7) HOW TO BUILD EDMA KO's
+   cd to ltp-ddt root directory
+   cd to testcases/ddt/edma_test_suite/src/kernel/
+   do make CROSS_COMPILE=<CC PREFIX> KERNEL_DIR=<kernel directory> PLATFRORM=<Platform name>
+   copy the "edma_test.ko" from testcases/ddt/edma_test_suite/src/kernel/ and "kSt_timer.ko" from testcases/ddt/utils/kernel to DESTDIR<destination directory    >/testcases/bin/ddt.
+8) HOW TO INSTALL ALSA INCLUDES AND LIBS
    Install following packages on to your filesystem
        	alsa-dev (e.g. alsa-dev_1.0.18-r0.1_armv5te.ipk)
 	alsa-lib-dev (e.g. alsa-lib-dev_1.0.18-r0.1_armv5te.ipk)
@@ -216,7 +220,7 @@
 	$ ar -p alsa-lib-dev_1.0.18-r0.1_armv5te.ipk data.tar.gz | tar -zx
    (http://arago-project.org/wiki/index.php/Crosscompiling_Outside_of_Arago)
 
-8) HOW TO RUN TESTS
+9) HOW TO RUN TESTS
 ================================================================================
  * Run DDT tests the same way you run LTP tests. Use ltprun program and pass to
    it the test scenario file in the runtest directory (option -f) to run and the
@@ -239,7 +243,7 @@
    -i <options>: Run test under additional background load on IO Bus
    -n          : Run test with network traffic in background.
 
-9) @setup_requires Naming Conventions
+10) @setup_requires Naming Conventions
 ================================================================================
 As discussed in section 4.2 above, @setup_requires is used to highlight test scenarios' setup
 requirements. The following @setup_requires tags are currently defined.
@@ -255,7 +259,7 @@ usbhostmsc, usbhosthid, usbhostaudio, usbhostvideo, usbslavefbs, usbslavecdc, us
 sd, sdhc, mmc, sata
 
 
-10) HELP/SUPPORT
+11) HELP/SUPPORT
 ================================================================================
    Please submit your queries or comments to the opentest mailing list at 
    opentest@arago-project.org

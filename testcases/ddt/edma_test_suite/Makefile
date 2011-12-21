@@ -43,7 +43,8 @@ SOURCES_USER := \
 
 INCLUDES_USER = -I src/user/parser -I src/user/interface/common -I ../utils/user  -I $(KERNEL_DIR)/include
 
-MAKE_TARGETS		:= edma_tests  edma_test.ko kSt_timer.ko
+#MAKE_TARGETS		:= edma_tests  edma_test.ko kSt_timer.ko
+MAKE_TARGETS           := edma_tests
 
 all:
 	$(CC) $(CFLAGS) $(LDFLAGS) -o edma_tests ${INCLUDES} ${SOURCES_USER}

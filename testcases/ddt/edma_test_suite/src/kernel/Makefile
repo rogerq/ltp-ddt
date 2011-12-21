@@ -21,8 +21,8 @@ MAKE_TARGETS		:= modules
 
 modules:
 	$(MAKE) -C $(KERNEL_DIR) ARCH=arm SUBDIRS=$(PWD) modules
-	cp edma_test.ko  ../../
-	cp ../../../utils/kernel/kSt_timer.ko  ../../
+#	cp edma_test.ko  ../../
+#	cp ../../../utils/kernel/kSt_timer.ko  ../../
 
 
 clean:
