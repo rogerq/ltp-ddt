@@ -15,9 +15,9 @@ power_mgr/cpuidle
 rtc/rtc-s35390a
 sound/capture/alsa
 sound/playback/alsa
-usb/host/msc
-usb/host/hid
-usb/host/iso
+usb/host/msc/musb_omap2430
+usb/host/iso/musb_omap2430
+usb/host/hid/musb_omap2430
 usb/otg
 usb/slave/msc
 usb/slave/cdc

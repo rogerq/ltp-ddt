@@ -14,7 +14,9 @@ net/eth100M/davinci_emac
 rtc/rtc-s35390a
 sound/capture/alsa
 sound/playback/alsa
-usb/host/msc/
+usb/host/msc/musb_omap2430
+usb/host/iso/musb_omap2430
+usb/host/hid/musb_omap2430
 video/display/*/v4l2/omap_vout
 video/capture/*/v4l2/OMAP3 ISP CCDC output
 watchdog/omap_wdt

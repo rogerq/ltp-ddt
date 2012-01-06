@@ -106,7 +106,7 @@ esac
 case $MACHINE in
 	am387x-evm|am389x-evm)
 		sound='CONFIG_SND_SOC_TLV320AIC3X:snd_soc_tlv320aic3x CONFIG_SND_TI81XX_SOC:snd_soc_davinci CONFIG_SND_DAVINCI_SOC_MCASP:snd_soc_davinci_mcasp CONFIG_SND_SOC:snd_soc_evm';;
-	omap3evm)
+	omap3evm|am37x-evm)
 		sound='CONFIG_SND_OMAP_SOC_OMAP3EVM:snd_soc_omap3evm';;
 	am3517-evm)
 		sound='CONFIG_SND_OMAP_SOC_AM3517EVM:snd-soc-am3517evm';;
