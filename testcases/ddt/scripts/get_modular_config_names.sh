@@ -89,11 +89,11 @@ do
     *musb_davinci)
       usb="CONFIG_USB_MUSB_DAVINCI_GLUE:davinci";;
     *musb_da8xx)
-      usb="CONFIG_USB_MUSB_da8xx_GLUE:da8xx";;
+      usb="CONFIG_USB_MUSB_DA8XX_GLUE:da8xx";;
     *musb_omap2430)
       usb="CONFIG_USB_MUSB_OMAP2PLUS_GLUE:omap2430";;
-
-
+    *musb_am35x)
+      usb="CONFIG_USB_MUSB_AM35X_GLUE:am35x";; #driver name may be wrong
 
   esac
 done
