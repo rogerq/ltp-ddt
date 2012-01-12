@@ -93,7 +93,7 @@ do
     *musb_omap2430)
       usb="CONFIG_USB_MUSB_OMAP2PLUS_GLUE:omap2430";;
     *musb_am35x)
-      usb="CONFIG_USB_MUSB_AM35X_GLUE:am35x";; #driver name may be wrong
+      usb="CONFIG_USB_MUSB_AM35X_GLUE:am35x";;
 
   esac
 done

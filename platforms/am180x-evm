@@ -15,5 +15,7 @@ sound/capture/alsa
 sound/playback/alsa
 spi_master/mtd/spi_davinci
 usb/host/msc/musb_da8xx
+usb/host/hid/musb_da8xx
+usb/host/iso/musb_da8xx
 watchdog
 graphics/fb0/DA8xx_FB_Drv
