@@ -41,20 +41,20 @@ find_part_type() {
   if [ -e /sys/block/$MTD_DEV/device/type ]; then
     TYPE=`cat /sys/block/$MTD_DEV/device/type`
     if [ $TYPE == 'nand' ]; then
-			PART_TYPE='nand'
-		else
-  		if [ -d /sys/class/mtd/mtd$PART/device/driver ]; then
-    		ls /sys/class/mtd/mtd$PART/device/driver | grep 'flash' && PART_TYPE="nor" || PART_TYPE="spi"
-    		#ls /sys/class/mtd/mtd$PART/device/driver | grep 'spi' && PART_TYPE="spi"
-  		else
-    		die "/sys/class/mtd/mtd$PART/device/driver doesn't exist"
-  		fi
-			
-		fi
-	else
-		die "/sys/block/$MTD_DEV/device/type doesn't exist"
-	fi
-	echo $PART_TYPE
+      PART_TYPE='nand'
+    else
+      if [ `ls /sys/class/mtd/mtd$PART/device/driver/ | grep 'flash'` ]; then
+        PART_TYPE="nor"
+      elif [ `ls /sys/class/mtd/mtd$PART/device/driver/ | grep 'spi'` ];then
+        PART_TYPE="spi"
+      else
+        die "/sys/class/mtd/mtd$PART/device/driver doesn't exist"
+      fi
+    fi
+  else
+    die "/sys/block/$MTD_DEV/device/type doesn't exist"
+  fi
+  echo $PART_TYPE
 }
 
 # search through Lo to Hi to find out which partition has the biggest size

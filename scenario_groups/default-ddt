@@ -112,4 +112,16 @@ ddt/v4l2_disp_perf
 ddt/v4l2_ioctl
 ddt/wdt_test
 ddt/wdt_stress_test
+ddt/nor_check_mtd_existence
+ddt/nor_check_mtd_proc_entry
+ddt/nor_mtd_dd_rw_jffs2
+ddt/nor_mtd_dd_write_concurrence
+ddt/nor_mtd_debug_erase
+ddt/nor_mtd_debug_rw
+ddt/nor_mtd_flash_erase
+ddt/nor_mtd_flash_eraseall
+ddt/nor_mtd_mkdir_rmdir
+ddt/nor_mtd_oobtest
+ddt/nor_perf_jffs2
+ddt/nor_stress_dd_rw
 
