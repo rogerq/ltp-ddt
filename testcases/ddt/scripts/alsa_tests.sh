@@ -151,6 +151,11 @@ case "$TYPE" in
 		do_cmd arecord -D "$DEVICE" -f "$SAMPLEFORMAT" $FILE -d "$DURATION" -r "$SAMPLERATE" -c "$CHANNEL" "$ACCESSTYPEARG" "$OPMODEARG" --buffer-size=$BUFFERSIZE --period-size $PERIODSIZE
 		;;		
 	playback)
+		if [ ! -s ~$FILE ]
+		then
+			test_print_trc "$FILE Does not exists or has size zero. Using /dev/urandom as input file to generate noise"
+			FILE="/dev/urandom"
+		fi
 		do_cmd aplay -D "$DEVICE" -f "$SAMPLEFORMAT" $FILE -d "$DURATION" -r "$SAMPLERATE" -f "$SAMPLEFORMAT" -c "$CHANNEL" "$ACCESSTYPEARG" "$OPMODEARG"  --buffer-size=$BUFFERSIZE --period-size $PERIODSIZE
 		;;		
 	loopback)
