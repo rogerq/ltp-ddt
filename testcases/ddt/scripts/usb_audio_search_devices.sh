@@ -29,11 +29,11 @@ source "st_log.sh"
 #
 # Search for an USB Audio device
 #
-Audio_Search_Device()
-{
-test_print_trc " ::"
-test_print_trc " :: Determining audio card number for USB Audio device"
-test_print_trc " ::"
+#Audio_Search_Device()
+#{
+#test_print_trc " ::"
+#test_print_trc " :: Determining audio card number for USB Audio device"
+#test_print_trc " ::"
 
 audiodev=none
 devices=`ls -d /sys/class/sound/card*`
@@ -43,9 +43,10 @@ for device in $devices
 		if test "$module" = "usb";
 		then
 			audiodev=`cat $device'/number'`
-			test_print_trc " ::"
-			test_print_trc " :: Found USB Audio device mapped to [card$audiodev]"
-			test_print_trc " ::"
+#			test_print_trc " ::"
+#			test_print_trc " :: Found USB Audio device mapped to [card$audiodev]"
+#			test_print_trc " ::"
+			echo $audiodev
 		fi
 	done
 if test "$audiodev" = "none";
@@ -54,4 +55,4 @@ then
 	test_print_trc " :: No USB Audio device found. Exiting Audio tests..."
 	test_print_trc " ::"	
 fi
-}
+#}
