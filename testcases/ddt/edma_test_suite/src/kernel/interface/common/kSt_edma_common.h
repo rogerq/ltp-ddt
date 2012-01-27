@@ -21,7 +21,7 @@
 #include <mach/io.h>
 #include <mach/irqs.h>
 #include <mach/hardware.h>
-#include <mach/memory.h>
+//#include <mach/memory.h>
 #include "kSt_edma_interface.h"
 
 #define ST_EDMA_TCC_ANY 0
