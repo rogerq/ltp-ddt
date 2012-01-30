@@ -1,0 +1,8 @@
+# @name cpufreq tests
+# @desc cpufreq functional & stress tests, sets governor as ondemand upon successful completion of the test
+# @requires power_mgr/cpufreq/userspace && power_mgr/cpufreq/ondemand
+
+POWERMGR_S_FUNC_CPUFREQ_BASIC source 'common.sh'; echo "userspace" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor || die "unable to set to userspace governer"; powermgr_cpufreq.sh -d 2; powermgr_cpufreq.sh -r true -d 2
+POWERMGR_M_STRESS_CPUFREQ_HEAVYDUTY source 'common.sh'; echo "userspace" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor || die "unable to set to userspace governer"; powermgr_cpufreq.sh -e true -l 100000
+POWERMGR_L_STRESS_CPUFREQ_RELIABILITY source 'common.sh'; echo "userspace" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor || die "unable to set to userspace governer"; powermgr_cpufreq.sh -l 3600 -d 1; powermgr_cpufreq.sh -l 3600 -r true -d 1
+POWERMGR_S_FUNC_CPUFREQ_ONDEMAND source 'common.sh'; echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor || die "unable to set to ondemand governer"
