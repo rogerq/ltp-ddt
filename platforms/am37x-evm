@@ -24,4 +24,5 @@ usb/slave/cdc
 video/display/*/v4l2/omap_vout
 video/capture/*/v4l2/OMAP3
 watchdog/omap_wdt
+jffs2
 

@@ -1,5 +1,5 @@
-# @name Nand mtdtests and mtd nandecc test
-# @desc Nand mtdtests and mtd nandecc test 
+# @name Nand mtdtests 
+# @desc Nand mtdtests 
 # @requires nand
 
 NAND_L_MODULAR_MTD_OOBTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; flash_eraseall "mtd$part"; do_cmd insmod.sh "mtd_oobtest" dev="$part"; do_cmd rmmod.sh "mtd_oobtest" 

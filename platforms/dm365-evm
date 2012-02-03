@@ -17,3 +17,4 @@ video/capture/1080p/mc/davinci_video_ccdc_output
 video/capture/480p/mc/davinci_video_prv_output
 video/display/480p/v4l2/davinci_display_driver
 video/capture/480p/mc/davinci_video_rsz_output
+jffs2

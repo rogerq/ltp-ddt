@@ -9,3 +9,4 @@ i2c/eeprom
 spi_master/mtd/spi_davinci
 usb/host/musb_hdrc
 edma/
+jffs2

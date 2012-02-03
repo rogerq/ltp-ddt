@@ -19,5 +19,6 @@ usb/host/iso/musb_ti81xx
 usb/host/hid/musb_ti81xx
 video/display
 watchdog/omap_wdt
+jffs2
 
 

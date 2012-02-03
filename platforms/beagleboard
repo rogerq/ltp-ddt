@@ -7,7 +7,6 @@ i2c/non_eeprom
 mmc_host/sd/mmci-omap-hs
 mmc_host/mmc/mmci-omap-hs
 mmc_host/sdhc/mmci-omap-hs
-nand/omap2-nand
 net/eth100M
 power_mgr/cpufreq
 power_mgr/cpuidle

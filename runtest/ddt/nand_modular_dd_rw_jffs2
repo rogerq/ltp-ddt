@@ -1,0 +1,7 @@
+# @name 
+#	NAND modular read write test 
+# @desc 
+#       modprobe nand module first and then do RW and then rmmod it
+# @requires  nand && jffs2 
+
+NAND_L_MODULAR_RW_JFFS2 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -f "jffs2" -b "1M" -c "10" -l "1" -d "nand"

@@ -12,7 +12,6 @@ mmc_host/mmc/<drivername>
 mmc_host/sdhc/<drivername>
 mmc_host/sdio/<drivername>
 nand/<drivername>
-ubifs
 nor/<drivername>
 net/eth10M/<drivername (i.e.davinci_emac)>
 net/eth100M/<drivername>
@@ -50,3 +49,5 @@ video/display/720p/v4l2/<drivername>
 video/display/1080i/v4l2/<drivername>
 video/display/1080p/v4l2/<drivername>
 watchdog/<drivername>
+ubifs
+jffs2
