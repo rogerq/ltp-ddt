@@ -9,6 +9,6 @@ USB_M_FUNC_Audio_LOOPBACK_ACCESSTYPE_MMAP_02	 source 'common.sh' ; do_cmd instal
 USB_L_FUNC_Audio_LOOPBACK_ACCESSTYPE_MMAP_03	 source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd 'usb_host_audio.sh -t loopback -a 1 -d 300'
 
 USB_M_FUNC_Audio_PLAYBACK_ACCESSTYPE_NONINTER_01 source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh; audio_dev=`usb_audio_search_devices.sh`; do_cmd 'alsa_tests.sh -D "hw:'$audio_dev',0" -t playback -a 0 -F /home/root/USB_M_FUNC_Audio_PLAYBACK_ACCESSTYPE_NONINTER_01.wav'
-USB_M_FUNC_Audio_PLAYBACK_ACCESSTYPE_MMAP_01     source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh; audio_dev='usb_audio_search_devices.sh'; do_cmd 'alsa_tests.sh -D "hw:$audio_dev,0" -t playback -a 0 -F /home/root/USB_M_FUNC_Audio_PLAYBACK_ACCESSTYPE_MMAP_01.wav'
+USB_M_FUNC_Audio_PLAYBACK_ACCESSTYPE_MMAP_01     source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh; audio_dev=`usb_audio_search_devices.sh`; do_cmd 'alsa_tests.sh -D "hw:$audio_dev,0" -t playback -a 1 -F /home/root/USB_M_FUNC_Audio_PLAYBACK_ACCESSTYPE_MMAP_01.wav'
 
 
