@@ -1,20 +1,20 @@
 # @name Nand mtdtests 
-# @desc Nand mtdtests 
+# @desc Performance mtdtest suite including oobtest, pagetest, readtest, speedtest, stresstest, subpagetest and nandecctest. 
 # @requires nand
 
-NAND_L_MODULAR_MTD_OOBTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; flash_eraseall "mtd$part"; do_cmd insmod.sh "mtd_oobtest" dev="$part"; do_cmd rmmod.sh "mtd_oobtest" 
+NAND_L_MODULAR_MTD_OOBTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; do_cmd flash_eraseall /dev/mtd$part; do_cmd sleep 1; do_cmd insmod.sh "mtd_oobtest" dev="$part"; do_cmd rmmod.sh "mtd_oobtest" 
 
-NAND_L_MODULAR_MTD_PAGETEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; flash_eraseall mtd$part; do_cmd insmod.sh "mtd_pagetest" dev="$part"; do_cmd rmmod.sh "mtd_pagetest" 
+NAND_L_MODULAR_MTD_PAGETEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; do_cmd flash_eraseall /dev/mtd$part; do_cmd sleep 1; do_cmd insmod.sh "mtd_pagetest" dev="$part"; do_cmd rmmod.sh "mtd_pagetest" 
 
-NAND_L_MODULAR_MTD_READTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; flash_eraseall mtd$part; do_cmd insmod.sh "mtd_readtest" dev="$part"; do_cmd rmmod.sh "mtd_readtest" 
+NAND_L_MODULAR_MTD_READTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; do_cmd flash_eraseall /dev/mtd$part; do_cmd sleep 1; do_cmd insmod.sh "mtd_readtest" dev="$part"; do_cmd rmmod.sh "mtd_readtest" 
 
-NAND_L_MODULAR_MTD_SPEEDTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; flash_eraseall mtd$part; do_cmd insmod.sh "mtd_speedtest" dev="$part"; do_cmd rmmod.sh "mtd_speedtest" 
+NAND_L_MODULAR_MTD_SPEEDTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; do_cmd flash_eraseall /dev/mtd$part; do_cmd sleep 1; do_cmd insmod.sh "mtd_speedtest" dev="$part"; do_cmd rmmod.sh "mtd_speedtest" 
 
-NAND_L_MODULAR_MTD_STRESSTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; flash_eraseall mtd$part; do_cmd insmod.sh "mtd_stresstest" dev="$part"; do_cmd rmmod.sh "mtd_stresstest" 
+NAND_L_MODULAR_MTD_STRESSTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; do_cmd flash_eraseall /dev/mtd$part; do_cmd sleep 1; do_cmd insmod.sh "mtd_stresstest" dev="$part"; do_cmd rmmod.sh "mtd_stresstest" 
 
-NAND_L_MODULAR_MTD_SUBPAGETEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; flash_eraseall mtd$part; do_cmd insmod.sh "mtd_subpagetest" dev="$part"; do_cmd rmmod.sh "mtd_subpagetest" 
+NAND_L_MODULAR_MTD_SUBPAGETEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; do_cmd flash_eraseall /dev/mtd$part; do_cmd sleep 1; do_cmd insmod.sh "mtd_subpagetest" dev="$part"; do_cmd rmmod.sh "mtd_subpagetest" 
 
-NAND_L_MODULAR_MTD_NANDECCTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; flash_eraseall mtd$part; do_cmd insmod.sh "mtd_nandecctest"; do_cmd rmmod.sh "mtd_nandecctest" 
+NAND_L_MODULAR_MTD_NANDECCTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; do_cmd flash_eraseall /dev/mtd$part; do_cmd sleep 1; do_cmd sleep 1; do_cmd insmod.sh "mtd_nandecctest"; do_cmd rmmod.sh "mtd_nandecctest" 
 
 
 
