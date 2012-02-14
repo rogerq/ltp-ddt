@@ -1,0 +1,11 @@
+# @name Nand mkdir and rmdir when mounted with jffs2 
+# @desc Perform mkdir and rmdir in Nand with jffs2
+#	The partition number is specified in get_mtd_partition_number.sh
+# @requires nand && jffs2
+
+NAND_M_FUNC_MKDIR_RMDIR_JFFS2 source "common.sh"; source "mtd_common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"`; dev_node="$MTD_BLK_DEV$part"; blk_device_do_mount.sh -n "$dev_node" -f "jffs2" -d "nand" -m "/mnt/nand"; do_cmd mkdir "/mnt/nand/test"; do_cmd chmod 777 "/mnt/nand/test"; do_cmd rmdir "/mnt/nand/test"; do_cmd umount "$dev_node" 
+
+
+
+
+
