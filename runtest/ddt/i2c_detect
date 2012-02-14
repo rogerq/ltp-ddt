@@ -1,0 +1,11 @@
+# @name I2C detect
+# @desc Using i2c-detect utility to detect the attached slaves 
+# @requires i2c 
+
+I2C_S_FUNC_I2CDETECT source 'common.sh'; do_cmd i2cdetect -y -r 1
+ 
+
+
+
+
+
