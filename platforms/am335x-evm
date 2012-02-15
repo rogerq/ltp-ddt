@@ -32,4 +32,6 @@ usb/otg
 usb/slave/msc
 usb/slave/cdc
 watchdog/omap_wdt
-
+pwm/ehrpwm
+pwm/ecap
+pwm/backlight

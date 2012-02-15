@@ -1,0 +1,19 @@
+# @name backlight
+# @desc Testing backlight change by varying parameter value.
+#       Verification must be done manually looking at the LCD
+#       Backlight brightness varies according to the values sypplied
+# @requires pwm/backlight
+
+PWM_S_FUNC_BACKLIGHT_00	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 0';
+PWM_M_FUNC_BACKLIGHT_10	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 10';
+PWM_M_FUNC_BACKLIGHT_20	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 20';
+PWM_M_FUNC_BACKLIGHT_30	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 30';
+PWM_M_FUNC_BACKLIGHT_40	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 40';
+PWM_S_FUNC_BACKLIGHT_50	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 50';
+PWM_M_FUNC_BACKLIGHT_60	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 60';
+PWM_M_FUNC_BACKLIGHT_70	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 70';
+PWM_M_FUNC_BACKLIGHT_80	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 80';
+PWM_M_FUNC_BACKLIGHT_90	source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 90';
+PWM_S_FUNC_BACKLIGHT_100 source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 100';
+PWM_M_FUNC_BACKLIGHT_110 source 'common.sh' ; do_cmd 'pwm.sh -t backlight -v 110';
+
