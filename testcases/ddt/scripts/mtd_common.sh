@@ -44,7 +44,7 @@ find_part_type() {
 }
 
 # search through Lo to Hi to find out which partition has the biggest size
-find_part_with_biggest_size() {
+find_mtdpart_with_biggest_size() {
   local LO=$1
   local HI=$2
   # search through Lo to Hi to find out which one has the biggest size
@@ -116,7 +116,7 @@ get_mtd_biggest_part() {
   # by now, the part_range like ":1:2" should be found.
   LO=`echo $PART_RANGE | cut -d":" -f2`
   HI=`echo $PART_RANGE | rev| cut -d':' -f1 | rev`
-  TEST_PART=`find_part_with_biggest_size $LO $HI`
+  TEST_PART=`find_mtdpart_with_biggest_size $LO $HI`
   if [ -n "$TEST_PART" ]; then
     echo $TEST_PART
   else
