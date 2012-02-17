@@ -18,6 +18,46 @@ KB=1024
 MB=1048576
 GB=$((1024*1024*1024))
 
+########### DEFINE PLATFORM DATA ############
+# This is done by ltp-ddt's runltp script, but it is optionally done
+# here for cases where we are running the scripts outside ltp-ddt
+# If the PATH in the target filesystem doesn't have below path exported,
+# please add those path in order to run standalone ltp scripts.
+# export PATH="${PATH}:/opt/ltp/testcases/bin:/opt/ltp/testcases/bin/ddt"
+
+resolve_platform_name() {
+  case $1 in
+    *) PLATFORM="$1" ;; 
+  esac
+  echo $PLATFORM
+}
+
+if [ "x$SOC" == "x" ]
+then
+  LTPPATH='/opt/ltp'
+  plat=`uname -a | cut -d' ' -f 2`
+	local i=0; local DRIVERS=""
+	while read -r file
+  do
+		echo $file | grep -e "^#.*" > /dev/null
+		if [ "$?" == "0" ]; then
+			continue
+		fi
+		case $i in
+			 0) ARCH="$file"
+				 export ARCH ;;
+			 1) SOC="$file"
+				 export SOC ;;
+			 2) MACHINE="$file"
+				 export MACHINE ;;
+			 3) DRIVERS="$file" ;;
+			 *) DRIVERS="${DRIVERS},${file}" ;;
+		esac
+	  i=`expr $i + 1`
+	done < ${LTPPATH}/platforms/`resolve_platform_name $plat`
+	export DRIVERS
+
+fi
 
 ########### FUNCTIONS #####################
 # Default value for inverted_return is "false" but can
