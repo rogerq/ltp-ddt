@@ -3,5 +3,5 @@
 # @requires net && usb/host 
 # @setup_requires usbhostmsc
 
-SYSTEM_L_FUNC_ETH-USB-0001 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/eth_iperf_tcp -p $MACHINE -s ETH_M_PERF_IPERF_TCP_128K_1448B # /opt/ltp/runltp -f ddt/usbhost_perf_vfat -p $MACHINE -s USBHOST_S_PERF_VFAT_0001" 
+SYSTEM_L_FUNC_ETH-USB-0001 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/eth_iperf_tcp -P $MACHINE -s ETH_M_PERF_IPERF_TCP_128K_1448B # /opt/ltp/runltp -f ddt/usbhost_perf_vfat -P $MACHINE -s USBHOST_S_PERF_VFAT_0001" 
 
