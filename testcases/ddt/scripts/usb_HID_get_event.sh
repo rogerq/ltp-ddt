@@ -32,13 +32,13 @@ device=$1
 events=`ls -d $device/input/input*`
 for event in $events
 do
-	inputevent=`basename "$event" | cut -c6`
+	inputevent=`basename "$event" | cut -c6-7`
 	echo INPUT event is $hidevent
 done
 events=`ls -d $device/input/input$inputevent/event*`
 for event in $events
 do
-	hidevent=`basename "$event" | cut -c6`
+	hidevent=`basename "$event" | cut -c6-7`
 	echo HID event is $hidevent
 done
 }

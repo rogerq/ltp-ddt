@@ -83,31 +83,57 @@ hidSearch=$1
 devClass=0
 devProtocol=0
 hidevent=0
+hiddevices=0
+hiddevices_aftersearch=0
 devices=`ls -d /sys/bus/usb/devices/*`
 for device in $devices
 	do
 		module=`egrep usbhid $device'/uevent'`
 		if test "$module" != ""
 		then
-			devClass=`cat $device'/bInterfaceClass'`
-			devProtocol=`cat $device'/bInterfaceProtocol'`
-			if test $devClass -eq $HID_CLASS
+			hiddevices_aftersearch=`expr $hiddevices_aftersearch + 1 | bc`
+		fi
+done
+
+if test  $hiddevices_aftersearch -gt $hiddevices
+then
+	for device in $devices
+		do
+			module=`egrep usbhid $device'/uevent'`
+			if test "$module" != ""
 			then
-				if test $devProtocol -eq $hidSearch
+				devClass=`cat $device'/bInterfaceClass'`
+				devProtocol=`cat $device'/bInterfaceProtocol'`
+				if test $devClass -eq $HID_CLASS
 				then
-					if test $hidSearch -eq $HID_PROTOCOL_NONE
+					if test $devProtocol -eq $hidSearch
 					then
-						test_print_trc "HID None Found"
-					elif test $hidSearch -eq $HID_PROTOCOL_KEYBOARD
-					then	
-						test_print_trc "HID Keyboard Found"
-					elif test $hidSearch -eq $HID_PROTOCOL_MOUSE
-					then
-						test_print_trc "HID Mouse Found"
+						if test $hidSearch -eq $HID_PROTOCOL_NONE
+						then
+							test_print_trc "HID None Found"
+						    test_print_trc " ******************************************************"
+        				    test_print_trc "  HID None found. Exiting USB HID tests..."
+				            test_print_trc " ******************************************************"
+					         exit 2;
+						elif test $hidSearch -eq $HID_PROTOCOL_KEYBOARD
+						then	
+							test_print_trc "HID Keyboard Found"
+							devProtocol_keyboard=$devProtocol
+							HID_Get_Event $device
+						elif test $hidSearch -eq $HID_PROTOCOL_MOUSE
+						then
+							test_print_trc "HID Mouse Found"
+							devProtocol_mouse=$devProtocol
+							HID_Get_Event $device
+						fi
 					fi
-					HID_Get_Event $device
 				fi
 			fi
-		fi
 	done
+else
+		    test_print_trc " ******************************************************"
+		    test_print_trc "  USB HID devices not found. Exiting USB HID tests..."
+		    test_print_trc " ******************************************************"
+		    exit 2;
+fi
 }

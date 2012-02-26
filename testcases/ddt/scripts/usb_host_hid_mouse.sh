@@ -68,25 +68,26 @@ test_print_trc " ::"
 
 HID_Search_Device $HID_PROTOCOL_MOUSE
 
-if test $hidevent -eq 0
+if test $devProtocol_mouse -eq 2
 then
-	test_print_trc " ::"
-	test_print_trc " :: USB Mouse not found. Exiting USB Mouse tests..."
-	test_print_trc " ::"
-	do_cmd 'FAIL,USB Mouse not found'
-else
 
-	test_print_trc "TestName:: HID : USB Mouse"
-	test_print_trc "Test Description:: Test input events from USB mouse using evtest"
+    test_print_trc "TestName:: HID : USB Mouse"
+    test_print_trc "TestDesc:: Test input events from USB Mouse using evtest"
 
-	evtest /dev/input/event$hidevent &
+    evtest /dev/input/event$hidevent &
 
 	test_print_trc "This test requires manual intervention."
 
-	sleep 10
-	kill -9 $(pidof evtest)
-
-	test_print_end $TestId
+	 sleep 10;
+	 kill -9 $(pidof evtest)
+	 test_print_end $TestId
+ else
+	 test_print_trc " ::"
+	 test_print_trc " :: USB Mouse not found. Exiting USB Mouse tests..."
+	 test_print_trc " ::"
+	 exit 2;
 fi
+
+
 
 

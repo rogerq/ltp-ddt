@@ -69,24 +69,24 @@ test_print_trc " ::"
 
 
 HID_Search_Device $HID_PROTOCOL_KEYBOARD
-if test $hidevent -eq 0
+
+if test $devProtocol_keyboard -eq 1
 then
-	test_print_trc " ::"
-	test_print_trc " :: USB Keyboard not found. Exiting USB Keyboard tests..."
-	test_print_trc " ::"
-	do_cmd 'FAIL,USB Keyboard not found'
+
+    test_print_trc "TestName:: HID : USB Keyboard"
+    test_print_trc "TestDesc:: Test input events from USB keyboard using evtest"
+
+    evtest /dev/input/event$hidevent &
+
+    test_print_trc "This test requires manual intervention."
+
+    sleep 10;
+    kill -9 $(pidof evtest)
+    test_print_end $TestId
 else
-
-test_print_trc "TestName:: HID : USB Keyboard"
-test_print_trc "TestDesc:: Test input events from USB keyboard using evtest"
-
-evtest /dev/input/event$hidevent &
-
-test_print_trc "This test requires manual intervention."
-
-sleep 10
-kill -9 $(pidof evtest)
-test_print_end $TestId
-
+    test_print_trc " ::"
+    test_print_trc " :: USB Keyboard not found. Exiting USB Keyboard tests..."
+    test_print_trc " ::"
+    exit 2;
 fi
 
