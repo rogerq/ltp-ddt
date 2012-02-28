@@ -127,3 +127,32 @@ get_return_value() {
         die "Value $name not found in $file"
 }
 
+# Get value for key in "key1=value2 key2=value2" space seperated pairs
+# Input:
+#   $1 key
+#   $2 key-value pairs 
+#   $3 key-value delimiter
+
+get_value_for_key() {
+	if [ $# -ne 3 ]; then
+		die "Wrong number of arguments. \
+    Usage: get_value_for_key <key> <key-value pairs> <key-value delimiter>"
+	fi
+
+  key=$1
+  key_value_pairs=$2
+  key_value_delimiter=$3
+
+  for pair in $key_value_pairs; do
+    k=`echo $pair |cut -d"=" -f1`
+    v=`echo $pair |cut -d"=" -f2` # note: value could be empty
+    if [ "$k" == "$key" ]
+    then
+      rtn="$v"
+    break
+  fi
+  done
+  echo "$rtn"
+}
+
+

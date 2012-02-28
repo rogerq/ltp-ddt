@@ -73,7 +73,7 @@ case $DEV_TYPE in
 		DEV_NODE="$MTD_BLK_DEV$PART"
         ;;
         mmc)
-          DEV_NODE=`find_part_with_biggest_size /dev/mmcblk0` || die "error getting partition with biggest size: $DEV_NODE"
+          DEV_NODE=`find_part_with_biggest_size "/dev/mmcblk0" "mmc"` || die "error getting partition with biggest size: $DEV_NODE"
         ;;
         usb)
                 #DEV_NODE="/dev/sda1"

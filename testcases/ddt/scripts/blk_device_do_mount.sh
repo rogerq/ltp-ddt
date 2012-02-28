@@ -86,15 +86,13 @@ if [ -n "$FS_TYPE" ]; then
   do_cmd "mount -t $FS_TYPE -o $MNT_MODE $MNT_DEV_NODE $MNT_POINT"
   do_cmd "mount | grep $MNT_DEV_NODE"
 else
-	case $DEVICE_TYPE in
-		nand|nor|spi)
+  DEV_TYPE=`get_device_type_map.sh "$DEVICE_TYPE"` || die "error getting device type: $DEV_TYPE"
+	case $DEV_TYPE in
+		mtd)
 			fs_to_try="jffs2:ubifs"
 		;;
-		mmc|ata|usb|sata)
-			fs_to_try="vfat:ext2:ext3"
-		;; 
 		*)
-			fs_to_try="vfat:ext2:ext3:jffs2:ubifs"
+			fs_to_try="vfat:ext2:ext3"
 		;;
 	esac	
 	# try all fs to mount
