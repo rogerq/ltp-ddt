@@ -3,5 +3,5 @@
 # @requires usb/host/hid
 # @setup_requires usbhosthid_keyboard
 
-USBHOST_L_FUNC_HID_Keyboard source 'common.sh'; do_cmd install_modules.sh 'usb'; do_cmd usb_host_hid_keyboard.sh
+USBHOST_S_FUNC_HID_Keyboard_Detection_Test source 'common.sh'; do_cmd install_modules.sh 'usb'; do_cmd usb_host_hid_keyboard.sh
 
