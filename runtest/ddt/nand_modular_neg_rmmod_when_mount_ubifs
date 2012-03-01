@@ -1,0 +1,7 @@
+# @name
+#       NAND modular negative test
+# @desc
+#       modprobe nand module first and then do mount and rmmod 
+# @requires  nand && ubifs
+
+NAND_L_MODULAR_NEG_RMMOD_WHEN_MOUNT_UBIFS source "common.sh"; do_cmd insmod.sh "nand"; DEV_NODE=`get_blk_device_node.sh "nand"` || die "error getting devnode for nand: $DEV_NODE"; do_cmd blk_device_erase_format_part.sh -d "nand" -n "$DEV_NODE" -f "ubifs"; do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "ubifs" -d "nand" -m "/mnt/nand"; rmmod.sh "nand" && exit 1 || exit 0
