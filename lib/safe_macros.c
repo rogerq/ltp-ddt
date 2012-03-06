@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <sys/mman.h>
+#include <sys/resource.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <libgen.h>
@@ -106,6 +107,20 @@ safe_getpwnam(const char *file, const int lineno, void (*cleanup_fn)(void),
 		    file, lineno);
 
 	return (rval);
+}
+
+int
+safe_getrusage(const char *file, const int lineno, void (*cleanup_fn)(void),
+	    int who, struct rusage *usage)
+{
+	int rval;
+
+	rval = getrusage(who, usage);
+	if (rval == -1)
+		tst_brkm(TBROK|TERRNO, cleanup_fn, "getrusage failed at %s:%d",
+		    file, lineno);
+
+	return rval;
 }
 
 void*
@@ -294,4 +309,32 @@ safe_write(const char *file, const int lineno, void (cleanup_fn)(void),
 		    file, lineno);
 
 	return (rval);
+}
+
+int safe_ftruncate(const char *file, const int lineno,
+	    void (cleanup_fn)(void), int fd, off_t length)
+{
+	int rval;
+	
+	rval = ftruncate(fd, length);
+	if (rval == -1) {
+		tst_brkm(TBROK|TERRNO, cleanup_fn, "ftruncate failed at %s:%d",
+		         file, lineno);
+	}
+
+	return rval;
+}
+
+int safe_truncate(const char *file, const int lineno,
+	    void (cleanup_fn)(void), const char *path, off_t length)
+{
+	int rval;
+
+	rval = truncate(path, length);
+	if (rval == -1) {
+		tst_brkm(TBROK|TERRNO, cleanup_fn, "truncate failed at %s:%d",
+		         file, lineno);
+	}
+
+	return rval;
 }
