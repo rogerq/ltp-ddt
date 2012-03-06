@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 #endif
 
 	nnodes = count_numa();
-	if (count_numa() == 1)
+	if (count_numa() <= 1)
 		tst_brkm(TCONF, NULL, "required a NUMA system.");
 
 	setup();
@@ -121,5 +121,6 @@ void cleanup(void)
 int main(void)
 {
 	tst_brkm(TCONF, NULL, "no NUMA development packages installed.");
+	tst_exit();
 }
 #endif

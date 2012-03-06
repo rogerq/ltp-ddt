@@ -1,5 +1,6 @@
 #ifndef _MEM_H
 #define _MEM_H
+#include "config.h"
 #include "test.h"
 #include "usctest.h"
 
@@ -11,13 +12,20 @@
 #define KSM			4
 #define CPATH			"/dev/cpuset"
 #define CPATH_NEW		CPATH "/1"
+#if defined(__powerpc__) || defined(__powerpc64__)
+#define MAXNODES		256
+#else
 #define MAXNODES		512
+#endif
 #define MEMCG_PATH		"/dev/cgroup"
 #define MEMCG_PATH_NEW		MEMCG_PATH "/1"
 #define TESTMEM			(1UL<<30)
 #define MB			(1UL<<20)
+#define KB			(1UL<<10)
 #define PATH_SYS_SYSTEM		"/sys/devices/system"
 #define PATH_KSM		"/sys/kernel/mm/ksm/"
+#define PATH_SYSVM		"/proc/sys/vm/"
+#define PATH_MEMINFO		"/proc/meminfo"
 
 char overcommit[BUFSIZ];
 int opt_num, opt_size, opt_unit;
@@ -47,4 +55,7 @@ void create_same_memory(int size, int num, int unit);
 void check_ksm_options(int *size, int *num, int *unit);
 void write_cpusets(void);
 void write_memcg(void);
+void set_sys_tune(char *sys_file, long tune, int check);
+long get_sys_tune(char *sys_file);
+long read_meminfo(char *item);
 #endif

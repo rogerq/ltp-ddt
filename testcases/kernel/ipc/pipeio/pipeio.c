@@ -158,6 +158,8 @@ char *av[];
 	  struct semid_ds *buf;
 	  unsigned short int *array;
 	} u;
+	unsigned int uwait_iter = 1000;
+	unsigned int uwait_total = 5000000;
 
 	u.val = 0;
 	format = HEX;
@@ -433,7 +435,7 @@ char *av[];
 
 	if ((writebuf = (char *) malloc(size)) == NULL ||
 	    (readbuf = (char *) malloc(size)) == NULL) {
-		tst_resm (TFAIL, "malloc() failed: %s", strerror(errno));
+		tst_resm (TFAIL|TERRNO, "malloc() failed");
   		SAFE_FREE(writebuf);
 		SAFE_FREE(readbuf);
 		exit(1);
@@ -443,16 +445,20 @@ char *av[];
 
 	writebuf[size-1] = 'A';	/* to detect partial read/write problem */
 
-	if ((sem_id = semget(IPC_PRIVATE, 1, IPC_CREAT|S_IRWXU)) == -1) {
-		tst_brkm(TBROK, NULL, "Couldn't allocate semaphore: %s", strerror(errno));
+	if ((sem_id = semget(IPC_PRIVATE, 2, IPC_CREAT|S_IRWXU)) == -1) {
+		tst_brkm(TBROK|TERRNO, NULL, "Couldn't allocate semaphore");
 	}
 
 	if (semctl(sem_id, 0, SETVAL, u) == -1)
-		tst_brkm(TBROK, NULL, "Couldn't initialize semaphore value: %s", strerror(errno));
+		tst_brkm(TBROK|TERRNO, NULL, "Couldn't initialize semaphore 0 value");
+
+	/* semaphore to hold off children from exiting until open() completes */
+	if (semctl(sem_id, 1, SETVAL, u) == -1)
+		tst_brkm(TBROK|TERRNO, NULL, "Couldn't initialize semaphore 1 value");
 
 	if (background) {
 	    if ((n=fork()) == -1) {
-		tst_resm (TFAIL, "fork() failed: %s", strerror(errno));
+		tst_resm (TFAIL|TERRNO, "fork() failed");
 		exit(1);
 	    }
 	    else if (n != 0) /* parent */
@@ -461,7 +467,7 @@ char *av[];
 
 	if (unpipe) {
 		if (pipe(fds) == -1) {
-			tst_resm (TFAIL, "pipe() failed to create un-named pipe: %s", strerror(errno));
+			tst_resm (TFAIL|TERRNO, "pipe() failed to create un-named pipe");
 			exit(1);
 		}
 		read_fd = fds[0];
@@ -470,14 +476,14 @@ char *av[];
 		blk_type = UNNAMED_IO;
 	} else {
 		if (strlen(dir) && chdir(dir) == -1) {
-			tst_resm (TFAIL, "chdir(%s) failed: %s", dir, strerror(errno));
+			tst_resm (TFAIL|TERRNO, "chdir(%s) failed", dir);
 			exit(1);
 		}
 
 		if (stat(pname, &stbuf) == -1) {
 
 		    if (mkfifo(pname,0777) == -1) {
-			tst_resm (TFAIL, "mkfifo(%s,0777) failed: %s", pname, strerror(errno));
+			tst_resm (TFAIL|TERRNO, "mkfifo(%s,0777) failed", pname);
 			exit(1);
 		    }
 		}
@@ -510,7 +516,7 @@ printf("num_wrters = %d\n", num_wrters);
 
 	for (i=num_wrters; i > 0; --i) {
 		if ((c=fork()) < 0) {
-			tst_resm (TFAIL, "fork() failed: %s", strerror(errno));
+			tst_resm (TFAIL|TERRNO, "fork() failed");
 			exit(1);
 		}
 		if (c == 0) break;	/* stop child from forking */
@@ -521,11 +527,11 @@ printf("child after fork pid = %d\n", getpid());
 #endif
 		if (! unpipe) {
 			if ((write_fd = open(pname,O_WRONLY)) == -1) {
-				tst_resm (TFAIL, "child pipe open(%s, %#o) failed: %s", pname, O_WRONLY|ndelay, strerror(errno));
+				tst_resm (TFAIL|TERRNO, "child pipe open(%s, %#o) failed", pname, O_WRONLY|ndelay);
 				exit(1);
 			}
 			if (ndelay && fcntl(write_fd, F_SETFL, O_NONBLOCK) == -1) {
-				tst_brkm(TBROK, NULL, "Failed setting the pipe to nonblocking mode: %s", strerror(errno));
+				tst_brkm(TBROK|TERRNO, NULL, "Failed setting the pipe to nonblocking mode");
 			}
 		}
 		else {
@@ -539,7 +545,7 @@ printf("child after fork pid = %d\n", getpid());
 		};
 
 		if (semop(sem_id, &sem_op, 1) == -1)
-			tst_brkm(TBROK, NULL, "Couldn't raise the semaphore: %s", strerror(errno));
+			tst_brkm(TBROK|TERRNO, NULL, "Couldn't raise the semaphore 0");
 
 		pid_word = (int *)&writebuf[0];
 		count_word = (int *)&writebuf[NBPW];
@@ -567,7 +573,7 @@ printf("child after fork pid = %d\n", getpid());
 			 * If lio_write_buffer returns a negative number,
 			 * the return will be -errno.
 			 */
-													tst_resm (TFAIL, "pass %d: lio_write_buffer(%s) failed; it returned %d: %s", j, cp, nb, strerror(-nb));
+				tst_resm (TFAIL, "pass %d: lio_write_buffer(%s) failed; it returned %d: %s", j, cp, nb, strerror(-nb));
 				exit(1);
 			}
 			else if (nb != size) {
@@ -586,21 +592,39 @@ printf("child after fork pid = %d\n", getpid());
 			}
 			fflush(stderr);
 		}
+
+		/* child waits until parent completes open() */
+		sem_op = (struct sembuf) {
+			.sem_num = 1,
+			.sem_op = -1,
+			.sem_flg = 0
+		};
+		if (semop(sem_id, &sem_op, 1) == -1)
+			tst_brkm(TBROK|TERRNO, NULL, "Couldn't lower the semaphore 1");
 	}
 	if (c > 0) {	/***** if parent *****/
 
 		if (! unpipe) {
 			if ((read_fd = open(pname,O_RDONLY)) == -1) {
-				tst_resm (TFAIL, "parent pipe open(%s, %#o) failed: %s", pname, O_RDONLY, strerror(errno));
+				tst_resm (TFAIL|TERRNO, "parent pipe open(%s, %#o) failed", pname, O_RDONLY);
 				exit(1);
 			}
 			if (ndelay && fcntl(read_fd, F_SETFL, O_NONBLOCK) == -1) {
-				tst_brkm(TBROK, NULL, "Failed setting the pipe to nonblocking mode: %s", strerror(errno));
+				tst_brkm(TBROK|TERRNO, NULL, "Failed setting the pipe to nonblocking mode");
 			}
 		}
 		else {
 			close(write_fd);
 		}
+
+		/* raise semaphore so children can exit */
+		sem_op = (struct sembuf) {
+			.sem_num = 1,
+			.sem_op = num_wrters,
+			.sem_flg = 0
+		};
+		if (semop(sem_id, &sem_op, 1) == -1)
+			tst_brkm(TBROK|TERRNO, NULL, "Couldn't raise the semaphore 1");
 
 		sem_op = (struct sembuf) {
 			.sem_num = 0,
@@ -612,7 +636,7 @@ printf("child after fork pid = %d\n", getpid());
 			if (errno == EINTR) {
 				continue;
 			}
-			tst_brkm(TBROK, NULL, "Couldn't wait on semaphore: %s", strerror(errno));
+			tst_brkm(TBROK|TERRNO, NULL, "Couldn't wait on semaphore 0");
 		}
 
 		for (i=num_wrters*num_writes; i > 0 || loop; --i) {
@@ -693,6 +717,19 @@ output:
 			if (!quiet)
 				tst_resm(TPASS, "1 PASS %d pipe reads complete, read size = %d, %s %s",
 				          count+1,size,pipe_type,blk_type);
+
+		/* wait for all children to finish, timeout after uwait_total
+		   semtimedop might not be available everywhere */
+		for (i=0; i<uwait_total; i+=uwait_iter) {
+			if (semctl(sem_id, 1, GETVAL) == 0) {
+				break;
+			}
+			usleep(uwait_iter);
+		}
+
+		if (i > uwait_total) {
+			tst_resm(TWARN, "Timed out waiting for child processes to exit");
+		}
 
 		semctl(sem_id, 0, IPC_RMID);
 

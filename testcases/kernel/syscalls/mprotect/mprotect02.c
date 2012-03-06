@@ -60,6 +60,7 @@
 
 #include "safe_macros.h"
 
+static void sighandler(int sig);
 static void cleanup(void);
 static void setup(void);
 
@@ -69,6 +70,7 @@ int fd, status;
 char file1[BUFSIZ];
 
 char *addr = MAP_FAILED;
+char buf[] = "abcdefghijklmnopqrstuvwxyz";
 
 #ifndef UCLINUX
 
@@ -76,7 +78,6 @@ int main(int ac, char **av)
 {
 	int lc;
 	char *msg;
-	char *buf = "abcdefghijklmnopqrstuvwxyz";
 
 	int bytes_to_write, fd, num_bytes;
 	pid_t pid;
@@ -106,7 +107,7 @@ int main(int ac, char **av)
 		} while (0 < num_bytes);
 
 		/* mmap the PAGESIZE bytes as read only. */
-		addr = SAFE_MMAP(cleanup, 0, strlen(buf), PROT_READ,
+		addr = SAFE_MMAP(cleanup, 0, sizeof(buf), PROT_READ,
 		    MAP_SHARED, fd, 0);
 
 		if ((pid = FORK_OR_VFORK()) == -1)
@@ -114,22 +115,29 @@ int main(int ac, char **av)
 
 		if (pid == 0) {
 			(void)memcpy(addr, buf, strlen(buf));
-			printf("memcpy did not generate SIGSEGV\n");
-			exit(1);
+			exit(255);
 		}
 
 		if (waitpid(pid, &status, 0) == -1)
 			tst_brkm(TBROK|TERRNO, cleanup, "waitpid failed");
-
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGSEGV)
-			tst_resm(TPASS, "got SIGSEGV as expected");
-		else
+		if (!WIFEXITED(status))
+			tst_brkm(TBROK, cleanup, "child exited abnormally "
+					"with status: %d", status);
+		switch (status) {
+		case 255:
 			tst_brkm(TBROK, cleanup,
-			    "child exited abnormally; wait status = %d",
-			    status);
+					"memcpy did not generate SIGSEGV");
+		case 0:
+			tst_resm(TPASS, "got SIGSEGV as expected");
+			break;
+		default:
+			tst_brkm(TBROK, cleanup, "got unexpected signal: %d",
+					status);
+			break;
+		}
 
 		/* Change the protection to WRITE. */
-		TEST(mprotect(addr, strlen(buf), PROT_WRITE));
+		TEST(mprotect(addr, sizeof(buf), PROT_WRITE));
 
 		if (TEST_RETURN != -1) {
 
@@ -163,7 +171,8 @@ int main(int ac, char **av)
 			continue;
 		}
 
-		SAFE_MUNMAP(cleanup, addr, strlen(buf));
+		SAFE_MUNMAP(cleanup, addr, sizeof(buf));
+		addr = MAP_FAILED;
 
 		SAFE_CLOSE(cleanup, fd);
 
@@ -184,8 +193,14 @@ int main()
 
 #endif /* UCLINUX */
 
+static void sighandler(int sig)
+{
+	_exit((sig == SIGSEGV) ? 0 : sig);
+}
+
 static void setup()
 {
+	tst_sig(FORK, sighandler, cleanup);
 
 	TEST_PAUSE;
 
@@ -199,7 +214,7 @@ static void cleanup()
 	TEST_CLEANUP;
 
 	if (addr != MAP_FAILED) {
-		SAFE_MUNMAP(NULL, addr, sizeof(file1));
+		SAFE_MUNMAP(NULL, addr, sizeof(buf));
 		SAFE_CLOSE(NULL, fd);
 	}
 
