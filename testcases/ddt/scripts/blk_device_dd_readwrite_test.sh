@@ -30,7 +30,7 @@ cat <<-EOF >&2
         -m MNT_POINT	mount point 
         -b DD_BUFSIZE 	dd buffer size for 'bs'
         -c DD_CNT 	dd count for 'count'
-        -i IO_OPERATION	IO operation like 'write', 'read', default is 'read'
+        -i IO_OPERATION	IO operation like 'wr', 'rd', default is 'wr'
         -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
 	-l TEST_LOOP	test loop for r/w. default is 1.
 	-s SKIP_FORMAT  skip erase/format part and just do r/w 
@@ -72,7 +72,7 @@ if [ -z $DEV_NODE ]; then
   test_print_trc "DEV_NODE returned from get_blk_device_node is: $DEV_NODE"
 fi
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
-: ${IO_OPERATION:='read'}
+: ${IO_OPERATION:='wr'}
 : ${TEST_LOOP:='1'}
 test_print_trc "DEV_NODE: $DEV_NODE"
 test_print_trc "MNT_POINT: $MNT_POINT"
@@ -105,14 +105,18 @@ while [ $x -lt $TEST_LOOP ]
 do
 	do_cmd date	
 	case $IO_OPERATION in
-		write)
-			do_cmd dd if=/dev/zero of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT
+		wr)
+      SRC_FILE='/dev/shm/srctest_file'
+      do_cmd "dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
+			do_cmd dd if="$SRC_FILE" of="$MNT_POINT/test.file" bs=$DD_BUFSIZE count=$DD_CNT
+      do_cmd diff "$SRC_FILE" "$MNT_POINT/test.file"
+			do_cmd dd if=$MNT_POINT/test.file of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
 		;;
 		write_in_bg)
-			do_cmd dd if=/dev/zero of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT &
+			do_cmd dd if=/dev/urandom of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT &
 		;;
-		read)
-			do_cmd dd if=/dev/zero of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT
+		rd)
+			do_cmd dd if=/dev/urandom of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT
 			do_cmd dd if=$MNT_POINT/test.file of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
 		;;
 		*)
@@ -121,11 +125,10 @@ do
 		;;	
 	esac
 	do_cmd rm $MNT_POINT/test.file
+  do_cmd rm "$SRC_FILE"
 	x=$((x+1))
 	do_cmd date
 done
-#test_print_trc "Umounting device"
-#do_cmd "umount $DEV_NODE"
 [ $SKIP_FORMAT -eq 1 ] || do_cmd blk_device_unprepare.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE"
 
 
