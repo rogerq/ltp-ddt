@@ -87,7 +87,7 @@ COMMON_TARGETS    += testcases/lib
 
 # Don't want to nuke the original files if we're installing in-build-tree.
 ifneq ($(BUILD_TREE_STATE),$(BUILD_TREE_SRCDIR_INSTALL))
-INSTALL_TARGETS		+= runtest scenario_groups testscripts platforms
+INSTALL_TARGETS		+= runtest scenario_groups testscripts platforms skips
 CLEAN_TARGETS		+= include runtest scenario_groups testscripts
 endif
 INSTALL_TARGETS		+= $(COMMON_TARGETS)
