@@ -723,7 +723,8 @@ main()
     # If enabled, execute only test cases that match the PATTERN
     if [ -n "$TAG_RESTRICT_STRING" ]
     then
-        mv -f ${TMP}/alltests ${TMP}/alltests.orig
+      mv -f ${TMP}/alltests ${TMP}/alltests.orig
+      sed -i s'/\t/ /' ${TMP}/alltests.orig
 	    grep "$TAG_RESTRICT_STRING" ${TMP}/alltests.orig > ${TMP}/alltests #Not worth checking return codes for this case
     fi
 
