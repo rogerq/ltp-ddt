@@ -1032,13 +1032,13 @@ main()
 	EOF
 	cat $LOGFILE
     }
-    cat $LOGFILE | grep ' PASS ' 
+    cat $LOGFILE | grep ' FAIL ' 
     if [ $? -ne 0 ]; then
       rm -f $LOGFILE 
-      exit 1
+      exit $VALUE
     else
       rm -f $LOGFILE
-      exit $VALUE
+      exit 1
     fi
 }
 
