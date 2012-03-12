@@ -5,3 +5,4 @@ nand/davinci_nand
 net/eth1G
 spi_master/mtd/spi_davinci
 jffs2
+ubifs
