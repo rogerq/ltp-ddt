@@ -1,0 +1,5 @@
+# @name Power managment test for dynamic ticks
+# @desc Checks if dynamic ticks if enabled works fine
+# @requires power_mgr/dynamic_ticks
+
+POWERMGR_S_FUNC_DYNAMIC_TICKS source 'common.sh' ; do_cmd powermgr_dynticks.sh
