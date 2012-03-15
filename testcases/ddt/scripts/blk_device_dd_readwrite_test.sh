@@ -106,7 +106,8 @@ do
 	do_cmd date	
 	case $IO_OPERATION in
 		wr)
-      SRC_FILE='/dev/shm/srctest_file'
+      #SRC_FILE='/dev/shm/srctest_file'
+      SRC_FILE='/home/root/srctest_file'
       do_cmd "dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
 			do_cmd dd if="$SRC_FILE" of="$MNT_POINT/test.file" bs=$DD_BUFSIZE count=$DD_CNT
       do_cmd diff "$SRC_FILE" "$MNT_POINT/test.file"
