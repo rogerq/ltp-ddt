@@ -106,6 +106,10 @@ do
 			FREQ=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies | awk -v tmp=$t '{print $tmp}'`
 			do_cmd echo $FREQ > "/sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed" || die "unable to set OPP for $FREQ KHz"
 			FREQUENCY=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq`
+			if [ $FREQ -ne $FREQUENCY ]
+			then
+				die "unable to set OPP for $FREQ KHz"
+			fi
 			VOLTAGE=`cat $REGULATOR_VOLT_PATH`
 			test_print_trc "OPP set for: $FREQUENCY KHz $VOLTAGE uV"
 			sleep $DELAY
@@ -114,12 +118,20 @@ do
 		FREQ=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies | awk '{print $1}'`
 		do_cmd echo $FREQ > "/sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed" || die "unable to set OPP for $FREQ KHz"
 		FREQUENCY=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq`
+		if [ $FREQ -ne $FREQUENCY ]
+		then
+			die "unable to set OPP for $FREQ KHz"
+		fi
 		VOLTAGE=`cat $REGULATOR_VOLT_PATH`
 		test_print_trc "OPP set for: $FREQUENCY KHz $VOLTAGE uV"
 		sleep $DELAY
 		FREQ=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies | awk -v tmp=$cnt '{print $tmp}'`
 		do_cmd echo $FREQ > "/sys/devices/system/cpu/cpu0/cpufreq/scaling_setspeed" || die "unable to set OPP for $FREQ KHz"
 		FREQUENCY=`cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq`
+		if [ $FREQ -ne $FREQUENCY ]
+		then
+			die "unable to set OPP for $FREQ KHz"
+		fi
 		VOLTAGE=`cat $REGULATOR_VOLT_PATH`
 		test_print_trc "OPP set for: $FREQUENCY KHz $VOLTAGE uV"
 		sleep $DELAY
