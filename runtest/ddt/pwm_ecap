@@ -3,20 +3,20 @@
 #       Verification must be done manually by connecting CRO probes
 # @requires pwm/ecap
 
-PWM_S_FUNC_ECAP_DUTY_PERCENT_10	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 10 -p 200 -r 0 -P frequency -D percentage -T 3';
-PWM_S_FUNC_ECAP_DUTY_PERCENT_40	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 40 -p 200 -r 0 -P frequency -D percentage -T 3';
-PWM_S_FUNC_ECAP_DUTY_PERCENT_50	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 50 -p 200 -r 0 -P frequency -D percentage -T 3';
+PWM_S_FUNC_ECAP_DUTY_PERCENT_10	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 10 -p 200 -r 0 -P frequency -D percentage -T 30';
+PWM_S_FUNC_ECAP_DUTY_PERCENT_40	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 40 -p 200 -r 0 -P frequency -D percentage -T 30';
+PWM_S_FUNC_ECAP_DUTY_PERCENT_50	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 50 -p 200 -r 0 -P frequency -D percentage -T 30';
 
-PWM_S_FUNC_ECAP_DUTY_SECOND_0_4	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.4 -p 0.004 -r 0 -P seconds -D seconds -T 3';
-PWM_S_FUNC_ECAP_DUTY_SECOND_0_5	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.5 -p 0.004 -r 0 -P seconds -D seconds -T 3';
-PWM_S_FUNC_ECAP_DUTY_SECOND_0_6	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.6 -p 0.004 -r 0 -P seconds -D seconds -T 3';
+PWM_S_FUNC_ECAP_DUTY_SECOND_1_MS source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.001 -p 0.004 -r 0 -P seconds -D seconds -T 30';
+PWM_S_FUNC_ECAP_DUTY_SECOND_2_MS source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.002 -p 0.004 -r 0 -P seconds -D seconds -T 30';
+PWM_S_FUNC_ECAP_DUTY_SECOND_3_MS source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.003 -p 0.004 -r 0 -P seconds -D seconds -T 30';
 
 
-PWM_S_FUNC_ECAP_PERIOD_Hz_50	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 50 -p 50 -r 0 -P frequency -D percentage -T 3';
-PWM_S_FUNC_ECAP_PERIOD_Hz_100	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 50 -p 100 -r 0 -P frequency -D percentage -T 3';
-PWM_S_FUNC_ECAP_PERIOD_Hz_200	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 50 -p 200 -r 0 -P frequency -D percentage -T 3';
+PWM_S_FUNC_ECAP_PERIOD_Hz_50	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 50 -p 50 -r 0 -P frequency -D percentage -T 30';
+PWM_S_FUNC_ECAP_PERIOD_Hz_100	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 50 -p 100 -r 0 -P frequency -D percentage -T 30';
+PWM_S_FUNC_ECAP_PERIOD_Hz_200	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 50 -p 200 -r 0 -P frequency -D percentage -T 30';
 
-PWM_S_FUNC_ECAP_PERIOD_SECONDS_0_004	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.5 -p 0.004 -r 0 -P seconds -D seconds -T 3';
-PWM_S_FUNC_ECAP_PERIOD_SECONDS_0_005	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.5 -p 0.005 -r 0 -P seconds -D seconds -T 3';
-PWM_S_FUNC_ECAP_PERIOD_SECONDS_0_006	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.5 -p 0.006 -r 0 -P seconds -D seconds -T 3';
+PWM_S_FUNC_ECAP_PERIOD_SECONDS_4_MS	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.002 -p 0.004 -r 0 -P seconds -D seconds -T 30';
+PWM_S_FUNC_ECAP_PERIOD_SECONDS_3_MS	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.002 -p 0.003 -r 0 -P seconds -D seconds -T 30';
+PWM_S_FUNC_ECAP_PERIOD_SECONDS_2_MS	source 'common.sh' ; do_cmd 'pwm.sh -t ecap -d 0.002 -p 0.002 -r 0 -P seconds -D seconds -T 30';
 

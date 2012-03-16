@@ -3,16 +3,16 @@
 #       Tests must be verified manually using a CRO and observing Haptic motor rotation on EVM
 # @requires pwm
 
-PWM_S_FUNC_EHRPWM_DUTY_PERCENTAGE_50	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 50 -p 200 -r 0 -P frequency -D percentage -T 3';
-PWM_M_FUNC_EHRPWM_DUTY_PERCENTAGE_60	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 60 -p 200 -r 0 -P frequency -D percentage -T 3';
-PWM_M_FUNC_EHRPWM_DUTY_PERCENTAGE_20	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 20 -p 200 -r 0 -P frequency -D percentage -T 3';
-PWM_S_FUNC_EHRPWM_PERIOD_Hz_100	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 50 -p 100 -r 0 -P frequency -D percentage -T 3';
-PWM_M_FUNC_EHRPWM_PERIOD_Hz_200	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 50 -p 200 -r 0 -P frequency -D percentage -T 3';
-PWM_M_FUNC_EHRPWM_PERIOD_Hz_250	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 50 -p 250 -r 0 -P frequency -D percentage -T 3';
-PWM_S_FUNC_EHRPWM_DUTY_SECONDS_0_5	source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.5 -p 0.004 -r 0 -P "seconds" -D "seconds" -T 2';
-PWM_M_FUNC_EHRPWM_DUTY_SECONDS_0_6	source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.6 -p 0.004 -r 0 -P "seconds" -D "seconds" -T 2';
-PWM_M_FUNC_EHRPWM_DUTY_SECONDS_0_4	source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.4 -p 0.004 -r 0 -P "seconds" -D "seconds" -T 2';
-PWM_S_FUNC_EHRPWM_PERIOD_SECONDS_0_004	source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.5 -p 0.004 -r 0 -P "seconds" -D "seconds" -T 2';
-PWM_M_FUNC_EHRPWM_PERIOD_SECONDS_0_005	source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.5 -p 0.005 -r 0 -P "seconds" -D "seconds" -T 2';
-PWM_M_FUNC_EHRPWM_PERIOD_SECONDS_0_006	source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.5 -p 0.006 -r 0 -P "seconds" -D "seconds" -T 2';
+PWM_S_FUNC_EHRPWM_DUTY_PERCENTAGE_50	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 50 -p 200 -r 0 -P frequency -D percentage -T 30';
+PWM_M_FUNC_EHRPWM_DUTY_PERCENTAGE_60	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 60 -p 200 -r 0 -P frequency -D percentage -T 30';
+PWM_M_FUNC_EHRPWM_DUTY_PERCENTAGE_20	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 20 -p 200 -r 0 -P frequency -D percentage -T 30';
+PWM_S_FUNC_EHRPWM_PERIOD_Hz_100	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 50 -p 100 -r 0 -P frequency -D percentage -T 30';
+PWM_M_FUNC_EHRPWM_PERIOD_Hz_200	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 50 -p 200 -r 0 -P frequency -D percentage -T 30';
+PWM_M_FUNC_EHRPWM_PERIOD_Hz_250	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 50 -p 250 -r 0 -P frequency -D percentage -T 30';
+PWM_S_FUNC_EHRPWM_DUTY_SECONDS_1_MS source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.001 -p 0.004 -r 0 -P "seconds" -D "seconds" -T 30';
+PWM_M_FUNC_EHRPWM_DUTY_SECONDS_2_MS source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.002 -p 0.004 -r 0 -P "seconds" -D "seconds" -T 30';
+PWM_M_FUNC_EHRPWM_DUTY_SECONDS_3_MS source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.003 -p 0.004 -r 0 -P "seconds" -D "seconds" -T 30';
+PWM_S_FUNC_EHRPWM_PERIOD_SECONDS_4_MS	source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.002 -p 0.004 -r 0 -P "seconds" -D "seconds" -T 30';
+PWM_M_FUNC_EHRPWM_PERIOD_SECONDS_3_MS	source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.002 -p 0.003 -r 0 -P "seconds" -D "seconds" -T 30';
+PWM_M_FUNC_EHRPWM_PERIOD_SECONDS_2_MS	source 'common.sh' ; do_cmd 'pwm.sh -t "ehrpwm" -d 0.002 -p 0.002 -r 0 -P "seconds" -D "seconds" -T 30';
 
