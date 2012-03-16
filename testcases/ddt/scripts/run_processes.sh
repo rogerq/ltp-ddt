@@ -5,17 +5,19 @@
 
 pids=''
 RET=0
-i=0
 OFS=$IFS
 IFS="#"
 
 # Start processes
+i=0
 for w in $1 
 do
+  sleep 1
   eval "$w" > ./log$i.tmp 2>&1 &
   pids="$pids:$!"
   i=`expr $i + 1`
 done
+cnt=$i
 
 IFS=':'
 
@@ -35,5 +37,17 @@ do
 done
 
 IFS=$OFS
+
+# Print logs in console
+j=0
+while [ $j -lt $cnt ]
+do
+  echo "*************  log$j.tmp    ***************"
+  cat ./log$j.tmp
+  echo "*************end of log$j.tmp**************"
+  echo ""
+  j=`expr $j + 1`
+done
+
 exit $RET
 
