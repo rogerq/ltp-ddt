@@ -118,7 +118,7 @@ case $MACHINE in
                 esac
                 ;;
 
-        am387x-evm)
+        am387x-evm|dm385-evm)
                 case $SLAVE_DEVICE in
                         eeprom)
                                 SLAVE_ADDR=0x50
