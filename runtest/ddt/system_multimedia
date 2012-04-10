@@ -1,7 +1,8 @@
 # @name Test system use cases
 # @desc Test system use cases
-# @requires net && usb/host && graphics && sound
-# @setup_requires usbhostmsc 
+# @requires net && usb/host && graphics && sound && nand && ubifs && mmc_host/sdhc
+# @setup_requires usbhostmsc && sdhc 
 
 SYSTEM_L_PERF_ETH-USB-LCD-ALSA-0001 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/eth_iperf_tcp -P $MACHINE -s ETH_M_PERF_IPERF_TCP_128K_1448B # /opt/ltp/runltp -f ddt/usbhost_perf_vfat -P $MACHINE -s USBHOST_S_PERF_VFAT_0001 # /opt/ltp/runltp -f ddt/fbdev_disp -P $MACHINE -s FBDEV_L_FUNC # /opt/ltp/runltp -P $MACHINE -f ddt/alsa_opmode -s ALSA_M_FUNC_LOOPBK_OPMODE_BLK_02"
+SYSTEM_L_STRESS_ETH-USB-LCD-ALSA-NAND-MMC-0001 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/eth_iperf_tcp -P $MACHINE -s ETH_M_PERF_IPERF_TCP_128K_1448B # /opt/ltp/runltp -f ddt/usbhost_perf_vfat -P $MACHINE -s USBHOST_S_PERF_VFAT_0001 # /opt/ltp/runltp -f ddt/fbdev_disp -P $MACHINE -s FBDEV_L_FUNC # /opt/ltp/runltp -P $MACHINE -f ddt/alsa_opmode -s ALSA_M_FUNC_LOOPBK_OPMODE_BLK_02 # /opt/ltp/runltp -f ddt/mmc_sdhccard_dd_rw_ext2 -P $MACHINE -s MMC_M_FUNC_SDHC_EXT2_DD_RW_0007 # /opt/ltp/runltp  -f ddt/nand_perf_ubifs -P $MACHINE -s NAND_L_PERF_UBIFS"
 
