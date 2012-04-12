@@ -104,29 +104,30 @@ x=0
 while [ $x -lt $TEST_LOOP ]
 do
 	do_cmd date	
+  TEST_FILE="${MNT_POINT}/test_file_$$"
 	case $IO_OPERATION in
 		wr)
       #SRC_FILE='/dev/shm/srctest_file'
-      SRC_FILE='/home/root/srctest_file'
+      SRC_FILE="/home/root/srctest_file_${DEVICE_TYPE}_$$"
       do_cmd "dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
-			do_cmd dd if="$SRC_FILE" of="$MNT_POINT/test.file" bs=$DD_BUFSIZE count=$DD_CNT
-      do_cmd diff "$SRC_FILE" "$MNT_POINT/test.file"
-			do_cmd dd if=$MNT_POINT/test.file of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
+			do_cmd dd if="$SRC_FILE" of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
+      do_cmd diff "$SRC_FILE" "$TEST_FILE"
+			do_cmd dd if=$TEST_FILE of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
+      do_cmd rm "$SRC_FILE"
 		;;
 		write_in_bg)
-			do_cmd dd if=/dev/urandom of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT &
+			do_cmd dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT &
 		;;
 		rd)
-			do_cmd dd if=/dev/urandom of=$MNT_POINT/test.file bs=$DD_BUFSIZE count=$DD_CNT
-			do_cmd dd if=$MNT_POINT/test.file of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
+			do_cmd dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
+			do_cmd dd if="$TEST_FILE" of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
 		;;
 		*)
 		test_print_err "Invalid IO operation type in $0 script"
 		exit 1;
 		;;	
 	esac
-	do_cmd rm $MNT_POINT/test.file
-  do_cmd rm "$SRC_FILE"
+	do_cmd rm "$TEST_FILE"
 	x=$((x+1))
 	do_cmd date
 done

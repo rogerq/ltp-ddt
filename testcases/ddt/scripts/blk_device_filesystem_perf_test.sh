@@ -94,8 +94,9 @@ test_print_trc "DEVICE_TYPE:${DEVICE_TYPE}"
 
 # check if input are valid for this machine
 DEVICE_PART_SIZE=`get_blk_device_part_size.sh -d $DEVICE_TYPE -n $DEV_NODE` || die "error while getting device partition size: $DEVICE_PART_SIZE"
-test_print_trc "Device Partition Size is $DEVICE_PART_SIZE"
-[ $(( $FILE_SIZE * $MB )) -gt $DEVICE_PART_SIZE ] && die "File Size: $FILE_SIZE MB is not less than or equal to Device Partition Size: $DEVICE_PART_SIZE"
+test_print_trc "Device Partition Size is $DEVICE_PART_SIZE MB"
+#[ $(( $FILE_SIZE * $MB )) -gt $DEVICE_PART_SIZE ] && die "File Size: $FILE_SIZE MB is not less than or equal to Device Partition Size: $DEVICE_PART_SIZE"
+[ $FILE_SIZE -gt $DEVICE_PART_SIZE ] && die "File Size: $FILE_SIZE MB is not less than or equal to Device Partition Size: $DEVICE_PART_SIZE MB"
 
 # run filesystem perf test
 do_cmd "mkdir -p $MNT_POINT"
@@ -120,10 +121,12 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	fi
 
 	test_print_trc "Creating src test file..."
-	TMP_FILE='/dev/shm/srctest_file'
+	TMP_FILE="/dev/shm/srctest_file_${DEVICE_TYPE}_$$"
 	do_cmd "dd if=/dev/urandom of=$TMP_FILE bs=1M count=$SRCFILE_SIZE"
 
-	do_cmd filesystem_tests -write -src_file $TMP_FILE -srcfile_size $SRCFILE_SIZE -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
+  TEST_FILE="${MNT_POINT}/test_file_$$"
+
+	do_cmd filesystem_tests -write -src_file $TMP_FILE -srcfile_size $SRCFILE_SIZE -file ${TEST_FILE} -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 	do_cmd "rm -f $TMP_FILE"
 	do_cmd "sync"
 	# should do umount and mount before read to force to write to device
@@ -133,7 +136,7 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 
 	#do_cmd "mount -t $FS_TYPE -o $MNT_MODE $DEV_NODE $MNT_POINT"
   do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -o "$MNT_MODE"
-	do_cmd filesystem_tests -read -file $MNT_POINT/test_file -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
+	do_cmd filesystem_tests -read -file ${TEST_FILE} -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 	do_cmd "sync"
 	do_cmd "echo 3 > /proc/sys/vm/drop_caches"
 
@@ -142,11 +145,12 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	# TMP_FILE='/test_file'
 	#HALF_FILE_SIZE=`expr $FILE_SIZE / 2`
 	HALF_FILE_SIZE=$(echo "scale=2; $FILE_SIZE/2" | bc)
-	do_cmd "dd if=/dev/urandom of=$MNT_POINT/test_file bs=512K count=$FILE_SIZE"
-	do_cmd filesystem_tests -copy -src_file $MNT_POINT/test_file -dst_file $MNT_POINT/dst_test_file -duration 30 -buffer_size $BUFFER_SIZE -file_size $HALF_FILE_SIZE -performance 
-	do_cmd "rm -f $MNT_POINT/test_file"
-	do_cmd "rm -f $MNT_POINT/dst_test_file"
-	do_cmd "rm -f $TMP_FILE"
+  TEST_FILE="${MNT_POINT}/test_file_$$"
+  DST_TEST_FILE="${MNT_POINT}/dst_test_file_$$"
+	do_cmd "dd if=/dev/urandom of=${TEST_FILE} bs=512K count=$FILE_SIZE"
+	do_cmd filesystem_tests -copy -src_file ${TEST_FILE} -dst_file ${DST_TEST_FILE} -duration 30 -buffer_size $BUFFER_SIZE -file_size $HALF_FILE_SIZE -performance 
+	do_cmd "rm -f ${TEST_FILE}"
+	do_cmd "rm -f ${DST_TEST_FILE}"
 	test_print_trc "Unmount the device"
 	#do_cmd "umount $DEV_NODE"
   do_cmd blk_device_unprepare.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE"

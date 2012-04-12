@@ -88,6 +88,7 @@ case $DEV_TYPE in
 	;;
 esac
 
-echo $SIZE
+# return size in MB
+echo $(( $SIZE / $MB ))
 
 
