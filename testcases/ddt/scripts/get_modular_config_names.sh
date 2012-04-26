@@ -53,7 +53,7 @@ do
 
     *mmci-omap-hs)
       mmc="CONFIG_MMC_OMAP_HS:omap_hsmmc";;
-    *davinci-mmc)
+    *davinci_mmc)
       mmc="CONFIG_MMC_DAVINCI:davinci_mmc";;
 
     *rtc-s35390a)
@@ -63,8 +63,8 @@ do
     *rtc_twl)
       rtc="CONFIG_RTC_DRV_TWL4030:rtc_twl";;
 
-    *davinci_spi)
-      spi="CONFIG_SPI_DAVINCI:davinci_spi";;
+    *spi_davinci)
+      spi="CONFIG_SPI_DAVINCI:spi_davinci";;
     *omap2_mcspi)
       spi="CONFIG_SPI_OMAP24XX:omap2_mcspi";;
     *spi-omap2-mcspi)
