@@ -100,6 +100,9 @@ if [ -z "$FS_TYPE" ]; then
 fi
 
 test_print_trc "Doing read/write test for $TEST_LOOP times"
+#SRC_FILE='/dev/shm/srctest_file'
+SRC_FILE="/home/root/srctest_file_${DEVICE_TYPE}_$$"
+do_cmd "dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
 x=0
 while [ $x -lt $TEST_LOOP ]
 do
@@ -107,20 +110,16 @@ do
   TEST_FILE="${MNT_POINT}/test_file_$$"
 	case $IO_OPERATION in
 		wr)
-      #SRC_FILE='/dev/shm/srctest_file'
-      SRC_FILE="/home/root/srctest_file_${DEVICE_TYPE}_$$"
-      do_cmd "dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
-			do_cmd dd if="$SRC_FILE" of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
+			do_cmd time dd if="$SRC_FILE" of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
       do_cmd diff "$SRC_FILE" "$TEST_FILE"
-			do_cmd dd if=$TEST_FILE of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
-      do_cmd rm "$SRC_FILE"
+			do_cmd time dd if=$TEST_FILE of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
 		;;
 		write_in_bg)
-			do_cmd dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT &
+			do_cmd time dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT &
 		;;
 		rd)
-			do_cmd dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
-			do_cmd dd if="$TEST_FILE" of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
+			do_cmd time dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
+			do_cmd time dd if="$TEST_FILE" of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
 		;;
 		*)
 		test_print_err "Invalid IO operation type in $0 script"
@@ -131,6 +130,8 @@ do
 	x=$((x+1))
 	do_cmd date
 done
+do_cmd rm "$SRC_FILE"
+
 [ $SKIP_FORMAT -eq 1 ] || do_cmd blk_device_unprepare.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE"
 
 
