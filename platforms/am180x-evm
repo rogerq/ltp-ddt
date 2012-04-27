@@ -11,6 +11,9 @@ net/eth100M/davinci_emac
 pru
 rtc/omap_rtc
 sata
+nand/davinci_nand
+jffs2
+nor/physmap-flash
 sound/capture/alsa
 sound/playback/alsa
 spi_master/mtd/spi_davinci

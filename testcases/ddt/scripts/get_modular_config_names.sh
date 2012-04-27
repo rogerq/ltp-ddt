@@ -45,9 +45,11 @@ do
   case $DRIVER in
     *omap2-nand)
       nand="CONFIG_JFFS2_FS:jffs2 CONFIG_MTD_NAND_OMAP2:omap2";; 
-    *davinci-nand)
-      nand=":davinci_nand";;
+    *davinci_nand)
+      nand="CONFIG_JFFS2_FS:jffs2 CONFIG_MTD_NAND_DAVINCI:davinci_nand";;
 
+    *physmap-flash)
+      nor="CONFIG_JFFS2_FS:jffs2 CONFIG_MTD_PHYSMAP:physmap";;
     *ahci)
       sata="CONFIG_SATA_AHCI_PLATFORM:ahci_platform";;
 
