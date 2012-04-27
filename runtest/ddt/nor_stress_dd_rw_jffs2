@@ -1,0 +1,11 @@
+# @name NOR write stress test using dd with dd_cnt being half of mtd size 
+# @desc Perform NOR eraseall first, then do read write 
+# @requires  nor
+# The partition number is specified in get_mtd_partition_number.sh
+
+NOR_L_STRESS_DD_RW_0001 source 'common.sh'; part=`get_mtd_partition_number.sh "nor"` || die "error getting mtd part number: $part"; size=`get_mtd_size.sh "$part"` || die "error getting mtd size: $size"; size=$(( $size/MB )) && size=`get_ceiling_divide.sh "$size" 2` || die "error getting divide ceiling"; do_cmd blk_device_dd_readwrite_test.sh -f "jffs2" -b "1M" -c "$size" -l "100" -d "nor"
+
+
+
+
+

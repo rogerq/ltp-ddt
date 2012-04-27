@@ -1,0 +1,7 @@
+# @name 
+#	NOR insmod rmmod test
+# @desc 
+#       modprobe nor module and then rmmod it
+# @requires  nor 
+
+NOR_M_MODULAR_INSMOD_RMMOD source "common.sh"; install_modules.sh "nor"; mod_name=`get_modular_name.sh "nor"` || die "error getting modular name: $mod_name"; do_cmd insmod.sh "$mod_name"; do_cmd rmmod.sh "$mod_name" 

@@ -1,0 +1,9 @@
+# @name 
+#	NOR modular multiple insmod rmmod test 
+# @desc 
+#       modprobe nor module multiple times 
+# @requires  nor 
+# @setup_requires 
+
+#NOR_MODULAR_STRESS_0001 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -l "10" -d "nor" -s
+NOR_L_MODULAR_MULTI_0001 source "common.sh"; do_cmd do_modular_common.sh -l "10" -d "nor" 

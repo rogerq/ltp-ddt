@@ -1,0 +1,7 @@
+# @name
+#       NOR modular negative test
+# @desc
+#       modprobe nor module first and then do mount and rmmod 
+# @requires  nor && jffs2
+
+NOR_L_MODULAR_NEG_RMMOD_WHEN_MOUNT_JFFS2 source "common.sh"; do_cmd insmod.sh "nor"; DEV_NODE=`get_blk_device_node.sh "nor"` || die "error getting devnode for nor: $DEV_NODE"; do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "jffs2" -d "nor" -m "/mnt/nor"; rmmod.sh "nor" && exit 1 || exit 0

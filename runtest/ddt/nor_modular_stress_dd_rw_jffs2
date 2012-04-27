@@ -1,0 +1,7 @@
+# @name 
+#	NOR jffs2 modular read write test 
+# @desc 
+#       modprobe nor module first and then do RW and then rmmod it
+# @requires  nor && jffs2
+
+NOR_L_MODULAR_STRESS_RW_JFFS2 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -f "jffs2" -b "1M" -c "2" -l "10" -d "nor"
