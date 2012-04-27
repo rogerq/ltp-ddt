@@ -22,3 +22,4 @@ usb/host/hid/musb_da8xx
 usb/host/iso/musb_da8xx
 watchdog
 graphics/fb0/DA8xx_FB_Drv
+clcd/DA8xx_lcdc

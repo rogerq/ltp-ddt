@@ -82,6 +82,8 @@ do
     *DA8xx_FB_Drv)
       graphics="CONFIG_FB_DA8XX:da8xx-fb";;
 
+    *clcd)
+      clcd="CONFIG_DA850_UI_CLCD:panel";; #not sure if this is the right one
 
     *soc-audio)
       sound=':snd-soc-evm';; #covered in below switch case for MACHINE

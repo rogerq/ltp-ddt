@@ -5,6 +5,7 @@ can/<drivername>
 edma/<drivername>
 sdma/<drivername>
 graphics/<drivername>
+clcd/<drivername>
 i2c/non_eeprom/<drivername>
 i2c/eeprom/<drivername>
 mmc_host/sd/<drivername>

@@ -1,0 +1,5 @@
+# @name CLCD display test
+# @desc Testing basic display on clcd
+# @requires clcd
+
+CLCD_S_FUNC_DISP source "common.sh"; do_cmd 'clcd.sh'
