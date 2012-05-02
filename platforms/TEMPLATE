@@ -11,6 +11,7 @@ i2c/eeprom/<drivername>
 mmc_host/sd/<drivername>
 mmc_host/mmc/<drivername>
 mmc_host/sdhc/<drivername>
+mmc_host/sdxc/<drivername>
 mmc_host/sdio/<drivername>
 nand/<drivername>
 nor/<drivername>

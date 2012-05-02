@@ -1,0 +1,23 @@
+# @name SDXC card: MMC device w/r test with fs:vfat
+# @desc Perform mkfs first, then do read write 
+#	The device node is specified in get_blk_device_node.sh
+# @requires mmc_host/sdxc 
+# @setup_requires sdxc
+
+MMC_L_FUNC_SDXC_VFAT_DD_RW_10M source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1M" -c "10" -d "mmc" 
+
+MMC_L_FUNC_SDXC_VFAT_DD_RW_100M source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "10M" -c "10" -d "mmc"
+
+MMC_L_FUNC_SDXC_VFAT_DD_RW_1G source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "10M" -c "100" -d "mmc"
+
+MMC_L_STRESS_SDXC_VFAT_DD_RW_10G source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1M" -c "1024" -d "mmc" -l 10 -w
+
+MMC_L_STRESS_SDXC_VFAT_DD_RW_50G source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1M" -c "1024" -d "mmc" -l 50 -w
+
+
+
+
+
+
+
+
