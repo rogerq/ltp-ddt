@@ -135,7 +135,7 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	do_cmd "echo 3 > /proc/sys/vm/drop_caches"
 
 	#do_cmd "mount -t $FS_TYPE -o $MNT_MODE $DEV_NODE $MNT_POINT"
-  do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -o "$MNT_MODE"
+  do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -o "$MNT_MODE" -m "$MNT_POINT"
 	do_cmd filesystem_tests -read -file ${TEST_FILE} -buffer_size $BUFFER_SIZE -file_size $FILE_SIZE -performance 
 	do_cmd "sync"
 	do_cmd "echo 3 > /proc/sys/vm/drop_caches"
