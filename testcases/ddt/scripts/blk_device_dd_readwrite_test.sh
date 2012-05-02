@@ -20,40 +20,43 @@ source "st_log.sh"
 source "mtd_common.sh"
 
 SKIP_FORMAT=0
+WRITE_TO_FILL=0
 ############################# Functions #######################################
 usage()
 {
 cat <<-EOF >&2
-        usage: ./${0##*/} [-n DEV_NODE] [-d DEVICE_TYPE] [-f FS_TYPE] [-m MNT_POINT] [-b DD_BUFSIZE] [-c DD_CNT] [-i IO_OPERATION] [-l TEST_LOOP] [-s SKIP_FORMAT]
-	-n DEV_NODE	optional param; device node like /dev/mtdblock2; /dev/sda1
-        -f FS_TYPE      filesystem type like jffs2, ext2, etc
-        -m MNT_POINT	mount point 
-        -b DD_BUFSIZE 	dd buffer size for 'bs'
-        -c DD_CNT 	dd count for 'count'
-        -i IO_OPERATION	IO operation like 'wr', 'rd', default is 'wr'
-        -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
-	-l TEST_LOOP	test loop for r/w. default is 1.
+  usage: ./${0##*/} [-n DEV_NODE] [-d DEVICE_TYPE] [-f FS_TYPE] [-m MNT_POINT] [-b DD_BUFSIZE] [-c DD_CNT] [-i IO_OPERATION] [-l TEST_LOOP] [-s SKIP_FORMAT] [-w WRITE_TO_FILLUP] 
+	-n DEV_NODE	    optional param; device node like /dev/mtdblock2; /dev/sda1
+  -f FS_TYPE      filesystem type like jffs2, ext2, etc
+  -m MNT_POINT	  mount point 
+  -b DD_BUFSIZE 	dd buffer size for 'bs'
+  -c DD_CNT 	    dd count for 'count'
+  -i IO_OPERATION	IO operation like 'wr', 'rd', default is 'wr'
+  -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+	-l TEST_LOOP	  test loop for r/w. default is 1.
 	-s SKIP_FORMAT  skip erase/format part and just do r/w 
-        -h Help         print this usage
+  -w WRITE_TO_FILLUP keep writing different files TEST_LOOP times to device
+  -h Help         print this usage
 EOF
 exit 0
 }
 
 ############################### CLI Params ###################################
 
-while getopts  :d:f:m:n:b:c:i:l:sh arg
+while getopts  :d:f:m:n:b:c:i:l:swh arg
 do case $arg in
         n)      
-		# optional param
-		DEV_NODE="$OPTARG";;
+                # optional param
+                DEV_NODE="$OPTARG";;
         d)      DEVICE_TYPE="$OPTARG";;
         f)      FS_TYPE="$OPTARG";;
         m)      MNT_POINT="$OPTARG";;
         b)      DD_BUFSIZE="$OPTARG";;
         c)      DD_CNT="$OPTARG";;
-	i) 	IO_OPERATION="$OPTARG";;
-	l) 	TEST_LOOP="$OPTARG";;
-	s)	SKIP_FORMAT=1;;
+        i) 	    IO_OPERATION="$OPTARG";;
+        l) 	    TEST_LOOP="$OPTARG";;
+        s)	    SKIP_FORMAT=1;;
+        w)      WRITE_TO_FILL=1;; 
         h)      usage;;
         :)      test_print_trc "$0: Must supply an argument to -$OPTARG." >&2
                 exit 1
@@ -79,12 +82,6 @@ test_print_trc "MNT_POINT: $MNT_POINT"
 test_print_trc "FS_TYPE: $FS_TYPE"
 
 ############# Do the work ###########################################
-#do_cmd "mount" | grep $DEV_NODE 
-#if [ $? -ne 0]; then
-#	test_print_trc "Erasing/Formatting this partition and then mount it"
-#	do_cmd blk_device_erase_format_part.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE"
-#	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
-#fi
 if [ $SKIP_FORMAT -ne 1 ]; then 
 	if [ -n "$FS_TYPE" ]; then
 		do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
@@ -100,14 +97,21 @@ if [ -z "$FS_TYPE" ]; then
 fi
 
 test_print_trc "Doing read/write test for $TEST_LOOP times"
-#SRC_FILE='/dev/shm/srctest_file'
+# not using tmpfs because it is too small and we don't measure performance here
+#SRC_FILE='/dev/shm/srctest_file' 
 SRC_FILE="/home/root/srctest_file_${DEVICE_TYPE}_$$"
-do_cmd "dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
+do_cmd "time dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
 x=0
 while [ $x -lt $TEST_LOOP ]
 do
+  echo "============LOOP: $x============"
 	do_cmd date	
-  TEST_FILE="${MNT_POINT}/test_file_$$"
+  if [ "$WRITE_TO_FILL" -ne 1 ]; then
+    TEST_FILE="${MNT_POINT}/test_file_$$"
+  else
+    # write to different file to fill up the device
+    TEST_FILE="${MNT_POINT}/test_file_$$_${x}"
+  fi
 	case $IO_OPERATION in
 		wr)
 			do_cmd time dd if="$SRC_FILE" of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
@@ -126,11 +130,30 @@ do
 		exit 1;
 		;;	
 	esac
-	do_cmd rm "$TEST_FILE"
+  if [ "$WRITE_TO_FILL" -ne 1 ]; then
+    do_cmd rm "$TEST_FILE"
+  else
+    # don't remove the testfiles so that to fillup the device
+    do_cmd echo "Do not remove the testfiles in order to fillup the device"
+  fi
 	x=$((x+1))
 	do_cmd date
 done
 do_cmd rm "$SRC_FILE"
+do_cmd "df -h"
+do_cmd "ls -l ${MNT_POINT}"
+
+# remove all the testfiles in loop
+if [ "$WRITE_TO_FILL" -eq 1 ]; then
+  x=0
+  while [ $x -lt $TEST_LOOP ]
+  do
+    echo "============LOOP for removing files: $x============"
+    TEST_FILE="${MNT_POINT}/test_file_$$_${x}"
+    do_cmd "rm ${TEST_FILE}"
+    x=$((x+1))
+  done  
+fi
 
 [ $SKIP_FORMAT -eq 1 ] || do_cmd blk_device_unprepare.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE"
 
