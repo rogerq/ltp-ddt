@@ -3,7 +3,7 @@
 # @requires sata
 # @setup_requires sata
 
-SATA_S_PERF_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 10 -B "262144" -d "sata"
+SATA_S_PERF_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 100 -B "262144" -d "sata"
 SATA_L_PERF_VFAT_0001 blk_device_filesystem_perf_test.sh -f vfat -s 1000 -B "102400 262144 524288 1048576 5242880" -d "sata"
 
 
