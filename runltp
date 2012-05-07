@@ -1034,8 +1034,15 @@ main()
     }
     cat $LOGFILE | grep ' FAIL ' 
     if [ $? -ne 0 ]; then
-      rm -f $LOGFILE 
-      exit $VALUE
+      # make sure there is PASS result. sometime, there is no result.
+      cat $LOGFILE | grep ' PASS '
+      if [ $? -eq 0 ]; then
+        rm -f $LOGFILE 
+        exit $VALUE
+      else
+        rm -f $LOGFILE 
+        exit 1
+      fi
     else
       rm -f $LOGFILE
       exit 1
