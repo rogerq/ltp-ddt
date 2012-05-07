@@ -1,7 +1,7 @@
 # @name eHRPWM
 # @desc Testing eHRPWM by varying parameters such as duty cycle, period frequency 
 #       Tests must be verified manually using a CRO and observing Haptic motor rotation on EVM
-# @requires pwm
+# @requires pwm/ehrpwm
 
 PWM_S_FUNC_EHRPWM_DUTY_PERCENTAGE_50	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 50 -p 200 -r 0 -P frequency -D percentage -T 30';
 PWM_M_FUNC_EHRPWM_DUTY_PERCENTAGE_60	source 'common.sh' ; do_cmd 'pwm.sh -t ehrpwm -d 60 -p 200 -r 0 -P frequency -D percentage -T 30';

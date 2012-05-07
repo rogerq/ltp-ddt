@@ -88,6 +88,11 @@ case $MACHINE in
 		ehrpwm_instance=2
 		ehrpwm_channel=1
 		;;
+	am180x-evm)
+		ecap_instance=2
+		ehrpwm_instance=1
+		ehrpwm_channel=1
+		;;
 esac
 # Define default values for variables being overriden
 
@@ -136,20 +141,24 @@ esac
 	if test "$period_type" = "frequency" 
 	then
 		do_cmd "echo $period > /sys/class/pwm/$device/period_freq" || die "setting period_freq failed"
+		do_cmd "cat /sys/class/pwm/$device/period_freq" || die "print period_freq failed"
 	fi
 	if test "$period_type" = "seconds" ;
 	then
 		do_cmd "echo `echo "$period * 1000000000" | bc -l` > /sys/class/pwm/$device/period_ns" || die "setting period_ns failed"
+		do_cmd "cat /sys/class/pwm/$device/period_ns" || die "print period_ns failed"
 	fi
 	
 	if test "$duty_type" = "percentage" ; 
 	then
 		do_cmd "echo $duty > /sys/class/pwm/$device/duty_percent" || die "setting duty_percent failed"
+		do_cmd "cat /sys/class/pwm/$device/duty_percent" || die "print duty_percent failed"
 	fi
 
 	if test "$duty_type" = "seconds"  ;
 	then
 		do_cmd "echo `echo "$duty * 1000000000" | bc -l` > /sys/class/pwm/$device/duty_ns" || die "setting duty_ns failed"
+		do_cmd "cat /sys/class/pwm/$device/duty_ns" || die "print duty_ns failed"
 	fi
 	test_print_trc "Starting device $device"
 	do_cmd "echo 1 > /sys/class/pwm/$device/run" || die "Run failed" 
