@@ -92,7 +92,7 @@ else
 			fs_to_try="jffs2:ubifs"
 		;;
 		*)
-			fs_to_try="vfat:ext2:ext3"
+			fs_to_try="vfat:ext3:ext2"
 		;;
 	esac	
 	# try all fs to mount

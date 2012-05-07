@@ -1,0 +1,12 @@
+# @name SDHC card: MMC device w/r stress test with fs:ext2 and size:10M (bs=10M;count=1)
+# @desc Perform mkfs first, then do read write 
+#	The device node is specified in get_blk_device_node.sh
+# @requires mmc_host/sdhc 
+# @setup_requires sdhc
+
+MMC_L_STRESS_SDHC_EXT2_WR_TARBALL source "common.sh"; install_modules.sh "mmc"; DEV_NODE=`get_blk_device_node.sh "mmc";` || die "error getting devnode for mmc"; do_cmd blk_device_tarball_write_test.sh -f "ext3" -d "mmc" -l "100" -t "http://arago-project.org/files/releases/opentest/opentest-0.0.20.tar.gz"
+
+
+
+
+
