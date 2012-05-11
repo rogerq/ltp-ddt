@@ -3,6 +3,7 @@ omapl138
 am180x-evm
 can/<drivername>
 edma/<drivername>
+gpio/<drivername>
 sdma/<drivername>
 graphics/<drivername>
 clcd/<drivername>

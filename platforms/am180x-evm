@@ -2,6 +2,7 @@ armv5
 omapl138
 am180x-evm
 edma
+gpio
 i2c/non_eeprom
 mmc_host/sd/davinci_mmc
 mmc_host/mmc/davinci_mmc

@@ -1,0 +1,15 @@
+# @name GPIO interrupt test
+# @desc Set gpio pin in each bank to output and then use it to trigger interrupt. Before run this test, kernel may be required to be modified to add entries for pin to test
+# @requires gpio && am180x-evm 
+
+GPIO_S_FUNC_INTERRUPT_AM180X-EVM_BANK0 source "common.sh"; gpio.sh -b "0" -g "0" -l "4"
+GPIO_S_FUNC_INTERRUPT_AM180X-EVM_BANK1 source "common.sh"; gpio.sh -b "1" -g "15" -l "4"
+GPIO_S_FUNC_INTERRUPT_AM180X-EVM_BANK2 source "common.sh"; gpio.sh -b "2" -g "10" -l "4"
+GPIO_S_FUNC_INTERRUPT_AM180X-EVM_BANK3 source "common.sh"; gpio.sh -b "3" -g "8" -l "4"
+GPIO_S_FUNC_INTERRUPT_AM180X-EVM_BANK4 source "common.sh"; gpio.sh -b "4" -g "8" -l "4"
+GPIO_S_FUNC_INTERRUPT_AM180X-EVM_BANK5 source "common.sh"; gpio.sh -b "5" -g "8" -l "4"
+GPIO_S_FUNC_INTERRUPT_AM180X-EVM_BANK6 source "common.sh"; gpio.sh -b "6" -g "8" -l "4"
+GPIO_S_FUNC_INTERRUPT_AM180X-EVM_BANK7 source "common.sh"; gpio.sh -b "7" -g "4" -l "4"
+GPIO_S_FUNC_INTERRUPT_AM180X-EVM_BANK8 source "common.sh"; gpio.sh -b "8" -g "12" -l "4"
+
+
