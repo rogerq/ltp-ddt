@@ -13,16 +13,16 @@
 
 source "common.sh"
 source "st_log.sh"
-source "usb_video_search_devices.sh"
 
 ############################# Functions #######################################
 usage()
 {
 	cat <<-EOF >&2
-	usage: ./${0##*/} [-w WIDTH] [-l LENGTH] [-i FILE_NAME] [-h HELP]
+	usage: ./${0##*/} [-w WIDTH] [-l LENGTH] [-i FILE_NAME] [-h HELP] [-d DEV_NAME]
 	-w WIDTH          	Video Resolution Width
 	-l LENGTH        	Video Resolution Length
 	-i FILE_NAME       	File Name
+	-d DEV_NAME		Device Name Eg: /dev/video0
 	-h HELP          	Help
 	EOF
 	exit 0
@@ -30,11 +30,12 @@ usage()
 
 ################################ CLI Params ####################################
 # Please use getopts
-while getopts  :w:l:i:h arg
+while getopts  :w:l:i:d:h arg
 do case $arg in
         w)      WIDTH="$OPTARG";;
         l)      LENGTH="$OPTARG";;
         i)      FILE_NAME="$OPTARG";;
+	d)	DEV_NAME="$OPTARG";;
         h)      HELP="$OPTARG";;
         :)      die "$0: Must supply an argument to -$OPTARG.";;
         \?)     die "Invalid Option -$OPTARG ";;
@@ -67,10 +68,6 @@ esac
 # use USER-DEFINED Params section above.
 
 
-#initalize
-
-DEV_NAME=`Video_Search_Device()`
-
 # Print the test params.
 
 test_print_trc " ****************** TEST PARAMETERS ******************"
@@ -83,7 +80,7 @@ test_print_trc " *************** END OF TEST PARAMETERS ***************"
 #capturing the video
 
 do_cmd cd /opt/ltp/testcases/bin/ddt
-do_cmd ./usb_video_capture -d /dev/$DEV_NAME -w $WIDTH -l $LENGTH -i $FILE_NAME
+do_cmd ./usb_video_capture -d $DEV_NAME -w $WIDTH -l $LENGTH -i $FILE_NAME
 
 
 test_print_trc " :: ########################################################## ::"

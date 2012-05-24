@@ -21,11 +21,6 @@ source "st_log.sh"
 # Search for an USB Video device
 #
 
-Video_Search_Device()
-{
-test_print_trc " ::"
-test_print_trc " :: Determining for video node associated with attached USB camera"
-test_print_trc " ::"
 
 videodev=none
 devices=`ls -d /sys/class/video4linux/video*`
@@ -36,10 +31,7 @@ for device in $devices
 		then
 			videodev=`basename "$device"`
 			camname=`cat $device'/name'`
-			test_print_trc " ::"
-			test_print_trc " :: Found USB Camera: [$camname] mapped to [$videodev]"
-			test_print_trc " ::"
-			echo $videodev;
+			echo /dev/$videodev
 		fi
 done
 if test "$videodev" = "none";
@@ -49,4 +41,3 @@ then
 	test_print_trc " ::"
 	exit 2	
 fi
-}
