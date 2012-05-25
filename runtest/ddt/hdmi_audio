@@ -1,0 +1,33 @@
+# @name HDMI Audio . 
+# @desc Test cases corresponding to HDMI playback Audio cases. 
+# @requires hdmi/audio/playback
+
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_32KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_32KHz.wav -r 32000'
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080i60_32KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080i-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_1080i60_32KHz.wav -r 32000'
+HDMI_S_FUNC_AUDIO_PLAYBACK_720p60_32KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "720p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_S_FUNC_AUDIO_PLAYBACK_720p60_32KHz.wav  -r 32000'
+HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_32KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "480p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_32KHz.wav  -r 32000'
+
+
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_44.1KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_44.1KHz.wav  -r 44100'
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080i60_44.1KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080i-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_1080i60_44.1KHz.wav  -r 44100'
+HDMI_S_FUNC_AUDIO_PLAYBACK_720p60_44.1KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "720p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_S_FUNC_AUDIO_PLAYBACK_720p60_44.1KHz.wav -r 44100 '
+HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_44.1KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "480p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_44.1KHz.wav  -r 44100'
+
+
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_48000  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_48000.wav  -r 48000'
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080i60_48KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080i-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_1080i60_48KHz.wav  -r 48000'
+HDMI_S_FUNC_AUDIO_PLAYBACK_720p60_48KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "720p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_S_FUNC_AUDIO_PLAYBACK_720p60_48KHz.wav  -r 48000'
+HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_48KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "480p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_48KHz.wav  -r 48000'
+
+
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_96KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_96KHz.wav  -r 96000'
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080i60_96KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080i-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_S_FUNC_AUDIO_PLAYBACK_1080i60_96KHz.wav  -r 96000'
+HDMI_S_FUNC_AUDIO_PLAYBACK_720p60_96KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "720p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_720p60_96KHz.wav  -r 96000'
+HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_96KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "480p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_96KHz.wav  -r 96000'
+
+
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_192KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_1080p60_192KHz.wav  -r 192000'
+HDMI_M_FUNC_AUDIO_PLAYBACK_1080i60_192KHz source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "1080i-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_1080i60_192KHz.wav  -r 192000'
+HDMI_S_FUNC_AUDIO_PLAYBACK_720p60_192KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "720p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_S_FUNC_AUDIO_PLAYBACK_720p60_192KHz.wav  -r 192000'
+HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_192KHz  source 'common.sh' ; devnode=`get_hdmi_audio_devnode.sh -m "480p-60"`; do_cmd 'alsa_tests.sh -D "hw:'$devnode'" -t playback -a 1 -d 10 -F /home/root/HDMI_M_FUNC_AUDIO_PLAYBACK_480p60_192KHz.wav  -r 192000'
+
