@@ -104,7 +104,7 @@ do_cmd "time dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
 x=0
 while [ $x -lt $TEST_LOOP ]
 do
-  echo "============LOOP: $x============"
+  echo "============R/W LOOP: $x============"
 	do_cmd date	
   if [ "$WRITE_TO_FILL" -ne 1 ]; then
     TEST_FILE="${MNT_POINT}/test_file_$$"

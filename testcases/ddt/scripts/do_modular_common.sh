@@ -56,11 +56,11 @@ test_print_trc "ACTION: $ACTION"
 
 ############# Do the work ###########################################
 test_print_trc "Doing insmod;rmmod test for $TEST_LOOP times"
+MOD_NAME=`get_modular_name.sh "$DEVICE_TYPE"` || die "error getting modular name" 
 x=0
 while [ $x -lt $TEST_LOOP ]
 do
-
-	MOD_NAME=`get_modular_name.sh "$DEVICE_TYPE"` || die "error getting modular name" 
+  echo "============Modular Test LOOP: $x============"
 	do_cmd insmod.sh "$MOD_NAME"
 
 	if [ -n "$ACTION" ]; then
@@ -68,7 +68,7 @@ do
 	fi
 
 	IS_BLK_DEVICE=`isBlockDevice.sh "$DEVICE_TYPE"` || die "Invalid device type:$DEVICE_TYPE"
-  	if [ $IS_BLK_DEVICE == "yes" ]
+  if [ $IS_BLK_DEVICE == "yes" ]
 	then
   	    # before doing modprobe remove, need make sure device is not mounted
   	    DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"  
