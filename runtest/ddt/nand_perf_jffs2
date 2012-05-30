@@ -4,10 +4,9 @@
 # @requires  nand && jffs2
 
 NAND_S_PERF_JFFS2 source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 10 -B "262144" -d "nand"
-NAND_M_PERF_JFFS2_FILESIZE_1M source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 1 -B "262144" -d "nand"
-NAND_M_PERF_JFFS2_FILESIZE_2M source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 2 -B "262144" -d "nand"
-NAND_M_PERF_JFFS2_FILESIZE_4M source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 4 -B "262144" -d "nand"
-NAND_M_PERF_JFFS2_FILESIZE_8M source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 8 -B "262144" -d "nand"
+NAND_M_PERF_JFFS2_FILESIZE_2M source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 2 -B "262144" -d "nand" -c 1
+NAND_M_PERF_JFFS2_FILESIZE_4M source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 4 -B "262144" -d "nand" -c 1
+NAND_M_PERF_JFFS2_FILESIZE_8M source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 8 -B "262144" -d "nand" -c 1
 NAND_M_PERF_JFFS2_VARIOUS_BUFSIZE source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 10 -B "4096 8192 16384 32768 65536" -d "nand"
 NAND_L_PERF_JFFS2 source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 100 -B "102400 262144 524288 1048576 5242880" -d "nand"
 NAND_L_PERF_JFFS2_MNT_SYNC source "common.sh"; install_modules.sh "nand"; blk_device_filesystem_perf_test.sh -f jffs2 -s 100 -o 'sync' -B "102400 262144 524288 1048576 5242880" -d "nand"
