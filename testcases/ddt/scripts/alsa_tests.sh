@@ -24,9 +24,10 @@
 #         a) Access Type   : Access Type ( 0->Non Interleaved, 1-> Interleaved, 2->Mmap )
 #         D) Audio Device  : Audio Device.
 #         l) Capture Log   : Whether to retain captured file or delete.
+#         u) URL           : URL of sound file to be played back 
 # @history 2011-04-07: First version
 # @history 2011-05-13: Removed st_log.sh
- 
+# @history 2012-05-30: Added wget support 
 source "common.sh"  # Import do_cmd(), die() and other functions
 
 ############################# Functions #######################################
@@ -46,6 +47,7 @@ usage()
 	-a ACCESS_TYPE		Access Type ( 0->Non Interleaved, 1-> Interleaved,2->Mmap )
 	-d DURATION         Dutaion In Secs like 5,10 etc. 
 	-l CAPTURELOG_FLAG  Whether to retain captured file or delete.( 1 -> To retain, 0 -> delete )
+	-u URL				URL of sound file to be played back
 	EOF
 	exit 0
 	
@@ -53,7 +55,7 @@ usage()
 
 ################################ CLI Params ####################################
 # Please use getopts
-while getopts  :t:r:f:F:p:b:l:d:c:o:a:D:h arg
+while getopts  :t:r:f:F:p:b:l:d:c:o:a:D:u:h arg
 do case $arg in
         t)      TYPE="$OPTARG";;
         r)      SAMPLERATE="$OPTARG";;        
@@ -67,6 +69,7 @@ do case $arg in
         a)      ACCESSTYPE="$OPTARG";;                                
         D)      DEVICE="$OPTARG";;        
         l)      CAPTURELOGFLAG="$OPTARG";;                
+	    u)      URL="$OPTARG";; 
         h)      usage;;
         :)      die "$0: Must supply an argument to -$OPTARG.";; 
         \?)     die "Invalid Option -$OPTARG ";;
@@ -87,7 +90,7 @@ done
 : ${ACCESSTYPE:='0'}
 : ${DEVICE:='hw:0,0'}
 : ${CAPTURELOGFLAG:='0'}
-
+: ${URL:=''}
 if [ $OPMODE -eq 0 ] ; then
 	OPMODEARG=""
 else
@@ -130,18 +133,21 @@ esac
 # Print the test params.
 
 test_print_trc " ****************** TEST PARAMETERS ******************"
-test_print_trc " TYPE		: $TYPE"
-test_print_trc " DEVICE		: $DEVICE"
-test_print_trc " DURATION	: $DURATION"
-test_print_trc " SAMPLERATE	: $SAMPLERATE"
-test_print_trc " SAMPLEFORMAT	: $SAMPLEFORMAT"
-test_print_trc " PERIODSIZE	: $PERIODSIZE"
-test_print_trc " BUFFERSIZE	: $BUFFERSIZE"
-test_print_trc " CHANNEL	: $CHANNEL"
-test_print_trc " OPMODE		: $OPMODE"
-test_print_trc " FILE		: $FILE"
-test_print_trc " ACCESSTYPE	: $ACCESSTYPE"
-
+test_print_trc " TYPE         : $TYPE"
+test_print_trc " DEVICE       : $DEVICE"
+test_print_trc " DURATION     : $DURATION"
+test_print_trc " SAMPLERATE   : $SAMPLERATE"
+test_print_trc " SAMPLEFORMAT : $SAMPLEFORMAT"
+test_print_trc " PERIODSIZE   : $PERIODSIZE"
+test_print_trc " BUFFERSIZE   : $BUFFERSIZE"
+test_print_trc " CHANNEL      : $CHANNEL"
+test_print_trc " OPMODE       : $OPMODE"
+test_print_trc " FILE         : $FILE"
+test_print_trc " ACCESSTYPE   : $ACCESSTYPE"
+if test "$URL" != ''
+then
+test_print_trc " URL          : $URL"
+fi
 test_print_trc " *************** END OF TEST PARAMETERS ***************"
 
 
@@ -151,6 +157,11 @@ case "$TYPE" in
 		do_cmd arecord -D "$DEVICE" -f "$SAMPLEFORMAT" $FILE -d "$DURATION" -r "$SAMPLERATE" -c "$CHANNEL" "$ACCESSTYPEARG" "$OPMODEARG" --buffer-size=$BUFFERSIZE --period-size $PERIODSIZE
 		;;		
 	playback)
+		if test "$URL" != ''
+		then
+			do_cmd wget $URL -O $FILE
+		fi
+
 		if [ ! -s $FILE ]
 		then
 			test_print_trc "$FILE Does not exists or has size zero. Using /dev/urandom as input file to generate noise"
