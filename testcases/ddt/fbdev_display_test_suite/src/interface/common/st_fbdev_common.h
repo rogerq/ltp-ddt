@@ -55,7 +55,10 @@
 #include <sys/mman.h>
 #include <sys/time.h>
 
+#include <linux/version.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38)
 #include <linux/videodev.h>
+#endif
 #include <linux/videodev2.h>
 #include <linux/fb.h>
 

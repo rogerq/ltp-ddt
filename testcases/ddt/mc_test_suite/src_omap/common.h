@@ -16,7 +16,10 @@
 #include <linux/media.h>
 #include <linux/v4l2-mediabus.h>
 #include <linux/v4l2-subdev.h>
+#include <linux/version.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38)
 #include <linux/videodev.h>
+#endif
 #include <linux/videodev2.h>
 
 

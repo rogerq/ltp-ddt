@@ -62,7 +62,10 @@
 #include <sys/stat.h>
 
 /* V4L2 specific header file */
+#include <linux/version.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38)
 #include <linux/videodev.h>
+#endif
 #include <linux/videodev2.h>
 
 /* Framebuffer module header file */
