@@ -14,6 +14,7 @@ power_mgr/cpufreq/ondemand
 power_mgr/cpufreq/userspace
 power_mgr/cpuidle
 power_mgr/dynamic_ticks
+power_mgr/smartreflex
 rtc/rtc-s35390a
 sound/capture/alsa
 sound/playback/alsa

@@ -1,0 +1,9 @@
+# @name TI SmartReflex Tests
+# @desc Check Texas Instruments SmartReflex functionality
+# @requires power_mgr/smartreflex
+
+SMARTREFLEX_S_FUNC_DEBUGFS_ENTRIES source 'common.sh'; MNT_POINT=`mount_debugfs.sh`; do_cmd ls $MNT_POINT/smartreflex
+
+SMARTREFLEX_S_FUNC_CORE_POWER_SAVINGS source 'common.sh'; MNT_POINT=`mount_debugfs.sh`; echo 1 > $MNT_POINT/smartreflex/autocomp; volt0=`cat $MNT_POINT/smartreflex/smartreflex0/initial_voltage`; volt1=`cat $MNT_POINT/smartreflex/smartreflex0/current_voltage`; delta=`echo "$volt1 - $volt0" | bc`; if [ $delta -gt 0 ]; then die "SmartReflex did not lower Core Voltage";fi
+
+SMARTREFLEX_S_FUNC_MPU_POWER_SAVINGS  source 'common.sh'; MNT_POINT=`mount_debugfs.sh`; echo 1 > $MNT_POINT/smartreflex/autocomp; volt0=`cat $MNT_POINT/smartreflex/smartreflex1/initial_voltage`; volt1=`cat $MNT_POINT/smartreflex/smartreflex1/current_voltage`; delta=`echo "$volt1 - $volt0" | bc`; if [ $delta -gt 0 ]; then die "SmartReflex did not lower MPU Voltage";fi

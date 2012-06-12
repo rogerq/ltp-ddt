@@ -27,6 +27,7 @@ power_mgr/cpufreq/powersave/<drivername>
 power_mgr/cpufreq/ondemand/<drivername>
 power_mgr/cpuidle/<drivername>
 power_mgr/dynamic_ticks/<drivername>
+power_mgr/smartreflex
 pru/<drivername>
 rtc/<drivername>
 sata/<drivername>
