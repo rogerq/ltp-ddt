@@ -10,7 +10,7 @@ mmc_host/sdhc/mmci-omap-hs
 net/eth100M
 power_mgr/cpufreq
 power_mgr/cpuidle
-rtc/rtc-s35390a
+rtc/rtc_twl
 sound/capture/alsa
 sound/playback/alsa
 usb/host/msc
