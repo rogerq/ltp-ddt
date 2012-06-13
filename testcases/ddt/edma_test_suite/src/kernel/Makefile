@@ -27,6 +27,7 @@ modules:
 
 clean:
 	rm -f */*.o
+	rm -f ../../*.ko
 	rm -f interface/common/*.o
 	rm -f  *.o
 	rm -f  .*.cmd
