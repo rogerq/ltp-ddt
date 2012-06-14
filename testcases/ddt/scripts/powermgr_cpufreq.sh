@@ -91,6 +91,7 @@ test_print_trc "OPP to be switched for $LOOP loops with $DELAY seconds delay bet
 
 while [ $k -lt $LOOP ]
 do
+  echo "============ LOOP: $k============"
 	k=$((k+1))
 	if [ "$extreme" == "false" ]
 	then
