@@ -8,7 +8,10 @@ mmc_host/sd/mmci-omap-hs
 mmc_host/mmc/mmci-omap-hs
 mmc_host/sdhc/mmci-omap-hs
 net/eth100M
-power_mgr/cpufreq
+power_mgr/cpufreq/userspace
+power_mgr/cpufreq/performance
+power_mgr/cpufreq/powersave
+power_mgr/cpufreq/ondemand
 power_mgr/cpuidle
 rtc/rtc_twl
 sound/capture/alsa
