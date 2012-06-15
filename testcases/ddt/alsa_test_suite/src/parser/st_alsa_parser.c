@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
 		TEST_PRINT_TST_RESULT(ret, testcaseid);
 		TEST_PRINT_TST_END(testcaseid);
 	}
-	return 0;
+	return ret;
 }
 
 /*
