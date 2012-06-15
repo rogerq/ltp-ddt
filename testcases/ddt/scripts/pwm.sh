@@ -145,7 +145,9 @@ esac
 	fi
 	if test "$period_type" = "seconds" ;
 	then
-		do_cmd "echo `echo "$period * 1000000000" | bc -l` > /sys/class/pwm/$device/period_ns" || die "setting period_ns failed"
+		period=`echo "$period * 1000000000" | bc -l`
+		period=${period%.*}
+		do_cmd "echo $period > /sys/class/pwm/$device/period_ns" || die "setting period_ns failed"
 		do_cmd "cat /sys/class/pwm/$device/period_ns" || die "print period_ns failed"
 	fi
 	
@@ -157,7 +159,9 @@ esac
 
 	if test "$duty_type" = "seconds"  ;
 	then
-		do_cmd "echo `echo "$duty * 1000000000" | bc -l` > /sys/class/pwm/$device/duty_ns" || die "setting duty_ns failed"
+		duty=`echo "$duty * 1000000000" | bc -l`
+		duty=${duty%.*}
+		do_cmd "echo $duty > /sys/class/pwm/$device/duty_ns" || die "setting duty_ns failed"
 		do_cmd "cat /sys/class/pwm/$device/duty_ns" || die "print duty_ns failed"
 	fi
 	test_print_trc "Starting device $device"
