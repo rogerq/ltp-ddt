@@ -31,7 +31,7 @@ cat <<-EOF >&2
   -m MNT_POINT	  mount point 
   -b DD_BUFSIZE 	dd buffer size for 'bs'
   -c DD_CNT 	    dd count for 'count'
-  -i IO_OPERATION	IO operation like 'wr', 'rd', default is 'wr'
+  -i IO_OPERATION	IO operation like 'wr', 'cp', default is 'wr'
   -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
 	-l TEST_LOOP	  test loop for r/w. default is 1.
 	-s SKIP_FORMAT  skip erase/format part and just do r/w 
@@ -121,9 +121,16 @@ do
 		write_in_bg)
 			do_cmd time dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT &
 		;;
-		rd)
-			do_cmd time dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
-			do_cmd time dd if="$TEST_FILE" of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
+		cp)
+			do_cmd time dd if="$SRC_FILE" of="${TEST_FILE}_1" bs=$DD_BUFSIZE count=$DD_CNT
+      do_cmd diff "$SRC_FILE" "${TEST_FILE}_1"
+      
+			do_cmd time dd if="${TEST_FILE}_1" of="${TEST_FILE}_2" bs=$DD_BUFSIZE count=$DD_CNT
+      do_cmd md5sum "${TEST_FILE}_1"
+      do_cmd md5sum "${TEST_FILE}_2"
+      do_cmd diff "${TEST_FILE}_1" "${TEST_FILE}_2"
+      sleep 1
+      do_cmd rm "${TEST_FILE}_1" "${TEST_FILE}_2"
 		;;
 		*)
 		test_print_err "Invalid IO operation type in $0 script"
@@ -134,7 +141,7 @@ do
     do_cmd rm "$TEST_FILE"
   else
     # don't remove the testfiles so that to fillup the device
-    do_cmd echo "Do not remove the testfiles in order to fillup the device"
+    do_cmd echo "Did not remove the testfiles in order to fillup the device"
   fi
 	x=$((x+1))
 	do_cmd date
