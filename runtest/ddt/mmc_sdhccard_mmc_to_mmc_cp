@@ -5,9 +5,9 @@
 # @setup_requires sdhc
 
 
-MMC_L_FUNC_SDHC_MMC2MMC_CP_VFAT_1M source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1M" -c "1" -i "cp" -d "mmc"
+#MMC_M_FUNC_SDHC_MMC2MMC_CP_VFAT_1M source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1M" -c "1" -i "cp" -d "mmc" -l "10"
 
-MMC_L_FUNC_SDHC_MMC2MMC_CP_VFAT_10M source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1M" -c "10" -i "cp" -d "mmc"
+MMC_M_FUNC_SDHC_MMC2MMC_CP_VFAT_10M source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1M" -c "10" -i "cp" -d "mmc" -l "10"
 
-MMC_L_FUNC_SDHC_MMC2MMC_CP_VFAT_100M source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "10M" -c "10" -i "cp" -d "mmc"
+MMC_L_FUNC_SDHC_MMC2MMC_CP_VFAT_100M source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "10M" -c "10" -i "cp" -d "mmc" -l "100"
 
