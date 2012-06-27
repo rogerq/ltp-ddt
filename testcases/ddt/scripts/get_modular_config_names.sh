@@ -114,7 +114,7 @@ case $MACHINE in
 		sound='CONFIG_SND_OMAP_SOC_OMAP3EVM:snd_soc_omap3evm';;
 	beagleboard)
 		sound='CONFIG_SND_OMAP_SOC_OMAP3_BEAGLE:snd-soc-omap3beagle CONFIG_SND_OMAP_SOC:snd-soc-omap CONFIG_SND_OMAP_SOC_MCBSP:snd-soc-omap-mcbsp'
-		usb='CONFIG_USB_MASS_STORAGE:ehci-hcd';; 
+		usb='CONFIG_USB_EHCI_HCD:ehci-hcd';; 
 	am3517-evm)
 		sound='CONFIG_SND_OMAP_SOC_AM3517EVM:snd-soc-am3517evm';;
 	am335x-evm)
