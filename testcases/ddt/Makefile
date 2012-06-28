@@ -147,7 +147,6 @@ FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 endif
 
 ifeq ($(PLATFORM),beagleboard)
-FILTER_OUT_DIRS                 += fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
 FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
 FILTER_OUT_DIRS                 += mc_test_suite
