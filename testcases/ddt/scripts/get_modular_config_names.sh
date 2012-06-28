@@ -113,7 +113,7 @@ case $MACHINE in
 	omap3evm|am37x-evm)
 		sound='CONFIG_SND_OMAP_SOC_OMAP3EVM:snd_soc_omap3evm';;
 	beagleboard)
-		sound='CONFIG_SND_OMAP_SOC_OMAP3_BEAGLE:snd-soc-omap3beagle CONFIG_SND_OMAP_SOC:snd-soc-omap CONFIG_SND_OMAP_SOC_MCBSP:snd-soc-omap-mcbsp'
+		sound='CONFIG_SND_OMAP_SOC_OMAP3_BEAGLE:snd-soc-omap3beagle CONFIG_SND_OMAP_SOC:snd-soc-omap CONFIG_SND_OMAP_SOC_MCBSP:snd-soc-omap-mcbsp CONFIG_SND_SOC_TWL4030:snd-soc-twl4030'
 		usb='CONFIG_USB_EHCI_HCD:ehci-hcd'
 		graphics='CONFIG_PANEL_DVI:panel_dvi CONFIG_PANEL_GENERIC_DPI:panel_generic_dpi CONFIG_FB_OMAP2:omapfb';; 
 	am3517-evm)
