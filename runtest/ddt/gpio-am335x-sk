@@ -1,0 +1,21 @@
+# @name GPIO set test including set gpio to 'in', 'out' etc on am335x-sk
+# @desc Set gpio pin in each bank to 'in' or 'out' through sysfs. Before run this test, kernel may be required to be modified to add entries for pin to test
+# @requires gpio && am335x-sk 
+
+GPIO_M_FUNC_DIR_IN_AM335X-SK_BANK0 source "common.sh"; gpio.sh -b "0" -g "3" -l "2" -t "in" -i "0"
+GPIO_M_FUNC_DIR_IN_AM335X-SK_BANK1 source "common.sh"; gpio.sh -b "1" -g "8" -l "2" -t "in" -i "0"
+GPIO_M_FUNC_DIR_IN_AM335X-SK_BANK2 source "common.sh"; gpio.sh -b "2" -g "1" -l "2" -t "in" -i "0"
+GPIO_M_FUNC_DIR_IN_AM335X-SK_BANK3 source "common.sh"; gpio.sh -b "3" -g "18" -l "2" -t "in" -i "0"
+
+
+GPIO_M_FUNC_DIR_OUT_AM335X-SK_BANK0 source "common.sh"; gpio.sh -b "0" -g "3" -l "2" -t "out" -i "0"
+GPIO_M_FUNC_DIR_OUT_AM335X-SK_BANK1 source "common.sh"; gpio.sh -b "1" -g "8" -l "2" -t "out" -i "0"
+GPIO_M_FUNC_DIR_OUT_AM335X-SK_BANK2 source "common.sh"; gpio.sh -b "2" -g "1" -l "2" -t "out" -i "0"
+GPIO_M_FUNC_DIR_OUT_AM335X-SK_BANK3 source "common.sh"; gpio.sh -b "3" -g "18" -l "2" -t "out" -i "0"
+
+
+GPIO_M_FUNC_EDGE_AM335X-SK_BANK0 source "common.sh"; gpio.sh -b "0" -g "3" -l "2" -t "edge" -i "0"
+GPIO_M_FUNC_EDGE_AM335X-SK_BANK1 source "common.sh"; gpio.sh -b "1" -g "8" -l "2" -t "edge" -i "0"
+GPIO_M_FUNC_EDGE_AM335X-SK_BANK2 source "common.sh"; gpio.sh -b "2" -g "1" -l "2" -t "edge" -i "0"
+GPIO_M_FUNC_EDGE_AM335X-SK_BANK3 source "common.sh"; gpio.sh -b "3" -g "18" -l "2" -t "edge" -i "0"
+
