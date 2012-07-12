@@ -1,7 +1,8 @@
 armv7l
 am335x
-am335x-evm
+am335x-sk
 edma
+gpio
 graphics/fb0/DA8xx_FB_Drv
 i2c/non_eeprom
 i2c/eeprom
