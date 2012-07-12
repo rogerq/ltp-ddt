@@ -1,0 +1,10 @@
+# @name Nand Ubifs Write/Read Performance under CPU load test
+# @desc Erase Nand MTD partition, mount it as ubifs and writes to it under cpu load
+#	By default, the partition number is specified in get_mtd_partition_number.sh; 
+# @requires  nand && ubifs
+NAND_L_PERF_UBIFS_CPU_LOAD source 'common.sh';/opt/ltp/runltp -f ddt/nand_perf_ubifs -s "NAND_S_PERF_UBIFS" -P $MACHINE -c 8
+#NAND_L_NANDWRITE_CPU_LOAD source 'common.sh';/opt/ltp/runltp -f ddt/nand_raw_write -s "NANDWRITE_CMD" -P $MACHINE -c 8
+
+
+
+
