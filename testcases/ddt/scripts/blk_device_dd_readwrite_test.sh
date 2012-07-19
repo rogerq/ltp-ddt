@@ -122,15 +122,15 @@ do
 			do_cmd time dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT &
 		;;
 		cp)
-			do_cmd time dd if="$SRC_FILE" of="${TEST_FILE}_1" bs=$DD_BUFSIZE count=$DD_CNT
-      do_cmd diff "$SRC_FILE" "${TEST_FILE}_1"
+			do_cmd time dd if="$SRC_FILE" of="${TEST_FILE}" bs=$DD_BUFSIZE count=$DD_CNT
+      do_cmd diff "$SRC_FILE" "${TEST_FILE}"
       
-			do_cmd time dd if="${TEST_FILE}_1" of="${TEST_FILE}_2" bs=$DD_BUFSIZE count=$DD_CNT
-      do_cmd md5sum "${TEST_FILE}_1"
+			do_cmd time dd if="${TEST_FILE}" of="${TEST_FILE}_2" bs=$DD_BUFSIZE count=$DD_CNT
+      do_cmd md5sum "${TEST_FILE}"
       do_cmd md5sum "${TEST_FILE}_2"
-      do_cmd diff "${TEST_FILE}_1" "${TEST_FILE}_2"
+      do_cmd diff "${TEST_FILE}" "${TEST_FILE}_2"
       sleep 1
-      do_cmd rm "${TEST_FILE}_1" "${TEST_FILE}_2"
+      do_cmd rm "${TEST_FILE}_2"
 		;;
 		*)
 		test_print_err "Invalid IO operation type in $0 script"
