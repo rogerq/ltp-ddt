@@ -1,0 +1,9 @@
+# @name GStreamer test for video functionality
+# @desc Mpeg4, Mpeg2 and 264 video streams are played using gstreamer, demo streams are used,
+#	 if these are not available then streams are downloaded from smruti.india.ti.com
+# @requires graphics
+
+GST_S_VIDEO_MPEG4 source 'common.sh'; gst.sh "1622" "mpeg4"; do_cmd 'gst-launch-0.10 filesrc location=testfile ! mpeg4videoparse ! ffdec_mpeg4 ! ffmpegcolorspace ! fbdevsink device=/dev/fb0'
+GST_S_VIDEO_MPEG2 source 'common.sh'; gst.sh "1493" "mpeg2"; do_cmd 'gst-launch-0.10 filesrc location=testfile ! mpegvideoparse ! ffdec_mpeg2video ! ffmpegcolorspace ! fbdevsink device=/dev/fb0'
+GST_S_VIDEO_H264 source 'common.sh'; gst.sh "1288" "264"; do_cmd 'gst-launch-0.10 filesrc location=testfile ! h264parse ! ffdec_h264 ! ffmpegcolorspace ! fbdevsink device=/dev/fb0'
+
