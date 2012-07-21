@@ -155,4 +155,28 @@ get_value_for_key() {
   echo "$rtn"
 }
 
+# Compare two files based on md5sum
+# Input:
+#   $1 file1
+#   $2 file2
+# Return:
+#   true if equal; false otherwise
+compare_md5sum()
+{
+  FILE1=$1
+  FILE2=$2
+  a=$(md5sum "$FILE1"|cut -d' ' -f1)
+  if [ $? -ne 0 ]; then
+    echo "error getting md5sum of $FILE1"
+    exit 1
+  fi
+  echo "$1: $a"
+  b=$(md5sum "$FILE2"|cut -d' ' -f1)
+  if [ $? -ne 0 ]; then
+    echo "error getting md5sum of $FILE2"
+    exit 1
+  fi
+  echo "$2: $b"
+  [ "$a" = "$b" ]
+}
 

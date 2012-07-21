@@ -101,6 +101,8 @@ test_print_trc "Doing read/write test for $TEST_LOOP times"
 #SRC_FILE='/dev/shm/srctest_file' 
 SRC_FILE="/home/root/srctest_file_${DEVICE_TYPE}_$$"
 do_cmd "time dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
+sleep 10
+do_cmd ls -lh $SRC_FILE
 x=0
 while [ $x -lt $TEST_LOOP ]
 do
@@ -122,13 +124,14 @@ do
 			do_cmd time dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT &
 		;;
 		cp)
-			do_cmd time dd if="$SRC_FILE" of="${TEST_FILE}" bs=$DD_BUFSIZE count=$DD_CNT
-      do_cmd diff "$SRC_FILE" "${TEST_FILE}"
-      
-			do_cmd time dd if="${TEST_FILE}" of="${TEST_FILE}_2" bs=$DD_BUFSIZE count=$DD_CNT
-      do_cmd md5sum "${TEST_FILE}"
-      do_cmd md5sum "${TEST_FILE}_2"
-      do_cmd diff "${TEST_FILE}" "${TEST_FILE}_2"
+			do_cmd time cp "$SRC_FILE" "${TEST_FILE}"
+      ls -lh "$SRC_FILE"
+      ls -lh "${TEST_FILE}"
+      do_cmd compare_md5sum "$SRC_FILE" "$TEST_FILE" 
+			do_cmd time cp "${TEST_FILE}" "${TEST_FILE}_2"
+      #do_cmd diff "${TEST_FILE}" "${TEST_FILE}_2"
+      ls -lh "${TEST_FILE}_2"
+      do_cmd compare_md5sum "${TEST_FILE}" "${TEST_FILE}_2"
       sleep 1
       do_cmd rm "${TEST_FILE}_2"
 		;;
