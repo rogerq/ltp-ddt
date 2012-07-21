@@ -41,6 +41,16 @@ EOF
 exit 0
 }
 
+compare_md5sum()
+{
+  FILE1=$1
+  FILE2=$2
+  a=$(md5sum "$FILE1"|cut -d' ' -f1)
+  echo "$1: $a"
+  b=$(md5sum "$FILE2"|cut -d' ' -f1)
+  echo "$2: $b"
+  [ "$a" = "$b" ] 
+}
 ############################### CLI Params ###################################
 
 while getopts  :d:f:m:n:b:c:i:l:swh arg
@@ -147,11 +157,10 @@ do
       ls -lh "$SRC_FILE"
       ls -lh "${TEST_FILE}"
       do_cmd compare_md5sum "$SRC_FILE" "$TEST_FILE" 
-			do_cmd time cp "${TEST_FILE}" "${TEST_FILE}_2"
+		do_cmd time cp "${TEST_FILE}" "${TEST_FILE}_2"
       do_cmd "sync"
       do_cmd "echo 3 > /proc/sys/vm/drop_caches"
 
-      #do_cmd diff "${TEST_FILE}" "${TEST_FILE}_2"
       ls -lh "${TEST_FILE}_2"
       test_print_trc "compare_md5sum "${TEST_FILE}" "${TEST_FILE}_2" "
       compare_md5sum "${TEST_FILE}" "${TEST_FILE}_2"
