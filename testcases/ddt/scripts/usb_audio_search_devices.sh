@@ -26,8 +26,11 @@ source "st_log.sh"
 
 ############# Do the work ###########################################
 
-cmd="aplay -l"
-if [ "$1" = "record" ];
+if [ "$1" = "play" ]; then
+ cmd="aplay -l"
+fi
+
+if [ "$1" = "record" -o "$1" = "loopback" ];
 then
   cmd="arecord -l"
 fi
@@ -38,6 +41,11 @@ if [ "$audiodev" = "" ]; then
 	test_print_trc " :: No USB Audio $1 device found. Exiting Audio tests..."
 	test_print_trc " ::"	
  	exit 1 
+elif [ "$1" = "loopback" ]; then
+	cmd="aplay -l"
+	audioplay=`$cmd | egrep "^card\s+[[:digit:]]+.+USB\s+Audio"| head -n 1 | cut -d':' -f 1 | cut -d' ' -f 2`
+audiodev=$audiodev$audioplay
+echo $audiodev
 else
   echo $audiodev
 fi

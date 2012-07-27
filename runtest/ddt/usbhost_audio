@@ -5,13 +5,13 @@
 
 # LOOPBACK
 
-USBHOST_S_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_MMAP_01     source 'common.sh' ; do_cmd install_modules.sh 'usb';  do_cmd usb_audio_search_devices.sh; audio_dev=`usb_audio_search_devices.sh`; do_cmd 'alsa_tests.sh -D plughw:'$audio_dev',0  -t loopback -a 1 -d 10'
-USBHOST_M_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_MMAP_02     source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh; audio_dev=`usb_audio_search_devices.sh`; do_cmd do_cmd 'alsa_tests.sh -D plughw:'$audio_dev',0  -t loopback -a 1 -d 60'
-USBHOST_L_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_MMAP_03     source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh; audio_dev=`usb_audio_search_devices.sh`; do_cmd 'alsa_tests.sh -D plughw:'$audio_dev',0  -t loopback -a 1 -d 300'
+USBHOST_S_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_MMAP_01     source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh loopback; audio_dev=`usb_audio_search_devices.sh loopback`; rec_dev=${audio_dev:0:1}; play_dev=${audio_dev:1:1}; do_cmd 'alsa_tests.sh -R plughw:'$rec_dev',0  -P plughw:'$play_dev',0 -t loopback -a 1 -d 10'
+USBHOST_M_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_MMAP_02     source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh loopback; audio_dev=`usb_audio_search_devices.sh loopback`; rec_dev=${audio_dev:0:1}; play_dev=${audio_dev:1:1}; do_cmd 'alsa_tests.sh -R plughw:'$rec_dev',0  -P plughw:'$play_dev',0 -t loopback -a 1 -d 60'
+USBHOST_L_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_MMAP_03     source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh loopback; audio_dev=`usb_audio_search_devices.sh loopback`; rec_dev=${audio_dev:0:1}; play_dev=${audio_dev:1:1}; do_cmd 'alsa_tests.sh -R plughw:'$rec_dev',0  -P plughw:'$play_dev',0 -t loopback -a 1 -d 300'
 
-USBHOST_S_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_NONINTER_01  source 'common.sh' ; do_cmd install_modules.sh 'usb';  do_cmd usb_audio_search_devices.sh; audio_dev=`usb_audio_search_devices.sh`; do_cmd 'alsa_tests.sh -D plughw:'$audio_dev',0  -t loopback -a 0 -d 10'
-USBHOST_M_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_NONINTER_02  source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh; audio_dev=`usb_audio_search_devices.sh`; do_cmd 'alsa_tests.sh -D plughw:'$audio_dev',0  -t loopback -a 0 -d 60'
-USBHOST_L_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_NONINTER_03  source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh; audio_dev=`usb_audio_search_devices.sh`; do_cmd 'alsa_tests.sh -D plughw:'$audio_dev',0  -t loopback -a 0 -d 300'
+USBHOST_S_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_NONINTER_01  source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh loopback; audio_dev=`usb_audio_search_devices.sh loopback`; rec_dev=${audio_dev:0:1}; play_dev=${audio_dev:1:1}; do_cmd 'alsa_tests.sh -R plughw:'$rec_dev',0  -P plughw:'$play_dev',0 -t loopback -a 0 -d 10'
+USBHOST_M_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_NONINTER_02  source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh loopback; audio_dev=`usb_audio_search_devices.sh loopback`; rec_dev=${audio_dev:0:1}; play_dev=${audio_dev:1:1}; do_cmd 'alsa_tests.sh -R plughw:'$rec_dev',0  -P plughw:'$play_dev',0 -t loopback -a 0 -d 60'
+USBHOST_L_FUNC_AUDIO_LOOPBACK_ACCESSTYPE_NONINTER_03  source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh loopback; audio_dev=`usb_audio_search_devices.sh loopback`; rec_dev=${audio_dev:0:1}; play_dev=${audio_dev:1:1}; do_cmd 'alsa_tests.sh -R plughw:'$rec_dev',0  -P plughw:'$play_dev',0 -t loopback -a 0 -d 300'
 
 
 # PLAYBACK
