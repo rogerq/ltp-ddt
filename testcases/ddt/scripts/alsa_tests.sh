@@ -23,6 +23,8 @@
 #         o) OpMode		   : OpMode (0->Blocking, 1->Non-Blocking)
 #         a) Access Type   : Access Type ( 0->Non Interleaved, 1-> Interleaved, 2->Mmap )
 #         D) Audio Device  : Audio Device.
+#         R) Record Device : Audio Record Device.
+#         P) Playback Device  : Audio PlaybackDevice.
 #         l) Capture Log   : Whether to retain captured file or delete.
 #         u) URL           : URL of sound file to be played back 
 # @history 2011-04-07: First version
@@ -34,9 +36,11 @@ source "common.sh"  # Import do_cmd(), die() and other functions
 usage()
 {
 	cat <<-EOF >&2
-	usage: ./${0##*/} [-t TEST_TYPE] [-D DEVICE][-r SAMPLE_RATE] [-f SAMPLE_FORMAT] [-p PERIOD_SIZE] [-b BUFFER_SIZE] [-c CHANNEL] [-o OpMODE] [-a ACCESS_TYPE] [-d DURATION]
+	usage: ./${0##*/} [-t TEST_TYPE] [-D DEVICE] [-R REC_DEVICE] [-P PLAY_DEVICE] [-r SAMPLE_RATE] [-f SAMPLE_FORMAT] [-p PERIOD_SIZE] [-b BUFFER_SIZE] [-c CHANNEL] [-o OpMODE] [-a ACCESS_TYPE] [-d DURATION]
 	-t TEST_TYPE		Test Type. Possible Values are Capture,playback,loopback.
 	-D DEVICE           Device Name like hw:0,0.
+	-R REC_DEVICE           Device Name like hw:0,0.
+	-P PLAY_DEVICE           Device Name like hw:0,0.
 	-r SAMPLE_RATE		Sample Rate like 44100,48000,88200,96000 etc.
 	-f SAMPLE_FORMAT	Sample Format like S8,S16_LE,S24_LE,S32_LE.
 	-p PERIOD_SIZE		Period Size like 1,2,4,8,etc.
@@ -55,7 +59,7 @@ usage()
 
 ################################ CLI Params ####################################
 # Please use getopts
-while getopts  :t:r:f:F:p:b:l:d:c:o:a:D:u:h arg
+while getopts  :t:r:f:F:p:b:l:d:c:o:a:D:R:P:u:h arg
 do case $arg in
         t)      TYPE="$OPTARG";;
         r)      SAMPLERATE="$OPTARG";;        
@@ -68,6 +72,8 @@ do case $arg in
         F)      FILE="$OPTARG";;                                        
         a)      ACCESSTYPE="$OPTARG";;                                
         D)      DEVICE="$OPTARG";;        
+        R)      REC_DEVICE="$OPTARG";;        
+        P)      PLAY_DEVICE="$OPTARG";;        
         l)      CAPTURELOGFLAG="$OPTARG";;                
 	    u)      URL="$OPTARG";; 
         h)      usage;;
@@ -89,6 +95,8 @@ done
 : ${OPMODE:='0'}
 : ${ACCESSTYPE:='0'}
 : ${DEVICE:='hw:0,0'}
+: ${REC_DEVICE:='hw:0,0'}
+: ${PLAY_DEVICE:='hw:0,0'}
 : ${CAPTURELOGFLAG:='0'}
 : ${URL:=''}
 if [ $OPMODE -eq 0 ] ; then
@@ -135,6 +143,8 @@ esac
 test_print_trc " ****************** TEST PARAMETERS ******************"
 test_print_trc " TYPE         : $TYPE"
 test_print_trc " DEVICE       : $DEVICE"
+test_print_trc " REC_DEVICE   : $REC_DEVICE"
+test_print_trc " PLAY_DEVICE  : $PLAY_DEVICE"
 test_print_trc " DURATION     : $DURATION"
 test_print_trc " SAMPLERATE   : $SAMPLERATE"
 test_print_trc " SAMPLEFORMAT : $SAMPLEFORMAT"
@@ -170,6 +180,6 @@ case "$TYPE" in
 		do_cmd aplay -D "$DEVICE" -f "$SAMPLEFORMAT" $FILE -d "$DURATION" -r "$SAMPLERATE" -f "$SAMPLEFORMAT" -c "$CHANNEL" "$ACCESSTYPEARG" "$OPMODEARG"  --buffer-size=$BUFFERSIZE --period-size $PERIODSIZE
 		;;		
 	loopback)
-		do_cmd arecord -D "$DEVICE" -f "$SAMPLEFORMAT" -d "$DURATION" -r "$SAMPLERATE" -c "$CHANNEL" "$ACCESSTYPEARG" "$OPMODEARG"  --buffer-size=$BUFFERSIZE --period-size $PERIODSIZE "|" aplay -D "$DEVICE" -f "$SAMPLEFORMAT" -d "$DURATION" -r "$SAMPLERATE" -c "$CHANNEL" "$ACCESSTYPEARG" "$OPMODEARG"  --buffer-size=$BUFFERSIZE --period-size $PERIODSIZE
+		do_cmd arecord -D "$REC_DEVICE" -f "$SAMPLEFORMAT" -d "$DURATION" -r "$SAMPLERATE" -c "$CHANNEL" "$ACCESSTYPEARG" "$OPMODEARG"  --buffer-size=$BUFFERSIZE --period-size $PERIODSIZE "|" aplay -D "$PLAY_DEVICE" -f "$SAMPLEFORMAT" -d "$DURATION" -r "$SAMPLERATE" -c "$CHANNEL" "$ACCESSTYPEARG" "$OPMODEARG"  --buffer-size=$BUFFERSIZE --period-size $PERIODSIZE
 		;;		
 esac	
