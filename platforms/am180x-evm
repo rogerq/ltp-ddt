@@ -15,6 +15,7 @@ rtc/omap_rtc
 sata
 nand/davinci_nand
 jffs2
+ubifs
 nor/physmap-flash
 sound/capture/alsa
 sound/playback/alsa
