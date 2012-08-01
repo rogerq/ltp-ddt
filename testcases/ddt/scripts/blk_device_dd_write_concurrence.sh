@@ -72,15 +72,18 @@ else
 fi
 
 test_print_trc "Doing write concurrence test"
-do_cmd dd if=/dev/zero of=$MNT_POINT/test1.file bs=$DD_BUFSIZE count=$DD_CNT &
-do_cmd dd if=/dev/zero of=$MNT_POINT/test2.file bs=$DD_BUFSIZE count=$DD_CNT
+SRC_FILE="/home/root/srctest_file_${DEVICE_TYPE}_$$"
+do_cmd "time dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
+do_cmd dd if="$SRC_FILE" of=${MNT_POINT}/test1.file bs=$DD_BUFSIZE count=$DD_CNT &
+do_cmd dd if="$SRC_FILE" of=${MNT_POINT}/test2.file bs=$DD_BUFSIZE count=$DD_CNT
 do_cmd sleep 10
 FILE_SIZE=$((`convert_to_bytes.sh $DD_BUFSIZE` * `convert_to_bytes.sh $DD_CNT`))
 echo `get_file_size.sh $MNT_POINT/test1.file` | grep $FILE_SIZE || die "error: file1 size is not expected file size"
 echo `get_file_size.sh $MNT_POINT/test2.file` | grep $FILE_SIZE || die "error: file2 size is not expected file size"
-do_cmd diff "$MNT_POINT/test1.file" "$MNT_POINT/test1.file"
+do_cmd diff "$SRC_FILE" "${MNT_POINT}/test1.file"
+do_cmd diff "$SRC_FILE" "${MNT_POINT}/test2.file"
 #do_cmd dd if=$MNT_POINT/test.file of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
-do_cmd rm $MNT_POINT/test1.file $MNT_POINT/test2.file
+do_cmd rm ${MNT_POINT}/test1.file ${MNT_POINT}/test2.file
 
 test_print_trc "Umounting device"
 do_cmd blk_device_umount.sh -d "$DEVICE_TYPE" -f "$FS_TYPE" -n "$DEV_NODE"
