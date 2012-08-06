@@ -1,0 +1,33 @@
+# @name Graphics demos
+# @desc Running various graphics demos
+# @requires graphics
+
+SGX_S_FUNC_BLIT source 'common.sh'; graphics_install.sh || die "The graphics package is not installed"; do_cmd '/usr/local/bin/sgx_blit_test -t'
+SGX_S_FUNC_CLIPBLIT source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/usr/local/bin/sgx_clipblit_test'
+SGX_S_FUNC_RENDERFLIP source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/usr/local/bin/sgx_render_flip_test -nf '
+SGX_M_FUNC_OGLESCOVERFLOW source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESCoverflow -qaf=1000'
+SGX_M_FUNC_OGLESEVILSKULL source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESEvilSkull -qaf=1000'
+SGX_M_FUNC_OGLESFILMTV source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESFilmTV -qaf=1000'
+SGX_M_FUNC_OGLESFIVESPHERES source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESFiveSpheres -qaf=1000'
+SGX_M_FUNC_OGLESFRACTAL source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESFractal -qaf=1000'
+SGX_M_FUNC_OGLESFUR source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESFur -qaf=1000'
+SGX_M_FUNC_OGLESLIGHTING source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESLighting -qaf=1000'
+SGX_M_FUNC_OGLESMOUSE source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESMouse -qaf=1000'
+SGX_M_FUNC_OGLESNAVIGATION source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESNavigation -qaf=1000'
+SGX_M_FUNC_OGLESNAVIGATION3D source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESNavigation3D -qaf=1000'
+SGX_M_FUNC_OGLESOPTIMIZEMESH source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESOptimizeMesh -qaf=1000'
+SGX_M_FUNC_OGLESPARTICLES source 'common.sh';graphics_install.sh || die "The graphics package is not installed"; do_cmd '/opt/gfxsdkdemos/ogles/OGLESParticles -qaf=1000'
+SGX_M_FUNC_OGLESPOLYBUMP source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles/OGLESPolyBump -qaf=1000'
+SGX_M_FUNC_OGLESSKYBOX source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles/OGLESSkybox -qaf=1000'
+SGX_M_FUNC_OGLESTRILINEAR source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles/OGLESTrilinear -qaf=1000'
+SGX_M_FUNC_OGLESUSERCLIPPLANES source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles/OGLESUserClipPlanes -qaf=1000'
+SGX_M_FUNC_OGLESVASE source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles/OGLESVase -qaf=1000'
+SGX_M_FUNC_OGLES2CHAMELEONMAN source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles2/OGLES2ChameleonMan -qaf=1000'
+SGX_M_FUNC_OGLES2COVERFLOW source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles2/OGLES2Coverflow -qaf=1000'
+SGX_M_FUNC_OGLES2EXAMPLEUI source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles2/OGLES2ExampleUI -qaf=1000'
+SGX_M_FUNC_OGLES2FILMTV source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles2/OGLES2FilmTV -qaf=1000'
+SGX_M_FUNC_OGLES2FRACTAL source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles2/OGLES2Fractal -qaf=1000'
+SGX_M_FUNC_OGLES2MAGICLANTERN source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles2/OGLES2MagicLantern -qaf=1000'
+SGX_M_FUNC_OGLES2NAVIGATION source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles2/OGLES2Navigation -qaf=1000'
+SGX_M_FUNC_OGLES2NAVIGATION3D source 'common.sh';graphics_install.sh || die "The graphics package is not installed";  do_cmd '/opt/gfxsdkdemos/ogles2/OGLES2Navigation3D -qaf=1000'
+
