@@ -1,9 +1,16 @@
-# @name GStreamer test for video functionality
-# @desc Mpeg4, Mpeg2 and 264 video streams are played using gstreamer, demo streams are used,
-#	 if these are not available then streams are downloaded from smruti.india.ti.com
+# @name GStreamer test for running a mpeg4 video stream
+# @desc Display Modular tests for display in a loop of 100 and checking for proc entries
 # @requires graphics
 
-GST_S_VIDEO_MPEG4 source 'common.sh'; gst.sh "1622" "mpeg4"; do_cmd 'gst-launch-0.10 filesrc location=testfile ! mpeg4videoparse ! ffdec_mpeg4 ! ffmpegcolorspace ! fbdevsink device=/dev/fb0'
-GST_S_VIDEO_MPEG2 source 'common.sh'; gst.sh "1493" "mpeg2"; do_cmd 'gst-launch-0.10 filesrc location=testfile ! mpegvideoparse ! ffdec_mpeg2video ! ffmpegcolorspace ! fbdevsink device=/dev/fb0'
-GST_S_VIDEO_H264 source 'common.sh'; gst.sh "1288" "264"; do_cmd 'gst-launch-0.10 filesrc location=testfile ! h264parse ! ffdec_h264 ! ffmpegcolorspace ! fbdevsink device=/dev/fb0'
-
+GST_S_FUNC_VIDEO_MPEG4_480P source 'common.sh'; do_cmd 'gst.sh -d "1622" -c "mpeg4" -r "480p"'
+GST_M_FUNC_VIDEO_MPEG4_WQVGA source 'common.sh'; do_cmd 'gst.sh -d "1700" -c "mpeg4" -r "WQVGA"'
+GST_M_FUNC_VIDEO_MPEG4_WVGA source 'common.sh'; do_cmd 'gst.sh -d "1626" -c "mpeg4" -r "WVGA"'
+GST_S_FUNC_VIDEO_MPEG2_480P source 'common.sh'; do_cmd 'gst.sh -d "1493" -c "mpeg2" -r "480p"'
+GST_M_FUNC_VIDEO_MPEG2_WQVGA source 'common.sh'; do_cmd 'gst.sh -d "1513" -c "mpeg2" -r "WQVGA"'
+GST_M_FUNC_VIDEO_MPEG2_WVGA source 'common.sh'; do_cmd 'gst.sh -d "1495" -c "mpeg2" -r "WVGA"'
+GST_S_FUNC_VIDEO_H264_480P source 'common.sh'; do_cmd 'gst.sh -d "1288" -c "264" -r "480p"'
+GST_M_FUNC_VIDEO_H264_WQVGA source 'common.sh'; do_cmd 'gst.sh -d "1326" -c "264" -r "WQVGA"'
+GST_M_FUNC_VIDEO_H264_WVGA source 'common.sh'; do_cmd 'gst.sh -c "264" -r "WVGA"'
+GST_S_FUNC_AV_MP4_480P source 'common.sh'; do_cmd 'gst.sh -c "mpeg4aac" -r "480p"'
+GST_M_FUNC_AV_MP4_WQVGA source 'common.sh'; do_cmd 'gst.sh -c "mpeg4aac" -r "WQVGA"'
+GST_M_FUNC_AV_MP4_WVGA source 'common.sh'; do_cmd 'gst.sh -c "mpeg4aac" -r "WVGA"'
