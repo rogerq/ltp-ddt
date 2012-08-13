@@ -1,0 +1,9 @@
+# @name Test various drivers while changing cpu frequency
+# @desc Test various drivers while the OPP is changed to cover all possible vallues
+# @requires sound && mmc_host && power_mgr/cpufreq/userspace
+
+SYSTEM_S_FUNC_OPP_AUDIO source 'common.sh'; run_processes.sh "/opt/ltp/runltp -P $MACHINE -f ddt/alsa_opmode -s ALSA_M_FUNC_PLAYBK_OPMODE_BLK # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_S_FUNC_OPP_SD source 'common.sh'; run_processes.sh "/opt/ltp/runltp -P $MACHINE -f ddt/mmc_quick_perf -s MMC_S_PERF_SD_SANITY # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_L_STRESS_OPP_SD source 'common.sh'; run_processes.sh "/opt/ltp/runltp -P $MACHINE -f ddt/mmc_sdcard_perf_vfat -s MMC_L_PERF_SD_VFAT_0001 # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_L_STRESS_CPUFREQ_RELIABILITY"
+SYSTEM_L_STRESS_OPP_AUDIO source 'common.sh'; run_processes.sh "/opt/ltp/runltp -P $MACHINE -f ddt/alsa_opmode -s ALSA_M_FUNC_PLAYBK_OPMODE_BLK # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_L_STRESS_CPUFREQ_RELIABILITY"
+
