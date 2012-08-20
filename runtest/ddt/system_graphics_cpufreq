@@ -2,8 +2,6 @@
 # @desc Test various drivers while the OPP is changed to cover all possible vallues
 # @requires graphics
 
-SYSTEM_S_FUNC_OPP_LCD source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/fbdev_disp -P $MACHINE -s FBDEV_S_FUNC # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
 SYSTEM_S_FUNC_OPP_SGX source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/sgx -P $MACHINE -s SGX_S_FUNC_BLIT # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
-SYSTEM_L_STRESS_OPP_LCD source 'common.sh'; run_processes.sh "/opt/ltp/runltp -P $MACHINE -f ddt/fbdev_disp -s FBDEV_L_FUNC # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_L_STRESS_CPUFREQ_RELIABILITY"
 SYSTEM_L_STRESS_OPP_SGX source 'common.sh'; run_processes.sh "/opt/ltp/runltp -P $MACHINE -f ddt/sgx -s SGX_M_FUNC_OGLES2CHAMELEONMAN # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_L_STRESS_CPUFREQ_RELIABILITY"
 
