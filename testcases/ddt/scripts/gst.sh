@@ -78,7 +78,7 @@ esac
 # value you want
 
 ########################### REUSABLE TEST LOGIC ###############################
-if [ -f "$FILE" ];then
+if [ -e "$FILE" ];then
    echo "Demo file $FILE exists"
 else
    FILE="/usr/share/ti/video/$DOWNLOAD"

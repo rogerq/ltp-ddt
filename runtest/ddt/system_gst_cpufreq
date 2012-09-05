@@ -1,0 +1,9 @@
+# @name Test various drivers while changing cpu frequency
+# @desc Test various drivers while the OPP is changed to cover all possible vallues
+# @requires graphics && power_mgr/cpufreq/userspace
+
+SYSTEM_S_FUNC_OPP_GST_MPEG4 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/gst_video -P $MACHINE -s GST_S_FUNC_VIDEO_MPEG4_480P # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_S_FUNC_OPP_GST_MPEG2 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/gst_video -P $MACHINE -s GST_S_FUNC_VIDEO_MPEG2_480P # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_S_FUNC_OPP_GST_H264 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/gst_video -P $MACHINE -s GST_S_FUNC_VIDEO_H264_480P # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_S_FUNC_OPP_GST_MP4 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/gst_video -P $MACHINE -s GST_S_FUNC_AV_MP4_480P # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+
