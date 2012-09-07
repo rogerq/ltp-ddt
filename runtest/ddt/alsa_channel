@@ -11,7 +11,7 @@ ALSA_L_FUNC_LOOPBK_CHANNEL_MONO_3	source 'common.sh' ; do_cmd install_modules.sh
 
 ALSA_S_FUNC_CAPTURE_CHANNEL_STERIO_1	source 'common.sh' ; do_cmd install_modules.sh 'sound' ;do_cmd 'alsa_tests.sh -t capture -d 10 -c 2 -F ALSA_S_FUNC_CAPTURE_CHANNEL_2.snd';do_cmd 'alsa_tests.sh -t playback -d 10 -c 2 -F ALSA_S_FUNC_CAPTURE_CHANNEL_2.snd'
 ALSA_M_FUNC_CAPTURE_CHANNEL_STERIO_2	source 'common.sh' ; do_cmd install_modules.sh 'sound' ;do_cmd 'alsa_tests.sh -t capture -d 60 -c 2 -F ALSA_M_FUNC_CAPTURE_CHANNEL_2.snd'; do_cmd 'alsa_tests.sh -t playback -d 60 -c 2 -F ALSA_M_FUNC_CAPTURE_CHANNEL_2.snd'
-ALSA_L_FUNC_CAPTURE_CHANNEL_STERIO_3	source 'common.sh' ; do_cmd install_modules.sh 'sound' ;do_cmd 'alsa_tests.sh -t capture -d 300 -c 2 -F ALSA_L_FUNC_CAPTURE_CHANNEL_2.snd'; do_cmd 'alsa_tests.sh -t playback -d 300 -c 2 -F ALSA_L_FUNC_CAPTURE_CHANNEL_2.snd'
+ALSA_L_STRESS_CAPTURE_CHANNEL_STERIO_3	source 'common.sh' ; do_cmd install_modules.sh 'sound' ;do_cmd 'alsa_tests.sh -t capture -d 300 -c 2 -F ALSA_L_STRESS_CAPTURE_CHANNEL_2.snd'; do_cmd 'alsa_tests.sh -t playback -d 300 -c 2 -F ALSA_L_STRESS_CAPTURE_CHANNEL_2.snd'
 
 ALSA_M_FUNC_LOOPBK_CHANNEL_STERIO_1	source 'common.sh' ; do_cmd install_modules.sh 'sound' ;do_cmd 'alsa_tests.sh -t loopback -c 2 -d 10'
 ALSA_M_FUNC_LOOPBK_CHANNEL_STERIO_2	source 'common.sh' ; do_cmd install_modules.sh 'sound' ;do_cmd 'alsa_tests.sh -t loopback -c 2 -d 60'
