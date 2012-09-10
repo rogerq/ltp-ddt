@@ -1,5 +1,5 @@
 # @name
-#       NAND modular negative test
+#       NAND modular negative test when fs is jffs2
 # @desc
 #       modprobe nand module first and then do mount and rmmod 
 # @requires  nand && jffs2
