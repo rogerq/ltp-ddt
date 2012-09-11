@@ -4,4 +4,4 @@
 #       modprobe spi module first and then do RW and then rmmod it
 # @requires  spi_master 
 
-SPI_L_MODULAR_STRESS_RW_JFFS2 source "common.sh"; do_cmd blk_device_modular_dd_rw.sh -f "jffs2" -b "1M" -c "10" -l "10" -d "spi"
+SPI_L_MODULAR_STRESS_RW_JFFS2 source "common.sh"; install_modules.sh "spi"; part=`get_mtd_partition_number.sh "spi"` || die "error getting mtd part number: $part"; size=`get_mtd_size.sh "$part"` || die "error getting mtd size: $size"; size=$(( $size/MB )) && size=`get_ceiling_divide.sh "$size" 2` || die "error getting divide ceiling"; do_cmd blk_device_modular_dd_rw.sh -f "jffs2" -b "1M" -c "$size" -l "20" -d "spi"
