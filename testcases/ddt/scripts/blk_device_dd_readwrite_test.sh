@@ -103,6 +103,7 @@ SRC_FILE="/home/root/srctest_file_${DEVICE_TYPE}_$$"
 do_cmd "time dd if=/dev/urandom of=$SRC_FILE bs=$DD_BUFSIZE count=$DD_CNT"
 sleep 10
 do_cmd ls -lh $SRC_FILE
+do_cmd "df -h"
 x=0
 while [ $x -lt $TEST_LOOP ]
 do
