@@ -1,0 +1,9 @@
+# @name 
+#	MMC modular read write negative test 
+# @desc 
+#       modprobe mmc module first and then do RW and rmmod before RW finishing 
+# @requires  mmc_host/sdhc
+# @setup_requires sdhc
+
+MMC_L_MODULAR_NEG_MOD_RW_SDHC source "common.sh"; install_modules.sh "mmc"; blk_device_modular_dd_rw_neg.sh -b "1M" -c "100" -d "mmc" -i "write_in_bg" 
+
