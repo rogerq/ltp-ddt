@@ -66,7 +66,6 @@ if [ -z $DEV_NODE ]; then
 	DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE"
 fi
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
-: ${FS_TYPE:='jffs2'}
 : ${IO_OPERATION:='read'}
 : ${SKIP_RW:=0}
 test_print_trc "DEV_NODE: $DEV_NODE"
