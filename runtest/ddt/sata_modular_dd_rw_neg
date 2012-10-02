@@ -1,0 +1,9 @@
+# @name 
+#	SATA modular read write negative test 
+# @desc 
+#       modprobe sata module first and then do RW and rmmod before RW finishing 
+# @requires  sata
+# @setup_requires sata
+
+SATA_L_MODULAR_NEG_MOD_RW_VFAT source "common.sh"; install_modules.sh "sata"; blk_device_modular_dd_rw_neg.sh -b "1M" -c "100" -f "vfat" -d "sata" -i "write_in_bg" 
+

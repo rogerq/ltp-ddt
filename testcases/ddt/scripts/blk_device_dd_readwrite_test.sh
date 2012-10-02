@@ -118,18 +118,30 @@ do
 	case $IO_OPERATION in
 		wr)
 			do_cmd time dd if="$SRC_FILE" of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
+      do_cmd "sync"
+      do_cmd "echo 3 > /proc/sys/vm/drop_caches"
+
       do_cmd diff "$SRC_FILE" "$TEST_FILE"
 			do_cmd time dd if=$TEST_FILE of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
+      do_cmd "sync"
+      do_cmd "echo 3 > /proc/sys/vm/drop_caches"
+
 		;;
 		write_in_bg)
 			do_cmd time dd if=/dev/urandom of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT &
 		;;
 		cp)
 			do_cmd time cp "$SRC_FILE" "${TEST_FILE}"
+      do_cmd "sync"
+      do_cmd "echo 3 > /proc/sys/vm/drop_caches"
+
       ls -lh "$SRC_FILE"
       ls -lh "${TEST_FILE}"
       do_cmd compare_md5sum "$SRC_FILE" "$TEST_FILE" 
 			do_cmd time cp "${TEST_FILE}" "${TEST_FILE}_2"
+      do_cmd "sync"
+      do_cmd "echo 3 > /proc/sys/vm/drop_caches"
+
       #do_cmd diff "${TEST_FILE}" "${TEST_FILE}_2"
       ls -lh "${TEST_FILE}_2"
       do_cmd compare_md5sum "${TEST_FILE}" "${TEST_FILE}_2"
