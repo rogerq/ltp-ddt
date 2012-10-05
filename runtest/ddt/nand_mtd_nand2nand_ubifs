@@ -1,12 +1,14 @@
 # @name NAND to NAND cp test with fs:ubifs
 # @desc mount ubifs on nand, then create src file and then copy to dst file 
 #	The device node is specified in get_blk_device_node.sh
-# @requires nand 
+# @requires nand && ubifs 
 
 
 #NAND_M_FUNC_NAND2NAND_CP_UBIFS_1M source "common.sh"; install_modules.sh "nand"; do_cmd blk_device_dd_readwrite_test.sh -f "ubifs" -b "1M" -c "1" -i "cp" -d "nand" -l "10"
 
 NAND_M_FUNC_NAND2NAND_CP_UBIFS_10M source "common.sh"; install_modules.sh "nand"; do_cmd blk_device_dd_readwrite_test.sh -f "ubifs" -b "1M" -c "10" -i "cp" -d "nand" -l "10"
 
-NAND_L_FUNC_NAND2NAND_CP_UBIFS_100M source "common.sh"; install_modules.sh "nand"; do_cmd blk_device_dd_readwrite_test.sh -f "ubifs" -b "10M" -c "10" -i "cp" -d "nand" -l "100"
+NAND_L_STRESS_NAND2NAND_CP_UBIFS_80M source "common.sh"; install_modules.sh "nand"; do_cmd blk_device_dd_readwrite_test.sh -f "ubifs" -b "10M" -c "8" -i "cp" -d "nand" -l "100"
+
+NAND_L_STRESS_NAND2NAND_CP_UBIFS_100M source "common.sh"; install_modules.sh "nand"; do_cmd blk_device_dd_readwrite_test.sh -f "ubifs" -b "10M" -c "10" -i "cp" -d "nand" -l "100"
 
