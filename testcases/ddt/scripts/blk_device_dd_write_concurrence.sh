@@ -16,7 +16,7 @@
 # Input  
 
 source "common.sh"
-source "st_log.sh"
+source "blk_device_common.sh"
 source "mtd_common.sh"
 
 ############################# Functions #######################################
@@ -63,6 +63,9 @@ if [ -z $DEV_NODE ]; then
 fi
 
 MNT_POINT=/mnt/partition_$DEVICE_TYPE
+
+# print out the model number if possible
+do_cmd printout_model "$DEV_NODE" "$DEVICE_TYPE"
 
 ############# Do the work ###########################################
 if [ -n "$FS_TYPE" ]; then

@@ -19,14 +19,15 @@
 
 source "st_log.sh"
 source "common.sh"
+source "blk_device_common.sh"
 
 ############################# Functions #######################################
 usage()
 {
 cat <<-EOF >&2
-	usage: ./${0##*/} [-f FS_TYPE] [-n DEVICE_NODE] [-m MOUNT POINT] [-B BUFFER SIZES] [-s FILE SIZE] [-d DEVICE TYPE] [-o SYNC or ASYNC]
+	usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-m MOUNT POINT] [-B BUFFER SIZES] [-s FILE SIZE] [-d DEVICE TYPE] [-o SYNC or ASYNC]
 	-f FS_TYPE	filesystem type like jffs2, ext2, etc
-	-n DEVICE_NODE	optional param, block device node like /dev/mtdblock4, /dev/sda1
+	-n DEV_NODE	optional param, block device node like /dev/mtdblock4, /dev/sda1
 	-m MNT_POINT	optional param, mount point like /mnt/mmc
 	-B BUFFER_SIZES	optional param, buffer sizes for perf test like '102400 262144 524288 1048576 5242880'
 	-s FILE SIZE 	optional param, file size in MB for perf test
@@ -76,7 +77,7 @@ done
 : ${MNT_MODE:='async'}
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
 if [ -z $DEV_NODE ]; then
-        DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error while getting device node"
+        DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error while getting device node: $DEV_NODE"
         test_print_trc "DEV_NODE return from get_blk_device_node is: $DEV_NODE" 
 fi
 
@@ -91,6 +92,9 @@ test_print_trc "BUFFER SIZES:${BUFFER_SIZES}"
 test_print_trc "FILE SIZE:${FILE_SIZE}MB"
 test_print_trc "SRCFILE SIZE:${SRCFILE_SIZE}MB"
 test_print_trc "DEVICE_TYPE:${DEVICE_TYPE}"
+
+# print out the model number if possible
+do_cmd printout_model "$DEV_NODE" "$DEVICE_TYPE"
 
 # check if input are valid for this machine
 DEVICE_PART_SIZE=`get_blk_device_part_size.sh -d $DEVICE_TYPE -n $DEV_NODE` || die "error while getting device partition size: $DEVICE_PART_SIZE"

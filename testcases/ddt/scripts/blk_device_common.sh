@@ -109,3 +109,17 @@ is_part_rootfs(){
   fi
   echo "$RTN"
 }
+
+printout_model(){
+  DEV_NODE=$1
+  DEV_TYPE=$2
+  case "$DEV_NODE" in
+    *sd*)
+      BASE_SD=`echo "$DEV_NODE" |sed "s/\/dev\///" |sed "s/[0-9]$//"` 
+      do_cmd "cat /sys/block/$BASE_SD/device/model"
+      ;;
+    *)
+      test_print_trc "model info is not available."
+      ;;
+  esac
+}
