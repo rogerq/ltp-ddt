@@ -16,7 +16,7 @@
 # Input  
 
 source "common.sh"
-source "st_log.sh"
+source "blk_device_common.sh"
 source "mtd_common.sh"
 
 SKIP_FORMAT=0
@@ -82,6 +82,9 @@ test_print_trc "MNT_POINT: $MNT_POINT"
 test_print_trc "FS_TYPE: $FS_TYPE"
 
 ############# Do the work ###########################################
+# print out the model number if possible
+do_cmd printout_model "$DEV_NODE" "$DEVICE_TYPE"
+
 if [ $SKIP_FORMAT -ne 1 ]; then 
 	if [ -n "$FS_TYPE" ]; then
 		do_cmd blk_device_prepare_format.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
@@ -120,8 +123,14 @@ do
 			do_cmd time dd if="$SRC_FILE" of="$TEST_FILE" bs=$DD_BUFSIZE count=$DD_CNT
       do_cmd "sync"
       do_cmd "echo 3 > /proc/sys/vm/drop_caches"
-
-      do_cmd diff "$SRC_FILE" "$TEST_FILE"
+      #do_cmd hexdump "$SRC_FILE" > /srcfile
+      #do_cmd hexdump "$TEST_FILE" > /dstfile
+      #do_cmd diff /srcfile /dstfile
+      test_print_trc "diff "$SRC_FILE" "$TEST_FILE" "
+      diff "$SRC_FILE" "$TEST_FILE"
+      if [ $? -ne 0 ]; then
+        do_cmd cmp -l "$SRC_FILE" "$TEST_FILE"
+      fi
 			do_cmd time dd if=$TEST_FILE of=/dev/null bs=$DD_BUFSIZE count=$DD_CNT
       do_cmd "sync"
       do_cmd "echo 3 > /proc/sys/vm/drop_caches"
@@ -144,7 +153,11 @@ do
 
       #do_cmd diff "${TEST_FILE}" "${TEST_FILE}_2"
       ls -lh "${TEST_FILE}_2"
-      do_cmd compare_md5sum "${TEST_FILE}" "${TEST_FILE}_2"
+      test_print_trc "compare_md5sum "${TEST_FILE}" "${TEST_FILE}_2" "
+      compare_md5sum "${TEST_FILE}" "${TEST_FILE}_2"
+      if [ $? -ne 0 ]; then
+        do_cmd cmp -l "${TEST_FILE}" "${TEST_FILE}_2"
+      fi
       sleep 1
       do_cmd rm "${TEST_FILE}_2"
 		;;
