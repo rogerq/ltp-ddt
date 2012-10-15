@@ -1,0 +1,17 @@
+# @name USB Host ISO class. 
+# @desc Test cases corresponding to USB Host loopback/playback Audio class with USB Host Video class. 
+# @requires usb/host/iso
+# @setup_requires usbhostaudio_usbhostvideo
+
+# Audio LOOPBACK with video capture
+
+USBHOST_S_FUNC_AUDIO_LOOPBACK_WITH_VIDEO_CAPTURE     source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh loopback; audio_dev=`usb_audio_search_devices.sh loopback`; rec_dev=${audio_dev:0:1}; play_dev=${audio_dev:1:1}; do_cmd 'alsa_tests.sh -R plughw:'$rec_dev',0  -P plughw:'$play_dev',0 -t loopback -a 1 -d 60 &' ; source 'common.sh' ; do_cmd install_modules.sh 'usb';  DEV_NAME=`usb_video_search_devices.sh`; do_cmd usb_host_video.sh -w 640 -l 480 -i /home/root/640_480.YUV -d $DEV_NAME
+
+# Audio PLAYBACK with video capture
+
+USBHOST_M_FUNC_AUDIO_PLAYBACK_WITH_VIDEO_CAPTURE      source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh play; audio_dev=`usb_audio_search_devices.sh play`; do_cmd 'alsa_tests.sh -D plughw:'$audio_dev',0 -t playback -a 1 -F /home/root/USBHOST_M_FUNC_AUDIO_PLAYBACK_ACCESSTYPE_MMAP_01.wav &' ; source 'common.sh' ; do_cmd install_modules.sh 'usb';  DEV_NAME=`usb_video_search_devices.sh`; do_cmd usb_host_video.sh -w 640 -l 480 -i /home/root/640_480.YUV -d $DEV_NAME
+
+# Audio CAPTURE with video capture
+
+USBHOST_M_FUNC_AUDIO_VIDEO_CAPTURE       source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_audio_search_devices.sh record; audio_dev=`usb_audio_search_devices.sh record`; do_cmd 'alsa_tests.sh   -D plughw:'$audio_dev',0  -t capture -a 1 -F /home/root/USBHOST_M_FUNC_AUDIO_CAPTURE_ACCESSTYPE_MMAP_01.snd &' ; source 'common.sh' ; do_cmd install_modules.sh 'usb';  DEV_NAME=`usb_video_search_devices.sh`; do_cmd usb_host_video.sh -w 640 -l 480 -i /home/root/640_480.YUV -d $DEV_NAME
+
