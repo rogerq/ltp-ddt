@@ -23,8 +23,8 @@ source "blk_device_common.sh"
 usage()
 {
 cat <<-EOF >&2
-  usage: ./${0##*/} [-n DEV_NODES] [-d DEVICE_TYPE] [-f FS_TYPE] [-b DD_BUFSIZE] [-c DD_CNT] [-i IO_OPERATION] [-l TEST_LOOP]  
-	-n DEV_NODES	  device node like /dev/sda1; /dev/sdb1;
+  usage: ./${0##*/} [-n DRIVE_NAME] [-d DEVICE_TYPE] [-f FS_TYPE] [-b DD_BUFSIZE] [-c DD_CNT] [-i IO_OPERATION] [-l TEST_LOOP]  
+	-n DRIVE_NAME	  drive name like "a b c" to overwrite the ones find dynamically; 
   -f FS_TYPE      filesystem type like jffs2, ext2, etc
   -b DD_BUFSIZE 	dd buffer size for 'bs'
   -c DD_CNT 	    dd count for 'count'
@@ -40,7 +40,7 @@ exit 0
 
 while getopts  :d:f:m:n:b:c:i:l:swh arg
 do case $arg in
-        n)      DEV_NODES="$OPTARG";;
+        n)      DRIVE_NAME="$OPTARG";;
         d)      DEVICE_TYPE="$OPTARG";;
         f)      FS_TYPE="$OPTARG";;
         b)      DD_BUFSIZE="$OPTARG";;
@@ -64,20 +64,14 @@ done
 : ${TEST_LOOP:='1'}
 
 ############# Do the work ###########################################
-if [ -z "$DEV_NODES" ]; then
-  DEV_NODES=""
+if [ -z "$DRIVE_NAME" ]; then
   DRIVES=`find_all_scsi_drives "$DEVICE_TYPE"` || die "Error when calling find_all_scsi_drives: $DRIVES"
-  for d in $DRIVES; do
-    do_cmd "cat /sys/block/sd$d/device/model"
-    DEV_NODES="${DEV_NODES} /dev/sd${d}1"
-  done
 fi
-
-#TODO: use DEV_NODES below so the user can specify their own nodes they want to test
 
 # Do data transfter among different drives
 # Mount all the drives first
 for i in $DRIVES; do
+  do_cmd "cat /sys/block/sd$i/device/model"
   MNT_POINT="/mnt/sd${i}_$$"
   NODE="/dev/sd${i}1"
 

@@ -123,3 +123,40 @@ printout_model(){
       ;;
   esac
 }
+
+# find all available scsi drives
+# Input: "usb" or "sata"
+# Output: drives_found
+find_all_scsi_drives() {
+  SCSI_DEVICE=$1
+  DRIVES_FOUND=""
+  DRIVES=`fdisk -l |grep "Disk /dev/sd" | cut -b 13`
+  for DRIVE in $DRIVES; do
+    if [ -e /sys/block/sd"$DRIVE"/device/vendor ]; then
+      VENDOR=`cat /sys/block/sd"$DRIVE"/device/vendor`
+      RESULT=`echo $VENDOR | grep -i "ATA"`
+      case $SCSI_DEVICE in
+        sata)
+          if [ -n "$RESULT" ]; then
+            DRIVES_FOUND="${DRIVES_FOUND} $DRIVE"
+          fi
+        ;;
+        usb)
+          if [ -z "$RESULT" ]; then
+            DRIVES_FOUND="${DRIVES_FOUND} $DRIVE"
+          fi
+        ;;
+        all)
+          DRIVES_FOUND="${DRIVES_FOUND} $DRIVE"
+        ;;
+      esac
+    fi
+  done
+  if [ -n "$DRIVES_FOUND" ]; then
+    echo "$DRIVES_FOUND"
+  else
+    # if could not find match, let user know
+    echo "Could not find any device node for SCSI device!"
+    exit 1
+  fi
+}
