@@ -1,0 +1,7 @@
+# @name
+#       SPI modular negative test when fs is jffs2
+# @desc
+#       modprobe spi module first and then do mount and rmmod 
+# @requires  spi_master
+
+SPI_L_MODULAR_NEG_RMMOD_WHEN_MOUNT_JFFS2 source "common.sh"; mod_name=`get_modular_name.sh "spi"` || die "error getting modular name: $mod_name"; do_cmd insmod.sh "$mod_name"; DEV_NODE=`get_blk_device_node.sh "spi"` || die "error getting devnode for spi: $DEV_NODE"; do_cmd blk_device_erase_format_part.sh -d "spi" -n "$DEV_NODE" -f "jffs2"; do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "jffs2" -d "spi" -m "/mnt/spi"; rmmod.sh "$mod_name" && exit 1 || exit 0
