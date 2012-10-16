@@ -1,0 +1,9 @@
+# @name SATA read write among different devices 
+# @desc Do read write among different SATA devices 
+# @requires sata 
+# @setup_requires sata
+
+SATA_S_FUNC_INTER_DRIVES_VFAT_10M source 'common.sh'; do_cmd scsi_dd_readwrite_between_nodes.sh -f "vfat" -b "1" -c "10" -d "sata" 
+SATA_M_FUNC_INTER_DRIVES_EXT2_100M source 'common.sh'; do_cmd scsi_dd_readwrite_between_nodes.sh -f "ext2" -b "10" -c "10" -d "sata" 
+SATA_L_FUNC_INTER_DRIVES_VFAT_1G source 'common.sh'; do_cmd scsi_dd_readwrite_between_nodes.sh -f "vfat" -b "10" -c "100" -d "sata" 
+

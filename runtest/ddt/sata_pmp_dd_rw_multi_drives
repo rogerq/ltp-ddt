@@ -1,0 +1,7 @@
+# @name Read Write to scsi multiple drives
+# @desc Using dd to read write sata harddisks
+# @requires sata 
+# @setup_requires sata
+
+SATA_M_FUNC_MULTI_DRIVES_VFAT_DD_RW_100M source 'common.sh'; do_cmd scsi_dd_readwrite_multi_nodes.sh -b "1M" -c "100" -d "sata"
+

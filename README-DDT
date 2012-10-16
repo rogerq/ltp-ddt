@@ -114,6 +114,10 @@
    Please follow the naming conventions identified in section 9) of this document
    if the test scenario needs to identify any setup requirements.
 
+   You can use underscore(_) to seperate multiple @setup_requires. Examples:
+
+   @setup_requires usbhostvideo_usbhostaudio
+   This test requires usbhostvideo setup and usbhostaudio setup.
  
 5) HOW TO ADD NEW PLATFORMS
 ================================================================================

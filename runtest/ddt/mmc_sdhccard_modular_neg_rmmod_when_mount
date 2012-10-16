@@ -1,0 +1,8 @@
+# @name
+#       MMC modular negative test when fs is vfat 
+# @desc
+#       modprobe mmc module first and then do mount and rmmod 
+# @requires  mmc_host/sdhc
+# @setup_requires sdhc
+
+MMC_L_MODULAR_NEG_RMMOD_WHEN_MOUNT source "common.sh"; mod_name=`get_modular_name.sh "mmc"` || die "error getting modular name: $mod_name"; do_cmd insmod.sh "$mod_name"; DEV_NODE=`get_blk_device_node.sh "mmc"` || die "error getting devnode for mmc: $DEV_NODE"; do_cmd blk_device_erase_format_part.sh -d "mmc" -n "$DEV_NODE" -f "vfat"; do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "vfat" -d "mmc" -m "/mnt/mmc"; rmmod.sh "$mod_name" && exit 1 || exit 0
