@@ -1,0 +1,32 @@
+# @name USB Host Write/Read between all/seleted drives test
+# @desc find the drives if it is hdd/usb or if the drive is mentioned explisitly, then copy a file with all possible combinations to the drives with mentioned file size
+# @requires usb/host
+# @setup_requires usbhostmsc
+
+USBHOST_L_FUNC_COPY_bw_ALL_DRIVES_500M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d all -b 512K -c 1000 -l 10
+USBHOST_M_FUNC_COPY_bw_ALL_DRIVES_100M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d all -b 1M -c 100
+USBHOST_S_FUNC_COPY_bw_ALL_DRIVES_10M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 100K -c 100
+USBHOST_M_FUNC_COPY_bw_ALL_DRIVES_400M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d all -b 2M -c 200
+USBHOST_M_FUNC_COPY_bw_USB_DRIVES_50M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d usb -b 512K -c 100
+USBHOST_L_FUNC_COPY_bw_USB_DRIVES_1G source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d usb -b 1M -c 1000
+USBHOST_M_FUNC_COPY_bw_USB_DRIVES_100M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d usb -b 100K -c 1000
+USBHOST_M_FUNC_COPY_bw_USB_DRIVES_400M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d usb -b 2M -c 200
+USBHOST_M_FUNC_COPY_bw_HDD_DRIVES_50M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d hdd -b 512K -c 100
+USBHOST_M_FUNC_COPY_bw_HDD_DRIVES_100M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d hdd -b 1M -c 100
+USBHOST_L_FUNC_COPY_bw_HDD_DRIVES_1G source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d hdd -b 100K -c 10000 -l 10
+USBHOST_M_FUNC_COPY_bw_HDD_DRIVES_400M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -d hdd -b 2M -c 200
+USBHOST_M_FUNC_COPY_A2A source_250M 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 512K -c 500 -n a
+USBHOST_M_FUNC_COPY_bw_AC_250M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 512K -c 500 -n "a c"
+USBHOST_M_FUNC_COPY_bw_BC_250M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 512K -c 500 -n "a b"
+USBHOST_L_FUNC_COPY_bw_ABC_250M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 512K -c 500 -n "a b c" -l 10
+USBHOST_S_FUNC_COPY_B2B_10M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 100K -c 100 -n b
+USBHOST_S_FUNC_COPY_bw_AC_10M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 100K -c 100 -n "a c"
+USBHOST_S_FUNC_COPY_bw_BC_10M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 100K -c 100 -n "b c"
+USBHOST_S_FUNC_COPY_bw_ABC_10M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 100K -c 100 -n "a b c"
+USBHOST_M_FUNC_COPY_C2C_50M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 1M -c 50 -n c
+USBHOST_M_FUNC_COPY_bw_AC_50M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 1M -c 50 -n "a c"
+USBHOST_M_FUNC_COPY_bw_BC_50M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 1M -c 50 -n "b a"
+USBHOST_M_FUNC_COPY_bw_ABC_100M source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 2M -c 50 -n "a b c"
+USBHOST_L_FUNC_COPY_A2A_1G source 'common.sh' ; do_cmd install_modules.sh 'usb'; scsi_dd_readwrite_between_nodes.sh -b 1M -c 1000 -n a
+
+
