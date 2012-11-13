@@ -170,6 +170,7 @@ int st_i2c_eeprom_read_test(struct st_i2c_testparams *info, char *test_id)
 		calc =
 		    (((float)(totalsize) * 1000000) / (float)(elapsed_usecs));
 		calc = (calc * BYTE_TO_BIT_CONV) / BIT_TO_KBIT_CONV;
+
 		TEST_PRINT_TRC("I2C | Read | Duration in uSec: %ld",
 			       actual_time);
 		TEST_PRINT_TRC("I2C | Read | Kbits/Sec: %lf", calc);
@@ -181,7 +182,8 @@ int st_i2c_eeprom_read_test(struct st_i2c_testparams *info, char *test_id)
 			    ("I2C | Read | percentage cpu load | %.2f%%",
 			     percentage_cpu_load);
 	}
-      free_mem:
+  TEST_PRINT_TRC("|PERFDATA|bsize:%d|iomode:read|throughput:%.2lfKbits/S|cpuload:%.2f%%|", bsize, calc, percentage_cpu_load);
+  free_mem:
 	if (NULL != buf) {
 		free(buf);
 	}
@@ -413,11 +415,12 @@ int st_i2c_eeprom_write_test(struct st_i2c_testparams *info, char *test_id)
 			     percentage_cpu_load);
 		}
 	}
-      free_readbuf:
+  TEST_PRINT_TRC("|PERFDATA|bsize:%d|iomode:write|throughput:%.2lfKbits/S|cpuload:%.2f%%|", bsize, calc, percentage_cpu_load);
+  free_readbuf:
 	if (NULL != read_buf) {
 		free(read_buf);
 	}
-      free_writebuf:
+  free_writebuf:
 	if (NULL != write_buf) {
 		free(write_buf);
 	}
