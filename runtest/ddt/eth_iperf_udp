@@ -45,3 +45,18 @@ ETH_L_PERF_IPERF_UDP_10M_1000B source 'common.sh'; run_iperf.sh -w 128k -l 1000 
 ETH_L_PERF_IPERF_UDP_25M_1000B source 'common.sh'; run_iperf.sh -w 128k -l 1000 -f M -u -t 60 -b 25M
 ETH_L_PERF_IPERF_UDP_50M_1000B source 'common.sh'; run_iperf.sh -w 128k -l 1000 -f M -u -t 60 -b 50M
 ETH_L_PERF_IPERF_UDP_100M_1000B source 'common.sh'; run_iperf.sh -w 128k -l 1000 -f M -u -t 60 -b 100M
+
+
+ETH_M_PERF_IPERF_UDP_1M_2000B source 'common.sh'; run_iperf.sh -w 128k -l 2000 -f M -u -t 60 -b 1M
+ETH_M_PERF_IPERF_UDP_5M_2000B source 'common.sh'; run_iperf.sh -w 128k -l 2000 -f M -u -t 60 -b 5M
+ETH_M_PERF_IPERF_UDP_10M_2000B source 'common.sh'; run_iperf.sh -w 128k -l 2000 -f M -u -t 60 -b 10M
+ETH_M_PERF_IPERF_UDP_1M_4000B source 'common.sh'; run_iperf.sh -w 128k -l 4000 -f M -u -t 60 -b 1M
+ETH_M_PERF_IPERF_UDP_5M_4000B source 'common.sh'; run_iperf.sh -w 128k -l 4000 -f M -u -t 60 -b 5M
+ETH_M_PERF_IPERF_UDP_10M_4000B source 'common.sh'; run_iperf.sh -w 128k -l 4000 -f M -u -t 60 -b 10M
+ETH_M_PERF_IPERF_UDP_1M_6000B source 'common.sh'; run_iperf.sh -w 128k -l 6000 -f M -u -t 60 -b 1M
+ETH_M_PERF_IPERF_UDP_5M_6000B source 'common.sh'; run_iperf.sh -w 128k -l 6000 -f M -u -t 60 -b 5M
+ETH_M_PERF_IPERF_UDP_10M_6000B source 'common.sh'; run_iperf.sh -w 128k -l 6000 -f M -u -t 60 -b 10M
+ETH_M_PERF_IPERF_UDP_1M_8000B source 'common.sh'; run_iperf.sh -w 128k -l 8000 -f M -u -t 60 -b 1M
+ETH_M_PERF_IPERF_UDP_5M_8000B source 'common.sh'; run_iperf.sh -w 128k -l 8000 -f M -u -t 60 -b 5M
+ETH_M_PERF_IPERF_UDP_10M_8000B source 'common.sh'; run_iperf.sh -w 128k -l 8000 -f M -u -t 60 -b 10M
+
