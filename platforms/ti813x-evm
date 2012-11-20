@@ -21,3 +21,5 @@ usb/host/hid/musb_ti81xx
 watchdog/omap_wdt
 jffs2
 ubifs
+power_mgr/cpufreq/userspace
+

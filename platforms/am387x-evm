@@ -11,6 +11,8 @@ net/eth10M/davinci_emac
 net/eth100M/davinci_emac
 power_mgr/cpufreq
 power_mgr/cpuidle
+power_mgr/cpufreq/ondemand
+power_mgr/cpufreq/userspace
 sata/ahci
 sound/capture/alsa
 sound/playback/alsa
