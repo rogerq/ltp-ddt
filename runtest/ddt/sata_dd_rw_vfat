@@ -22,6 +22,10 @@ SATA_L_FUNC_VFAT_DD_RW_B05M_C010 source 'common.sh'; do_cmd blk_device_dd_readwr
 
 SATA_L_FUNC_VFAT_DD_RW_B10M_C010 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "10M" -c "10" -d "sata"
 
+SATA_L_FUNC_VFAT_DD_RW_B10M_C100 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "10M" -c "100" -d "sata"
+
+SATA_L_FUNC_VFAT_DD_RW_B10M_C1000 source 'common.sh'; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "10M" -c "1000" -d "sata"
+
 
 
 
