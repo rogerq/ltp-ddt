@@ -18,7 +18,7 @@
 #	$FS_TYPE	like 'jffs2', 'ext2', 'vfat'
 
 source "common.sh"
-source "st_log.sh"
+source "mtd_common.sh"
 
 ############################# Functions #######################################
 usage()
@@ -101,7 +101,11 @@ case $DEV_TYPE in
 
       # need erase all blocks with option -e since some blocks may contain non-ubifs data 
       MTD_ERASEBLOCKS=`get_mtd_eraseblocks.sh $PART` || die "error getting how many eraseblocks mtd$PART have: $MTD_ERASEBLOCKS"
+      SUBPAGE_SIZE=`get_subpagesize "/dev/mtd$PART" ` || die "error getting subpage size for mtd$PART: ${SUBPAGE_SIZE}"
+      PAGE_SIZE=`get_pagesize "/dev/mtd$PART" ` || die "error getting page size for mtd$PART: ${PAGE_SIZE}"
       test_print_trc "mtd eraseblocks: $MTD_ERASEBLOCKS"
+      test_print_trc "mtd subpage size: $SUBPAGE_SIZE"
+      test_print_trc "mtd pagesize: $PAGE_SIZE"
       # before format, make sure it is not attached.
       test_print_trc "Detach $CHAR_DEV_NODE and ubi$UBI_DEVICE_NUM"
       umount "ubi$UBI_DEVICE_NUM:$VOL_NAME"
@@ -109,8 +113,9 @@ case $DEV_TYPE in
       ubidetach -d $UBI_DEVICE_NUM
       ls /dev/ub*
       # For now, temp hard code -s and -O.
-      do_cmd "ubiformat "$CHAR_DEV_NODE" -s 512 -O 2048 -e $MTD_ERASEBLOCKS -y -q"
-      do_cmd "ubiattach /dev/ubi_ctrl -m "$PART" -O 2048"
+      #do_cmd "ubiformat "$CHAR_DEV_NODE" -s 512 -O 2048 -e $MTD_ERASEBLOCKS -y -q"
+      do_cmd "ubiformat "$CHAR_DEV_NODE" -s "$SUBPAGE_SIZE" -O "$PAGE_SIZE" -e $MTD_ERASEBLOCKS -y -q"
+      do_cmd "ubiattach /dev/ubi_ctrl -m "$PART" -O "$PAGE_SIZE" "
       do_cmd "ls /dev/ub*"
       
       # before mk vol, need remove the existing one

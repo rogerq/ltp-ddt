@@ -125,3 +125,20 @@ get_mtd_biggest_part() {
   fi
 }
 
+# get subpage size using mtdinfo
+# input: devnode like /dev/mtd6
+# output: subpage size in bytes
+get_subpagesize() {
+  DEV_NODE=$1
+  SSIZE=`mtdinfo "$DEV_NODE" |grep 'Sub-page size' |awk '{print $3}'`
+  echo "$SSIZE"
+}
+
+# get page size using mtdinfo
+# input: devnode like /dev/mtd6
+# output: page size in bytes
+get_pagesize() {
+  DEV_NODE=$1
+  PSIZE=`mtdinfo "$DEV_NODE" |grep 'Minimum input/output unit size' |awk '{print $5}'`
+  echo "$PSIZE"
+}
