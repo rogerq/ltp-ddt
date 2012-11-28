@@ -75,7 +75,7 @@ test_print_trc "FS_TYPE: $FS_TYPE"
 ############# Do the work ###########################################
 MOD_NAME=`get_modular_name.sh "$DEVICE_TYPE"` || die "error getting modular name"
 do_cmd insmod.sh $MOD_NAME
-do_cmd blk_device_erase_format_part.sh -d $DEVICE_TYPE -n $DEV_NODE -f $FS_TYPE
+do_cmd blk_device_erase_format_part.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
 do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT"
 
 test_print_trc "Doing read/write test in the same time, remove module"
@@ -98,5 +98,5 @@ test_print_trc "Waiting for process $! to finish..."
 wait $!
 do_cmd rm $MNT_POINT/test.file
 test_print_trc "Umounting device"
-do_cmd blk_device_umount.sh -d "$DEVICE_TYPE" -f "$FS_TYPE" -n "$DEV_NODE"
+do_cmd blk_device_umount.sh -m "$MNT_POINT"
 

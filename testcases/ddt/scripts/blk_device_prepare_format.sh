@@ -70,7 +70,7 @@ test_print_trc "MNT_MODE: $MNT_MODE"
 ############# Do the work ###########################################
 if [ -n "$FS_TYPE" ]; then
 	test_print_trc "Erasing/Formatting this partition and then mount it"
-	do_cmd blk_device_erase_format_part.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE"
+	do_cmd blk_device_erase_format_part.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" -f "$FS_TYPE" -m "$MNT_POINT"
 	do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -f "$FS_TYPE" -d "$DEVICE_TYPE" -m "$MNT_POINT" -o "$MNT_MODE"
 else
 	test_print_trc "Mount the partition with the existing FS on device"

@@ -155,7 +155,7 @@ do
 	x=$((x+1))
 	do_cmd date
   do_cmd rm -rf "$MNT_POINT/*"
-  do_cmd blk_device_unprepare.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE"
+  do_cmd blk_device_unprepare.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE" -m "$MNT_POINT"
   # set FS_TYPE to nothing so the device will not be formatted for the 2nd and following times
   FS_TYPE=""
 done

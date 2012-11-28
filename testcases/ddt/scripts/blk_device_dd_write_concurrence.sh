@@ -89,7 +89,7 @@ do_cmd diff "$SRC_FILE" "${MNT_POINT}/test2.file"
 do_cmd rm ${MNT_POINT}/test1.file ${MNT_POINT}/test2.file
 
 test_print_trc "Umounting device"
-do_cmd blk_device_umount.sh -d "$DEVICE_TYPE" -f "$FS_TYPE" -n "$DEV_NODE"
+do_cmd blk_device_umount.sh -m "$MNT_POINT"
 
 
 

@@ -22,10 +22,8 @@ source "mtd_common.sh"
 usage()
 {
 cat <<-EOF >&2
-  usage: ./${0##*/} [-n DEV_NODE] [-d DEVICE_TYPE]
-	-n DEV_NODE	optional param; device node like /dev/mtdblock2; /dev/sda1
-	-d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
-  -f FS_TYPE      file system type
+  usage: ./${0##*/} [-m MNT_POINT]
+	-m MNT_POINT  
   -h Help         print this usage
 EOF
 exit 0
@@ -33,11 +31,10 @@ exit 0
 
 ############################### CLI Params ###################################
 
-while getopts  :n:d:f:h arg
+while getopts  :m:d:f:h arg
 do case $arg in
-        n)      
-		# optional param
-		DEV_NODE="$OPTARG";;
+        m)      
+		            MNT_POINT="$OPTARG";;
         d)      DEVICE_TYPE="$OPTARG";;
         f)      FS_TYPE="$OPTARG";;
         h)      usage;;
@@ -53,18 +50,12 @@ esac
 done
 
 ############################ DEFAULT Params #######################
-if [ -z $DEV_NODE ]; then
-	DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"
-fi
 ############# Do the work ###########################################
 # TODO: don't hardcode ubi node and volume name
 test_print_trc "Umounting device"
-if [ "$FS_TYPE" = "ubifs" ]; then
-  DEV_NODE="ubi0:test"
-fi
-test_print_trc "DEV_NODE: $DEV_NODE"
+test_print_trc "MNT_POINT: $MNT_POINT"
 
-do_cmd "umount $DEV_NODE"
+do_cmd "umount $MNT_POINT"
 
 
 

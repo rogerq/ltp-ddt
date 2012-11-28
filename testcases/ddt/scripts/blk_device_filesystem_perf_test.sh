@@ -135,7 +135,8 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	do_cmd "sync"
 	# should do umount and mount before read to force to write to device
 	#do_cmd "umount $DEV_NODE"
-  do_cmd blk_device_umount.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE" 
+  #do_cmd blk_device_umount.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE" 
+  do_cmd blk_device_umount.sh -m "$MNT_POINT" 
 	do_cmd "echo 3 > /proc/sys/vm/drop_caches"
 
 	#do_cmd "mount -t $FS_TYPE -o $MNT_MODE $DEV_NODE $MNT_POINT"
@@ -157,7 +158,7 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
 	do_cmd "rm -f ${DST_TEST_FILE}"
 	test_print_trc "Unmount the device"
 	#do_cmd "umount $DEV_NODE"
-  do_cmd blk_device_unprepare.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE"
+  do_cmd blk_device_unprepare.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -f "$FS_TYPE" -m "$MNT_POINT"
 done
 
 

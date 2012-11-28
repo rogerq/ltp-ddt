@@ -13,9 +13,9 @@
 # 
 
 # erase or format storage device based on type
-# Input $DEVICE_TYPE 	like 'nand', 'spi', 'mmc', 'usb'
-#	$DEV_NODE	like '/dev/mtdblock3', '/dev/mmcblk0p1', '/dev/sda1'
-#	$FS_TYPE	like 'jffs2', 'ext2', 'vfat'
+# Input $DEVICE_TYPE  like 'nand', 'spi', 'mmc', 'usb'
+# $DEV_NODE like '/dev/mtdblock3', '/dev/mmcblk0p1', '/dev/sda1'
+# $FS_TYPE like 'jffs2', 'ext2', 'vfat'
 
 source "common.sh"
 source "mtd_common.sh"
@@ -24,16 +24,17 @@ source "mtd_common.sh"
 usage()
 {
 cat <<-EOF >&2
-        usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-d DEVICE TYPE]
+        usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-d DEVICE TYPE] [-m MNTPNT]
         -f FS_TYPE      filesystem type like jffs2, ext2, etc
-        -n DEV_NODE	device node like /dev/mtdblock3; /dev/sda1 
+        -n DEV_NODE device node like /dev/mtdblock3; /dev/sda1 
         -d DEVICE_TYPE  device type like 'nand', 'mmc', 'usb' etc
+        -m MNT_POINT
         -h Help         print this usage
 EOF
 exit 0
 }
 
-while getopts :d:n:f:h arg
+while getopts :d:n:f:m:h arg
 do case $arg in
         d)
                 DEVICE_TYPE=$OPTARG ;;
@@ -41,10 +42,12 @@ do case $arg in
                 DEV_NODE=$OPTARG ;;
         f)
                 FS_TYPE=$OPTARG ;;
-	h)
-		usage ;;
+        m)  
+                MNT_POINT=$OPTARG ;;
+        h)
+                usage ;;
         \?)
-		echo "Invalid Option -$OPTARG ignored." >&2
+                echo "Invalid Option -$OPTARG ignored." >&2
                 usage
                 exit 1
                 ;;
@@ -85,11 +88,11 @@ sleep 3
 
 # do erase or format for following device type.
 case $DEV_TYPE in
-	mtd)
-		test_print_trc "device type is mtd"
-		CHAR_DEV_NODE=`echo $DEV_NODE | sed s/block//` || die "error while getting mtd char dev_node"
-		[ ! -c $CHAR_DEV_NODE ] && die "$CHAR_DEV_NODE is not char device"
-	#exit 0
+ mtd)
+    test_print_trc "device type is mtd"
+    CHAR_DEV_NODE=`echo $DEV_NODE | sed s/block//` || die "error while getting mtd char dev_node"
+    [ ! -c $CHAR_DEV_NODE ] && die "$CHAR_DEV_NODE is not char device"
+ #exit 0
     PART=`get_mtd_partnum_from_devnode.sh "$DEV_NODE"` || die "error getting partition number: $PART"
     if [ "$FS_TYPE" = "ubifs" ]; then
       # TODO: volume name is set to 'test'. Later on, get the name from proc mtd or sys entry.
@@ -108,8 +111,12 @@ case $DEV_TYPE in
       test_print_trc "mtd pagesize: $PAGE_SIZE"
       # before format, make sure it is not attached.
       test_print_trc "Detach $CHAR_DEV_NODE and ubi$UBI_DEVICE_NUM"
-      umount "ubi$UBI_DEVICE_NUM:$VOL_NAME"
+      #umount "ubi$UBI_DEVICE_NUM:$VOL_NAME"
+      test_print_trc "umount "$MNT_POINT""
+      umount "$MNT_POINT"
+      test_print_trc "ubidetach -p "$CHAR_DEV_NODE""
       ubidetach -p "$CHAR_DEV_NODE"
+      test_print_trc "ubidetach -d $UBI_DEVICE_NUM"
       ubidetach -d $UBI_DEVICE_NUM
       ls /dev/ub*
       # For now, temp hard code -s and -O.
@@ -128,15 +135,15 @@ case $DEV_TYPE in
       #do_cmd "ubimkvol /dev/ubi0 -N test -s 200MiB"
       do_cmd "ubimkvol /dev/ubi$UBI_DEVICE_NUM -N "$VOL_NAME" -S $LEB_CNT"
     else
-		  do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
+      do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
     fi
-		sleep 1
-	;;
-	*)
-		if [ -n "$FS_TYPE" ]; then
-			do_cmd "$MKFS $DEV_NODE"
-		fi
-	;;
+    sleep 1
+    ;;
+ *)
+  if [ -n "$FS_TYPE" ]; then
+   do_cmd "$MKFS $DEV_NODE"
+  fi
+ ;;
 esac
 
 
