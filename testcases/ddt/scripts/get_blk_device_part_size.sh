@@ -54,41 +54,12 @@ do case $arg in
 esac
 done
 
-: ${DEV_NODE:='/dev/mtdblock3'}
-: ${DEVICE_TYPE:='nand'}
-
 SIZE=0
-DEV_TYPE=`get_device_type_map.sh $DEVICE_TYPE` || die "error while translating device type"
-case $DEV_TYPE in
-	mtd)
-		PART=`get_mtd_partnum_from_devnode.sh "$DEV_NODE"` || die "error getting partition number: $PART"
-		SIZE=`get_mtd_size.sh "$PART"` || die "error while getting the mtd size: $SIZE"
-
-		# different way to get size; but could not figure out if it is symlink	
-		#for file in $(find /sys/class/mtd/mtd$PART -type f -name size); do
-		#	test_print_trc "file is:$file"
-		#	size=`cat $file`
-		#done
-	;;
-	mmc)
-		#SIZE=$((1*GB))
-    SIZE=`get_part_size_of_devnode "$DEV_NODE"` || die "error getting partition size for mmc $DEV_NODE: $SIZE"
-	;;
-	usb)
-		SIZE=$((1*GB))
-	;;
-	ata)
-		SIZE=$((1*GB))
-	;;
-	sata)
-		SIZE=$((1*GB))
-	;;
-	*)
-		die "Device type is not found; Size for Device Partition is set to default value: $SIZE"
-	;;
-esac
+# Size is in MB
+SIZE=`get_part_size_of_devnode "$DEV_NODE"` || die "error getting partition size for $DEV_NODE: $SIZE"
 
 # return size in MB
-echo $(( $SIZE / $MB ))
+#echo $(( $SIZE / $MB ))
+echo $SIZE
 
 

@@ -64,10 +64,11 @@ find_part_with_biggest_size() {
 }
 
 # get size of the partition with PART_DEVNODE
-# return size is in 'bytes'
+# return size is in 'MBytes'
 get_part_size_of_devnode() {
   PART_DEVNODE=$1
-  PARTSIZE=`fdisk -l "$PART_DEVNODE" | grep "$PART_DEVNODE:" |cut -d"," -f2 |sed s/bytes//`  
+  #PARTSIZE=`fdisk -l "$PART_DEVNODE" | grep "$PART_DEVNODE:" |cut -d"," -f2 |sed s/bytes//`  
+  PARTSIZE=`fdisk -l "$PART_DEVNODE" | grep "Disk "$PART_DEVNODE":" | awk '{print $3 }' `
   if [ $PARTSIZE -le 0 ]; then
     die "Could not get partition size from $PART_DEVNODE"
   fi
@@ -105,7 +106,7 @@ is_part_rootfs(){
     RTN="yes"
   fi
   if [ "$NEED_UMOUNT" == "yes" ]; then
-    do_cmd blk_device_umount.sh -d "$DEVICE_TYPE" -n "$DEV_NODE" > /dev/null 2>$1
+    do_cmd blk_device_umount.sh -m "$MNT_POINT" > /dev/null 2>$1
   fi
   echo "$RTN"
 }
@@ -119,7 +120,7 @@ printout_model(){
       do_cmd "cat /sys/block/$BASE_SD/device/model"
       ;;
     *)
-      test_print_trc "model info is not available."
+      test_print_trc "model info is not available for non scsi devices."
       ;;
   esac
 }
