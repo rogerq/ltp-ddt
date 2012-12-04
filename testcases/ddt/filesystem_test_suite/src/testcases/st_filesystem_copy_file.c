@@ -169,11 +169,11 @@ int st_filesystem_performance_copy_test(struct st_filesystem_testparams *info,
 			goto free_mem;
 	        }
 		copycnt++;
-		TEST_PRINT_TRC("Coping of file  succeeded for %d Time",copycnt);
+		TEST_PRINT_TRC("Copying of file  succeeded for %d Time",copycnt);
 		dstfileopenflag = 0;
 		res_integrity = st_filesystem_dateintegrity_test(srcfile_ptr,dstfile_ptr);
 		if( SUCCESS != res_integrity ) {
-			TEST_PRINT_ERR("Date integrity test failed ");
+			TEST_PRINT_ERR("Data integrity test failed ");
 			result = FAILURE;
 			goto free_mem;
 		}	
