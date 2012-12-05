@@ -25,16 +25,17 @@ source "blk_device_common.sh"
 usage()
 {
 cat <<-EOF >&2
-	usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-m MOUNT POINT] [-B BUFFER SIZES] [-s FILE SIZE] [-d DEVICE TYPE] [-o SYNC or ASYNC]
-	-f FS_TYPE	filesystem type like jffs2, ext2, etc
-	-n DEV_NODE	optional param, block device node like /dev/mtdblock4, /dev/sda1
-	-m MNT_POINT	optional param, mount point like /mnt/mmc
-	-B BUFFER_SIZES	optional param, buffer sizes for perf test like '102400 262144 524288 1048576 5242880'
-	-s FILE SIZE 	optional param, file size in MB for perf test
-	-c SRCFILE SIZE 	optional param, srcfile size in MB for writing to device
-	-d DEVICE_TYPE	device type like 'nand', 'mmc', 'usb' etc
+  usage: ./${0##*/} [-f FS_TYPE] [-n DEV_NODE] [-m MOUNT POINT] [-B BUFFER SIZES] [-s FILE SIZE] [-d DEVICE TYPE] [-o SYNC or ASYNC] [-t TIME_OUT]
+  -f FS_TYPE	filesystem type like jffs2, ext2, etc
+  -n DEV_NODE	optional param, block device node like /dev/mtdblock4, /dev/sda1
+  -m MNT_POINT	optional param, mount point like /mnt/mmc
+  -B BUFFER_SIZES	optional param, buffer sizes for perf test like '102400 262144 524288 1048576 5242880'
+  -s FILE SIZE 	optional param, file size in MB for perf test
+  -c SRCFILE SIZE 	optional param, srcfile size in MB for writing to device
+  -d DEVICE_TYPE	device type like 'nand', 'mmc', 'usb' etc
   -o MNT_MODE     mount mode: sync or async. default is async
-	-h Help 	print this usage
+  -t TIME_OUT  time out duratiopn for copying
+  -h Help 	print this usage
 EOF
 exit 0
 }
@@ -48,25 +49,26 @@ if [ $# == 0 ]; then
 	exit 1
 fi
 
-while getopts  :f:n:m:B:s:c:d:o:h arg
+while getopts  :f:n:m:B:s:c:d:o:t:h arg
 do case $arg in
-	f)	FS_TYPE="$OPTARG";;
-	n)	DEV_NODE="$OPTARG";;
-	m)	MNT_POINT="$OPTARG";;
-	B)	BUFFER_SIZES="$OPTARG";;
-	s)	FILE_SIZE="$OPTARG";;
-	c)	SRCFILE_SIZE="$OPTARG";;
-	d)	DEVICE_TYPE="$OPTARG";;
-	o)	MNT_MODE="$OPTARG";;
-	h)	usage;;
-	:)	test_print_trc "$0: Must supply an argument to -$OPTARG." >&2
-		exit 1 
-		;;
+  f)  FS_TYPE="$OPTARG";;
+  n)  DEV_NODE="$OPTARG";;
+  m)  MNT_POINT="$OPTARG";;
+  B)  BUFFER_SIZES="$OPTARG";;
+  s)  FILE_SIZE="$OPTARG";;
+  c)  SRCFILE_SIZE="$OPTARG";;
+  d)  DEVICE_TYPE="$OPTARG";;
+  o)  MNT_MODE="$OPTARG";;
+  t)  TIME_OUT="$OPTARG";;
+  h)  usage;;
+  :)  test_print_trc "$0: Must supply an argument to -$OPTARG." >&2
+  exit 1 
+  ;;
 
-	\?)	test_print_trc "Invalid Option -$OPTARG ignored." >&2
-		usage 
-		exit 1
-		;;
+  \?)  test_print_trc "Invalid Option -$OPTARG ignored." >&2
+  usage 
+  exit 1
+  ;;
 esac
 done
 
@@ -75,6 +77,7 @@ done
 : ${FILE_SIZE:='100'}
 : ${SRCFILE_SIZE:='10'}
 : ${MNT_MODE:='async'}
+: ${TIME_OUT:='30'}
 : ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
 if [ -z $DEV_NODE ]; then
         DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error while getting device node: $DEV_NODE"
@@ -153,7 +156,7 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
   TEST_FILE="${MNT_POINT}/test_file_$$"
   DST_TEST_FILE="${MNT_POINT}/dst_test_file_$$"
 	do_cmd "dd if=/dev/urandom of=${TEST_FILE} bs=512K count=$FILE_SIZE"
-	do_cmd filesystem_tests -copy -src_file ${TEST_FILE} -dst_file ${DST_TEST_FILE} -duration 30 -buffer_size $BUFFER_SIZE -file_size $HALF_FILE_SIZE -performance 
+	do_cmd filesystem_tests -copy -src_file ${TEST_FILE} -dst_file ${DST_TEST_FILE} -duration ${TIME_OUT} -buffer_size $BUFFER_SIZE -file_size $HALF_FILE_SIZE -performance 
 	do_cmd "rm -f ${TEST_FILE}"
 	do_cmd "rm -f ${DST_TEST_FILE}"
 	test_print_trc "Unmount the device"
