@@ -2,7 +2,8 @@
 # @desc Erase nand and write/read to nand
 # @requires nand
 
-NAND_L_FUNC_NANDTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"` || die "error getting mtd part number: $part"; do_cmd "nandtest -k -p 2 /dev/mtd"$part" " 
+NAND_S_FUNC_NANDTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"` || die "error getting mtd part number: $part"; do_cmd "nandtest -k -p 1 /dev/mtd"$part" " 
+NAND_L_STRESS_NANDTEST source "common.sh"; install_modules.sh "nand"; part=`get_mtd_partition_number.sh "nand"` || die "error getting mtd part number: $part"; do_cmd "nandtest -k -p 20 /dev/mtd"$part" " 
 
 
 
