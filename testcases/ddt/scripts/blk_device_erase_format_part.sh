@@ -59,7 +59,11 @@ test_print_trc "DEVICE NODE: $DEV_NODE"
 test_print_trc "FS TYPE: $FS_TYPE"
 
 ############################ DEFAULT Params #######################
-MKFS="mkfs.$FS_TYPE"
+if [ "$FS_TYPE" = "vfat" ]; then
+  MKFS="mkfs.${FS_TYPE} -F 32"
+else
+  MKFS="mkfs.${FS_TYPE}"
+fi
 FLASH_ERASEALL="flash_eraseall"
 
 
@@ -141,7 +145,7 @@ case $DEV_TYPE in
     ;;
  *)
   if [ -n "$FS_TYPE" ]; then
-   do_cmd "$MKFS $DEV_NODE"
+   do_cmd "${MKFS} $DEV_NODE"
   fi
  ;;
 esac
