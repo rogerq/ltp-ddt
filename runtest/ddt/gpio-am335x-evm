@@ -1,0 +1,23 @@
+# @name GPIO set test including set gpio to 'in', 'out' etc on am335x-sk
+# @desc Set gpio pin in each bank to 'in' or 'out' through sysfs. Before run this test, kernel may be required to be modified to add entries for pin to test
+# @requires gpio && am335x-evm 
+
+GPIO_M_FUNC_DIR_IN_AM335X-EVM_BANK0 source "common.sh"; gpio.sh -b "0" -g "31" -l "2" -t "in" -i "0"
+GPIO_M_FUNC_DIR_IN_AM335X-EVM_BANK1 source "common.sh"; gpio.sh -b "1" -g "20" -l "2" -t "in" -i "0"
+# there is no existing gpio2_ pin in current pinmux table. Use gpio2_6(lcd_data0) as test pin. 
+# NEED set pinmux to gpio2_6. "echo 0x0027 > omap_mux/lcd_data0"
+GPIO_M_FUNC_DIR_IN_AM335X-EVM_BANK2 source "common.sh"; gpio.sh -b "2" -g "6" -l "2" -t "in" -i "0"
+GPIO_M_FUNC_DIR_IN_AM335X-EVM_BANK3 source "common.sh"; gpio.sh -b "3" -g "14" -l "2" -t "in" -i "0"
+
+
+GPIO_M_FUNC_DIR_OUT_AM335X-EVM_BANK0 source "common.sh"; gpio.sh -b "0" -g "31" -l "2" -t "out" -i "0"
+GPIO_M_FUNC_DIR_OUT_AM335X-EVM_BANK1 source "common.sh"; gpio.sh -b "1" -g "20" -l "2" -t "out" -i "0"
+GPIO_M_FUNC_DIR_OUT_AM335X-EVM_BANK2 source "common.sh"; gpio.sh -b "2" -g "6" -l "2" -t "out" -i "0"
+GPIO_M_FUNC_DIR_OUT_AM335X-EVM_BANK3 source "common.sh"; gpio.sh -b "3" -g "14" -l "2" -t "out" -i "0"
+
+
+GPIO_M_FUNC_EDGE_AM335X-EVM_BANK0 source "common.sh"; gpio.sh -b "0" -g "31" -l "2" -t "edge" -i "0"
+GPIO_M_FUNC_EDGE_AM335X-EVM_BANK1 source "common.sh"; gpio.sh -b "1" -g "20" -l "2" -t "edge" -i "0"
+GPIO_M_FUNC_EDGE_AM335X-EVM_BANK2 source "common.sh"; gpio.sh -b "2" -g "6" -l "2" -t "edge" -i "0"
+GPIO_M_FUNC_EDGE_AM335X-EVM_BANK3 source "common.sh"; gpio.sh -b "3" -g "14" -l "2" -t "edge" -i "0"
+
