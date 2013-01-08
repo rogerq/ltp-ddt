@@ -1,0 +1,7 @@
+# @name Test storage devices including sata with net
+# @desc Test storage devices including sata with net
+# @requires net && usb/host && nand && ubifs && mmc_host/sdhc && sata 
+# @setup_requires usbhostmsc && sdhc && sata
+
+SYSTEM_L_FUNC_NET-MMC-USB-NAND-SATA source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/eth_iperf_tcp -P $MACHINE -s "ETH_M_PERF_IPERF_TCP_128K_1448B" # /opt/ltp/runltp -f ddt/mmc_sdhccard_perf_vfat -P $MACHINE -s "MMC_M_PERF_SDHC_VFAT_0001" # /opt/ltp/runltp -f ddt/usbhost_perf_vfat -P $MACHINE -s "USBHOST_S_PERF_VFAT_0001" # /opt/ltp/runltp -f ddt/nand_perf_ubifs -P $MACHINE -s "NAND_S_PERF_UBIFS " # /opt/ltp/runltp -f ddt/sata_perf_vfat -P $MACHINE -s "SATA_S_PERF_VFAT_10M " "
+
