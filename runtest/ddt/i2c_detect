@@ -2,7 +2,7 @@
 # @desc Using i2c-detect utility to detect the attached slaves 
 # @requires i2c 
 
-I2C_S_FUNC_I2CDETECT source 'common.sh'; do_cmd i2cdetect -y -r 1
+I2C_S_FUNC_I2CDETECT source 'common.sh'; i2cbus=`ls /dev/i2c* |head -1 |cut -d'-' -f2`; do_cmd i2cdetect -y -r "$i2cbus" 
  
 
 
