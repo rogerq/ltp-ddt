@@ -165,14 +165,14 @@
 
 6.1) Environment Setup for LTP-DDT build
 ================================================================================
- In order to cross compile LTP-DDT, CodeSourcery cross-compiler tool-chain is required.
+ In order to cross compile LTP-DDT, a cross-compiler tool-chain is required.
  Download and install toolchain from following location:
- https://sourcery.mentor.com/sgpp/portal/release1039
- Set the environment variable PATH to contain the binaries of the CodeSourcery cross-compiler tool-chain.
+ http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
+ Set the environment variable PATH to contain the binaries of the toolchain cross-compiler tool-chain.
      For example, in bash: 
-	     $ export PATH=/opt/toolchain/2009-q1/bin:$PATH 
+	     $ export PATH=/opt/arago-2011.09/armv7a/bin:$PATH 
  Test if PATH is set properly by running following command 
- 	$arm-none-linux-gnueabi-gcc -v
+ 	$arm-arago-linux-gnueabi-gcc -v
 
 6.2) HOW TO CROSS-COMPILE AND INSTALL
 ================================================================================
