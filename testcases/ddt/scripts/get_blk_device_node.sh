@@ -52,9 +52,12 @@ find_scsi_node() {
 			;;
 			usb)
 				if [ -z "$RESULT" ]; then
-					DEV_NODE="/dev/"$DRIVE"1"
-					echo $DEV_NODE
-					exit 0				
+          RESULT=`echo $VENDOR | grep -i "Generic"`
+          if [ -z "$RESULT" ]; then
+            DEV_NODE="/dev/"$DRIVE"1"
+            echo $DEV_NODE
+            exit 0				
+          fi
 				fi
 			;;
 		esac
