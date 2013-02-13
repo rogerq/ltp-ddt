@@ -34,25 +34,25 @@ DEVICE_TYPE=$1
 # input is either 'sata' or 'usb'
  
 find_scsi_node() {
-	SCSI_DEVICE=$1
+  SCSI_DEVICE=$1
 	# find the first drive for SATA to test, ignore the second one if any
 	# Assume maximum 2 usb and 2 sata plugged in
-	DRIVES='a b c d'
-	for DRIVE in $DRIVES; do
-		if [ -e /sys/block/sd"$DRIVE"/device/vendor ]; then
-		VENDOR=`cat /sys/block/sd"$DRIVE"/device/vendor`
+  BASE_DRV=`ls /dev/sd* |sed -r s'/\/dev\/sd[a-z]+[0-9]+//g' |sed -r s'/\/dev\///g'`
+	for DRIVE in $BASE_DRV; do
+		if [ -e /sys/block/"$DRIVE"/device/vendor ]; then
+		VENDOR=`cat /sys/block/"$DRIVE"/device/vendor`
 		RESULT=`echo $VENDOR | grep -i "ATA"`
 		case $SCSI_DEVICE in
 			sata)
 				if [ -n "$RESULT" ]; then
-					DEV_NODE="/dev/sd"$DRIVE"1"
+					DEV_NODE="/dev/"$DRIVE"1"
 					echo $DEV_NODE
 					exit 0				
 				fi
 			;;
 			usb)
 				if [ -z "$RESULT" ]; then
-					DEV_NODE="/dev/sd"$DRIVE"1"
+					DEV_NODE="/dev/"$DRIVE"1"
 					echo $DEV_NODE
 					exit 0				
 				fi
