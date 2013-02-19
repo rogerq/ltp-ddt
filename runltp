@@ -725,7 +725,7 @@ main()
     then
       mv -f ${TMP}/alltests ${TMP}/alltests.orig
       sed -i s'/\t/ /' ${TMP}/alltests.orig
-	    grep "$TAG_RESTRICT_STRING" ${TMP}/alltests.orig > ${TMP}/alltests #Not worth checking return codes for this case
+	    grep -E "$TAG_RESTRICT_STRING" ${TMP}/alltests.orig > ${TMP}/alltests #Not worth checking return codes for this case
     fi
 
     # Blacklist or skip tests if a SKIPFILE was specified with -S
