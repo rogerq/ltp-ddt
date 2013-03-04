@@ -44,7 +44,6 @@
 #include <unistd.h>
 #include "test.h"
 #include "usctest.h"
-#include "config.h"
 
 char *TCID = "thp01";
 int TST_TOTAL = 1;
@@ -78,11 +77,12 @@ int main(int argc, char **argv)
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		switch (pid = fork()) {
 		case -1:
-			tst_brkm(TBROK|TERRNO, cleanup, "fork");
+			tst_brkm(TBROK | TERRNO, cleanup, "fork");
 		case 0:
 			memset(arg, 'c', length - 1);
 			arg[length - 1] = '\0';
-			for (i = 0; i < ARRAY_SZ - 1; i++)
+			array[0] = "true";
+			for (i = 1; i < ARRAY_SZ - 1; i++)
 				array[i] = arg;
 			array[ARRAY_SZ - 1] = NULL;
 			if (setrlimit(RLIMIT_STACK, &rl) == -1) {
@@ -95,10 +95,10 @@ int main(int argc, char **argv)
 			}
 		default:
 			if (waitpid(pid, &st, 0) == -1)
-				tst_brkm(TBROK|TERRNO, cleanup, "waitpid");
+				tst_brkm(TBROK | TERRNO, cleanup, "waitpid");
 			if (!WIFEXITED(st) || WEXITSTATUS(st) != 0)
 				tst_brkm(TBROK, cleanup,
-					"child exited abnormally");
+					 "child exited abnormally");
 		}
 	}
 	tst_resm(TPASS, "system didn't crash, pass.");
@@ -112,7 +112,7 @@ static void setup(void)
 	length = 32 * ps;
 	arg = malloc(length);
 	if (arg == NULL)
-		tst_brkm(TBROK|TERRNO, NULL, "malloc");
+		tst_brkm(TBROK | TERRNO, NULL, "malloc");
 
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 	TEST_PAUSE;
