@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -87,12 +87,13 @@ struct test_case_t {
 	uid_t user_id;
 	gid_t group_id;
 } test_cases[] = {
-	{ 700, 701 },
-	{ 702, -1 },
-	{ 703, 701 },
-	{ -1, 704 },
-	{ 703, 705 },
-};
+	{
+	700, 701}, {
+	702, -1}, {
+	703, 701}, {
+	-1, 704}, {
+703, 705},};
+
 int TST_TOTAL = sizeof(test_cases) / sizeof(*test_cases);
 
 void setup();			/* setup function for the test */
@@ -101,9 +102,9 @@ void cleanup();			/* cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat(2) struct contents */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
-	int i;		/* counter variable for chmod(2) tests */
+	int lc;
+	char *msg;
+	int i;
 	uid_t user_id;		/* user id of the user set for testfile */
 	gid_t group_id;		/* group id of the user set for testfile */
 
@@ -123,7 +124,7 @@ int main(int ac, char **av)
 			TEST(chown(TESTFILE, user_id, group_id));
 
 			if (TEST_RETURN == -1) {
-				tst_resm(TFAIL|TTERRNO, "chown failed");
+				tst_resm(TFAIL | TTERRNO, "chown failed");
 				continue;
 			}
 			if (STD_FUNCTIONAL_TEST) {
@@ -164,8 +165,9 @@ void setup()
 
 	tst_tmpdir();
 
-	if ((fd = open(TESTFILE, O_RDWR|O_CREAT, FILE_MODE)) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "opening %s failed", TESTFILE);
+	if ((fd = open(TESTFILE, O_RDWR | O_CREAT, FILE_MODE)) == -1)
+		tst_brkm(TBROK | TERRNO, cleanup, "opening %s failed",
+			 TESTFILE);
 	if (close(fd) == -1)
 		tst_brkm(TBROK, cleanup, "closing %s failed", TESTFILE);
 

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /* Author: Masatake YAMATO <yamato@redhat.com> */
@@ -47,13 +47,13 @@ GETGROUPS(int size16, GID_T *list16)
 
 	list32 = malloc(size16 * sizeof(gid_t));
 	if (list32 == NULL)
-	  tst_brkm(TBROK, NULL, "malloc failed to alloc %d errno "
+	  tst_brkm(TBROK, NULL, "malloc failed to alloc %zu errno "
 		   " %d ", size16 * sizeof(gid_t), errno);
 
 	r = getgroups(size16, list32);
 	if (r < 0)
 	  goto out;
-  
+
 	for (i = 0; i < r; i++) {
 		if (!GID_SIZE_CHECK(list32[i]))
 		  tst_brkm(TBROK,

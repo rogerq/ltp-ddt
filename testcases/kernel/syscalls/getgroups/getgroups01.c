@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -96,12 +96,12 @@ gid_t cmpset[NGROUPS];
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
+	int lc;
 	char *ptr;		/* message returned from parse_opts */
 
 	gid_t group;
 
-	int i;			/* counter */
+	int i;
 	int entries;		/* number of group entries */
 
 	initgroups("root", 0);
@@ -121,10 +121,10 @@ int main(int ac, char **av)
 		else if (STD_FUNCTIONAL_TEST) {
 			if (errno == EINVAL)
 				tst_resm(TPASS,
-				    "getgroups failed as expected with EINVAL");
+					 "getgroups failed as expected with EINVAL");
 			else
-				tst_resm(TFAIL|TTERRNO,
-				    "getgroups didn't fail as expected with EINVAL");
+				tst_resm(TFAIL | TTERRNO,
+					 "getgroups didn't fail as expected with EINVAL");
 		}
 
 		/*
@@ -138,15 +138,15 @@ int main(int ac, char **av)
 
 		TEST(getgroups(0, gidset));
 		if (TEST_RETURN == -1)
-			tst_resm(TFAIL|TTERRNO, "getgroups failed");
+			tst_resm(TFAIL | TTERRNO, "getgroups failed");
 		else if (STD_FUNCTIONAL_TEST) {
 			if (memcmp(cmpset, gidset, NGROUPS) != 0)
 				tst_resm(TFAIL,
-				    "getgroups modified the gidset array");
+					 "getgroups modified the gidset array");
 			else
 				tst_resm(TPASS,
-				    "getgroups did not modify the gidset "
-				    "array");
+					 "getgroups did not modify the gidset "
+					 "array");
 		}
 
 		/*
@@ -156,31 +156,31 @@ int main(int ac, char **av)
 
 		if (TEST_RETURN <= 1)
 			tst_resm(TCONF,
-				"getgroups returned %ld; unable to test that using ngrps >=1 but less than number of grps", TEST_RETURN);
+				 "getgroups returned %ld; unable to test that using ngrps >=1 but less than number of grps",
+				 TEST_RETURN);
 		else {
 			TEST(getgroups(TEST_RETURN - 1, gidset));
 			if (TEST_RETURN == -1) {
 				if (STD_FUNCTIONAL_TEST) {
 					if (errno == EINVAL)
 						tst_resm(TPASS,
-						    "getgroups failed as "
-						    "expected with EINVAL");
+							 "getgroups failed as "
+							 "expected with EINVAL");
 					else
-						tst_resm(TFAIL|TERRNO,
-						    "getgroups didn't fail "
-						    "with EINVAL");
+						tst_resm(TFAIL | TERRNO,
+							 "getgroups didn't fail "
+							 "with EINVAL");
 				}
 			} else
 				tst_resm(TFAIL,
-				    "getgroups succeeded unexpectedly with %ld",
-				    TEST_RETURN);
+					 "getgroups succeeded unexpectedly with %ld",
+					 TEST_RETURN);
 		}
-
 
 		TEST(getgroups(NGROUPS, gidset));
 		if ((entries = TEST_RETURN) == -1)
-			tst_resm(TFAIL|TTERRNO,
-			    "getgroups failed unexpectedly");
+			tst_resm(TFAIL | TTERRNO,
+				 "getgroups failed unexpectedly");
 		else if (STD_FUNCTIONAL_TEST) {
 
 			group = getgid();
@@ -188,18 +188,18 @@ int main(int ac, char **av)
 			for (i = 0; i < entries; i++)
 				if (gidset[i] == group) {
 					tst_resm(TPASS,
-					    "getgroups(NGROUPS,gidset) "
-					    "returned %d contains gid %d "
-					    "(from getgid)",
-					    entries, group);
+						 "getgroups(NGROUPS,gidset) "
+						 "returned %d contains gid %d "
+						 "(from getgid)",
+						 entries, group);
 					break;
 				}
 
 			if (i == entries)
 				tst_resm(TFAIL,
-				    "getgroups(NGROUPS,gidset) ret %d, does "
-				    "not contain gid %d (from getgid)",
-				    entries, group);
+					 "getgroups(NGROUPS,gidset) ret %d, does "
+					 "not contain gid %d (from getgid)",
+					 entries, group);
 		}
 
 	}

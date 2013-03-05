@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -91,7 +91,7 @@ int fd, fd1, status;
 int main(int argc, char **argv)
 {
 	int lc, retval;
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 	pid_t pid;
 
 	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL)
@@ -108,7 +108,8 @@ int main(int argc, char **argv)
 
 			pid = FORK_OR_VFORK();
 			if (pid == -1)
-				tst_brkm(TBROK|TERRNO, cleanup, "fork failed");
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "fork failed");
 			if (pid == 0) {
 				fd1 = open(filename, O_RDONLY);
 				retval = flock(fd1, LOCK_SH | LOCK_NB);
@@ -121,18 +122,18 @@ int main(int argc, char **argv)
 						 "flock() PASSED in acquiring shared lock on "
 						 "Share Locked file");
 				exit(0);
-			} else
-				if (wait(&status) == -1)
-					tst_brkm(TBROK|TERRNO, cleanup,
-					    "wait failed");
+			} else if (wait(&status) == -1)
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "wait failed");
 
 			pid = FORK_OR_VFORK();
 			if (pid == -1)
-				tst_brkm(TBROK|TERRNO, cleanup, "fork failed");
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "fork failed");
 
 			if (pid == 0) {
 				fd1 = open(filename, O_RDWR);
-				retval = flock(fd1, LOCK_EX|LOCK_NB);
+				retval = flock(fd1, LOCK_EX | LOCK_NB);
 				if (retval == -1) {
 					tst_resm(TPASS,
 						 "flock() failed to acquire exclusive lock on existing "
@@ -143,12 +144,11 @@ int main(int argc, char **argv)
 						 "Share Locked file");
 				}
 				exit(0);
-			} else
-				if (wait(&status) == -1)
-					tst_resm(TBROK|TERRNO, "wait failed");
+			} else if (wait(&status) == -1)
+				tst_resm(TBROK | TERRNO, "wait failed");
 			TEST(flock(fd, LOCK_UN));
 		} else
-			tst_resm(TFAIL|TERRNO, "flock failed");
+			tst_resm(TFAIL | TERRNO, "flock failed");
 
 		close(fd);
 		close(fd1);

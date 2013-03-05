@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 
@@ -74,21 +74,21 @@ int main(int argc, char *argv[])
 
 	if (argc < 2 || argc > 3) {
 		errx(EINVAL, "TBROK\t Invalid #args received from script"
-			" The test will run without any cpu load");
+		     " The test will run without any cpu load");
 	}
 
 	/* Migrate the task to its group if applicable */
 	test_num = atoi(argv[1]);
 	if (test_num < 0) {
 		errx(EINVAL,
-		    "Invalid test number received from script. "
-		    "Skipping load creation");
+		     "Invalid test number received from script. "
+		     "Skipping load creation");
 	}
 
 	if (test_num == 2) {
 		strncpy(mytaskfile, argv[2], FILENAME_MAX);
 		strncat(mytaskfile, "/tasks",
-					 FILENAME_MAX - strlen(mytaskfile) - 1);
+			FILENAME_MAX - strlen(mytaskfile) - 1);
 		write_to_file(mytaskfile, "a", getpid());
 	}
 

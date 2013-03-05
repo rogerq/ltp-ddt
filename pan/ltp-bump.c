@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -40,7 +40,7 @@
 
 #include "zoolib.h"
 
-pid_t read_active(FILE *fp, char *name);
+pid_t read_active(FILE * fp, char *name);
 
 int main(int argc, char **argv)
 {
@@ -51,27 +51,28 @@ int main(int argc, char **argv)
 	int sig = SIGINT;
 
 	while ((c = getopt(argc, argv, "a:s:12")) != -1) {
-		switch(c) {
-			case 'a':
-				active = (char*)malloc(strlen(optarg)+1);
-				strcpy( active, optarg );
-				break;
-			case 's':
-				sig = atoi( optarg );
-				break;
-			case '1':
-				sig = SIGUSR1;
-				break;
-			case '2':
-				sig = SIGUSR2;
-				break;
+		switch (c) {
+		case 'a':
+			active = (char *)malloc(strlen(optarg) + 1);
+			strcpy(active, optarg);
+			break;
+		case 's':
+			sig = atoi(optarg);
+			break;
+		case '1':
+			sig = SIGUSR1;
+			break;
+		case '2':
+			sig = SIGUSR2;
+			break;
 		}
 	}
 
 	if (active == NULL) {
 		active = zoo_getname();
 		if (active == NULL) {
-			fprintf(stderr, "ltp-bump: Must supply -a or set ZOO env variable\n");
+			fprintf(stderr,
+				"ltp-bump: Must supply -a or set ZOO env variable\n");
 			exit(1);
 		}
 	}
@@ -88,18 +89,21 @@ int main(int argc, char **argv)
 	}
 
 	while (optind < argc) {
-		/*printf("argv[%d] = (%s)\n", optind, argv[optind] );*/
+		/*printf("argv[%d] = (%s)\n", optind, argv[optind] ); */
 		nanny = zoo_getpid(zoo, argv[optind]);
 		if (nanny == -1) {
 			fprintf(stderr, "ltp-bump: Did not find tag '%s'\n",
 				argv[optind]);
 		} else {
-			if (kill( nanny, sig ) == -1) {
+			if (kill(nanny, sig) == -1) {
 				if (errno == ESRCH) {
-					fprintf(stderr,"ltp-bump: Tag %s (pid %d) seems to be dead already.\n",
+					fprintf(stderr,
+						"ltp-bump: Tag %s (pid %d) seems to be dead already.\n",
 						argv[optind], nanny);
 					if (zoo_clear(zoo, nanny))
-						fprintf(stderr,"ltp-bump: %s\n", zoo_error);
+						fprintf(stderr,
+							"ltp-bump: %s\n",
+							zoo_error);
 				}
 			}
 		}

@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -90,9 +90,11 @@ struct test_cases_t {
 	struct rusage *usage;
 	int exp_errno;
 } test_cases[] = {
-	{ RUSAGE_BOTH, &usage, EINVAL},
+	{
+	RUSAGE_BOTH, &usage, EINVAL},
 #ifndef UCLINUX
-	{ RUSAGE_SELF, (struct rusage *)-1, EFAULT}
+	{
+	RUSAGE_SELF, (struct rusage *)-1, EFAULT}
 #endif
 };
 
@@ -101,8 +103,8 @@ int TST_TOTAL = sizeof(test_cases) / sizeof(*test_cases);
 int main(int ac, char **av)
 {
 
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -114,16 +116,15 @@ int main(int ac, char **av)
 		Tst_count = 0;
 
 		for (i = 0; i < TST_TOTAL; i++) {
-			TEST(getrusage(test_cases[i].who,
-				       test_cases[i].usage));
+			TEST(getrusage(test_cases[i].who, test_cases[i].usage));
 
 			if (TEST_RETURN == -1 &&
 			    TEST_ERRNO == test_cases[i].exp_errno)
-				tst_resm(TPASS|TTERRNO,
-				    "getrusage failed as expected");
+				tst_resm(TPASS | TTERRNO,
+					 "getrusage failed as expected");
 			else
-				tst_resm(TFAIL|TTERRNO,
-				    "getrusage failed unexpectedly");
+				tst_resm(TFAIL | TTERRNO,
+					 "getrusage failed unexpectedly");
 		}
 	}
 

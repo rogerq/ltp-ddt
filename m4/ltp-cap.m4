@@ -14,7 +14,7 @@ dnl the GNU General Public License for more details.
 dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program;  if not, write to the Free Software
-dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 dnl
 dnl Author: Garrett Cooper <yanegomi@gmail.com>
 dnl
@@ -29,7 +29,6 @@ AH_TEMPLATE(HAVE_LIBCAP,
 AC_CHECK_HEADERS([sys/capability.h],[capability_header_prefix="sys"])
 if test "x$capability_header_prefix" != x; then
 	AC_CHECK_LIB(cap,cap_compare,[cap_libs="-lcap"])
-	AC_CHECK_PROG(CAPSET,capset,capset)
 fi
 if test "x$cap_libs" != x; then
 	AC_DEFINE(HAVE_LIBCAP)

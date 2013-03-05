@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -78,20 +78,20 @@ struct passwd *ltpuser1;
 struct test_case_t {
 	char *fname;
 } TC[] = {
-	{ fname},
-	{ fname1}
+	{
+	fname}, {
+	fname1}
 };
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
+	int lc;
 	int retval = 0;
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
 	pid_t pid, pid1;
 	int i, status, fd;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -105,7 +105,7 @@ int main(int ac, char **av)
 		Tst_count = 0;
 
 		if ((pid = FORK_OR_VFORK()) == -1) {
-			tst_brkm(TBROK|TERRNO, cleanup, "fork() #1 failed");
+			tst_brkm(TBROK | TERRNO, cleanup, "fork() #1 failed");
 		}
 
 		if (pid == 0) {	/* first child */
@@ -127,7 +127,7 @@ int main(int ac, char **av)
 		}
 
 		if ((pid1 = FORK_OR_VFORK()) == -1) {
-			tst_brkm(TBROK|TERRNO, cleanup, "fork() #2 failed");
+			tst_brkm(TBROK | TERRNO, cleanup, "fork() #2 failed");
 		}
 
 		if (pid1 == 0) {	/* second child */
@@ -159,7 +159,8 @@ int main(int ac, char **av)
 
 				if (TEST_ERRNO != EACCES) {
 					retval = 1;
-					tst_resm(TFAIL|TTERRNO, "Expected EACCES");
+					tst_resm(TFAIL | TTERRNO,
+						 "Expected EACCES");
 				} else {
 					tst_resm(TPASS, "call failed with "
 						 "EACCES as expected");
@@ -186,7 +187,7 @@ int main(int ac, char **av)
 	cleanup();
 
 	tst_exit();
- }
+}
 
 /*
  * setup() - performs all ONE TIME setup for this test.

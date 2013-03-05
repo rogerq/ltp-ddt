@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -130,8 +130,8 @@ int fd;
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
     /***************************************************************
      * parse standard options
@@ -164,7 +164,7 @@ int main(int ac, char **av)
 		/* check return code */
 		if (TEST_RETURN == -1) {
 			TEST_ERROR_LOG(TEST_ERRNO);
-			tst_resm(TFAIL|TTERRNO,
+			tst_resm(TFAIL | TTERRNO,
 				 "open(%s,O_RDWR|O_CREAT,0700) failed", fname);
 		} else {
 	    /***************************************************************
@@ -178,10 +178,10 @@ int main(int ac, char **av)
 			}
 
 			if (close(fd) == -1)
-				tst_brkm(TBROK|TERRNO, cleanup,
+				tst_brkm(TBROK | TERRNO, cleanup,
 					 "close(%s) failed", fname);
 			else if (unlink(fname) == -1)
-				tst_brkm(TBROK|TERRNO, cleanup,
+				tst_brkm(TBROK | TERRNO, cleanup,
 					 "unlink(%s) failed", fname);
 		}
 	}

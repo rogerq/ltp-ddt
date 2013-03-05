@@ -17,8 +17,8 @@
 * other software, or any other product whatsoever.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 *
 * History:
 * Created by: Cyril Lacabanne (Cyril.Lacabanne@bull.net)
@@ -37,7 +37,7 @@
 #define STRPROCNUM 40
 #define VERSNUM 1
 
-int eachresult (char *out, struct sockaddr_in *addr)
+int eachresult(char *out, struct sockaddr_in *addr)
 {
 	//Nothing to do for that test
 	return 1;
@@ -46,16 +46,16 @@ int eachresult (char *out, struct sockaddr_in *addr)
 int main(int argn, char *argc[])
 {
 	//Program parameters : argc[1] : HostName or Host IP
-	//					   argc[2] : Server Program Number
-	//					   other arguments depend on test case
+	//                                         argc[2] : Server Program Number
+	//                                         other arguments depend on test case
 
 	//run_mode can switch into stand alone program or program launch by shell script
 	//1 : stand alone, debug mode, more screen information
 	//0 : launch by shell script as test case, only one printf -> result status
 	int run_mode = 0;
-	int test_status = 0; //Default test result set to PASSED
+	int test_status = 0;	//Default test result set to PASSED
 	int progNum = atoi(argc[2]);
-    char nettype[16] = "visible";
+	char nettype[16] = "visible";
 	//Sent variables
 	int intSnd;
 	double dblSnd;
@@ -74,9 +74,9 @@ int main(int argn, char *argc[])
 	intSnd = -65536;
 
 	rpc_broadcast_exp(progNum, VERSNUM, INTPROCNUM,
-						  (xdrproc_t)xdr_int, (char *)&intSnd,
-						  (xdrproc_t)xdr_int, (char *)&intRec,
-						  (resultproc_t) eachresult, 1, 1, nettype);
+			  (xdrproc_t) xdr_int, (char *)&intSnd,
+			  (xdrproc_t) xdr_int, (char *)&intRec,
+			  (resultproc_t) eachresult, 1, 1, nettype);
 
 	if (intSnd != intRec)
 		test_status = 1;
@@ -87,9 +87,9 @@ int main(int argn, char *argc[])
 	intSnd = 16777216;
 
 	rpc_broadcast_exp(progNum, VERSNUM, INTPROCNUM,
-						  (xdrproc_t)xdr_int, (char *)&intSnd,
-						  (xdrproc_t)xdr_int, (char *)&intRec,
-						  (resultproc_t) eachresult, 1, 1, nettype);
+			  (xdrproc_t) xdr_int, (char *)&intSnd,
+			  (xdrproc_t) xdr_int, (char *)&intRec,
+			  (resultproc_t) eachresult, 1, 1, nettype);
 
 	if (intSnd != intRec)
 		test_status = 1;
@@ -100,9 +100,9 @@ int main(int argn, char *argc[])
 	lngSnd = -430000;
 
 	rpc_broadcast_exp(progNum, VERSNUM, LNGPROCNUM,
-						  (xdrproc_t)xdr_long, (char *)&lngSnd,
-						  (xdrproc_t)xdr_long, (char *)&lngSnd,
-						  (resultproc_t) eachresult, 1, 1, nettype);
+			  (xdrproc_t) xdr_long, (char *)&lngSnd,
+			  (xdrproc_t) xdr_long, (char *)&lngSnd,
+			  (resultproc_t) eachresult, 1, 1, nettype);
 
 	if (lngSnd != lngRec)
 		test_status = 1;
@@ -113,9 +113,9 @@ int main(int argn, char *argc[])
 	dblSnd = -1735.63000f;
 
 	rpc_broadcast_exp(progNum, VERSNUM, DBLPROCNUM,
-						  (xdrproc_t)xdr_long, (char *)&dblSnd,
-						  (xdrproc_t)xdr_long, (char *)&dblSnd,
-						  (resultproc_t) eachresult, 1, 1, nettype);
+			  (xdrproc_t) xdr_long, (char *)&dblSnd,
+			  (xdrproc_t) xdr_long, (char *)&dblSnd,
+			  (resultproc_t) eachresult, 1, 1, nettype);
 
 	if (dblSnd != dblRec)
 		test_status = 1;
@@ -127,9 +127,9 @@ int main(int argn, char *argc[])
 	strRec = (char *)malloc(64 * sizeof(char));
 
 	rpc_broadcast_exp(progNum, VERSNUM, DBLPROCNUM,
-						  (xdrproc_t)xdr_wrapstring, (char *)&strSnd,
-						  (xdrproc_t)xdr_wrapstring, (char *)&strRec,
-						  (resultproc_t) eachresult, 1, 1, nettype);
+			  (xdrproc_t) xdr_wrapstring, (char *)&strSnd,
+			  (xdrproc_t) xdr_wrapstring, (char *)&strRec,
+			  (resultproc_t) eachresult, 1, 1, nettype);
 
 	if (strcmp(strSnd, strRec))
 		test_status = 1;

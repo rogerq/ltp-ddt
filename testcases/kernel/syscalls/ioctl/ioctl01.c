@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -49,11 +49,11 @@
  *      test may have to be run as root depending on the tty permissions
  */
 
-#include <stdio.h>
-#include <sys/termios.h>
-#include <termio.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <termio.h>
+#include <termios.h>
 #include "test.h"
 #include "usctest.h"
 
@@ -62,19 +62,18 @@ int TST_TOTAL = 5;
 
 #define	INVAL_IOCTL	9999999
 
-void setup(void);
-void cleanup(void);
-void help(void);
+static void setup(void);
+static void cleanup(void);
+static void help(void);
 
-int exp_enos[] = { EBADF, EFAULT, EINVAL, ENOTTY, EFAULT, 0 };
+static int exp_enos[] = { EBADF, EFAULT, ENOTTY, ENOTTY, EFAULT, 0 };
 
-int fd, fd1;
-int bfd = -1;
+static int fd, fd1;
+static int bfd = -1;
 
-char *tty;
-struct termio termio;
+static struct termio termio;
 
-struct test_case_t {
+static struct test_case_t {
 	int *fd;
 	int request;
 	struct termio *s_tio;
@@ -87,8 +86,11 @@ struct test_case_t {
 	{
 	&fd, TCGETA, (struct termio *)-1, EFAULT},
 	    /* command is invalid */
+	    /* This errno value was changed from EINVAL to ENOTTY
+	     * by kernel commit 07d106d0 and bbb63c51
+	     */
 	{
-	&fd, INVAL_IOCTL, &termio, EINVAL},
+	&fd, INVAL_IOCTL, &termio, ENOTTY},
 	    /* file descriptor is for a regular file */
 	{
 	&fd1, TCGETA, &termio, ENOTTY},
@@ -97,22 +99,23 @@ struct test_case_t {
 	&fd, TCGETA, NULL, EFAULT}
 };
 
-int Devflag = 0;
-char *devname;
+static int Devflag;
+static char *devname;
 
 /* for test specific parse_opts options - in this case "-D" */
-option_t options[] = {
+static option_t options[] = {
 	{"D:", &Devflag, &devname},
 	{NULL, NULL, NULL}
 };
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
+	int lc;
 	int i;
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
-	if ((msg = parse_opts(ac, av, options, &help)) != NULL)
+	msg = parse_opts(ac, av, options, &help);
+	if (msg != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
 	if (!Devflag)
@@ -123,10 +126,9 @@ int main(int ac, char **av)
 
 	setup();
 
-	if ((fd = open(devname, O_RDWR, 0777)) < 0) {
-		tst_brkm(TBROK, cleanup, "Couldn't open %s, errno = %d",
-			 tty, errno);
-	}
+	fd = open(devname, O_RDWR, 0777);
+	if (fd == -1)
+		tst_brkm(TBROK | TERRNO, cleanup, "Couldn't open %s", devname);
 
 	TEST_EXP_ENOS(exp_enos);
 
@@ -146,15 +148,12 @@ int main(int ac, char **av)
 
 			TEST_ERROR_LOG(TEST_ERRNO);
 
-			if (TEST_ERRNO == TC[i].error) {
-				tst_resm(TPASS, "expected failure - "
-					 "errno = %d : %s", TEST_ERRNO,
-					 strerror(TEST_ERRNO));
-			} else {
-				tst_resm(TFAIL, "unexpected error - %d : %s - "
-					 "expected %d", TEST_ERRNO,
-					 strerror(TEST_ERRNO), TC[i].error);
-			}
+			if (TEST_ERRNO == TC[i].error)
+				tst_resm(TPASS | TTERRNO, "failed as expected");
+			else
+				tst_resm(TFAIL | TTERRNO,
+					 "failed unexpectedly; expected %d - %s",
+					 TC[i].error, strerror(TC[i].error));
 		}
 	}
 	cleanup();
@@ -162,21 +161,13 @@ int main(int ac, char **av)
 	tst_exit();
 }
 
-/*
- * help() - Prints out the help message for the -D option defined
- *          by this test.
- */
-void help()
+static void help(void)
 {
 	printf("  -D <tty device> : for example, /dev/tty[0-9]\n");
 }
 
-/*
- * setup() - performs all ONE TIME setup for this test.
- */
-void setup()
+static void setup(void)
 {
-
 	tst_sig(NOFORK, DEF_HANDLER, cleanup);
 
 	TEST_PAUSE;
@@ -184,27 +175,22 @@ void setup()
 	/* make a temporary directory and cd to it */
 	tst_tmpdir();
 
-	/* create a temporary file */
-	if ((fd1 = open("x", O_CREAT, 0777)) < 0) {
-		tst_resm(TFAIL, "Could not open test file, errno = %d", errno);
+	if (tst_kvercmp(3, 7, 0) < 0) {
+		exp_enos[2] = EINVAL;
+		TC[2].error = EINVAL;
 	}
+
+	/* create a temporary file */
+	fd1 = open("x", O_CREAT, 0777);
+	if (fd1 == -1)
+		tst_resm(TFAIL | TERRNO, "Could not open test file");
 }
 
-/*
- * cleanup() - performs all ONE TIME cleanup for this test at
- *	       completion or premature exit.
- */
-void cleanup()
+static void cleanup(void)
 {
-	/*
-	 * print timing stats if that option was specified.
-	 * print errno log if that option was specified.
-	 */
 	TEST_CLEANUP;
 
 	close(fd1);
 
-	/* delete the test directory created in setup() */
 	tst_rmdir();
-
 }

@@ -2,13 +2,13 @@
  * a race in pid generation that causes pids to be reused immediately
  *
  * From the mainline commit 5fdee8c4a5e1800489ce61963208f8cc55e42ea1:
- * 
+ *
  * A program that repeatedly forks and waits is susceptible to having
  * the same pid repeated, especially when it competes with another
  * instance of the same program.  This is really bad for bash
  * implementation.  Furthermore, many shell scripts assume that pid
  * numbers will not be used for some length of time.
- * 
+ *
  * Race Description:
  *
  * A                                B
@@ -45,6 +45,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
@@ -59,18 +60,18 @@
 char *TCID = "fork13";
 int TST_TOTAL = 1;
 
-static char pid_max[BUFSIZ];
+static unsigned long pid_max;
 
-#define PATH	"/proc/sys/kernel/pid_max"
-#define PIDMAX	32768
-#define RETURN	256
+#define PID_MAX_PATH "/proc/sys/kernel/pid_max"
+#define PID_MAX 32768
+#define RETURN 256
 
 static void setup(void);
 static int pid_distance(pid_t first, pid_t second);
 static void cleanup(void);
 static void check(void);
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	/* message returned from parse_opts */
 	char *msg;
@@ -84,96 +85,78 @@ int main(int argc, char* argv[])
 	tst_exit();
 }
 
-void check(void)
+static void check(void)
 {
-	int lc;
+	long lc;
 	pid_t last_pid = 0;
 	pid_t pid;
 	int child_exit_code, distance, reaped, status;
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		Tst_count = 0;
-		if (lc % PIDMAX == 0)
-			tst_resm(TINFO, "Iter: %d", lc/PIDMAX);
 		child_exit_code = lc % RETURN;
 		switch (pid = fork()) {
 		case -1:
-			tst_brkm(TBROK|TERRNO, cleanup, "fork");
+			tst_brkm(TBROK | TERRNO, cleanup, "fork");
 		case 0:
 			exit(child_exit_code);
 		default:
 			if (lc > 0) {
-				tst_resm(TINFO, "last_pid = %d pid = %d",
-					last_pid, pid);
 				distance = pid_distance(last_pid, pid);
-				if (distance == 0)
+				if (distance == 0) {
 					tst_resm(TFAIL,
-						"Unexpected pid sequence: "
-						"previous fork: pid=%d, "
-						"current fork: pid=%d for "
-						"iteration=%d.", last_pid, pid,
-						lc);
+						 "Unexpected pid sequence: "
+						 "previous fork: pid=%d, "
+						 "current fork: pid=%d for "
+						 "iteration=%ld.", last_pid,
+						 pid, lc);
+					return;
+				}
 			}
 			last_pid = pid;
 
-			reaped = wait(&status);
-			if (reaped != pid)
+			reaped = waitpid(pid, &status, 0);
+			if (reaped != pid) {
 				tst_resm(TFAIL,
-					"Wait return value: expected pid=%d, "
-					"got %d, iteration %d.", pid, reaped,
-					lc);
-			else if (WEXITSTATUS(status) != child_exit_code)
+					 "Wait return value: expected pid=%d, "
+					 "got %d, iteration %ld.", pid, reaped,
+					 lc);
+				return;
+			} else if (WEXITSTATUS(status) != child_exit_code) {
 				tst_resm(TFAIL, "Unexpected exit status %x, "
-					"iteration %d.", WEXITSTATUS(status),
-					lc);
+					 "iteration %ld.", WEXITSTATUS(status),
+					 lc);
+				return;
+			}
 		}
 	}
+	tst_resm(TPASS, "%ld pids forked, all passed", lc);
 }
 
-void setup(void)
+static void setup(void)
 {
-	FILE *fp;
-	int fd;
-	char buf[BUFSIZ];
-
 	tst_require_root(NULL);
 
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 	TEST_PAUSE;
-	/* Backup pid_max value. */
-	fp = fopen(PATH, "r+");
-	if (fp == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "fopen");
-	if (fgets(pid_max, BUFSIZ, fp) == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "fgets");
-	fclose(fp);
 
-	fd = open(PATH, O_WRONLY);
-	if (fd == -1)
-		tst_resm(TBROK|TERRNO, "open");
-	sprintf(buf, "%d", PIDMAX);
-	if (write(fd, buf, strlen(buf)) != strlen(buf))
-		tst_resm(TBROK|TERRNO, "write");
-	close(fd);
+	/* Backup pid_max value. */
+	SAFE_FILE_SCANF(NULL, PID_MAX_PATH, "%lu", &pid_max);
+
+	SAFE_FILE_PRINTF(NULL, PID_MAX_PATH, "%d", PID_MAX);
 }
 
-void cleanup(void)
+static void cleanup(void)
 {
-	int fd;
-
-	fd = open(PATH, O_WRONLY);
-	if (fd == -1)
-		tst_resm(TWARN|TERRNO, "open");
-	if (write(fd, pid_max, strlen(pid_max)) != strlen(pid_max))
-		tst_resm(TWARN|TERRNO, "write");
-	close(fd);
+	/* Restore pid_max value. */
+	SAFE_FILE_PRINTF(NULL, PID_MAX_PATH, "%lu", pid_max);
 
 	TEST_CLEANUP;
 }
 
-/* The distance mod 32768 between two pids, where the first pid is
+/* The distance mod PIDMAX between two pids, where the first pid is
    expected to be smaller than the second. */
-int pid_distance(pid_t first, pid_t second)
+static int pid_distance(pid_t first, pid_t second)
 {
-	return (second + 32768 - first) % 32768;
+	return (second + PID_MAX - first) % PID_MAX;
 }

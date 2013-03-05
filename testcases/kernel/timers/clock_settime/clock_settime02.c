@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**************************************************************************
@@ -79,15 +79,13 @@ char *TCID = "clock_settime02";	/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 static struct timespec saved;	/* Used to reset the time */
 
-int
-main(int ac, char **av)
+int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	struct timespec spec;	/* Used to specify time for test */
 
-	/* parse standard options */
-	if ((msg = parse_opts (ac, av, NULL, NULL)) != NULL)
+	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
 	setup();
@@ -101,8 +99,8 @@ main(int ac, char **av)
 
 		TEST(syscall(__NR_clock_settime, CLOCK_REALTIME, &spec));
 		tst_resm((TEST_RETURN < 0 ? TFAIL | TTERRNO : TPASS),
-			"clock_settime %s",
-			(TEST_RETURN == 0 ? "passed" : "failed"));
+			 "clock_settime %s",
+			 (TEST_RETURN == 0 ? "passed" : "failed"));
 	}
 
 	cleanup();
@@ -110,8 +108,7 @@ main(int ac, char **av)
 }
 
 /* setup() - performs all ONE TIME setup for this test */
-void
-setup(void)
+void setup(void)
 {
 
 	tst_sig(NOFORK, DEF_HANDLER, cleanup);
@@ -132,8 +129,7 @@ setup(void)
  * completion or premature exit
  */
 
-void
-cleanup(void)
+void cleanup(void)
 {
 	/* Set the saved time */
 	if (clock_settime(CLOCK_REALTIME, &saved) < 0) {
@@ -142,8 +138,8 @@ cleanup(void)
 	}
 
 	/*
-	* print timing stats if that option was specified.
-	* print errno log if that option was specified.
-	*/
+	 * print timing stats if that option was specified.
+	 * print errno log if that option was specified.
+	 */
 	TEST_CLEANUP;
 }

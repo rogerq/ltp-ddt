@@ -54,30 +54,32 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
+#include "config.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <fcntl.h>
+#if HAVE_NUMAIF_H
+#include <numaif.h>
+#endif
+#include <signal.h>
+#include <stdio.h>
+#include <unistd.h>
 #include "test.h"
 #include "usctest.h"
-#include "config.h"
+#include "mem.h"
 
 char *TCID = "ksm02";
 int TST_TOTAL = 1;
 
 #if HAVE_NUMA_H && HAVE_LINUX_MEMPOLICY_H && HAVE_NUMAIF_H \
 	&& HAVE_MPOL_CONSTANTS
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
-#include <numaif.h>
-#include "../include/mem.h"
-
 option_t ksm_options[] = {
-        { "n:", &opt_num,       &opt_numstr},
-        { "s:", &opt_size,      &opt_sizestr},
-        { "u:", &opt_unit,      &opt_unitstr},
-        { NULL, NULL,           NULL}
+	{"n:", &opt_num, &opt_numstr},
+	{"s:", &opt_size, &opt_sizestr},
+	{"u:", &opt_unit, &opt_unitstr},
+	{NULL, NULL, NULL}
 };
 
 int main(int argc, char *argv[])
@@ -85,16 +87,15 @@ int main(int argc, char *argv[])
 	int lc;
 	char *msg;
 	int size = 128, num = 3, unit = 1;
-	unsigned long nnodes = 1;
-	unsigned long nmask = 2;
+	unsigned long nmask = 0;
+	unsigned int node;
 
 	msg = parse_opts(argc, argv, ksm_options, ksm_usage);
 	if (msg != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
-	nnodes = count_numa();
-	if (count_numa() == 1)
-		tst_brkm(TCONF, NULL, "required a NUMA system.");
+	node = get_a_numa_node(tst_exit);
+	nmask = 1 << node;
 
 	setup();
 
@@ -102,11 +103,18 @@ int main(int argc, char *argv[])
 		Tst_count = 0;
 		check_ksm_options(&size, &num, &unit);
 
-		if (set_mempolicy(MPOL_BIND, &nmask, MAXNODES) == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "set_mempolicy");
+		if (set_mempolicy(MPOL_BIND, &nmask, MAXNODES) == -1) {
+			if (errno != ENOSYS)
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "set_mempolicy");
+			else
+				tst_brkm(TCONF, cleanup,
+					 "set_mempolicy syscall is not "
+					 "implemented on your system.");
+		}
 		create_same_memory(size, num, unit);
 
-		write_cpusets();
+		write_cpusets(node);
 		create_same_memory(size, num, unit);
 	}
 	cleanup();
@@ -123,6 +131,11 @@ void setup(void)
 {
 	tst_require_root(NULL);
 
+	if (tst_kvercmp(2, 6, 32) < 0)
+		tst_brkm(TCONF, NULL, "2.6.32 or greater kernel required");
+	if (access(PATH_KSM, F_OK) == -1)
+		tst_brkm(TCONF, NULL, "KSM configuration is not enabled");
+
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 	TEST_PAUSE;
 	mount_mem("cpuset", "cpuset", NULL, CPATH, CPATH_NEW);
@@ -131,7 +144,6 @@ void setup(void)
 #else /* no NUMA */
 int main(void)
 {
-	tst_resm(TCONF, "no NUMA development packages installed.");
-	tst_exit();
+	tst_brkm(TCONF, NULL, "no NUMA development packages installed.");
 }
 #endif

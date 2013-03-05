@@ -15,7 +15,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /******************************************************************************/
@@ -65,7 +65,7 @@
 #include "linux_syscall_numbers.h"
 
 #ifndef O_CLOEXEC
-# define O_CLOEXEC 02000000
+#define O_CLOEXEC 02000000
 #endif
 
 #define IN_CLOEXEC O_CLOEXEC
@@ -131,8 +131,8 @@ void setup()
 int main(int argc, char *argv[])
 {
 	int fd, coe;
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL)
@@ -140,8 +140,8 @@ int main(int argc, char *argv[])
 
 	if ((tst_kvercmp(2, 6, 27)) < 0) {
 		tst_brkm(TCONF, NULL,
-			"This test can only run on kernels that are 2.6.27 "
-			"and higher");
+			 "This test can only run on kernels that are 2.6.27 "
+			 "and higher");
 	}
 	setup();
 
@@ -150,35 +150,36 @@ int main(int argc, char *argv[])
 		for (testno = 0; testno < TST_TOTAL; ++testno) {
 			fd = syscall(__NR_inotify_init1, 0);
 			if (fd == -1) {
-				tst_brkm(TFAIL|TERRNO, cleanup,
-					"inotify_init1(0) failed");
+				tst_brkm(TFAIL | TERRNO, cleanup,
+					 "inotify_init1(0) failed");
 			}
 			coe = fcntl(fd, F_GETFD);
 			if (coe == -1) {
-				tst_brkm(TBROK|TERRNO, cleanup, "fcntl failed");
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "fcntl failed");
 			}
 			if (coe & FD_CLOEXEC) {
 				tst_brkm(TFAIL, cleanup,
-					"inotify_init1(0) set close-on-exit");
+					 "inotify_init1(0) set close-on-exit");
 			}
 			close(fd);
 
 			fd = syscall(__NR_inotify_init1, IN_CLOEXEC);
 			if (fd == -1) {
-				tst_brkm(TFAIL|TERRNO, cleanup,
+				tst_brkm(TFAIL | TERRNO, cleanup,
 					 "inotify_init1(IN_CLOEXEC) failed");
 			}
 			coe = fcntl(fd, F_GETFD);
 			if (coe == -1) {
-				tst_resm(TBROK|TERRNO, "fcntl failed");
+				tst_resm(TBROK | TERRNO, "fcntl failed");
 			} else if ((coe & FD_CLOEXEC) == 0) {
 				tst_resm(TFAIL,
-					"inotify_init1(O_CLOEXEC) did not "
-					"set close-on-exit");
+					 "inotify_init1(O_CLOEXEC) did not "
+					 "set close-on-exit");
 			} else {
 				close(fd);
 				tst_resm(TPASS, "inotify_init1(O_CLOEXEC) "
-					"PASSED");
+					 "PASSED");
 			}
 		}
 	}

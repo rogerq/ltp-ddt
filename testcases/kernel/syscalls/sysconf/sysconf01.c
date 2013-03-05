@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program;  if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -25,9 +25,6 @@
  *
  * USAGE :
  *      sysconf01
- *
- * RESTRICTIONS
- * MUST RUN AS ROOT
  */
 
 #define _GNU_SOURCE 1
@@ -42,8 +39,8 @@
 #include "test.h"
 #include "usctest.h"
 
-char *TCID = "sysconf01";	/* Test program identifier.    */
-int TST_TOTAL = 56;		/* Total number of test cases. */
+char *TCID = "sysconf01";
+int TST_TOTAL = 56;
 
 static void _test_sysconf(long name, const char *strname)
 {
@@ -67,11 +64,11 @@ static void _test_sysconf(long name, const char *strname)
 			break;
 		case 0:
 			tst_resm(TCONF, "Not supported sysconf resource: %s",
-					strname);
+				 strname);
 			break;
 		default:
 			tst_resm(TFAIL | TERRNO, "Unexpected errno value for "
-						 "%s", strname);
+				 "%s", strname);
 			break;
 		}
 	} else
@@ -81,7 +78,7 @@ static void _test_sysconf(long name, const char *strname)
 
 #define test_sysconf(name) _test_sysconf(name, #name)
 
-int main()
+int main(void)
 {
 	/* 1 - 5 */
 	test_sysconf(_SC_CLK_TCK);
@@ -167,10 +164,8 @@ int main()
 				 "errno (%i) != actual (%i)", EINVAL, actual);
 		} else
 			tst_resm(TPASS, "The invalid sysconf key was trapped "
-					"appropriately");
+				 "appropriately");
 	}
-
-	tst_exit();
 
 	tst_exit();
 }

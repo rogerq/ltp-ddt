@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -84,8 +84,8 @@ void sigproc(int sig);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int time_sec1 = 10;	/* time for which 1st alarm is set */
 	int time_sec2 = 0;	/* time for which 2nd alarm is set */
 	int ret_val1, ret_val2;	/* return values for alarm() calls */
@@ -150,7 +150,7 @@ void setup()
 
 	/* Set the signal catching function */
 	if (signal(SIGALRM, sigproc) == SIG_ERR)
-		tst_brkm(TFAIL|TERRNO, cleanup, "signal(SIGALRM, ..) failed");
+		tst_brkm(TFAIL | TERRNO, cleanup, "signal(SIGALRM, ..) failed");
 }
 
 void sigproc(int sig)

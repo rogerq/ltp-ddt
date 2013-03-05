@@ -15,7 +15,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -104,6 +104,7 @@ extern struct passwd *my_getpwnam(char *);
 char *TCID = "fstat05";		/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 int exp_enos[] = { EFAULT, 0 };
+
 int fildes;			/* testfile descriptor */
 
 void setup();			/* Main setup function for the tests */
@@ -132,15 +133,12 @@ int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat structure buffer */
 	struct stat *ptr_str;
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
-	msg = parse_opts(ac, av, NULL, NULL);
-	if (msg != NULL) {
+	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-		tst_exit();
-	 }
 
 	/* Buffer points outside user's accessible address space. */
 	ptr_str = &stat_buf;	/* if it was for conformance testing */
@@ -168,17 +166,15 @@ int main(int ac, char **av)
 		/* Check return code from fstat(2) */
 		if (TEST_RETURN == -1) {
 			TEST_ERROR_LOG(TEST_ERRNO);
-			if (TEST_ERRNO == EFAULT) {
-				tst_resm(TPASS, "fstat() fails with "
-					 "expected error EFAULT");
-			} else {
-				tst_resm(TFAIL, "fstat() fails with "
-					 "wrong errno:%d", TEST_ERRNO);
-			}
-		} else {
+			if (TEST_ERRNO == EFAULT)
+				tst_resm(TPASS,
+					 "fstat failed with EFAULT as expected");
+			else
+				tst_resm(TFAIL | TTERRNO,
+					 "fstat failed unexpectedly");
+		} else
 			tst_resm(TFAIL, "fstat() returned %ld but we wanted -1",
 				 TEST_RETURN);
-		}
 
 	}
 
@@ -194,8 +190,7 @@ int main(int ac, char **av)
 
 int main()
 {
-	tst_resm(TINFO, "test is not available on uClinux");
-	tst_exit();
+	tst_brkm(TCONF, NULL, "test is not available on uClinux");
 }
 
 #endif /* if !defined(UCLINUX) */
@@ -210,40 +205,29 @@ void setup()
 {
 	int i;
 
+	tst_require_root(NULL);
+
 	/*
 	 * Capture unexpected signals SIGSEGV included
 	 * SIGSEGV being considered as acceptable as returned value
 	 */
-	for (i = 0; i < SIG_SEEN; i++) {
-
+	for (i = 0; i < SIG_SEEN; i++)
 		signal(siglist[i], &sighandler);
-	}
-
-	/* Switch to nobody user for correct error code collection */
-	if (geteuid() != 0) {
-		tst_brkm(TBROK, NULL, "Test must be run as root");
-	}
 
 	ltpuser = getpwnam(nobody_uid);
 	if (setuid(ltpuser->pw_uid) == -1)
-		tst_resm(TINFO, "setuid(%d) failed", ltpuser->pw_uid);
+		tst_brkm(TBROK | TERRNO, NULL, "setuid(%d) failed",
+			 ltpuser->pw_uid);
 
-	/* Pause if that option was specified
-	 * TEST_PAUSE contains the code to fork the test with the -i option.
-	 * You want to make sure you do this before you create your temporary
-	 * directory.
-	 */
-	TEST_PAUSE;
-
-	/* Make a temp dir and cd to it */
 	tst_tmpdir();
 
 	/* Create a testfile under temporary directory */
 	fildes = open(TEST_FILE, O_RDWR | O_CREAT, 0666);
 	if (fildes == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "open(%s, O_RDWR|O_CREAT, 0666) failed", TEST_FILE);
 
+	TEST_PAUSE;
 }
 
 /*
@@ -264,7 +248,8 @@ void cleanup()
 	TEST_CLEANUP;
 
 	if (close(fildes) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "close(%s) failed", TEST_FILE);
+		tst_brkm(TBROK | TERRNO, cleanup, "close(%s) failed",
+			 TEST_FILE);
 
 	tst_rmdir();
 
@@ -276,12 +261,10 @@ void cleanup()
 
 void sighandler(int sig)
 {
-	if (sig == SIGSEGV) {
-		tst_resm(TPASS, "fstat() fails with "
-			 "expected signal SIGSEGV");
-	} else {
-		tst_brkm(TBROK, 0, "Unexpected signal %d received.", sig);
-	}
+	if (sig == SIGSEGV)
+		tst_resm(TPASS, "fstat failed as expected with SIGSEGV");
+	else
+		tst_brkm(TBROK, NULL, "Unexpected signal %d received.", sig);
 	cleanup();
-
+	tst_exit();
 }

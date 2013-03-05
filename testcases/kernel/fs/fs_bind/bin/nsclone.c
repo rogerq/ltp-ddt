@@ -16,6 +16,9 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
+#define _GNU_SOURCE
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,21 +29,21 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-int myfunc(void *arg) {
+int myfunc(void *arg)
+{
 	return system(arg);
 }
 
-static void
-usage(char *cmd)
+static void usage(char *cmd)
 {
-	printf("%s  child_script parent_script\n",cmd);
+	printf("%s  child_script parent_script\n", cmd);
 }
 
 int main(int argc, char *argv[])
 {
 	char *child_cmd;
 	char *parent_cmd;
-	int ret=0, childret=0;
+	int ret = 0, childret = 0;
 
 	if (argc < 3) {
 		usage(argv[0]);
@@ -51,8 +54,7 @@ int main(int argc, char *argv[])
 	parent_cmd = (char *)strdup(argv[1]);
 
 	printf("1\n");
-	ret = ltp_clone_quick(CLONE_NEWNS|SIGCHLD, myfunc,
-				(void *)child_cmd);
+	ret = ltp_clone_quick(CLONE_NEWNS | SIGCHLD, myfunc, (void *)child_cmd);
 	if (ret != -1) {
 		system(parent_cmd);
 		wait(&childret);

@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -132,8 +132,8 @@ static struct test_case_t {
 
 int main(int ac, char **av)
 {
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 
 #if defined (__s390__) || (__s390x__) || (__ia64__)
 	/* Disables the test in case the kernel version is lower than 2.6.12 and arch is s390 */
@@ -144,7 +144,6 @@ int main(int ac, char **av)
 	}
 #endif
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -308,14 +307,13 @@ void setup()
 
 	if (write(fd, cache_contents, cache_sz) != cache_sz) {
 		tst_resm(TFAIL,
-			 "Write Error for \"cache_contents\" to \"cache_sz\" of %d (errno=%d : %s)",
+			 "Write Error for \"cache_contents\" to \"cache_sz\" of %zu (errno=%d : %s)",
 			 cache_sz, errno, strerror(errno));
 		cleanup();
 	}
 
 	data = mmap((void *)WINDOW_START,
-		    cache_sz,
-		    PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+		    cache_sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
 	if (data == MAP_FAILED) {
 		tst_resm(TFAIL, "mmap Error, errno=%d : %s", errno,

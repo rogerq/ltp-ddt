@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -132,15 +132,13 @@ static int stat_i;		/* Shared between do_child and stat_setup */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i;
 	void check_functionality(void);
 
-	/* parse standard options */
-	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
+	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-	}
 #ifdef UCLINUX
 	argv0 = av[0];
 	maybe_run_child(do_child, "ddd", &stat_i, &stat_time, &shm_id_1);
@@ -326,7 +324,7 @@ void do_child()
 		tst_brkm(TBROK, cleanup, "sync_pipe_close failed");
 
 	/* do an assignement for fun */
-	*(int *)test = stat_i;
+	memcpy(test, &stat_i, sizeof(stat_i));
 
 	/* pause until we get a signal from stat_cleanup() */
 	rval = pause();
@@ -485,10 +483,19 @@ void func_rmid()
 	shm_id_1 = -1;
 }
 
+/*
+ * sighandler() - handle signals, in this case SIGUSR1 is the only one expected
+ */
+void sighandler(sig)
+{
+	if (sig != SIGUSR1)
+		tst_resm(TBROK, "received unexpected signal %d", sig);
+}
+
 void setup(void)
 {
 
-	tst_sig(FORK, DEF_HANDLER, cleanup);
+	tst_sig(FORK, sighandler, cleanup);
 
 	TEST_PAUSE;
 

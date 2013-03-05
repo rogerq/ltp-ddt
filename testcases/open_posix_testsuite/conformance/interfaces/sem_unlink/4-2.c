@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -46,8 +46,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -81,24 +81,22 @@
 /******************************************************************************/
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret;
 
 	/* Initialize output */
 	output_init();
 
-	(void) sem_unlink(SEM_NAME);
+	(void)sem_unlink(SEM_NAME);
 
 	ret = sem_unlink(SEM_NAME);
 
-	if (ret != -1)
-	{
+	if (ret != -1) {
 		FAILED("sem_unlink did not return -1");
 	}
 
-	if (errno != ENOENT)
-	{
+	if (errno != ENOENT) {
 		output("Error %d: %s\n", errno, strerror(errno));
 		FAILED("The error was not ENOENT");
 	}

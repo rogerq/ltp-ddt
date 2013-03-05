@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -81,16 +81,16 @@ void try_bind()
 
 	// Set effective user/group
 	if ((rc = setegid(gid)) == -1) {
-		tst_brkm(TBROK|TERRNO, 0, "setegid(%u) failed", gid);
+		tst_brkm(TBROK | TERRNO, 0, "setegid(%u) failed", gid);
 		tst_exit();
 	}
 	if ((rc = seteuid(uid)) == -1) {
-		tst_brkm(TBROK|TERRNO, 0, "seteuid(%u) failed", uid);
+		tst_brkm(TBROK | TERRNO, 0, "seteuid(%u) failed", uid);
 		tst_exit();
 	}
 
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-		tst_brkm(TBROK|TERRNO, 0, "socket() failed");
+		tst_brkm(TBROK | TERRNO, 0, "socket() failed");
 		tst_exit();
 	}
 
@@ -113,14 +113,14 @@ void try_bind()
 
 	// Set effective user/group
 	if ((rc = setegid(0)) == -1) {
-		tst_brkm(TBROK|TERRNO, 0, "setegid(0) reset failed");
+		tst_brkm(TBROK | TERRNO, 0, "setegid(0) reset failed");
 		tst_exit();
 	}
 	if ((rc = seteuid(uid)) == -1) {
 		/* XXX: is this seteuid() correct !?  it isnt a reset if we
 		 *      made the same exact call above ...
 		 */
-		tst_brkm(TBROK|TERRNO, 0, "seteuid(%u) reset failed", uid);
+		tst_brkm(TBROK | TERRNO, 0, "seteuid(%u) reset failed", uid);
 		tst_exit();
 	}
 
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 	}
 
 	if ((gr = getgrgid(pw->pw_gid)) == NULL) {
-		tst_brkm(TBROK|TERRNO, 0, "getgrgid(%u) failed", pw->pw_gid);
+		tst_brkm(TBROK | TERRNO, 0, "getgrgid(%u) failed", pw->pw_gid);
 		tst_exit();
 	}
 

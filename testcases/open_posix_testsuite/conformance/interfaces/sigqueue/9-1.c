@@ -4,81 +4,99 @@
  * This file is licensed under the GPL license.  For the full content
  * of this license, see the COPYING file at the top level of this
  * source tree.
-
- Steps:
- - Register for myhandler to be called when SIGTOTEST is called, and make
-   sure SA_SIGINFO is set.
- - Block signal SIGTOTEST from the process.
- - Using sysconf(), check to see if there is a limit on number of queued
-   signals that are pending. If there isn't a limit (i.e. sysconf returned
-   -1), then this test is not applicable to the system's implementation,
-   and thus we should pass it.
- - Using sigqueue(), send to the current process a number of instances (of SIGTOTEST)
-   equal to the limit that sysconf() returned.
- - Send one more instance of SIGTOTEST and verify that sigqueue returns -1 and sets errno to
-   [EAGAIN]
+ *
+ * Updated: 21.06.2011  Peter W. Morreale <pmorreale@novell.com>
+ *
+ * Steps:
+ * - Register for myhandler to be called when SIGTOTEST is called, and make
+ *   sure SA_SIGINFO is set.
+ * - Block signal SIGTOTEST from the process.
+ * - Using sysconf(), check to see if there is a limit on number of queued
+ *   signals that are pending. If there isn't a limit (i.e. sysconf returned
+ *   -1), then this test is not applicable to the system's implementation,
+ *   and thus we should pass it.
+ * - Using sigqueue(), send to the current process a number of instances
+ *   (of SIGTOTEST) equal to the limit that sysconf() returned.
+ * - Send one more instance of SIGTOTEST and verify that sigqueue returns
+ *   -1 and sets errno to [EAGAIN]
+ *
  */
 
 #define _XOPEN_SOURCE 600
-#define _XOPEN_REALTIME 1
 #define SIGTOTEST SIGRTMIN
-#define NUMCALLS 5
 
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <pwd.h>
 #include "posixtest.h"
 
-void myhandler(int signo, siginfo_t *info, void *context) {
-	printf ("Inside Handler\n");
+#define MAX_ATTEMPTS	10000
+
+static int reset_uid(void)
+{
+	uid_t uid;
+
+	if (getuid())
+		return 0;
+
+	/* Search for an unused uid */
+	for (uid = 0; uid < MAX_ATTEMPTS; uid++) {
+		if (!getpwuid(uid) && !setuid(uid))
+			return 0;
+	}
+
+	printf("Failed: No unused uid's in %d attempts\n", MAX_ATTEMPTS);
+	return -1;
 }
 
-int main()
+int main(void)
 {
-
-	int pid, i;
+	int pid = getpid();
+	int i;
 	long syslimit;
+	int rc;
 	union sigval value;
-	struct sigaction act;
-
-	act.sa_flags = SA_SIGINFO;
-	act.sa_sigaction = myhandler;
-	sigemptyset(&act.sa_mask);
-	sigaction(SIGTOTEST, &act, 0);
 
 	value.sival_int = 0;	/* 0 is just an arbitrary value */
 	pid = getpid();
 
 	sighold(SIGTOTEST);
 
+	rc = reset_uid();
+	if (rc)
+		return PTS_UNRESOLVED;
+
+	/*
+	 * Get system limit.  Note that this limit is optional.
+	 */
 	syslimit = sysconf(_SC_SIGQUEUE_MAX);
+	if (syslimit < 0)
+		goto done;
 
-	printf("sigqueuemax %ld\n", syslimit);
-
-	if (syslimit == -1) {
-		printf("Test PASSED: Actually, test is not applicable to this implementation. This system has no defined limit."
-			" Note: it is optional whether an implementation has this limit, so this is"
-			" not a bug.\n");
-		return PTS_PASS;
-	}
-
-	for (i=0; i<syslimit; i++) {
+	for (i = 0; i < syslimit; i++) {
 		if (sigqueue(pid, SIGTOTEST, value) != 0) {
-			printf("Test UNRESOLVED: call to sigqueue did not return success\n");
+			printf("Failed: sigqueue on %d of %d max, errno: %s\n",
+			       i, syslimit, strerror(errno));
 			return PTS_UNRESOLVED;
 		}
 	}
 
-	if (sigqueue(pid, SIGTOTEST, value) != -1) {
-		printf("Test FAILED: sigqueue did not return -1 even though the process has already queued {SIGQUEUE_MAX} signals that are still pending.\n");
+	/*
+	 * Enqueue one more, needs to fail with EAGAIN
+	 */
+	rc = sigqueue(pid, SIGTOTEST, value);
+	if (!(rc == -1 && errno == EAGAIN)) {
+		printf("Failed: sigqueue() queued SIGQUEUE_MAX+1 signals\n");
 		return PTS_FAIL;
 	}
 
-	if (errno != EAGAIN) {
-		printf("Test FAILED: errno was not set to [EAGAIN] even though the process has already queued {SIGQUEUE_MAX} signals that are still pending.\n");
-	}
+done:
+	printf("Test PASSED\n");
 
 	return PTS_PASS;
 }

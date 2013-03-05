@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -93,17 +93,15 @@ int fail;
 
 int main(int argc, char **argv)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	int nbytes;
 
-	/* parse standard options */
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) !=
-	    NULL) {
+	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
-	 }
+	}
 
 	setup();		/* set "tstdir", and "testfile" vars */
 
@@ -124,13 +122,13 @@ int main(int argc, char **argv)
 			perror("signal");
 			tst_resm(TFAIL, "signal() SIGTERM FAILED");
 			cleanup();
-		 }
+		}
 
 		if (signal(SIGPIPE, sighandler) == SIG_ERR) {
 			perror("signal");
 			tst_resm(TFAIL, "signal() SIGPIPE FAILED");
 			cleanup();
-		 }
+		}
 
 		memset(buf_list[0], 0, K_1);
 		memset(buf_list[1], 0, K_1);
@@ -139,18 +137,18 @@ int main(int argc, char **argv)
 			tst_resm(TFAIL, "open(2) failed: fname = %s, "
 				 "errno = %d", f_name, errno);
 			cleanup();
-		 } else {
+		} else {
 			if ((nbytes = write(fd[0], buf_list[1], K_1)) != K_1) {
 				tst_resm(TFAIL, "write(2) failed: nbytes "
 					 "= %d, errno = %d", nbytes, errno);
 				cleanup();
-			 }
+			}
 		}
 
 		if (close(fd[0]) < 0) {
 			tst_resm(TFAIL, "close failed: errno = %d", errno);
 			cleanup();
-		 }
+		}
 
 		if ((fd[0] = open(f_name, O_RDWR, 0666)) < 0) {
 			tst_resm(TFAIL, "open failed: fname = %s, errno = %d",
@@ -358,7 +356,7 @@ void sighandler(int sig)
 		tst_resm(TFAIL, "unlink Failed--file = %s, errno = %d",
 			 f_name, errno);
 		cleanup();
-	 }
+	}
 	exit(sig);
 }
 

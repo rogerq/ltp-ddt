@@ -17,8 +17,8 @@
 * other software, or any other product whatsoever.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 *
 * History:
 * Created by: Cyril Lacabanne (Cyril.Lacabanne@bull.net)
@@ -37,14 +37,14 @@
 int main(int argn, char *argc[])
 {
 	//Program parameters : argc[1] : HostName or Host IP
-	//					   argc[2] : Server Program Number
-	//					   other arguments depend on test case
+	//                                         argc[2] : Server Program Number
+	//                                         other arguments depend on test case
 
 	//run_mode can switch into stand alone program or program launch by shell script
 	//1 : stand alone, debug mode, more screen information
 	//0 : launch by shell script as test case, only one printf -> result status
 	int run_mode = 0;
-	int test_status = 0; //Default test result set to FAILED
+	int test_status = 0;	//Default test result set to FAILED
 	int progNum = atoi(argc[2]);
 	char proto[8] = "udp";
 	CLIENT *clnt = NULL;
@@ -54,8 +54,7 @@ int main(int argn, char *argc[])
 	//First of all, create a client
 	clnt = clnt_create(argc[1], progNum, VERSNUM, proto);
 
-	if (run_mode)
-	{
+	if (run_mode) {
 		printf("CLIENT : %d\n", clnt);
 	}
 
@@ -68,10 +67,11 @@ int main(int argn, char *argc[])
 	if ((tvSet.tv_sec != tvGet.tv_sec) || (tvSet.tv_usec != tvGet.tv_usec))
 		test_status = 1;
 
-	if (run_mode)
-	{
-		printf("Time Set : %d sec %d usec\n", tvSet.tv_sec, tvSet.tv_usec);
-		printf("Time Get : %d sec %d usec\n", tvGet.tv_sec, tvGet.tv_usec);
+	if (run_mode) {
+		printf("Time Set : %d sec %d usec\n", tvSet.tv_sec,
+		       tvSet.tv_usec);
+		printf("Time Get : %d sec %d usec\n", tvGet.tv_sec,
+		       tvGet.tv_usec);
 	}
 
 	tvSet.tv_sec = 4000;
@@ -83,12 +83,12 @@ int main(int argn, char *argc[])
 	if ((tvSet.tv_sec != tvGet.tv_sec) || (tvSet.tv_usec != tvGet.tv_usec))
 		test_status = 1;
 
-	if (run_mode)
-	{
-		printf("Time Set : %d sec %d usec\n", tvSet.tv_sec, tvSet.tv_usec);
-		printf("Time Get : %d sec %d usec\n", tvGet.tv_sec, tvGet.tv_usec);
+	if (run_mode) {
+		printf("Time Set : %d sec %d usec\n", tvSet.tv_sec,
+		       tvSet.tv_usec);
+		printf("Time Get : %d sec %d usec\n", tvGet.tv_sec,
+		       tvGet.tv_usec);
 	}
-
 	//This last printf gives the result status to the tests suite
 	//normally should be 0: test has passed or 1: test has failed
 	printf("%d\n", test_status);

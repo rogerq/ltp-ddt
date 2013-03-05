@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -37,20 +37,20 @@
 /****************************** standard includes *****************************************/
 /********************************************************************************************/
 #include <pthread.h>
- #include <stdarg.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include <sys/wait.h>
- #include <errno.h>
+#include <errno.h>
 
 /********************************************************************************************/
 /******************************   Test framework   *****************************************/
 /********************************************************************************************/
-#include "testfrmw.h"
- #include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int (error code for example)
@@ -80,16 +80,14 @@
 /***********************************    Test case   *****************************************/
 /********************************************************************************************/
 /* Thread function */
-void * threaded(void * arg)
+void *threaded(void *arg)
 {
 	int ret;
 	ret = ftrylockfile(stdout);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		FAILED("The child process is owning the file lock.");
 	}
-
 #if VERBOSE > 1
 
 	output("The file lock was not inherited in the child process\n");
@@ -100,7 +98,7 @@ void * threaded(void * arg)
 }
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret, status;
 	pid_t child, ctl;
@@ -115,26 +113,22 @@ int main(int argc, char * argv[])
 	/* Create the child */
 	child = fork();
 
-	if (child == -1)
-	{
+	if (child == -1) {
 		UNRESOLVED(errno, "Failed to fork");
 	}
 
 	/* child */
-	if (child == 0)
-	{
+	if (child == 0) {
 
 		ret = pthread_create(&ch, NULL, threaded, NULL);
 
-		if (ret != 0)
-		{
+		if (ret != 0) {
 			UNRESOLVED(ret, "Failed to create a thread");
 		}
 
 		ret = pthread_join(ch, NULL);
 
-		if (ret != 0)
-		{
+		if (ret != 0) {
 			UNRESOLVED(ret, "Failed to join the thread");
 		}
 
@@ -150,13 +144,11 @@ int main(int argc, char * argv[])
 	/* Parent joins the child */
 	ctl = waitpid(child, &status, 0);
 
-	if (ctl != child)
-	{
+	if (ctl != child) {
 		UNRESOLVED(errno, "Waitpid returned the wrong PID");
 	}
 
-	if (!WIFEXITED(status) || (WEXITSTATUS(status) != PTS_PASS))
-	{
+	if (!WIFEXITED(status) || (WEXITSTATUS(status) != PTS_PASS)) {
 		FAILED("Child exited abnormally");
 	}
 

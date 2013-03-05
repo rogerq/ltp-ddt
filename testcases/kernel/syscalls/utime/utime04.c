@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -89,6 +89,7 @@
 char *TCID = "utime04";		/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 int exp_enos[] = { 0 };
+
 struct utimbuf times;		/* struct. buffer for utime() */
 
 void setup();			/* Main setup function of test */
@@ -97,8 +98,8 @@ void cleanup();			/* cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* struct buffer to hold file info. */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	time_t modf_time, access_time;
 	/* file modification/access time */
 
@@ -144,7 +145,7 @@ int main(int ac, char **av)
 						 "stat(2) of %s failed, "
 						 "error:%d", TEMP_FILE,
 						 TEST_ERRNO);
-				 }
+				}
 				modf_time = stat_buf.st_mtime;
 				access_time = stat_buf.st_atime;
 

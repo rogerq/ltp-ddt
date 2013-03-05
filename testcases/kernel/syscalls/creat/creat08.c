@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -86,8 +86,9 @@ int main(int ac, char **av)
 	uid_t save_myuid, user1_uid;
 	pid_t mypid;
 
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int fd;
+	int lc;
+	char *msg;
 
 	/*
 	 * parse standard options
@@ -113,7 +114,8 @@ int main(int ac, char **av)
 
 		/* Get the uid of user1 */
 		if ((user1 = getpwnam("nobody")) == NULL) {
-			tst_brkm(TBROK|TERRNO, NULL, "getpwnam(\"nobody\") failed");
+			tst_brkm(TBROK | TERRNO, NULL,
+				 "getpwnam(\"nobody\") failed");
 		}
 
 		user1_uid = user1->pw_uid;
@@ -122,13 +124,16 @@ int main(int ac, char **av)
 		 * Get the group IDs of group1 and group2.
 		 */
 		if ((group = getgrnam("nobody")) == NULL) {
-			tst_brkm(TBROK|TERRNO, cleanup,
-				 "getgrnam(\"nobody\") failed");
+			if ((group = getgrnam("nogroup")) == NULL) {
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "getgrnam(\"nobody\") and "
+					 "getgrnam(\"nogroup\") failed");
+			}
 		}
 		group1_gid = group->gr_gid;
 		if ((group = getgrnam("bin")) == NULL) {
-			tst_brkm(TBROK|TERRNO, cleanup,
-			    "getgrnam(\"bin\") failed");
+			tst_brkm(TBROK | TERRNO, cleanup,
+				 "getgrnam(\"bin\") failed");
 		}
 		group2_gid = group->gr_gid;
 
@@ -240,7 +245,8 @@ int main(int ac, char **av)
 		/*
 		 * Create the file with setgid not set
 		 */
-		if (open(nosetgid_A, O_CREAT|O_EXCL|O_RDWR, MODE_RWX) == -1) {
+		fd = open(nosetgid_A, O_CREAT | O_EXCL | O_RDWR, MODE_RWX);
+		if (fd == -1) {
 			tst_resm(TFAIL, "Creation of %s failed", nosetgid_A);
 			local_flag = FAILED;
 		}
@@ -262,12 +268,13 @@ int main(int ac, char **av)
 			tst_resm(TFAIL, "%s: Incorrect group", nosetgid_A);
 			local_flag = FAILED;
 		}
+		close(fd);
 
 		/*
 		 * Create the file with setgid set
 		 */
-		if (open(setgid_A, O_CREAT | O_EXCL | O_RDWR, MODE_SGID) ==
-		    -1) {
+		fd = open(setgid_A, O_CREAT | O_EXCL | O_RDWR, MODE_SGID);
+		if (fd == -1) {
 			tst_resm(TFAIL, "Creation of %s failed", setgid_A);
 			local_flag = FAILED;
 		}
@@ -291,6 +298,8 @@ int main(int ac, char **av)
 			tst_resm(TINFO, "got %u and %u", buf.st_gid, mygid);
 			local_flag = FAILED;
 		}
+		close(fd);
+
 		if (local_flag == PASSED) {
 			tst_resm(TPASS, "Test passed in block1.");
 		} else {
@@ -308,7 +317,8 @@ int main(int ac, char **av)
 		/*
 		 * Create the file with setgid not set
 		 */
-		if (creat(nosetgid_B, MODE_RWX) == -1) {
+		fd = creat(nosetgid_B, MODE_RWX);
+		if (fd == -1) {
 			tst_resm(TFAIL, "Creation of %s failed", nosetgid_B);
 			local_flag = FAILED;
 		}
@@ -331,11 +341,13 @@ int main(int ac, char **av)
 			tst_resm(TFAIL, "%s: Incorrect group", nosetgid_B);
 			local_flag = FAILED;
 		}
+		close(fd);
 
 		/*
 		 * Create the file with setgid set
 		 */
-		if (creat(setgid_B, MODE_SGID) == -1) {
+		fd = creat(setgid_B, MODE_SGID);
+		if (fd == -1) {
 			tst_resm(TFAIL, "Creation of %s failed", setgid_B);
 			local_flag = FAILED;
 		}
@@ -360,6 +372,7 @@ int main(int ac, char **av)
 				 setgid_B);
 			local_flag = FAILED;
 		}
+		close(fd);
 
 		if (local_flag == PASSED) {
 			tst_resm(TPASS, "Test passed in block2.");
@@ -376,12 +389,14 @@ int main(int ac, char **av)
 /*--------------------------------------------------------------*/
 		/* Become root again */
 		if (setreuid(-1, save_myuid) == -1) {
-			tst_resm(TFAIL|TERRNO, "Changing back to root failed");
+			tst_resm(TFAIL | TERRNO,
+				 "Changing back to root failed");
 			local_flag = FAILED;
 		}
 
 		/* Create the file with setgid set */
-		if (creat(root_setgid_B, MODE_SGID) == -1) {
+		fd = creat(root_setgid_B, MODE_SGID);
+		if (fd == -1) {
 			tst_resm(TFAIL, "Creation of %s failed", root_setgid_B);
 			local_flag = FAILED;
 		}
@@ -406,6 +421,7 @@ int main(int ac, char **av)
 				 group2_gid);
 			local_flag = FAILED;
 		}
+		close(fd);
 
 		if (local_flag == PASSED) {
 			tst_resm(TPASS, "Test passed in block3");
@@ -417,14 +433,13 @@ int main(int ac, char **av)
 	tst_exit();
 }
 
-static void
-setup(void)
+static void setup(void)
 {
 	tst_require_root(NULL);
+	tst_tmpdir();
 }
 
-static void
-cleanup(void)
+static void cleanup(void)
 {
 	if (unlink(setgid_A) == -1) {
 		tst_resm(TBROK, "%s failed", setgid_A);
@@ -433,18 +448,21 @@ cleanup(void)
 		tst_resm(TBROK, "unlink %s failed", nosetgid_A);
 	}
 	if (rmdir(DIR_A) == -1) {
-		tst_brkm(TBROK|TERRNO, NULL, "rmdir %s failed", DIR_A);
+		tst_brkm(TBROK | TERRNO, NULL, "rmdir %s failed", DIR_A);
 	}
 	if (unlink(setgid_B) == -1) {
-		tst_brkm(TBROK|TERRNO, NULL, "unlink %s failed", setgid_B);
+		tst_brkm(TBROK | TERRNO, NULL, "unlink %s failed", setgid_B);
 	}
 	if (unlink(root_setgid_B) == -1) {
-		tst_brkm(TBROK|TERRNO, NULL, "unlink %s failed", root_setgid_B);
+		tst_brkm(TBROK | TERRNO, NULL, "unlink %s failed",
+			 root_setgid_B);
 	}
 	if (unlink(nosetgid_B) == -1) {
-		tst_brkm(TBROK|TERRNO, NULL, "unlink %s failed", nosetgid_B);
+		tst_brkm(TBROK | TERRNO, NULL, "unlink %s failed", nosetgid_B);
 	}
 	if (rmdir(DIR_B) == -1) {
-		tst_brkm(TBROK|TERRNO, NULL, "rmdir %s failed", DIR_B);
+		tst_brkm(TBROK | TERRNO, NULL, "rmdir %s failed", DIR_B);
 	}
+
+	tst_rmdir();
 }

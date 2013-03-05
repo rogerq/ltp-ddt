@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -97,8 +97,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -124,9 +124,9 @@ int main(int ac, char **av)
 
 		/* Check for the return value of mmap() */
 		if (addr != MAP_FAILED) {
-			tst_resm(TFAIL|TERRNO,
-				"mmap() returned invalid value, expected: %p",
-				MAP_FAILED);
+			tst_resm(TFAIL | TERRNO,
+				 "mmap() returned invalid value, expected: %p",
+				 MAP_FAILED);
 			/* Unmap the mapped memory */
 			if (munmap(addr, page_sz) != 0) {
 				tst_resm(TBROK, "munmap() failed");
@@ -138,8 +138,8 @@ int main(int ac, char **av)
 		if (TEST_ERRNO == EACCES) {
 			tst_resm(TPASS, "mmap failed with EACCES");
 		} else {
-			tst_resm(TFAIL|TERRNO,
-				"mmap failed with unexpected errno");
+			tst_resm(TFAIL | TERRNO,
+				 "mmap failed with unexpected errno");
 		}
 	}
 	cleanup();
@@ -164,7 +164,7 @@ void setup()
 	/* Get the system page size */
 	if ((page_sz = getpagesize()) < 0) {
 		tst_brkm(TFAIL, NULL,
-			"getpagesize() fails to get system page size");
+			 "getpagesize() fails to get system page size");
 	}
 
 	/* Allocate space for the test buffer */

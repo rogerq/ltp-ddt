@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /******************************************************************************
@@ -118,13 +118,12 @@ static option_t options[] = {	/* options supported by mount04 test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	char nobody_uid[] = "nobody";
 	struct passwd *ltpuser;
 	int status;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, options, &help)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 		tst_exit();
@@ -148,9 +147,10 @@ int main(int ac, char **av)
 	if (Tflag == 1) {
 		strncpy(Type, fstype,
 			(FSTYPE_LEN <
-			 (strlen(fstype)+1)) ? FSTYPE_LEN : (strlen(fstype)+1));
+			 (strlen(fstype) + 1)) ? FSTYPE_LEN : (strlen(fstype) +
+							       1));
 	} else {
-		strncpy(Type, DEFAULT_FSTYPE, strlen(DEFAULT_FSTYPE)+1);
+		strncpy(Type, DEFAULT_FSTYPE, strlen(DEFAULT_FSTYPE) + 1);
 	}
 
 	if (STD_COPIES != 1) {
@@ -268,9 +268,8 @@ void setup()
 	/* set up expected error numbers */
 	TEST_EXP_ENOS(exp_enos);
 
-	if (access(device,F_OK)) {
-		tst_brkm(TBROK, cleanup1,
-			"Device '%s' does not exist", device);
+	if (access(device, F_OK)) {
+		tst_brkm(TBROK, cleanup1, "Device '%s' does not exist", device);
 	}
 
 	TEST(mount(device, mntpoint, Type, 0, NULL));

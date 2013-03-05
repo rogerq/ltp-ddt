@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -52,8 +52,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -87,11 +87,11 @@
 /******************************************************************************/
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret, value;
 
-	sem_t * sem;
+	sem_t *sem;
 
 	/* Initialize output */
 	output_init();
@@ -99,14 +99,12 @@ int main(int argc, char * argv[])
 	/* Create the semaphore */
 	sem = sem_open(SEM_NAME, O_CREAT | O_EXCL, 0777, 2);
 
-	if (sem == SEM_FAILED && errno == EEXIST)
-	{
+	if (sem == SEM_FAILED && errno == EEXIST) {
 		sem_unlink(SEM_NAME);
 		sem = sem_open(SEM_NAME, O_CREAT | O_EXCL, 0777, 2);
 	}
 
-	if (sem == SEM_FAILED)
-	{
+	if (sem == SEM_FAILED) {
 		UNRESOLVED(errno, "Failed to create the semaphore");
 	}
 
@@ -115,37 +113,32 @@ int main(int argc, char * argv[])
 		ret = sem_wait(sem);
 	} while (ret != 0 && errno == EINTR);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to wait for the semaphore");
 	}
 
 	/* Here, count is 1. Now, close the semaphore */
 	ret = sem_close(sem);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to close the semaphore");
 	}
 
 	/* Open the semaphore again */
 	sem = sem_open(SEM_NAME, O_CREAT, 0777, 3);
 
-	if (sem == SEM_FAILED)
-	{
+	if (sem == SEM_FAILED) {
 		UNRESOLVED(errno, "Failed to re-open the semaphore");
 	}
 
 	/* Check current semaphore count */
 	ret = sem_getvalue(sem, &value);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to get semaphore value");
 	}
 
-	if (value != 1)
-	{
+	if (value != 1) {
 		output("Got value: %d\n", value);
 		FAILED("The semaphore count has changed after sem_close");
 	}
@@ -153,15 +146,13 @@ int main(int argc, char * argv[])
 	/* Now, we can destroy all */
 	ret = sem_close(sem);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to close the semaphore");
 	}
 
 	ret = sem_unlink(SEM_NAME);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to unlink the semaphore");
 	}
 

@@ -12,7 +12,7 @@
  * the GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * Author: Serge Hallyn <serue@us.ibm.com>
  ***************************************************************************/
@@ -38,7 +38,8 @@ int main()
 		return 1;
 
 	mq_unlink("/checkmqnsenabled");
-	mqd = mq_open("/checkmqnsenabled", O_RDWR|O_CREAT|O_EXCL, 0777, NULL);
+	mqd =
+	    mq_open("/checkmqnsenabled", O_RDWR | O_CREAT | O_EXCL, 0777, NULL);
 	if (mqd == -1) {
 		perror("mq_open");
 		return 3;

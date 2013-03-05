@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -110,7 +110,8 @@ void setup()
 	sigemptyset(&act.sa_mask);
 	sigaddset(&act.sa_mask, SIGCLD);
 	if ((sigaction(SIGCLD, &act, NULL)) < 0)
-		tst_brkm(TBROK|TERRNO, cleanup, "sigaction(SIGCLD, ..) failed");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "sigaction(SIGCLD, ..) failed");
 }
 
 void do_child()
@@ -122,7 +123,7 @@ void do_child()
 	while (1) {
 		child_get(&fl);
 		if (fcntl(fd, F_GETLK, &fl) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 		child_put(&fl);
 	}
 }
@@ -164,16 +165,16 @@ compare_lock(struct flock *fl, short type, short whence, int start, int len,
 
 	if (fl->l_start != start)
 		tst_resm(TFAIL, "region starts in wrong place, should be "
-			 "%d is %"PRId64, start, (int64_t)fl->l_start);
+			 "%d is %" PRId64, start, (int64_t) fl->l_start);
 
 	if (fl->l_len != len)
 		tst_resm(TFAIL,
-		    "region length is wrong, should be %d is %"PRId64,
-		    len, (int64_t)fl->l_len);
+			 "region length is wrong, should be %d is %" PRId64,
+			 len, (int64_t) fl->l_len);
 
 	if (fl->l_pid != pid)
 		tst_resm(TFAIL, "locking pid is wrong, should be %d is %d",
-		    pid, fl->l_pid);
+			 pid, fl->l_pid);
 }
 
 void unlock_file()
@@ -181,7 +182,7 @@ void unlock_file()
 	struct flock fl;
 
 	if (do_lock(F_SETLK, (short)F_UNLCK, (short)0, 0, 0) < 0)
-		tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+		tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 	do_test(&fl, F_WRLCK, 0, 0, 0);
 	compare_lock(&fl, (short)F_UNLCK, (short)0, 0, 0, (pid_t) 0);
 }
@@ -244,10 +245,9 @@ int main(int ac, char **av)
 {
 	struct flock tl;
 
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 #ifdef UCLINUX
@@ -265,15 +265,15 @@ int main(int ac, char **av)
 		if ((child_pid = FORK_OR_VFORK()) == 0) {	/* parent */
 #ifdef UCLINUX
 			if (self_exec(av[0], "ddddd", parent_pipe[0],
-			    parent_pipe[1], child_pipe[0], child_pipe[1],
-			    fd) < 0)
-				tst_brkm(TBROK|TERRNO, cleanup,
-				    "self_exec failed");
+				      parent_pipe[1], child_pipe[0],
+				      child_pipe[1], fd) < 0)
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "self_exec failed");
 #else
 			do_child();
 #endif
 		} else if (child_pid == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "fork failed");
+			tst_brkm(TBROK | TERRNO, cleanup, "fork failed");
 
 		SAFE_CLOSE(cleanup, parent_pipe[0]);
 		SAFE_CLOSE(cleanup, child_pipe[1]);
@@ -286,10 +286,10 @@ int main(int ac, char **av)
 		 * at the begining
 		 */
 		if (do_lock(F_SETLK, (short)F_WRLCK, (short)0, 10, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		if (do_lock(F_SETLK, (short)F_RDLCK, (short)0, 1, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Test read lock
@@ -324,10 +324,10 @@ int main(int ac, char **av)
 		 * read lock just before
 		 */
 		if (do_lock(F_SETLK, (short)F_WRLCK, (short)0, 10, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		if (do_lock(F_SETLK, (short)F_RDLCK, (short)0, 5, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Test the read lock
@@ -362,10 +362,10 @@ int main(int ac, char **av)
 		 * ends at the first byte of the write lock
 		 */
 		if (do_lock(F_SETLK, (short)F_WRLCK, (short)0, 10, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		if (do_lock(F_SETLK, (short)F_RDLCK, (short)0, 5, 6) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Test read lock
@@ -400,10 +400,10 @@ int main(int ac, char **av)
 		 * lock that overlaps the front of the write.
 		 */
 		if (do_lock(F_SETLK, (short)F_WRLCK, (short)0, 10, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		if (do_lock(F_SETLK, (short)F_RDLCK, (short)0, 5, 8) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Test the read lock
@@ -438,10 +438,10 @@ int main(int ac, char **av)
 		 * lock in the middle of it
 		 */
 		if (do_lock(F_SETLK, (short)F_WRLCK, (short)0, 10, 10) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		if (do_lock(F_SETLK, (short)F_RDLCK, (short)0, 13, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Test the first write lock
@@ -480,13 +480,13 @@ int main(int ac, char **av)
 		 * lock that overlaps the end
 		 */
 		if (do_lock(F_SETLK, (short)F_WRLCK, (short)0, 10, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Set a read lock on the whole file
 		 */
 		if (do_lock(F_SETLK, (short)F_RDLCK, (short)0, 13, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Test the write lock
@@ -521,13 +521,13 @@ int main(int ac, char **av)
 		 * lock starting at the last byte of the write lock
 		 */
 		if (do_lock(F_SETLK, (short)F_WRLCK, (short)0, 10, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Set a read lock on the whole file.
 		 */
 		if (do_lock(F_SETLK, (short)F_RDLCK, (short)0, 14, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Test write lock
@@ -563,13 +563,13 @@ int main(int ac, char **av)
 		 * write lock.
 		 */
 		if (do_lock(F_SETLK, (short)F_WRLCK, (short)0, 10, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Set a read lock on the whole file
 		 */
 		if (do_lock(F_SETLK, (short)F_RDLCK, (short)0, 15, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Test the write lock
@@ -604,10 +604,10 @@ int main(int ac, char **av)
 		 * lock that starts past the end of the write lock.
 		 */
 		if (do_lock(F_SETLK, (short)F_WRLCK, (short)0, 10, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		if (do_lock(F_SETLK, (short)F_RDLCK, (short)0, 16, 5) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 
 		/*
 		 * Test the write lock

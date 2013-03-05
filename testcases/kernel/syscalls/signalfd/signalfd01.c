@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -33,7 +33,7 @@
  * RESTRICTIONS
  * 	None
  */
-# define _GNU_SOURCE
+#define _GNU_SOURCE
 
 #include "config.h"
 
@@ -57,9 +57,9 @@ int TST_TOTAL = 1;
 #if defined HAVE_SYS_SIGNALFD_H
 #include <sys/signalfd.h>
 #elif defined HAVE_LINUX_SIGNALFD_H
-# if defined HAVE_LINUX_TYPES_H
-# include <linux/types.h>
-# endif
+#if defined HAVE_LINUX_TYPES_H
+#include <linux/types.h>
+#endif
 #include <linux/signalfd.h>
 #define USE_OWNIMPL
 #elif defined HAVE_SIGNALFD_H
@@ -69,11 +69,11 @@ int TST_TOTAL = 1;
 #endif
 
 #if defined HAVE_STRUCT_SIGNALFD_SIGINFO_SSI_SIGNO
-# define SIGNALFD_PREFIX(FIELD) ssi_##FIELD
+#define SIGNALFD_PREFIX(FIELD) ssi_##FIELD
 #elif defined HAVE_STRUCT_SIGNALFD_SIGINFO_SIGNO
-# define SIGNALFD_PREFIX(FIELD) FIELD
+#define SIGNALFD_PREFIX(FIELD) FIELD
 #else
-# define USE_STUB
+#define USE_STUB
 #endif
 
 #ifdef USE_STUB
@@ -147,7 +147,7 @@ int do_test1(int ntst, int sig)
 	if ((s > 0) && (s != sizeof(struct signalfd_siginfo))) {
 		tst_resm(TFAIL,
 			 "getting incomplete signalfd_siginfo data: "
-			 "actual-size=%"PRId32", expected-size=%"PRId32,
+			 "actual-size=%" PRId32 ", expected-size=%" PRId32,
 			 s, sizeof(struct signalfd_siginfo));
 		sfd_for_next = -1;
 		close(sfd);
@@ -185,7 +185,7 @@ int do_test1(int ntst, int sig)
 		goto out;
 	}
 
-      out:
+out:
 	return sfd_for_next;
 }
 
@@ -237,7 +237,7 @@ void do_test2(int ntst, int fd, int sig)
 	if ((s > 0) && (s != sizeof(struct signalfd_siginfo))) {
 		tst_resm(TFAIL,
 			 "getting incomplete signalfd_siginfo data: "
-			 "actual-size=%"PRId32", expected-size= %"PRId32,
+			 "actual-size=%" PRId32 ", expected-size= %" PRId32,
 			 s, sizeof(struct signalfd_siginfo));
 		goto out;
 	} else if (s < 0) {
@@ -266,14 +266,14 @@ void do_test2(int ntst, int fd, int sig)
 		goto out;
 	}
 
-      out:
+out:
 	return;
 }
 
 int main(int argc, char **argv)
 {
 	int lc;
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 	int sfd;
 
 	if ((tst_kvercmp(2, 6, 22)) < 0) {

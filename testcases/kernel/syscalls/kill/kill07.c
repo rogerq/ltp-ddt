@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -86,13 +86,12 @@ extern void rm_shm(int);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	pid_t pid;
 	int exno, status, nsig, asig, ret;
 	struct sigaction my_act, old_act;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -152,7 +151,7 @@ int main(int ac, char **av)
 		if (TEST_RETURN == -1) {
 			tst_brkm(TFAIL, cleanup, "%s failed - errno = %d : %s",
 				 TCID, TEST_ERRNO, strerror(TEST_ERRNO));
-		 }
+		}
 
 		if (STD_FUNCTIONAL_TEST) {
 			/*
@@ -179,7 +178,7 @@ int main(int ac, char **av)
 		}
 		if (shmdt(flag)) {
 			tst_brkm(TBROK, cleanup, "shmdt failed ");
-		 }
+		}
 	}
 	cleanup();
 
@@ -205,7 +204,7 @@ void do_child()
 	int exno = 1;
 
 	sleep(300);
-	  tst_resm(TINFO, "Child never recieved a signal");
+	tst_resm(TINFO, "Child never recieved a signal");
 	exit(exno);
 }
 

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -42,7 +42,7 @@
  */
 
 #ifndef _GNU_SOURCE
-# define _GNU_SOURCE
+#define _GNU_SOURCE
 #endif
 
 #include <fcntl.h>
@@ -302,13 +302,15 @@ int do_test(struct flock *lock, pid_t pid)
 
 	if (fl.l_start != lock->l_start) {
 		tst_resm(TFAIL, "region starts in wrong place, "
-			 "should be %"PRId64" is %"PRId64, (int64_t)lock->l_start, (int64_t)fl.l_start);
+			 "should be %" PRId64 " is %" PRId64,
+			 (int64_t) lock->l_start, (int64_t) fl.l_start);
 		return 1;
 	}
 
 	if (fl.l_len != lock->l_len) {
-		tst_resm(TFAIL, "region length is wrong, should be %"PRId64" is %"PRId64,
-			 (int64_t)lock->l_len, (int64_t)fl.l_len);
+		tst_resm(TFAIL,
+			 "region length is wrong, should be %" PRId64 " is %"
+			 PRId64, (int64_t) lock->l_len, (int64_t) fl.l_len);
 		return 1;
 	}
 
@@ -392,7 +394,7 @@ void catch_child()
 {
 	tst_resm(TFAIL, "Unexpected death of child process");
 	cleanup();
- }
+}
 
 void catch_alarm()
 {
@@ -414,16 +416,15 @@ void catch_alarm()
 	tst_resm(TFAIL, "Alarm expired, deadlock not detected");
 	tst_resm(TWARN, "You may need to kill child processes by hand");
 	cleanup();
- }
+}
 
 int main(int ac, char **av)
 {
 	int ans;
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int fail = 0;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -448,7 +449,7 @@ int main(int ac, char **av)
 	if (setup()) {		/* global testup */
 		tst_resm(TINFO, "setup failed");
 		cleanup();
-	 }
+	}
 
 	/* check for looping state if -i option is given */
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
@@ -472,7 +473,7 @@ int main(int ac, char **av)
 		} else if (child_pid1 < 0) {
 			perror("Fork failed: child 1");
 			cleanup();
-		 }
+		}
 
 		/* parent */
 
@@ -496,7 +497,7 @@ int main(int ac, char **av)
 					 "1 failed");
 			}
 			cleanup();
-		 }
+		}
 
 		/* parent */
 
@@ -525,7 +526,7 @@ int main(int ac, char **av)
 					 "failed");
 			}
 			cleanup();
-		 }
+		}
 		/* parent */
 
 		close(parent_pipe[1]);

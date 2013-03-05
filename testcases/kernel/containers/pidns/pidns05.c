@@ -10,7 +10,7 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 ***************************************************************************
 *
@@ -35,8 +35,8 @@
 *
 * History:
 *
-* FLAG DATE     	NAME	   			DESCRIPTION
-* 31/10/08  Veerendra C <vechandr@in.ibm.com> 	Verifies killing of NestedCont's
+* FLAG DATE		NAME				DESCRIPTION
+* 31/10/08  Veerendra C <vechandr@in.ibm.com>	Verifies killing of NestedCont's
 *
 *******************************************************************************/
 #define _GNU_SOURCE 1
@@ -60,8 +60,7 @@ char *TCID = "pidns05";
 int TST_TOTAL = 1;
 int fd[2];
 
-void
-cleanup(void)
+void cleanup(void)
 {
 	TEST_CLEANUP;
 }
@@ -71,12 +70,12 @@ int max_pid(void)
 	FILE *fp;
 	int ret;
 
-	fp = fopen("/proc/sys/kernel/pid_max", "r") ;
+	fp = fopen("/proc/sys/kernel/pid_max", "r");
 	if (fp != NULL) {
 		fscanf(fp, "%d", &ret);
 		fclose(fp);
 	} else {
-		tst_resm(TBROK, "Cannot open /proc/sys/kernel/pid_max \n");
+		tst_resm(TBROK, "Cannot open /proc/sys/kernel/pid_max");
 		ret = -1;
 	}
 	return ret;
@@ -86,9 +85,9 @@ int max_pid(void)
  * Input parameter - Accepts pointer to pid_t : To copy the pid's matching.
  * Returns - the number of pids matched.
 */
-int find_cinit_pids(pid_t *pids)
+int find_cinit_pids(pid_t * pids)
 {
-	int next = 0, pid_max, i ;
+	int next = 0, pid_max, i;
 	pid_t parentpid, pgid, pgid2;
 
 	pid_max = max_pid();
@@ -130,22 +129,23 @@ int create_nested_container(void *vtest)
 	/* Comparing the values to make sure pidns is created correctly */
 	if (cpid != CINIT_PID || ppid != PARENT_PID) {
 		printf("Got unexpected cpid and/or ppid (cpid=%d ppid=%d)\n",
-		    cpid, ppid);
+		       cpid, ppid);
 		exit_val = 1;
 	}
 	if (count > 1) {
 		count--;
 		ret = do_clone_unshare_test(T_CLONE, CLONE_NEWPID,
-				create_nested_container, (void *) &count);
+					    create_nested_container,
+					    (void *)&count);
 		if (ret == -1) {
-			printf("clone failed; errno = %d : %s\n" ,
-			    ret, strerror(ret));
+			printf("clone failed; errno = %d : %s\n",
+			       ret, strerror(ret));
 			exit_val = 1;
 		} else
 			exit_val = 0;
 	} else {
 		/* Sending mesg, 'Nested containers created' through the pipe */
-		write(fd[1], mesg, (strlen(mesg)+1));
+		write(fd[1], mesg, (strlen(mesg) + 1));
 		exit_val = 0;
 	}
 
@@ -162,13 +162,13 @@ void kill_nested_containers()
 	pid_t pids_new[MAX_DEPTH];
 
 	orig_count = find_cinit_pids(pids);
-	kill(pids[MAX_DEPTH - 3], SIGKILL) ;
+	kill(pids[MAX_DEPTH - 3], SIGKILL);
 	sleep(1);
 
 	/* After killing child container, getting the New PID list */
 	new_count = find_cinit_pids(pids_new);
 
-	/* Verifying that the child containers were destroyed when parent is killed*/
+	/* Verifying that the child containers were destroyed when parent is killed */
 	if (orig_count - 2 != new_count)
 		status = -1;
 
@@ -178,21 +178,16 @@ void kill_nested_containers()
 	}
 
 	if (status == 0)
-		tst_resm(TPASS, "The number of containers killed are %d\n" ,
-				orig_count - new_count);
+		tst_resm(TPASS, "The number of containers killed are %d",
+			 orig_count - new_count);
 	else
 		tst_resm(TFAIL, "Failed to kill the sub-containers of "
-				"the container %d\n", pids[MAX_DEPTH - 3]);
+			 "the container %d", pids[MAX_DEPTH - 3]);
 
 	/* Loops through the containers created to exit from sleep() */
 	for (i = 0; i < MAX_DEPTH; i++) {
-		if (waitpid(pids[i], &status, 0) == -1)
-			tst_resm(TFAIL|TERRNO, "waitpid(%d, ...) failed",
-			    pids[i]);
-		else {
-			kill(pids[i], SIGKILL);
-			waitpid(pids[i], &status, 0);
-		}
+		kill(pids[i], SIGKILL);
+		waitpid(pids[i], &status, 0);
 	}
 }
 
@@ -210,7 +205,7 @@ int main(int argc, char *argv[])
 	 */
 	pid = fork();
 	if (pid == -1) {
-		tst_brkm(TBROK|TERRNO, NULL, "fork failed");
+		tst_brkm(TBROK | TERRNO, NULL, "fork failed");
 	} else if (pid != 0) {
 		/*
 		 * NOTE: use waitpid so that we know we're waiting for the
@@ -222,7 +217,10 @@ int main(int argc, char *argv[])
 		if (waitpid(pid, &status, 0) == -1) {
 			perror("wait failed");
 		}
-		exit(status);
+		if (WIFEXITED(status))
+			exit(WEXITSTATUS(status));
+		else
+			exit(status);
 	}
 
 	/* To make all the containers share the same PGID as its parent */
@@ -232,12 +230,12 @@ int main(int argc, char *argv[])
 	pgid = getpgid(pid);
 	ret = pipe(fd);
 	if (ret == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "pipe failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "pipe failed");
 
 	TEST(do_clone_unshare_test(T_CLONE, CLONE_NEWPID,
-	    create_nested_container, (void *)&count));
+				   create_nested_container, (void *)&count));
 	if (TEST_RETURN == -1) {
-		tst_brkm(TFAIL|TTERRNO, cleanup, "clone failed");
+		tst_brkm(TFAIL | TTERRNO, cleanup, "clone failed");
 	}
 
 	close(fd[1]);
@@ -248,7 +246,7 @@ int main(int argc, char *argv[])
 		tst_resm(TINFO, " %d %s", MAX_DEPTH, readbuffer);
 	else
 		tst_brkm(TFAIL, cleanup, "unable to create %d containers",
-		    MAX_DEPTH);
+			 MAX_DEPTH);
 
 	/* Kill the container created */
 	kill_nested_containers();

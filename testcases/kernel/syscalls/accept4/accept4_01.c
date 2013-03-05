@@ -16,7 +16,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 
@@ -65,7 +65,7 @@
 
 /* Flags for socket(), socketpair(), accept4() */
 #ifndef O_CLOEXEC
-# define O_CLOEXEC 02000000
+#define O_CLOEXEC 02000000
 #endif
 
 #ifndef SOCK_CLOEXEC
@@ -135,9 +135,10 @@ void setup()
 	TEST_PAUSE;
 	tst_tmpdir();
 }
+
 #if !(__GLIBC_PREREQ(2,10))
 static int
-accept4_01(int fd, struct sockaddr *sockaddr, socklen_t *addrlen, int flags)
+accept4_01(int fd, struct sockaddr *sockaddr, socklen_t * addrlen, int flags)
 {
 #ifdef DEBUG
 	tst_resm(TINFO, "Calling accept4(): flags = %x", flags);
@@ -192,13 +193,13 @@ do_test(int lfd, struct sockaddr_in *conn_addr,
 		die("Connect Error");
 
 	addrlen = sizeof(struct sockaddr_in);
-	#if !(__GLIBC_PREREQ(2,10))
+#if !(__GLIBC_PREREQ(2,10))
 	acceptfd = accept4_01(lfd, (struct sockaddr *)&claddr, &addrlen,
-                           closeonexec_flag | nonblock_flag);
-	#else
+			      closeonexec_flag | nonblock_flag);
+#else
 	acceptfd = accept4(lfd, (struct sockaddr *)&claddr, &addrlen,
 			   closeonexec_flag | nonblock_flag);
-	#endif
+#endif
 	if (acceptfd == -1) {
 		tst_resm(TCONF,
 			 "syscall __NR_accept4 not supported on your arch");

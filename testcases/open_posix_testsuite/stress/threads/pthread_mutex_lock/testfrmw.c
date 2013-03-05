@@ -11,8 +11,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
 
  * This file is a wrapper to use the tests from the NPTL Test & Trace Project
@@ -39,15 +39,17 @@ void output_init()
 	/* do nothing */
 	return;
 }
-void output(char * string, ...)
+
+void output(char *string, ...)
 {
-   va_list ap;
-   pthread_mutex_lock(&m_trace);
-   va_start(ap, string);
-   vprintf(string, ap);
-   va_end(ap);
-   pthread_mutex_unlock(&m_trace);
+	va_list ap;
+	pthread_mutex_lock(&m_trace);
+	va_start(ap, string);
+	vprintf(string, ap);
+	va_end(ap);
+	pthread_mutex_unlock(&m_trace);
 }
+
 void output_fini()
 {
 	/*do nothing */

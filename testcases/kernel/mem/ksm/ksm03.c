@@ -54,31 +54,30 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#include <sys/stat.h>
+
+#include <sys/types.h>
 #include <sys/mman.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
 #include "test.h"
 #include "usctest.h"
-#include "../include/mem.h"
+#include "mem.h"
 
 char *TCID = "ksm03";
 int TST_TOTAL = 1;
 
 option_t ksm_options[] = {
-        { "n:", &opt_num,       &opt_numstr},
-        { "s:", &opt_size,      &opt_sizestr},
-        { "u:", &opt_unit,      &opt_unitstr},
-        { NULL, NULL,           NULL}
+	{"n:", &opt_num, &opt_numstr},
+	{"s:", &opt_size, &opt_sizestr},
+	{"u:", &opt_unit, &opt_unitstr},
+	{NULL, NULL, NULL}
 };
 
 int main(int argc, char *argv[])
@@ -104,6 +103,11 @@ int main(int argc, char *argv[])
 void setup(void)
 {
 	tst_require_root(NULL);
+
+	if (tst_kvercmp(2, 6, 32) < 0)
+		tst_brkm(TCONF, NULL, "2.6.32 or greater kernel required");
+	if (access(PATH_KSM, F_OK) == -1)
+		tst_brkm(TCONF, NULL, "KSM configuration is not enabled");
 
 	mount_mem("memcg", "cgroup", "memory", MEMCG_PATH, MEMCG_PATH_NEW);
 	tst_sig(FORK, DEF_HANDLER, NULL);

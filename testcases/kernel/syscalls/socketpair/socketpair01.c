@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -81,7 +81,8 @@ struct test_case_t {		/* test case structure */
 	    /* Skip since uClinux does not implement memory protection */
 	{
 	PF_UNIX, SOCK_STREAM, 0, 0, -1, EFAULT, "bad aligned pointer"}, {
-	PF_UNIX, SOCK_STREAM, 0, (int *)7, -1, EFAULT, "bad unaligned pointer"},
+	PF_UNIX, SOCK_STREAM, 0, (int *)7, -1, EFAULT,
+		    "bad unaligned pointer"},
 #endif
 	{
 	PF_INET, SOCK_DGRAM, 17, sv, -1, EOPNOTSUPP, "UDP socket"}, {
@@ -91,11 +92,10 @@ PF_INET, SOCK_STREAM, 1, sv, -1, ESOCKTNOSUPPORT, "ICMP stream"},};
 
 int TST_TOTAL = sizeof(tdat) / sizeof(tdat[0]);	/* Total number of test cases. */
 
-
 int main(int argc, char *argv[])
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int s;
 
 	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL)

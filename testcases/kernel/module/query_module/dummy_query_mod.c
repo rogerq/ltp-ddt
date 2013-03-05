@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /*************************************************************************
@@ -33,22 +33,19 @@
 void dummy_func_test(void);
 
 /* Initialization routine of module */
-int
-init_module (void)
+int init_module(void)
 {
 	return 0;
 }
 
 /* Cleanup routine of module */
-void
-cleanup_module (void)
+void cleanup_module(void)
 {
 	return;
 }
 
 /* Dummy function used by dependent module */
-void
-dummy_func_test(void)
+void dummy_func_test(void)
 {
 	return;
 }

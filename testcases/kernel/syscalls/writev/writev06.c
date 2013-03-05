@@ -13,7 +13,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program;  if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -81,10 +81,9 @@ int fail;
 
 int main(int argc, char **argv)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -133,7 +132,8 @@ int main(int argc, char **argv)
 		TEST(writev(fd[0], wr_iovec, 2));
 		if (TEST_RETURN >= 0) {
 			if (TEST_RETURN == 2) {
-				tst_resm(TINFO, "writev returned %d as expected", 2);
+				tst_resm(TINFO,
+					 "writev returned %d as expected", 2);
 			} else {
 				tst_resm(TFAIL, "Expected nbytes = %d, got "
 					 "%ld", 2, TEST_RETURN);
@@ -141,7 +141,8 @@ int main(int argc, char **argv)
 			}
 		} else {
 			TEST_ERROR_LOG(TEST_ERRNO);
-			tst_resm(TFAIL|TTERRNO, "Error writev return value = %ld",
+			tst_resm(TFAIL | TTERRNO,
+				 "Error writev return value = %ld",
 				 TEST_RETURN);
 			fail = 1;
 		}

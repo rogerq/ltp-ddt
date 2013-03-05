@@ -15,7 +15,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -108,21 +108,21 @@ void do_sendfile(int prot, int pass_unmapped_buffer)
 				prot, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 	if (protected_buffer == MAP_FAILED) {
 		tst_brkm(TBROK, cleanup, "mmap failed: %d", errno);
-	 }
+	}
 
 	out_fd = create_server();
 
 	if ((in_fd = open(in_file, O_RDONLY)) < 0) {
 		tst_brkm(TBROK, cleanup, "open failed: %d", errno);
-	 }
+	}
 	if (stat(in_file, &sb) < 0) {
 		tst_brkm(TBROK, cleanup, "stat failed: %d", errno);
-	 }
+	}
 
 	if (pass_unmapped_buffer) {
 		if (munmap(protected_buffer, sizeof(*protected_buffer)) < 0) {
 			tst_brkm(TBROK, cleanup, "munmap failed: %d", errno);
-		 }
+		}
 	}
 
 	TEST(sendfile(out_fd, in_fd, protected_buffer, sb.st_size));
@@ -188,11 +188,11 @@ void setup()
 	if ((fd = creat(in_file, 00700)) < 0) {
 		tst_brkm(TBROK, cleanup, "creat failed in setup, errno: %d",
 			 errno);
-	 }
+	}
 	sprintf(buf, "abcdefghijklmnopqrstuvwxyz");
 	if (write(fd, buf, strlen(buf)) < 0) {
 		tst_brkm(TBROK, cleanup, "write failed, errno: %d", errno);
-	 }
+	}
 	close(fd);
 	sprintf(out_file, "out.%d", getpid());
 }
@@ -270,12 +270,12 @@ int create_server(void)
 int main(int ac, char **av)
 {
 	int i;
-	int lc;			/* loop counter */
+	int lc;
 	char *msg;		/* parse_opts() return message */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-	 }
+	}
 #ifdef UCLINUX
 	argv0 = av[0];
 	maybe_run_child(&do_child, "");

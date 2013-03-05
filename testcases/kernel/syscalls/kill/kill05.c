@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -103,11 +103,10 @@ extern int getipckey();
 
 int main(int ac, char **av)
 {
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 	pid_t pid;
 	int status;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 #ifdef UCLINUX
@@ -123,11 +122,23 @@ int main(int ac, char **av)
 		do_master_child(av);
 
 	if (waitpid(pid, &status, 0) == -1)
-		tst_resm(TBROK|TERRNO, "waitpid failed");
+		tst_resm(TBROK | TERRNO, "waitpid failed");
 	else if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		tst_resm(TFAIL, "child exited abnormally");
+	else
+		tst_resm(TPASS, "received expected errno(EPERM)");
 	cleanup();
 	tst_exit();
+}
+
+void wait_for_flag(int value)
+{
+	while (1) {
+		if (*flag == value)
+			break;
+		else
+			sleep(1);
+	}
 }
 
 /*
@@ -143,9 +154,6 @@ void do_master_child(char **av)
 
 	struct passwd *ltpuser1, *ltpuser2;
 
-	ltpuser1 = SAFE_GETPWNAM(NULL, user1name);
-	ltpuser2 = SAFE_GETPWNAM(NULL, user2name);
-
 	TEST_EXP_ENOS(exp_enos);
 
 	Tst_count = 0;
@@ -155,14 +163,15 @@ void do_master_child(char **av)
 	pid1 = FORK_OR_VFORK();
 
 	if (pid1 == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "Fork failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "Fork failed");
 
 	if (pid1 == 0) {
-
+		ltpuser1 = SAFE_GETPWNAM(NULL, user1name);
 		if (setreuid(ltpuser1->pw_uid, ltpuser1->pw_uid) == -1) {
 			perror("setreuid failed (in child)");
 			exit(1);
 		}
+		*flag = 1;
 #ifdef UCLINUX
 		if (self_exec(av[0], "") < 0) {
 			perror("self_exec failed");
@@ -172,15 +181,19 @@ void do_master_child(char **av)
 		do_child();
 #endif
 	}
+	ltpuser2 = SAFE_GETPWNAM(NULL, user2name);
 	if (setreuid(ltpuser2->pw_uid, ltpuser2->pw_uid) == -1) {
 		perror("seteuid failed");
 		exit(1);
 	}
 
+	/* wait until child sets its euid */
+	wait_for_flag(1);
+
 	TEST(kill(pid1, TEST_SIG));
 
 	/* signal the child that we're done */
-	*flag = 1;
+	*flag = 2;
 
 	if (waitpid(pid1, &status, 0) == -1) {
 		perror("waitpid failed");
@@ -206,15 +219,8 @@ void do_master_child(char **av)
 
 void do_child()
 {
-	pid_t my_pid;
-
-	my_pid = getpid();
-	while (1) {
-		if (*flag == 1)
-			exit(0);
-		else
-			sleep(1);
-	}
+	wait_for_flag(2);
+	exit(0);
 }
 
 void setup(void)
@@ -227,11 +233,11 @@ void setup(void)
 
 	semkey = getipckey();
 
-	if ((shmid1 = shmget(semkey, getpagesize(), 0666|IPC_CREAT)) == -1)
+	if ((shmid1 = shmget(semkey, getpagesize(), 0666 | IPC_CREAT)) == -1)
 		tst_brkm(TBROK, cleanup, "Failed to setup shared memory");
 
 	if ((flag = (int *)shmat(shmid1, 0, 0)) == (int *)-1)
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "Failed to attach shared memory:%d", shmid1);
 }
 

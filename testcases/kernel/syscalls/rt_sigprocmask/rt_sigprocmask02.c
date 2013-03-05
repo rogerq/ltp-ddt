@@ -13,7 +13,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /******************************************************************************/
@@ -79,8 +79,8 @@
 /* Extern Global Variables */
 
 /* Global Variables */
-char *TCID = "rt_sigprocmask02";/* Test program identifier.*/
-int  TST_TOTAL = 2;		/* total number of tests in this file.   */
+char *TCID = "rt_sigprocmask02";	/* Test program identifier. */
+int TST_TOTAL = 2;		/* total number of tests in this file.   */
 
 /* Extern Global Functions */
 /******************************************************************************/
@@ -100,7 +100,8 @@ int  TST_TOTAL = 2;		/* total number of tests in this file.   */
 /*              On success - Exits calling tst_exit(). With '0' return code.  */
 /*                                                                            */
 /******************************************************************************/
-extern void cleanup() {
+extern void cleanup()
+{
 
 	TEST_CLEANUP;
 	tst_rmdir();
@@ -125,7 +126,8 @@ extern void cleanup() {
 /*              On success - returns 0.                                       */
 /*                                                                            */
 /******************************************************************************/
-void setup() {
+void setup()
+{
 	/* Capture signals if any */
 	/* Create temporary directories */
 	TEST_PAUSE;
@@ -139,18 +141,19 @@ struct test_case_t {
 	int sssize;
 	int exp_errno;
 } test_cases[] = {
-	{ &set, 1, EINVAL },
-	{ (sigset_t *)-1, SIGSETSIZE, EFAULT }
+	{
+	&set, 1, EINVAL}, {
+	(sigset_t *) - 1, SIGSETSIZE, EFAULT}
 };
 
 int test_count = sizeof(test_cases) / sizeof(struct test_case_t);
 
-int main(int ac, char **av) {
+int main(int ac, char **av)
+{
 	int i;
 	sigset_t s;
-	char *msg;	/* message returned from parse_opts */
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 		tst_exit();
@@ -162,20 +165,18 @@ int main(int ac, char **av) {
 
 	TEST(sigfillset(&s));
 	if (TEST_RETURN == -1) {
-		tst_resm(TFAIL | TTERRNO,
-			"Call to sigfillset() failed.");
+		tst_resm(TFAIL | TTERRNO, "Call to sigfillset() failed.");
 		cleanup();
 		tst_exit();
 	}
 
-	for (i=0; i < test_count; i++) {
+	for (i = 0; i < test_count; i++) {
 		TEST(syscall(__NR_rt_sigprocmask, SIG_BLOCK,
-				&s, test_cases[i].ss,
-				test_cases[i].sssize));
+			     &s, test_cases[i].ss, test_cases[i].sssize));
 		if (TEST_RETURN == 0) {
 			tst_resm(TFAIL | TTERRNO,
-				"Call to rt_sigprocmask() succeeded, "
-				"but should failed");
+				 "Call to rt_sigprocmask() succeeded, "
+				 "but should failed");
 		} else if (TEST_ERRNO == test_cases[i].exp_errno) {
 			tst_resm(TPASS | TTERRNO, "Got expected errno");
 		} else {

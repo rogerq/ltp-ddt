@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -144,26 +144,26 @@ int main(int ac, char **av)
 
 		Tst_count = 0;
 
-		if ((fd = open(fname, O_RDWR|O_CREAT, 0700)) == -1) {
-			tst_brkm(TBROK|TTERRNO, cleanup,
-			    "open(%s, O_RDWR|O_CREAT,0700) failed", fname);
+		if ((fd = open(fname, O_RDWR | O_CREAT, 0700)) == -1) {
+			tst_brkm(TBROK | TTERRNO, cleanup,
+				 "open(%s, O_RDWR|O_CREAT,0700) failed", fname);
 		}
 		TEST(close(fd));
 
 		if (TEST_RETURN == -1) {
 			TEST_ERROR_LOG(TEST_ERRNO);
-			tst_resm(TFAIL|TTERRNO, "close(%s) failed", fname);
+			tst_resm(TFAIL | TTERRNO, "close(%s) failed", fname);
 		} else {
 			if (STD_FUNCTIONAL_TEST) {
 				/* No Verification test, yet... */
 				tst_resm(TPASS, "close(%s) returned %ld", fname,
-				    TEST_RETURN);
+					 TEST_RETURN);
 			}
 		}
 
 		if (unlink(fname) == -1) {
-			tst_brkm(TBROK|TERRNO, cleanup,
-			    "unlink(%s) failed", fname);
+			tst_brkm(TBROK | TERRNO, cleanup,
+				 "unlink(%s) failed", fname);
 		}
 	}
 

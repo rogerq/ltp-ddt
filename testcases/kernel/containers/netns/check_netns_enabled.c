@@ -11,7 +11,7 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 * Author: Veerendra C <vechandr@in.ibm.com>
 *
@@ -38,16 +38,15 @@ int TST_TOTAL = 1;
 #define CLONE_NEWNS -1
 #endif
 
-int
-main(void)
+int main(void)
 {
 	/* Checking if the kernel supports unshare with netns capabilities. */
 	if (CLONE_NEWNET == -1 || CLONE_NEWNS == -1)
-		tst_resm(TBROK|TERRNO,
-		    "CLONE_NEWNET (%d) or CLONE_NEWNS (%d) not supported",
-		    CLONE_NEWNET, CLONE_NEWNS);
-	else if (syscall(__NR_unshare, CLONE_NEWNET|CLONE_NEWNS) == -1)
-		tst_resm(TFAIL|TERRNO, "unshare syscall smoke test failed");
+		tst_resm(TBROK | TERRNO,
+			 "CLONE_NEWNET (%d) or CLONE_NEWNS (%d) not supported",
+			 CLONE_NEWNET, CLONE_NEWNS);
+	else if (syscall(__NR_unshare, CLONE_NEWNET | CLONE_NEWNS) == -1)
+		tst_resm(TFAIL | TERRNO, "unshare syscall smoke test failed");
 	else
 		tst_resm(TPASS, "unshare syscall smoke test passed");
 	tst_exit();

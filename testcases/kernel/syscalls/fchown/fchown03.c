@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -100,8 +100,8 @@ void cleanup();			/* cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat(2) struct contents */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	uid_t user_id;		/* Owner id of the test file. */
 	gid_t group_id;		/* Group id of the test file. */
 
@@ -180,7 +180,7 @@ int main(int ac, char **av)
 
 	cleanup();
 
-	  return (0);
+	return (0);
 }
 
 /*
@@ -201,8 +201,8 @@ void setup()
 	ltpuser = getpwnam(nobody_uid);
 	if (seteuid(ltpuser->pw_uid) == -1) {
 		tst_brkm(TBROK, cleanup, "seteuid failed to "
-			"to set the effective uid to %d: %s", ltpuser->pw_uid,
-				strerror(errno));
+			 "to set the effective uid to %d: %s", ltpuser->pw_uid,
+			 strerror(errno));
 	}
 
 	TEST_PAUSE;
@@ -218,11 +218,11 @@ void setup()
 	seteuid(0);
 	if (fchown(fildes, -1, 0) < 0)
 		tst_brkm(TBROK, cleanup, "Fail to modify Ownership of %s: %s",
-				TESTFILE, strerror(errno));
+			 TESTFILE, strerror(errno));
 
 	if (fchmod(fildes, NEW_PERMS) < 0)
 		tst_brkm(TBROK, cleanup, "Fail to modify Mode of %s: %s",
-				TESTFILE, strerror(errno));
+			 TESTFILE, strerror(errno));
 
 	setegid(ltpuser->pw_gid);
 	seteuid(ltpuser->pw_uid);

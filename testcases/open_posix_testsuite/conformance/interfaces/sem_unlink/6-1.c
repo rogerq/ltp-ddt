@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -48,8 +48,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -83,11 +83,11 @@
 /******************************************************************************/
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret, value;
 
-	sem_t * sem1, * sem2;
+	sem_t *sem1, *sem2;
 
 	/* Initialize output */
 	output_init();
@@ -95,44 +95,39 @@ int main(int argc, char * argv[])
 	/* Create the semaphore */
 	sem1 = sem_open(SEM_NAME, O_CREAT | O_EXCL, 0777, 1);
 
-	if ((sem1 == SEM_FAILED) && (errno == EEXIST))
-	{
+	if ((sem1 == SEM_FAILED) && (errno == EEXIST)) {
 		sem_unlink(SEM_NAME);
 		sem1 = sem_open(SEM_NAME, O_CREAT | O_EXCL, 0777, 1);
 	}
 
-	if (sem1 == SEM_FAILED)
-	{
+	if (sem1 == SEM_FAILED) {
 		UNRESOLVED(errno, "Failed to create the semaphore");
 	}
 
 	/* Unlink */
 	ret = sem_unlink(SEM_NAME);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to unlink the semaphore");
 	}
 
 	/* Try reconnect */
 	sem2 = sem_open(SEM_NAME, 0);
 
-	if (sem2 != SEM_FAILED)
-	{
+	if (sem2 != SEM_FAILED) {
 		FAILED("Reconnecting the unlinked semaphore did not failed");
 	}
 
-	if (errno != ENOENT)
-	{
+	if (errno != ENOENT) {
 		output("Error %d: %s\n", errno, strerror(errno));
-		FAILED("Reconnecting the unlinked semaphore failed with a wrong error");
+		FAILED
+		    ("Reconnecting the unlinked semaphore failed with a wrong error");
 	}
 
 	/* Reopen the semaphore */
 	sem2 = sem_open(SEM_NAME, O_CREAT | O_EXCL, 0777, 3);
 
-	if (sem2 == SEM_FAILED)
-	{
+	if (sem2 == SEM_FAILED) {
 		output("Gor error %d: %s\n", errno, strerror(errno));
 		FAILED("Failed to recreate the semaphore");
 	}
@@ -140,26 +135,22 @@ int main(int argc, char * argv[])
 	/* Check the semaphore have different values */
 	ret = sem_getvalue(sem1, &value);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to read sem1 value");
 	}
 
-	if (value != 1)
-	{
+	if (value != 1) {
 		output("Read: %d\n", value);
 		FAILED("Semaphore value is not as expected");
 	}
 
 	ret = sem_getvalue(sem2, &value);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to read sem1 value");
 	}
 
-	if (value != 3)
-	{
+	if (value != 3) {
 		output("Read: %d\n", value);
 		FAILED("Semaphore value is not as expected");
 	}
@@ -167,23 +158,20 @@ int main(int argc, char * argv[])
 	/* Unlink */
 	ret = sem_unlink(SEM_NAME);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to unlink the semaphore");
 	}
 
 	/* close both */
 	ret = sem_close(sem1);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to close the semaphore");
 	}
 
 	ret = sem_close(sem2);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to close the semaphore");
 	}
 

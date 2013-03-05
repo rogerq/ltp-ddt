@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -93,8 +93,8 @@ struct passwd *ltpuser;
 int main(int ac, char **av)
 {
 	char buffer[MAX_SIZE];	/* temporary buffer to hold symlink contents */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -172,7 +172,7 @@ void setup()
 		tst_brkm(TBROK, cleanup, "getpwname(nobody_uid) failed ");
 	}
 	if (seteuid(ltpuser->pw_uid) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup, "seteuid to nobody failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "seteuid to nobody failed");
 	}
 
 	tst_sig(NOFORK, DEF_HANDLER, cleanup);
@@ -182,19 +182,19 @@ void setup()
 	tst_tmpdir();
 
 	if ((fd = open(TESTFILE, O_RDWR | O_CREAT, FILE_MODE)) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "open(%s, O_RDWR|O_CREAT, %#o) failed",
 			 TESTFILE, FILE_MODE);
 	}
 
 	if (close(fd) == -1) {
-		tst_resm(TWARN|TERRNO, "close(%s) failed", TESTFILE);
+		tst_resm(TWARN | TERRNO, "close(%s) failed", TESTFILE);
 	}
 
 	/* Create a symlink of testfile under temporary directory */
 	if (symlink(TESTFILE, SYMFILE) < 0) {
-		tst_brkm(TBROK|TERRNO, cleanup, "symlink(%s, %s) failed",
-		    TESTFILE, SYMFILE);
+		tst_brkm(TBROK | TERRNO, cleanup, "symlink(%s, %s) failed",
+			 TESTFILE, SYMFILE);
 	}
 
 	/* Get the strlen of testfile */

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -93,8 +93,8 @@ void cleanup();			/* cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat(2) struct contents */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	off_t file_length;	/* test file length */
 
 	/* Parse standard options given to run the test. */
@@ -117,7 +117,8 @@ int main(int ac, char **av)
 		TEST(ftruncate(fildes, TRUNC_LEN));
 
 		if (TEST_RETURN == -1) {
-			tst_resm(TFAIL|TTERRNO, "ftruncate(%s) failed", TESTFILE);
+			tst_resm(TFAIL | TTERRNO, "ftruncate(%s) failed",
+				 TESTFILE);
 			continue;
 		}
 		/*
@@ -142,9 +143,10 @@ int main(int ac, char **av)
 			 * truncate(2) on it.
 			 */
 			if (file_length != TRUNC_LEN) {
-				tst_resm(TFAIL, "%s: Incorrect file size %"PRId64", "
-					 "Expected %d", TESTFILE, (int64_t)file_length,
-					 TRUNC_LEN);
+				tst_resm(TFAIL,
+					 "%s: Incorrect file size %" PRId64 ", "
+					 "Expected %d", TESTFILE,
+					 (int64_t) file_length, TRUNC_LEN);
 			} else {
 				tst_resm(TPASS, "Functionality of ftruncate() "
 					 "on %s successful", TESTFILE);
@@ -186,14 +188,15 @@ void setup()
 	/* open a file for reading/writing */
 	fildes = open(TESTFILE, O_RDWR | O_CREAT, FILE_MODE);
 	if (fildes == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "open(%s, O_RDWR|O_CREAT, %o) failed",
 			 TESTFILE, FILE_MODE);
 
 	/* Write to the file 1k data from the buffer */
 	while (c_total < FILE_SIZE) {
 		if ((c = write(fildes, tst_buff, sizeof(tst_buff))) <= 0) {
-			tst_brkm(TBROK|TERRNO, cleanup, "write(%s) failed", TESTFILE);
+			tst_brkm(TBROK | TERRNO, cleanup, "write(%s) failed",
+				 TESTFILE);
 		} else {
 			c_total += c;
 		}
@@ -216,7 +219,7 @@ void cleanup()
 
 	/* Close the testfile after writing data into it */
 	if (close(fildes) == -1)
-		tst_brkm(TFAIL|TERRNO, NULL, "close(%s) failed", TESTFILE);
+		tst_brkm(TFAIL | TERRNO, NULL, "close(%s) failed", TESTFILE);
 
 	tst_rmdir();
 

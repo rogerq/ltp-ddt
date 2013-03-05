@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -64,9 +64,7 @@ int main(int argc, char **argv)
 	pid_t pid, pid1;
 	int status;
 
-	/* parse standard options */
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) !=
-	    NULL) {
+	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
 
@@ -80,14 +78,14 @@ int main(int argc, char **argv)
 
 		if ((pid = FORK_OR_VFORK()) < 0) {
 			tst_brkm(TFAIL, cleanup, "fork failed");
-		 } else if (pid > 0) {	/* parent */
+		} else if (pid > 0) {	/* parent */
 			waitpid(pid, &status, 0);
 			_exit(0);
 		} else {	/* child */
 			pid1 = setsid();
 			if (pid1 < 0) {
 				tst_brkm(TFAIL, cleanup, "setsid failed");
-			 }
+			}
 			TEST(vhangup());
 			if (TEST_RETURN == -1) {
 				tst_resm(TFAIL, "vhangup() failed, errno:%d",
@@ -127,4 +125,4 @@ void cleanup(void)
 	 */
 	TEST_CLEANUP;
 
- }
+}

@@ -29,15 +29,16 @@
 #define INTHREAD 0
 #define INMAIN 1
 
-int result = 2;
-int sem = INMAIN;
+static int result = 2;
+static int sem = INTHREAD;
 
-void handler() {
+static void handler()
+{
 	printf("signal was called\n");
 	return;
 }
 
-void *a_thread_func()
+static void *a_thread_func()
 {
 	int return_value = 0;
 	struct sigaction act;
@@ -48,18 +49,20 @@ void *a_thread_func()
 	return_value = sigpause(SIGTOTEST);
 	if (return_value == -1) {
 		if (errno == EINTR) {
-			printf ("Test PASSED: sigpause returned -1 and set errno to EINTR\n");
+			printf("Test PASSED: sigpause returned -1 "
+			       "and set errno to EINTR\n");
 			result = 0;
 		} else {
-			printf ("Test FAILED: sigpause did not set errno to EINTR\n");
+			printf("Test FAILED: sigpause did not "
+			       "set errno to EINTR\n");
 			result = 1;
 		}
 	} else {
-		if (errno == EINTR) {
-			printf ("Test FAILED: sigpause did not return -1\n");
-		}
-		printf ("Test FAILED: sigpause did not set errno to EINTR\n");
-		printf ("Test FAILED: sigpause did not return -1\n");
+		if (errno == EINTR)
+			printf("Test FAILED: sigpause did not return -1\n");
+
+		printf("Test FAILED: sigpause did not set errno to EINTR\n");
+		printf("Test FAILED: sigpause did not return -1\n");
 		result = 1;
 
 	}
@@ -71,30 +74,26 @@ int main()
 {
 	pthread_t new_th;
 
-	if (pthread_create(&new_th, NULL, a_thread_func, NULL) != 0)
-	{
+	if (pthread_create(&new_th, NULL, a_thread_func, NULL) != 0) {
 		perror("Error creating thread\n");
 		return PTS_UNRESOLVED;
 	}
 
 	sleep(1);
 
-	if (pthread_kill(new_th, SIGTOTEST) != 0)
-	{
+	if (pthread_kill(new_th, SIGTOTEST) != 0) {
 		printf("Test UNRESOLVED: Couldn't send signal to thread\n");
 		return PTS_UNRESOLVED;
 	}
 
-	sem = INTHREAD;
 	while (sem == INTHREAD)
 		sleep(1);
 
-	if (result == 2) {
+	if (result == 2)
 		return PTS_UNRESOLVED;
-	}
-	if (result == 1) {
+
+	if (result == 1)
 		return PTS_FAIL;
-	}
 
 	printf("Test PASSED\n");
 	return PTS_PASS;

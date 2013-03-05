@@ -15,7 +15,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -62,6 +62,7 @@ int TST_TOTAL = 1;
 int fileHandle = 0;
 
 int exp_enos[] = { EACCES, 0 };
+
 char nobody_uid[] = "nobody";
 struct passwd *ltpuser;
 
@@ -74,10 +75,9 @@ void cleanup(void);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -130,7 +130,7 @@ void setup()
 	/* make a temporary directory and cd to it */
 	tst_tmpdir();
 	if (chmod(get_tst_tmpdir(), S_IRWXU) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "chmod(%s, 700) failed",
+		tst_brkm(TBROK | TERRNO, cleanup, "chmod(%s, 700) failed",
 			 get_tst_tmpdir());
 
 	/* create a test file */
@@ -140,14 +140,14 @@ void setup()
 	} else {
 		sprintf(path, "%s/%s", fname, fname);
 		if ((fileHandle = creat(path, 0444)) == -1)
-			tst_brkm(TFAIL|TERRNO, cleanup, "creat failed");
+			tst_brkm(TFAIL | TERRNO, cleanup, "creat failed");
 	}
 
 	ltpuser = getpwnam(nobody_uid);
 	if (ltpuser == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "getpwnam failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "getpwnam failed");
 	if (seteuid(ltpuser->pw_uid) == -1) {
-		tst_resm(TINFO|TERRNO, "seteuid failed to "
+		tst_resm(TINFO | TERRNO, "seteuid failed to "
 			 "to set the effective uid to %d", ltpuser->pw_uid);
 	}
 

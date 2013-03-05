@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -109,7 +109,7 @@
 static void setup(void);
 static void cleanup(void);
 
-char *TCID = "access03";	/* Test program identifier.	*/
+char *TCID = "access03";	/* Test program identifier.     */
 int TST_TOTAL = 8;		/* Total number of test cases. */
 
 int exp_enos[] = { EFAULT, 0 };	/* List must end with 0 */
@@ -122,8 +122,8 @@ void *high_addr;
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -178,12 +178,12 @@ void setup()
 	TEST_PAUSE;
 
 	low_addr = mmap(0, 1, PROT_NONE,
-	    MAP_PRIVATE_EXCEPT_UCLINUX|MAP_ANONYMOUS, 0, 0);
+			MAP_PRIVATE_EXCEPT_UCLINUX | MAP_ANONYMOUS, 0, 0);
 	if (low_addr == MAP_FAILED)
-		tst_brkm(TBROK|TERRNO, NULL, "mmap failed");
+		tst_brkm(TBROK | TERRNO, NULL, "mmap failed");
 	high_addr = get_high_address();
 	if (high_addr == NULL)
-		tst_brkm(TBROK|TERRNO, NULL, "get_high_address failed");
+		tst_brkm(TBROK | TERRNO, NULL, "get_high_address failed");
 	high_addr++;
 
 	tst_tmpdir();

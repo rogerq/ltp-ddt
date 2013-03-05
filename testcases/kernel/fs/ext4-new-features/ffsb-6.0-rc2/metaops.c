@@ -13,7 +13,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 #include <unistd.h>
 #include <sys/stat.h>
@@ -34,12 +34,12 @@
  *  renamefile
  */
 
-void metaops_metadir(ffsb_fs_t *fs, unsigned opnum)
+void metaops_metadir(ffsb_fs_t * fs, unsigned opnum)
 {
 	fs_set_opdata(fs, fs_get_metafiles(fs), opnum);
 }
 
-static void createdir(struct benchfiles *dirs, randdata_t *rd)
+static void createdir(struct benchfiles *dirs, randdata_t * rd)
 {
 	struct ffsb_file *newdir;
 
@@ -51,7 +51,7 @@ static void createdir(struct benchfiles *dirs, randdata_t *rd)
 	unlock_file_writer(newdir);
 }
 
-static void removedir(struct benchfiles *dirs, randdata_t *rd)
+static void removedir(struct benchfiles *dirs, randdata_t * rd)
 {
 	struct ffsb_file *deldir;
 
@@ -65,7 +65,7 @@ static void removedir(struct benchfiles *dirs, randdata_t *rd)
 	unlock_file_writer(deldir);
 }
 
-static void renamedir(struct benchfiles *dirs, randdata_t *rd)
+static void renamedir(struct benchfiles *dirs, randdata_t * rd)
 {
 	struct ffsb_file *dir;
 	char *oldname;
@@ -82,7 +82,7 @@ static void renamedir(struct benchfiles *dirs, randdata_t *rd)
 	free(oldname);
 }
 
-void ffsb_metaops(ffsb_thread_t *ft, ffsb_fs_t *fs, unsigned opnum)
+void ffsb_metaops(ffsb_thread_t * ft, ffsb_fs_t * fs, unsigned opnum)
 {
 	struct benchfiles *bf = (struct benchfiles *)fs_get_opdata(fs, opnum);
 	randdata_t *rd = ft_get_randdata(ft);
@@ -95,7 +95,7 @@ void ffsb_metaops(ffsb_thread_t *ft, ffsb_fs_t *fs, unsigned opnum)
 	ft_incr_op(ft, opnum, 1, 0);
 }
 
-void ffsb_createdir(ffsb_thread_t *ft, ffsb_fs_t *fs, unsigned opnum)
+void ffsb_createdir(ffsb_thread_t * ft, ffsb_fs_t * fs, unsigned opnum)
 {
 	struct benchfiles *bf = (struct benchfiles *)fs_get_opdata(fs, opnum);
 	struct ffsb_file *newdir;

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -92,9 +92,9 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
-	int i;			/* counter variable for test case looping */
+	int lc;
+	char *msg;
+	int i;
 	int incr_val;		/* nice value for the process */
 	char *test_desc;	/* test specific error message */
 
@@ -126,7 +126,7 @@ int main(int ac, char **av)
 				tst_resm(TPASS, "nice(2) returned %ld for %s",
 					 TEST_RETURN, test_desc);
 			} else {
-				tst_resm(TFAIL|TTERRNO,
+				tst_resm(TFAIL | TTERRNO,
 					 "nice() returned %ld for %s",
 					 TEST_RETURN, test_desc);
 			}

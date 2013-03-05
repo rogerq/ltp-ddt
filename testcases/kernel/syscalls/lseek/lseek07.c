@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -95,8 +95,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	char read_buf[BUFSIZ];	/* data read from temp. file */
 	off_t offset;		/* byte position in temporary file */
 
@@ -120,8 +120,8 @@ int main(int ac, char **av)
 		TEST(lseek(fildes, offset, SEEK_SET));
 
 		if (TEST_RETURN == (off_t) - 1) {
-			tst_resm(TFAIL|TTERRNO, "lseek on (%s) failed",
-			    TEMP_FILE);
+			tst_resm(TFAIL | TTERRNO, "lseek on (%s) failed",
+				 TEMP_FILE);
 			continue;
 		}
 		/*
@@ -136,7 +136,8 @@ int main(int ac, char **av)
 			if (TEST_RETURN != offset) {
 				tst_resm(TFAIL, "lseek() returned "
 					 "incorrect value %ld, expected "
-					 "%"PRId64, TEST_RETURN, (int64_t)offset);
+					 "%" PRId64, TEST_RETURN,
+					 (int64_t) offset);
 				continue;
 			}
 			/*
@@ -145,8 +146,8 @@ int main(int ac, char **av)
 			 */
 			if (write(fildes, write_buf2, strlen(write_buf2)) !=
 			    strlen(write_buf2)) {
-				tst_brkm(TFAIL|TERRNO, cleanup,
-				    "write() failed to write additional data");
+				tst_brkm(TFAIL | TERRNO, cleanup,
+					 "write() failed to write additional data");
 			}
 
 			/*

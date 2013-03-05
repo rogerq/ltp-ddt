@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -87,7 +87,7 @@ int main(int ac, char **av)
 {
 	FILE *fin;
 	char *cp, *cp_cur;
-	int lc;			/* loop counter */
+	int lc;
 	char *msg;		/* parse_opts() return message */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
@@ -104,11 +104,11 @@ int main(int ac, char **av)
 		if ((fin = popen(pwd, "r")) == NULL) {
 			tst_resm(TINFO, "%s: can't run %s", TCID, pwd);
 			tst_brkm(TBROK, cleanup, "%s FAILED", TCID);
-		 }
+		}
 		while (fgets(pwd_buf, sizeof(pwd_buf), fin) != NULL) {
 			if ((cp = strchr(pwd_buf, '\n')) == NULL) {
 				tst_brkm(TBROK, cleanup, "pwd output too long");
-			 }
+			}
 			*cp = 0;
 			cp_cur = pwd_buf;
 		}

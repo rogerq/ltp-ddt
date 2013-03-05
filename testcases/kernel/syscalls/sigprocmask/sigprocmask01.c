@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -89,6 +89,7 @@ void sig_handler(int sig);	/* signal catching function */
 char *TCID = "sigprocmask01";	/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 int exp_enos[] = { 0 };
+
 int sig_catch = 0;		/* variable to blocked/unblocked signals */
 
 struct sigaction sa_new;	/* struct to hold signal info */
@@ -97,8 +98,8 @@ sigset_t sigset2;
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	pid_t my_pid;		/* test process id */
 
 	/* Parse standard options given to run the test. */
@@ -171,7 +172,7 @@ int main(int ac, char **av)
 						tst_brkm(TFAIL, cleanup,
 							 "sigismember() failed, "
 							 "error:%d", errno);
-					 }
+					}
 
 					/*
 					 * Invoke sigprocmask() again to
@@ -186,7 +187,7 @@ int main(int ac, char **av)
 							 "sigprocmask() failed "
 							 "to unblock signal, "
 							 "error=%d", errno);
-					 }
+					}
 					if (sig_catch) {
 						tst_resm(TPASS, "Functionality "
 							 "of sigprocmask() "
@@ -236,12 +237,12 @@ void setup()
 		tst_brkm(TFAIL, cleanup,
 			 "sigemptyset() failed, errno=%d : %s",
 			 errno, strerror(errno));
-	 }
+	}
 	if (sigfillset(&sigset2) == -1) {
 		tst_brkm(TFAIL, cleanup,
 			 "sigfillset() failed, errno=%d : %s",
 			 errno, strerror(errno));
-	 }
+	}
 
 	/* Set the signal handler function to catch the signal */
 	sa_new.sa_handler = sig_handler;
@@ -249,7 +250,7 @@ void setup()
 		tst_brkm(TFAIL, cleanup,
 			 "sigaction() failed, errno=%d : %s",
 			 errno, strerror(errno));
-	 }
+	}
 
 	/*
 	 * Add specified signal (SIGINT) to the signal set
@@ -259,7 +260,7 @@ void setup()
 		tst_brkm(TFAIL, cleanup,
 			 "sigaddset() failed, errno=%d : %s",
 			 errno, strerror(errno));
-	 }
+	}
 }
 
 /*

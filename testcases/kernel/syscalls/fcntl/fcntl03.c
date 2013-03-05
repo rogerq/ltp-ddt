@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -132,8 +132,8 @@ int fd;
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -149,12 +149,11 @@ int main(int ac, char **av)
 		TEST(fcntl(fd, F_GETFD, 0));
 
 		if (TEST_RETURN == -1)
-			tst_resm(TFAIL|TTERRNO, "fcntl failed");
-		else
-			if (STD_FUNCTIONAL_TEST)
-				tst_resm(TPASS,
-					 "fcntl(%s, F_GETFD, 0) returned %ld",
-					 fname, TEST_RETURN);
+			tst_resm(TFAIL | TTERRNO, "fcntl failed");
+		else if (STD_FUNCTIONAL_TEST)
+			tst_resm(TPASS,
+				 "fcntl(%s, F_GETFD, 0) returned %ld",
+				 fname, TEST_RETURN);
 
 	}
 
@@ -174,7 +173,7 @@ void setup()
 
 	sprintf(fname, "tfile_%d", getpid());
 	if ((fd = open(fname, O_RDWR | O_CREAT, 0700)) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "open failed");
 }
 
 void cleanup()
@@ -182,7 +181,7 @@ void cleanup()
 	TEST_CLEANUP;
 
 	if (close(fd) == -1)
-		tst_resm(TWARN|TERRNO, "close failed");
+		tst_resm(TWARN | TERRNO, "close failed");
 
 	tst_rmdir();
 }

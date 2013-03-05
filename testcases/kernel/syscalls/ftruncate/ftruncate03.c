@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -110,13 +110,13 @@ int main()
 	errno = 0;
 	wjh_f = open(TESTFILE, O_RDWR | O_CREAT, 0644);
 	if (wjh_f == -1) {
-		tst_resm(TFAIL|TERRNO, "open(%s) failed", TESTFILE);
+		tst_resm(TFAIL | TERRNO, "open(%s) failed", TESTFILE);
 		tst_rmdir();
 		tst_exit();
 	}
 	while (count < strlen(str)) {
 		if ((count += write(wjh_f, str, strlen(str))) == -1) {
-			tst_resm(TFAIL|TERRNO, "write() failed");
+			tst_resm(TFAIL | TERRNO, "write() failed");
 			close(wjh_f);
 			tst_rmdir();
 			tst_exit();
@@ -135,7 +135,7 @@ int main()
 
 	wjh_f = open(TESTFILE, flag);
 	if (wjh_f == -1) {
-		tst_resm(TFAIL|TERRNO, "open(%s) failed", TESTFILE);
+		tst_resm(TFAIL | TERRNO, "open(%s) failed", TESTFILE);
 		tst_rmdir();
 		tst_exit();
 	}
@@ -150,7 +150,7 @@ int main()
 		if (wjh_ret == 0) {
 			tst_resm(TPASS, "Test Succeeded!");
 		} else {
-			tst_resm(TFAIL|TERRNO,
+			tst_resm(TFAIL | TERRNO,
 				 "ftruncate(%s) should have succeeded, but didn't! ret="
 				 "%d (wanted 0)", TESTFILE, wjh_ret);
 		}
@@ -177,7 +177,7 @@ int main()
 	       wjh_f, wjh_ret, errno, strerror(errno));
 #endif
 	if (wjh_ret != -1 || errno != EBADF) {
-		tst_resm(TFAIL|TERRNO,
+		tst_resm(TFAIL | TERRNO,
 			 "ftruncate(invalid_fd)=%d (wanted -1 and EBADF)",
 			 wjh_ret);
 	} else {

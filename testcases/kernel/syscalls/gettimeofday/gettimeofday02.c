@@ -11,7 +11,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -110,8 +110,8 @@ int main(int ac, char **av)
 		    (tv2.tv_sec == tv1.tv_sec && tv2.tv_usec < tv1.tv_usec)) {
 			tst_resm(TFAIL,
 				 "Time is going backwards: old %jd.%jd vs new %jd.%jd!",
-				 (intmax_t)tv1.tv_sec, (intmax_t)tv1.tv_usec, (intmax_t)tv2.tv_sec,
-				 (intmax_t)tv2.tv_usec);
+				 (intmax_t) tv1.tv_sec, (intmax_t) tv1.tv_usec,
+				 (intmax_t) tv2.tv_sec, (intmax_t) tv2.tv_usec);
 			cleanup();
 			return 1;
 		}

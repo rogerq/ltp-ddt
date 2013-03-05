@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * NAME
  *      test-skeleton.c
@@ -69,19 +69,18 @@ int parse_args(int c, char *v)
 
 static pid_t pid;
 
-static void
-timeout_handler(int sig)
+static void timeout_handler(int sig)
 {
 	int i, killed, status;
-	struct timespec ts = { .tv_sec = 0, .tv_nsec = 100000000 };
+	struct timespec ts = {.tv_sec = 0,.tv_nsec = 100000000 };
 
 	printf("Inside the timeout handler, killing the TC threads \n");
 	kill(pid, SIGKILL);
 	for (i = 0; i < 5; i++) {
-		killed = waitpid(pid, &status, WNOHANG|WUNTRACED);
+		killed = waitpid(pid, &status, WNOHANG | WUNTRACED);
 		if (0 != killed)
 			break;
-      		nanosleep(&ts, NULL);
+		nanosleep(&ts, NULL);
 	}
 
 	if (0 != killed && pid != killed) {
@@ -92,11 +91,10 @@ timeout_handler(int sig)
 	exit(1);
 }
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	pid_t termpid;
- 	int status;
+	int status;
 	setup();
 
 	rt_init("h", parse_args, argc, argv);
@@ -104,8 +102,7 @@ main(int argc, char **argv)
 	pid = fork();
 	if (0 == pid) {
 		exit(TEST_FUNCTION);
-	}
-	else if (pid < 0) {
+	} else if (pid < 0) {
 		printf("\n Cannot fork test program \n");
 		exit(1);
 	}

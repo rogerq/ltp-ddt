@@ -19,8 +19,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
 /*
@@ -112,8 +112,8 @@ char fname[255];
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 #if defined (__s390__) || (__s390x__) || (__ia64__)
 	/* Disables the test in case the kernel version is lower than 2.6.12 and arch is s390 */
@@ -124,7 +124,6 @@ int main(int ac, char **av)
 	}
 #endif
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -163,14 +162,13 @@ static void test_nonlinear(int fd)
 
 	if (write(fd, cache_contents, cache_sz) != cache_sz) {
 		tst_resm(TFAIL,
-			 "Write Error for \"cache_contents\" to \"cache_sz\" of %d (errno=%d : %s)",
+			 "Write Error for \"cache_contents\" to \"cache_sz\" of %zu (errno=%d : %s)",
 			 cache_sz, errno, strerror(errno));
 		cleanup(NULL);
 	}
 
 	data = mmap((void *)WINDOW_START,
-		    window_sz,
-		    PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+		    window_sz, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
 	if (data == MAP_FAILED) {
 		tst_resm(TFAIL, "mmap Error, errno=%d : %s", errno,
@@ -178,14 +176,14 @@ static void test_nonlinear(int fd)
 		cleanup(NULL);
 	}
 
-      again:
+again:
 	for (i = 0; i < window_pages; i += 2) {
 		char *page = data + i * page_sz;
 
 		if (remap_file_pages(page, page_sz * 2, 0,
 				     (window_pages - i - 2), 0) == -1) {
-			tst_resm(TFAIL|TERRNO,
-				 "remap_file_pages error for page=%p, page_sz=%d, window_pages=%d",
+			tst_resm(TFAIL | TERRNO,
+				 "remap_file_pages error for page=%p, page_sz=%zu, window_pages=%zu",
 				 page, (page_sz * 2), (window_pages - i - 2));
 			cleanup(data);
 		}
@@ -198,7 +196,7 @@ static void test_nonlinear(int fd)
 		if (i & 1) {
 			if (data[i * page_sz] != window_pages - i) {
 				tst_resm(TFAIL,
-					 "hm, mapped incorrect data, data[%d]=%d, (window_pages-%d)=%d",
+					 "hm, mapped incorrect data, data[%zu]=%d, (window_pages-%d)=%zu",
 					 (i * page_sz), data[i * page_sz], i,
 					 (window_pages - i));
 				cleanup(data);
@@ -206,7 +204,7 @@ static void test_nonlinear(int fd)
 		} else {
 			if (data[i * page_sz] != window_pages - i - 2) {
 				tst_resm(TFAIL,
-					 "hm, mapped incorrect data, data[%d]=%d, (window_pages-%d-2)=%d",
+					 "hm, mapped incorrect data, data[%zu]=%d, (window_pages-%d-2)=%zu",
 					 (i * page_sz), data[i * page_sz], i,
 					 (window_pages - i - 2));
 				cleanup(data);

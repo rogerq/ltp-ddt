@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -101,8 +101,8 @@ void cleanup();			/* Main cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat(2) struct contents */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -120,7 +120,7 @@ int main(int ac, char **av)
 		TEST(chmod(TESTFILE, PERMS));
 
 		if (TEST_RETURN == -1) {
-			tst_resm(TFAIL|TTERRNO, "chmod(%s, %#o) failed",
+			tst_resm(TFAIL | TTERRNO, "chmod(%s, %#o) failed",
 				 TESTFILE, PERMS);
 			continue;
 		}
@@ -134,7 +134,8 @@ int main(int ac, char **av)
 			 * stat(2).
 			 */
 			if (stat(TESTFILE, &stat_buf) == -1)
-				tst_brkm(TFAIL|TTERRNO, cleanup, "stat failed");
+				tst_brkm(TFAIL | TTERRNO, cleanup,
+					 "stat failed");
 
 			/* Check for expected mode permissions */
 			if ((stat_buf.st_mode & PERMS) == PERMS)
@@ -143,8 +144,8 @@ int main(int ac, char **av)
 					 TESTFILE, PERMS);
 			else
 				tst_resm(TFAIL, "%s: Incorrect modes 0%03o; "
-				    "expected 0%03o", TESTFILE,
-				    stat_buf.st_mode, PERMS);
+					 "expected 0%03o", TESTFILE,
+					 stat_buf.st_mode, PERMS);
 		} else
 			tst_resm(TPASS, "call succeeded");
 	}
@@ -187,19 +188,19 @@ void setup()
 		tst_brkm(TBROK, cleanup, "getgrnam failed");
 	group1_gid = ltpgroup->gr_gid;
 
-	fd = open(TESTFILE, O_RDWR|O_CREAT, FILE_MODE);
+	fd = open(TESTFILE, O_RDWR | O_CREAT, FILE_MODE);
 	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "open(%s, O_RDWR|O_CREAT, %#o) failed",
 			 TESTFILE, FILE_MODE);
 	if (close(fd) == -1)
-		tst_brkm(TBROK, cleanup, "close(%s) failed",
-			 TESTFILE);
+		tst_brkm(TBROK, cleanup, "close(%s) failed", TESTFILE);
 	if (chown(TESTFILE, user1_uid, group1_gid) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "chown(%s) failed", TESTFILE);
+		tst_brkm(TBROK | TERRNO, cleanup, "chown(%s) failed", TESTFILE);
 
 	if (setgid(group1_gid) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "setgid(%d) failed", group1_gid);
+		tst_brkm(TBROK | TERRNO, cleanup, "setgid(%d) failed",
+			 group1_gid);
 }
 
 void cleanup()

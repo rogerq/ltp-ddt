@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -50,6 +50,7 @@
  */
 
 #include <sys/file.h>
+#include <sys/resource.h>
 #include <sys/signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -57,26 +58,24 @@
 #include "test.h"
 #include "usctest.h"
 
-void do_child(void);
-void setup(void);
-void cleanup(void);
+static void do_child(void);
+static void setup(void);
+static void cleanup(void);
 
 char *TCID = "waitpid02";
 int TST_TOTAL = 1;
 
 int main(int argc, char **argv)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	int pid, npid, sig, nsig;
 	int exno, nexno, status;
 
-	/* parse standard options */
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) !=
-	    NULL) {
+	msg = parse_opts(argc, argv, NULL, NULL);
+	if (msg != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-	}
 #ifdef UCLINUX
 	maybe_run_child(&do_child, "");
 #endif
@@ -105,9 +104,8 @@ int main(int argc, char **argv)
 			errno = 0;
 			while (((npid = waitpid(pid, &status, 0)) != -1) ||
 			       (errno == EINTR)) {
-				if (errno == EINTR) {
+				if (errno == EINTR)
 					continue;
-				}
 
 				if (npid != pid) {
 					tst_resm(TFAIL, "waitpid error: "
@@ -146,20 +144,13 @@ int main(int argc, char **argv)
 				}
 			}
 		}
-
-		if (access("core", F_OK) == 0) {
-			unlink("core");
-		}
 	}
+
 	cleanup();
 	tst_exit();
-
 }
 
-/*
- * do_child()
- */
-void do_child()
+static void do_child(void)
 {
 	int exno = 1;
 
@@ -169,29 +160,19 @@ void do_child()
 	exit(exno);
 }
 
-/*
- * setup()
- *      performs all ONE TIME setup for this test
- */
-void setup(void)
+static void setup(void)
 {
-	/* Pause if that option was specified
-	 * TEST_PAUSE contains the code to fork the test with the -c option.
-	 */
+	/* SIGFPE is expected signal, so avoid creating any corefile.
+	 * '1' is a special value, that will also avoid dumping via pipe. */
+	struct rlimit r;
+	r.rlim_cur = 1;
+	r.rlim_max = 1;
+	setrlimit(RLIMIT_CORE, &r);
+
 	TEST_PAUSE;
 }
 
-/*
- * cleanup()
- *	performs all ONE TIME cleanup for this test at
- *	completion or premature exit
- */
-void cleanup(void)
+static void cleanup(void)
 {
-	/*
-	 * print timing stats if that option was specified.
-	 * print errno log if that option was specified.
-	 */
 	TEST_CLEANUP;
-
- }
+}

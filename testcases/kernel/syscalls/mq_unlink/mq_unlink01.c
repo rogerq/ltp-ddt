@@ -16,7 +16,7 @@
 /*									    */
 /* You should have received a copy of the GNU General Public License	  */
 /* along with this program;  if not, write to the Free Software	       */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*									    */
 /******************************************************************************/
 /******************************************************************************/
@@ -70,9 +70,9 @@
 /* Extern Global Variables */
 
 /* Global Variables */
-char *TCID = "mq_ulink01";  /* Test program identifier.*/
-int  testno;
-int  TST_TOTAL = 1;		   /* total number of tests in this file.   */
+char *TCID = "mq_ulink01";	/* Test program identifier. */
+int testno;
+int TST_TOTAL = 1;		/* total number of tests in this file.   */
 
 /* Extern Global Functions */
 /******************************************************************************/
@@ -92,7 +92,8 @@ int  TST_TOTAL = 1;		   /* total number of tests in this file.   */
 /*	      On success - Exits calling tst_exit(). With '0' return code.  */
 /*									    */
 /******************************************************************************/
-extern void cleanup() {
+extern void cleanup()
+{
 
 	TEST_CLEANUP;
 	tst_rmdir();
@@ -116,7 +117,8 @@ extern void cleanup() {
 /*	      On success - returns 0.				       */
 /*									    */
 /******************************************************************************/
-void setup() {
+void setup()
+{
 	tst_require_root(tst_exit);
 	/* Capture signals if any */
 	/* Create temporary directories */
@@ -154,47 +156,45 @@ struct test_case {
 */
 
 static struct test_case tcase[] = {
-	{ // case00
-		.ttype	  = NORMAL,
-		.qname	  = QUEUE_NAME,
-		.ret	    = 0,
-		.err	    = 0,
-	},
-	{ // case01
-		.ttype	  = NORMAL,
-		.user	   = "nobody",
-		.qname	  = QUEUE_NAME,
-		.ret	    = -1,
-		.err	    = EACCES,
-	},
-	{ // case02
-		.ttype	  = NORMAL,
-				//  0	 1	 2	 3
-				//  0123456789012345678901234567890123456789
-		.qname	  = "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaa",
-		.ret	    = -1,
-		.err	    = ENOENT,
-	},
-	{ // case03
-		.ttype	  = NORMAL,
-				//  0	 1	 2	 3
-				//  0123456789012345678901234567890123456789
-		.qname	  = "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" \
-				   "aaaaaaaaaaaaaaaa",
-		.ret	    = -1,
-		.err	    = ENAMETOOLONG,
-	},
+	{			// case00
+	 .ttype = NORMAL,
+	 .qname = QUEUE_NAME,
+	 .ret = 0,
+	 .err = 0,
+	 },
+	{			// case01
+	 .ttype = NORMAL,
+	 .user = "nobody",
+	 .qname = QUEUE_NAME,
+	 .ret = -1,
+	 .err = EACCES,
+	 },
+	{			// case02
+	 .ttype = NORMAL,
+	 //  0    1       2       3
+	 //  0123456789012345678901234567890123456789
+	 .qname = "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" "aaaaaaaaaaaaaaa",
+	 .ret = -1,
+	 .err = ENOENT,
+	 },
+	{			// case03
+	 .ttype = NORMAL,
+	 //  0    1       2       3
+	 //  0123456789012345678901234567890123456789
+	 .qname = "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" "aaaaaaaaaaaaaaaa",
+	 .ret = -1,
+	 .err = ENAMETOOLONG,
+	 },
 };
 
 /*
@@ -222,9 +222,9 @@ static int do_test(struct test_case *tc)
 	/*
 	 * Open message queue
 	 */
-	rc = mq_open(QUEUE_NAME, O_CREAT|O_EXCL|O_RDWR, S_IRWXU, NULL);
+	rc = mq_open(QUEUE_NAME, O_CREAT | O_EXCL | O_RDWR, S_IRWXU, NULL);
 	if (rc == -1) {
-		tst_resm(TFAIL|TTERRNO, "mq_open failed");
+		tst_resm(TFAIL | TTERRNO, "mq_open failed");
 		result = 1;
 		goto EXIT;
 	}
@@ -268,16 +268,12 @@ EXIT:
 	return 0;
 }
 
-/*
- * main()
- */
-
-int main(int ac, char **av) {
+int main(int ac, char **av)
+{
 	int i;
 	int lc;
 	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -291,11 +287,8 @@ int main(int ac, char **av) {
 
 			ret = 0;
 
-			/*
-			 * Execute test
-			 */
 			for (i = 0; ret == 0 &&
-				    i < (int)(sizeof(tcase) / sizeof(tcase[0])); i++) {
+			     i < (int)(sizeof(tcase) / sizeof(tcase[0])); i++) {
 				ret = do_test(&tcase[i]);
 			}
 

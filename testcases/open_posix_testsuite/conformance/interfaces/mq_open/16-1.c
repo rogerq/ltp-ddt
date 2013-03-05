@@ -20,9 +20,11 @@
  * this is fine (will have some false positives, but no false negatives).
  */
 
+#include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <mqueue.h>
 #include <signal.h>
@@ -32,60 +34,84 @@
 #include "posixtest.h"
 
 #define NAMESIZE 50
+#define TNAME "mq_open/16-1.c"
 
 int main()
 {
-       	char qname[NAMESIZE];
-	int pid, succeeded=0;
+	char qname[NAMESIZE];
+	char fname[NAMESIZE];
+	int pid, succeeded = 0;
+	int fd;
+	void *pa = NULL;
 	mqd_t childqueue, queue;
 
 	/*
 	 * initialize both queues
 	 */
-	childqueue = (mqd_t)-1;
-	queue = (mqd_t)-1;
+	childqueue = (mqd_t) - 1;
+	queue = (mqd_t) - 1;
 
-       	sprintf(qname, "/mq_open_16-1_%d", getpid());
+	sprintf(qname, "/mq_open_16-1_%d", getpid());
 
-	if ((pid = fork()) == 0) {
+	sprintf(fname, "/tmp/pts_mq_open_16_1_%d", getpid());
+	unlink(fname);
+	fd = open(fname, O_CREAT | O_RDWR | O_EXCL, S_IRUSR | S_IWUSR);
+	if (fd == -1) {
+		printf(TNAME " Error at open(): %s\n", strerror(errno));
+		exit(PTS_UNRESOLVED);
+	}
+	/* file is empty now, will cause "Bus error" */
+	write(fd, fname, sizeof(int));
+	unlink(fname);
+
+	pa = mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	if (pa == MAP_FAILED) {
+		printf(TNAME " Error at mmap: %s\n", strerror(errno));
+		close(fd);
+		exit(PTS_FAIL);
+	}
+	*(int *)pa = 0;
+
+	pid = fork();
+	if (pid == 0) {
 		sigset_t mask;
 		int sig;
 
 		/* child here */
 
-		/* try to sync with parent for mq_open*/
+		/* try to sync with parent for mq_open */
 		sigemptyset(&mask);
 		sigaddset(&mask, SIGUSR1);
-		sigprocmask(SIG_BLOCK,&mask,NULL);
+		sigprocmask(SIG_BLOCK, &mask, NULL);
 		sigwait(&mask, &sig);
 
-        	childqueue = mq_open(qname, O_CREAT|O_EXCL|O_RDWR,
-				S_IRUSR | S_IWUSR, NULL);
-        	if (childqueue != (mqd_t)-1) {
-			succeeded++;
+		childqueue = mq_open(qname, O_CREAT | O_EXCL | O_RDWR,
+				     S_IRUSR | S_IWUSR, NULL);
+		if (childqueue != (mqd_t) - 1) {
+			++*(int *)pa;
 #ifdef DEBUG
 			printf("mq_open() in child succeeded\n");
 		} else {
 			printf("mq_open() in child failed\n");
 #endif
-        	}
+		}
 	} else {
 		/* parent here */
 		int i;
 
 		sleep(1);
-		kill(pid, SIGUSR1); //tell child ready to call mq_open
+		kill(pid, SIGUSR1);
 
-        	queue = mq_open(qname, O_CREAT | O_EXCL |O_RDWR,
+		queue = mq_open(qname, O_CREAT | O_EXCL | O_RDWR,
 				S_IRUSR | S_IWUSR, NULL);
-        	if (queue != (mqd_t)-1) {
-			succeeded++;
+		if (queue != (mqd_t) - 1) {
+			++*(int *)pa;
 #ifdef DEBUG
 			printf("mq_open() in parent succeeded\n");
 		} else {
 			printf("mq_open() in parent failed\n");
 #endif
-        	}
+		}
 
 		if (wait(&i) == -1) {
 			perror("Error waiting for child to exit");
@@ -93,6 +119,8 @@ int main()
 			mq_close(queue);
 			mq_close(childqueue);
 			mq_unlink(qname);
+			close(fd);
+			munmap(pa, sizeof(int));
 			return PTS_UNRESOLVED;
 		}
 
@@ -100,18 +128,22 @@ int main()
 		mq_close(childqueue);
 		mq_unlink(qname);
 
-		if (succeeded==0) {
+		succeeded = *(int *)pa;
+		close(fd);
+		munmap(pa, sizeof(int));
+
+		if (succeeded == 0) {
 			printf("Test FAILED - mq_open() never succeeded\n");
 			return PTS_FAIL;
 		}
 
-		if (succeeded>1) {
+		if (succeeded > 1) {
 			printf("Test FAILED - mq_open() succeeded twice\n");
 			return PTS_FAIL;
 		}
 
-        	printf("Test PASSED\n");
-        	return PTS_PASS;
+		printf("Test PASSED\n");
+		return PTS_PASS;
 	}
 
 	return PTS_UNRESOLVED;

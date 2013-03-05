@@ -8,6 +8,8 @@
 
 #define _GNU_SOURCE
 
+#include <config.h>
+
 #include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -15,8 +17,7 @@
 #include <unistd.h>
 #include <sys/ptrace.h>
 #include <sys/syscall.h>
-#include <linux/ptrace.h>
-#include <asm/ptrace.h>
+#include "ptrace.h"
 
 #include "test.h"
 #include "usctest.h"
@@ -65,22 +66,33 @@ static void decode_regs(struct pt_regs *pt)
 	decode(ebp);
 	decode_sysnum(nr);
 	puts("");
+#elif defined(__x86_64__)
+	long nr = decode_user("orig_rax", 8 * ORIG_RAX);
+	decode(rax);
+	decode(rbx);
+	decode(rcx);
+	decode(rdx);
+	decode(rsi);
+	decode(rdi);
+	decode(rbp);
+	decode_sysnum(nr);
+	puts("");
 #elif defined(__sparc__)
-	#define G1 u_regs[0]
-	#define G2 u_regs[1]
-	#define G3 u_regs[2]
-	#define G4 u_regs[3]
-	#define G5 u_regs[4]
-	#define G6 u_regs[5]
-	#define G7 u_regs[6]
-	#define O0 u_regs[7]
-	#define O1 u_regs[8]
-	#define O2 u_regs[9]
-	#define O3 u_regs[10]
-	#define O4 u_regs[11]
-	#define O5 u_regs[12]
-	#define O6 u_regs[13]
-	#define O7 u_regs[14]
+#define G1 u_regs[0]
+#define G2 u_regs[1]
+#define G3 u_regs[2]
+#define G4 u_regs[3]
+#define G5 u_regs[4]
+#define G6 u_regs[5]
+#define G7 u_regs[6]
+#define O0 u_regs[7]
+#define O1 u_regs[8]
+#define O2 u_regs[9]
+#define O3 u_regs[10]
+#define O4 u_regs[11]
+#define O5 u_regs[12]
+#define O6 u_regs[13]
+#define O7 u_regs[14]
 	decode(G1);
 	decode(G2);
 	decode(G3);
@@ -99,7 +111,7 @@ static void decode_regs(struct pt_regs *pt)
 	decode_sysnum(pt->G1);
 	puts("");
 #else
-# warning "no idea how to decode your arch"
+#warning "no idea how to decode your arch"
 	puts("no idea how to decode your arch");
 #endif
 }

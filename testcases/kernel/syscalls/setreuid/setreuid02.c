@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -69,7 +69,6 @@
 #include "usctest.h"
 #include <errno.h>
 
-
 char *TCID = "setreuid02";
 uid_t nobody_pw_uid, root_pw_uid, daemon_pw_uid, bin_pw_uid;
 uid_t neg_one = -1;
@@ -108,14 +107,13 @@ void uid_verify(struct passwd *ru, struct passwd *eu, char *when);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
-	 }
+	}
 
 	setup();
 
@@ -167,12 +165,12 @@ void setup(void)
 	if (getpwnam("nobody") == NULL) {
 		tst_brkm(TBROK, NULL, "nobody must be a valid user.");
 		tst_exit();
-	 }
+	}
 
 	if (getpwnam("daemon") == NULL) {
 		tst_brkm(TBROK, NULL, "daemon must be a valid user.");
 		tst_exit();
-	 }
+	}
 
 	/* Check that the test process id is root  */
 	if (geteuid() != 0) {
@@ -214,7 +212,7 @@ void cleanup(void)
 	 */
 	TEST_CLEANUP;
 
- }
+}
 
 void uid_verify(struct passwd *ru, struct passwd *eu, char *when)
 {

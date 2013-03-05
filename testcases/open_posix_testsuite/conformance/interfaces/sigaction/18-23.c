@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertions:
 *
@@ -46,8 +46,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -101,34 +101,31 @@ int main()
 	sa.sa_handler = handler;
 	ret = sigemptyset(&sa.sa_mask);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to empty signal set");
 	}
 
 	/* Install the signal handler for SIGURG */
 	ret = sigaction(SIGNAL, &sa, 0);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to set signal handler");
 	}
 
-	if (called)
-	{
-		FAILED("The signal handler has been called when no signal was raised");
+	if (called) {
+		FAILED
+		    ("The signal handler has been called when no signal was raised");
 	}
 
 	ret = raise(SIGNAL);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to raise SIGURG");
 	}
 
-	if (!called)
-	{
-		FAILED("the sa_handler was not called whereas SA_SIGINFO was not set");
+	if (!called) {
+		FAILED
+		    ("the sa_handler was not called whereas SA_SIGINFO was not set");
 	}
 
 	/* Test passed */

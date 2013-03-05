@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /* Author: Li Zefan <lizf@cn.fujitsu.com>                                     */
 /*                                                                            */
@@ -47,7 +47,7 @@ int opt_mmap_lock2;
 int opt_shm;
 int opt_hugepage;
 
-int key_id;		/* used with opt_shm */
+int key_id;			/* used with opt_shm */
 unsigned long memsize;
 
 #define FILE_HUGEPAGE	"/hugetlb/hugepagefile"
@@ -60,15 +60,15 @@ unsigned long memsize;
 #define HUGEPAGE	(SCHAR_MAX + 6)
 
 const struct option long_opts[] = {
-	{ "mmap-anon",	0, NULL, MMAP_ANON	},
-	{ "mmap-file",	0, NULL, MMAP_FILE	},
-	{ "mmap-lock1",	0, NULL, MMAP_LOCK1	},
-	{ "mmap-lock2",	0, NULL, MMAP_LOCK2	},
-	{ "shm",	0, NULL, SHM		},
-	{ "hugepage",	0, NULL, HUGEPAGE	},
-	{ "size",	1, NULL, 's'		},
-	{ "key",	1, NULL, 'k'		},
-	{ NULL,		0, NULL, 0		},
+	{"mmap-anon", 0, NULL, MMAP_ANON},
+	{"mmap-file", 0, NULL, MMAP_FILE},
+	{"mmap-lock1", 0, NULL, MMAP_LOCK1},
+	{"mmap-lock2", 0, NULL, MMAP_LOCK2},
+	{"shm", 0, NULL, SHM},
+	{"hugepage", 0, NULL, HUGEPAGE},
+	{"size", 1, NULL, 's'},
+	{"key", 1, NULL, 'k'},
+	{NULL, 0, NULL, 0},
 };
 
 /*
@@ -132,7 +132,7 @@ void mmap_anon()
 
 	if (!flag_allocated) {
 		p = mmap(NULL, memsize, PROT_WRITE | PROT_READ,
-			 MAP_PRIVATE|MAP_ANONYMOUS, 0, 0);
+			 MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
 		if (p == MAP_FAILED)
 			err(1, "mmap(anonymous) failed");
 		touch_memory(p, memsize);
@@ -167,7 +167,7 @@ void mmap_file()
 		}
 		touch_memory(p, memsize);
 	} else {
-		if (!munmap(p, memsize) == -1)
+		if (munmap(p, memsize) == -1)
 			err(1, "munmap(file) failed");
 
 		if (opt_hugepage) {
@@ -202,10 +202,10 @@ void mmap_lock2()
 		if (p == MAP_FAILED)
 			err(1, "mmap failed");
 
-		if (!mlock(p, memsize))
+		if (mlock(p, memsize) == -1)
 			err(1, "mlock failed");
 	} else {
-		if (!munmap(p, memsize) == -1)
+		if (munmap(p, memsize) == -1)
 			err(1, "munmap failed");
 	}
 }
@@ -253,7 +253,7 @@ void shm()
 /*
  * sigint_handler: handle SIGINT by set the exit flag.
  */
-void sigint_handler(int __attribute__((unused)) signo)
+void sigint_handler(int __attribute__ ((unused)) signo)
 {
 	flag_exit = 1;
 }
@@ -267,7 +267,7 @@ void sigint_handler(int __attribute__((unused)) signo)
  * When we receive SIGUSR again, we will free all the allocated
  * memory.
  */
-void sigusr_handler(int __attribute__((unused)) signo)
+void sigusr_handler(int __attribute__ ((unused)) signo)
 {
 	if (opt_mmap_anon)
 		mmap_anon();
@@ -295,16 +295,17 @@ int main(int argc, char *argv[])
 	if ((fd = open("/dev/zero", O_RDWR)) == -1)
 		err(1, "open /dev/zero failed");
 
-	/* TODO: writer error handling here. */
+	memset(&sigint_action, 0, sizeof(sigint_action));
+	memset(&sigusr_action, 0, sizeof(sigusr_action));
+
+	/* TODO: add error handling below. */
 	sigemptyset(&sigint_action.sa_mask);
 	sigint_action.sa_handler = &sigint_handler;
 	sigaction(SIGINT, &sigint_action, NULL);
 
-	sigemptyset(&sigint_action.sa_mask);
+	sigemptyset(&sigusr_action.sa_mask);
 	sigusr_action.sa_handler = &sigusr_handler;
 	sigaction(SIGUSR1, &sigusr_action, NULL);
-
-	sigemptyset(&sigusr_action.sa_mask);
 
 	process_options(argc, argv);
 

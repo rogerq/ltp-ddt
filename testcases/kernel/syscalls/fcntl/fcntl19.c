@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -137,7 +137,7 @@ void do_child()
 	while (1) {
 		child_get(&fl);
 		if (fcntl(fd, F_GETLK, &fl) < 0)
-			tst_resm(TFAIL|TERRNO, "fcntl on file failed");
+			tst_resm(TFAIL | TERRNO, "fcntl on file failed");
 		child_put(&fl);
 	}
 }
@@ -183,13 +183,14 @@ compare_lock(struct flock *fl, short type, short whence, int start, int len,
 
 	if (fl->l_start != start) {
 		tst_resm(TFAIL, "region starts in wrong place, should be"
-			 "%d is %"PRId64, start, (int64_t)fl->l_start);
+			 "%d is %" PRId64, start, (int64_t) fl->l_start);
 		fail = 1;
 	}
 
 	if (fl->l_len != len) {
-		tst_resm(TFAIL, "region length is wrong, should be %d is %"PRId64,
-			 len, (int64_t)fl->l_len);
+		tst_resm(TFAIL,
+			 "region length is wrong, should be %d is %" PRId64,
+			 len, (int64_t) fl->l_len);
 		fail = 1;
 	}
 
@@ -283,10 +284,9 @@ int main(int ac, char **av)
 {
 	struct flock tl;
 
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}

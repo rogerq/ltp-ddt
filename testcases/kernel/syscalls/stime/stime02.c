@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -81,6 +81,7 @@
 char *TCID = "stime02";		/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 int exp_enos[] = { EPERM, 0 };
+
 time_t curr_time;		/* system's current time in seconds */
 time_t new_time;		/* system's new time */
 time_t tloc;			/* argument var. for time() */
@@ -92,8 +93,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	msg = parse_opts(ac, av, NULL, NULL);
@@ -166,7 +167,7 @@ void setup()
 	if ((curr_time = time(&tloc)) < 0) {
 		tst_brkm(TBROK, cleanup,
 			 "time() failed to get current time, errno=%d", errno);
-	 }
+	}
 
 	/* Get the system's new time */
 	new_time = curr_time + INCR_TIME;

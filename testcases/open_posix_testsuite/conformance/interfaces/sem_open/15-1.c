@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -49,8 +49,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -82,74 +82,63 @@
 /******************************************************************************/
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret, i;
-	char * name = "/sem_open_15_1";
+	char *name = "/sem_open_15_1";
 
-	sem_t * sems[ 4 ];
+	sem_t *sems[4];
 
 	/* Initialize output */
 	output_init();
 
 	/* Initialize all semaphores */
 
-	for (i = 0; i < 4; i++)
-	{
-		sems[ i ] = sem_open(name, O_CREAT, 0777, 1);
+	for (i = 0; i < 4; i++) {
+		sems[i] = sem_open(name, O_CREAT, 0777, 1);
 
-		if (sems[ i ] == SEM_FAILED)
-		{
+		if (sems[i] == SEM_FAILED) {
 			UNRESOLVED(errno, "Failed to sem_open");
 		}
 
 	}
 
 	/* Check all calls returned the same @ */
-	for (i = 0; i < 3; i++)
-	{
-		if (sems[ i ] != sems[ i + 1 ])
-		{
+	for (i = 0; i < 3; i++) {
+		if (sems[i] != sems[i + 1]) {
 			FAILED("sem_open returned a different address");
 		}
 
 		/* Close some semaphores */
-		ret = sem_close(sems[ i ]);
+		ret = sem_close(sems[i]);
 
-		if (ret != 0)
-		{
+		if (ret != 0) {
 			UNRESOLVED(errno, "Failed to sem_close");
 		}
 	}
 
 	/* Now, reopen, we should still get the same address */
-	for (i = 0; i < 3; i++)
-	{
-		sems[ i ] = sem_open(name, O_CREAT, 0777, 1);
+	for (i = 0; i < 3; i++) {
+		sems[i] = sem_open(name, O_CREAT, 0777, 1);
 
-		if (sems[ i ] == SEM_FAILED)
-		{
+		if (sems[i] == SEM_FAILED) {
 			UNRESOLVED(errno, "Failed to sem_open");
 		}
 
 	}
 
 	/* Check all calls returned the same @ */
-	for (i = 0; i < 3; i++)
-	{
-		if (sems[ i ] != sems[ i + 1 ])
-		{
+	for (i = 0; i < 3; i++) {
+		if (sems[i] != sems[i + 1]) {
 			FAILED("sem_open returned a different address");
 		}
 	}
 
 	/* Close all semaphores */
-	for (i = 0; i < 4; i++)
-	{
-		ret = sem_close(sems[ i ]);
+	for (i = 0; i < 4; i++) {
+		ret = sem_close(sems[i]);
 
-		if (ret != 0)
-		{
+		if (ret != 0) {
 			UNRESOLVED(errno, "Failed to sem_close");
 		}
 	}

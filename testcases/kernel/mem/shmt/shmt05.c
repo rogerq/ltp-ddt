@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /* 12/20/2002   Port to LTP     robbiew@us.ibm.com */
@@ -95,14 +95,13 @@ int main(void)
 			 "Error: shmget: shmid1 = %d, errno = %d\n",
 			 shmid1, errno);
 	} else {
-		cp1 = (char *)shmat(shmid1, cp + (SIZE/2), 0);
+		cp1 = (char *)shmat(shmid1, cp + (SIZE / 2), 0);
 		if (cp1 != (char *)-1) {
 			perror("shmat");
 			tst_resm(TFAIL,
 				 "Error: shmat: shmid1 = %d, addr= %p, errno = %d\n",
 				 shmid1, cp1, errno);
-		}
-		else{
+		} else {
 			tst_resm(TPASS, "2nd shmget & shmat");
 		}
 	}

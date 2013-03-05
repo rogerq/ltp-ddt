@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -103,11 +103,11 @@ struct test_case_t {		/* test case struct. to hold ref. test cond's */
 	int fd;
 	int mode;
 	int exp_errno;
-	void (*setupfunc)();
+	void (*setupfunc) ();
 } test_cases[] = {
-	{ 1, FILE_MODE, EPERM, setup1 },
-	{ 2, FILE_MODE, EBADF, setup2 },
-};
+	{
+	1, FILE_MODE, EPERM, setup1}, {
+2, FILE_MODE, EBADF, setup2},};
 
 char *TCID = "fchmod06";	/* Test program identifier.    */
 int TST_TOTAL = 2;		/* Total number of test cases. */
@@ -122,10 +122,10 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int fd;			/* test file descriptor */
-	int i;		/* counter to test different test conditions */
+	int i;
 	int mode;		/* creation mode for the node created */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -152,14 +152,14 @@ int main(int ac, char **av)
 
 			if (TEST_RETURN == -1) {
 				if (TEST_ERRNO == test_cases[i].exp_errno)
-					tst_resm(TPASS|TTERRNO,
-					    "fchmod failed as expected");
+					tst_resm(TPASS | TTERRNO,
+						 "fchmod failed as expected");
 				else
-					tst_resm(TFAIL|TTERRNO,
-					    "fchmod failed unexpectedly");
+					tst_resm(TFAIL | TTERRNO,
+						 "fchmod failed unexpectedly");
 			} else
 				tst_resm(TFAIL,
-				    "fchmod succeeded unexpectedly");
+					 "fchmod succeeded unexpectedly");
 		}
 
 	}
@@ -177,9 +177,9 @@ void setup()
 	tst_require_root(NULL);
 	ltpuser = getpwnam(nobody_uid);
 	if (ltpuser == NULL)
-		tst_brkm(TBROK|TERRNO, NULL, "getpwnam failed");
+		tst_brkm(TBROK | TERRNO, NULL, "getpwnam failed");
 	if (seteuid(ltpuser->pw_uid) == -1)
-		tst_resm(TBROK|TERRNO, "seteuid failed");
+		tst_resm(TBROK | TERRNO, "seteuid failed");
 
 	test_home = get_current_dir_name();
 
@@ -195,28 +195,29 @@ void setup1()
 {
 	uid_t old_uid;
 
-	if ((fd1 = open(TEST_FILE1, O_RDWR|O_CREAT, 0666)) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open(%s, ..) failed",
-		    TEST_FILE1);
+	if ((fd1 = open(TEST_FILE1, O_RDWR | O_CREAT, 0666)) == -1)
+		tst_brkm(TBROK | TERRNO, cleanup, "open(%s, ..) failed",
+			 TEST_FILE1);
 
 	old_uid = geteuid();
 	if (seteuid(0) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "seteuid(0) failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "seteuid(0) failed");
 
 	if (fchown(fd1, 0, 0) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "fchown of %s failed",
-		    TEST_FILE1);
+		tst_brkm(TBROK | TERRNO, cleanup, "fchown of %s failed",
+			 TEST_FILE1);
 
 	if (seteuid(old_uid) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "seteuid(%d) failed", old_uid);
+		tst_brkm(TBROK | TERRNO, cleanup, "seteuid(%d) failed",
+			 old_uid);
 
 }
 
 void setup2()
 {
-	if ((fd2 = open(TEST_FILE2, O_RDWR|O_CREAT, 0666)) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open(%s, ..) failed",
-		    TEST_FILE2);
+	if ((fd2 = open(TEST_FILE2, O_RDWR | O_CREAT, 0666)) == -1)
+		tst_brkm(TBROK | TERRNO, cleanup, "open(%s, ..) failed",
+			 TEST_FILE2);
 	if (close(fd2) == -1)
 		tst_brkm(TBROK, cleanup, "closing %s failed", TEST_FILE2);
 }
@@ -226,7 +227,7 @@ void cleanup()
 	TEST_CLEANUP;
 
 	if (close(fd1) == -1)
-		tst_resm(TWARN|TERRNO, "closing %s failed", TEST_FILE1);
+		tst_resm(TWARN | TERRNO, "closing %s failed", TEST_FILE1);
 
 	tst_rmdir();
 }

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -94,15 +94,15 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	msg = parse_opts(ac, av, NULL, NULL);
 	if (msg != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
-	 }
+	}
 
 	setup();
 
@@ -124,8 +124,8 @@ int main(int ac, char **av)
 		 * to as far as clock skew is concerned :P.
 		 */
 		if (gettimeofday(&real_time_tv, NULL) < 0) {
-			tst_brkm(TBROK|TERRNO, NULL,
-				"failed to get current time via gettimeofday(2)");
+			tst_brkm(TBROK | TERRNO, NULL,
+				 "failed to get current time via gettimeofday(2)");
 		}
 
 		/* Get the system's new time */
@@ -138,7 +138,7 @@ int main(int ac, char **av)
 		 * new_time.
 		 */
 		if (stime(&new_time) < 0) {
-			tst_resm(TFAIL|TERRNO, "stime(%ld) failed", new_time);
+			tst_resm(TFAIL | TERRNO, "stime(%ld) failed", new_time);
 		} else {
 
 			/*
@@ -152,26 +152,25 @@ int main(int ac, char **av)
 				 * to stime().
 				 */
 				if (gettimeofday(&pres_time_tv, NULL) < 0) {
-					tst_brkm(TFAIL|TERRNO, cleanup,
+					tst_brkm(TFAIL | TERRNO, cleanup,
 						 "time() failed to get "
 						 "system's time after stime");
 				}
 
 				/* Now do the actual verification */
-				switch(pres_time_tv.tv_sec - new_time) {
+				switch (pres_time_tv.tv_sec - new_time) {
 				case 0:
 				case 1:
 					tst_resm(TINFO, "pt.tv_sec: %ld",
-							pres_time_tv.tv_sec);
+						 pres_time_tv.tv_sec);
 					tst_resm(TPASS, "system time was set "
-							"to %ld", new_time);
+						 "to %ld", new_time);
 					break;
 				default:
 					tst_resm(TFAIL, "system time was not "
-							"set to %ld (time is "
-							"actually: %ld)",
-							new_time,
-							pres_time_tv.tv_sec);
+						 "set to %ld (time is "
+						 "actually: %ld)",
+						 new_time, pres_time_tv.tv_sec);
 				}
 
 			} else {
@@ -204,8 +203,7 @@ void setup()
 
 	/* Check that the test process id is super/root  */
 	if (geteuid() != 0) {
-		tst_brkm(TBROK, NULL,
-			"you must be root to execute this test!");
+		tst_brkm(TBROK, NULL, "you must be root to execute this test!");
 	}
 
 	TEST_PAUSE;
@@ -228,8 +226,8 @@ void cleanup()
 	/* Restore the original system time. */
 	if (settimeofday(&real_time_tv, NULL) != 0) {
 		tst_resm(TBROK | TERRNO, "failed to restore time to original "
-					 "value; system clock may need to be "
-					 "fixed manually");
+			 "value; system clock may need to be "
+			 "fixed manually");
 	}
 
 }

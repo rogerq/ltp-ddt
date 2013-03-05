@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /* Author: Li Zefan <lizf@cn.fujitsu.com>                                     */
 /*                                                                            */
@@ -145,8 +145,7 @@ void test_mmap_write(void)
 
 	old_inode_version = get_inode_version();
 
-	p = mmap(NULL, 1, PROT_WRITE,
-		 MAP_PRIVATE | MAP_FILE, fd, 0);
+	p = mmap(NULL, 1, PROT_WRITE, MAP_PRIVATE | MAP_FILE, fd, 0);
 	if (p == (void *)-1) {
 		perror("mmap");
 		exit(1);

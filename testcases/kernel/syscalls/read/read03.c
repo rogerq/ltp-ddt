@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -71,7 +71,6 @@ int main(int ac, char **av)
 
 	int c;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -128,13 +127,13 @@ void setup(void)
 
 	if (mknod(fifo, S_IFIFO | 0777, 0) < 0) {
 		tst_brkm(TBROK, cleanup, "mknod() failed, errno: %d", errno);
-	 }
+	}
 	if (stat(fifo, &buf) != 0) {
 		tst_brkm(TBROK, cleanup, "stat() failed, errno: %d", errno);
-	 }
+	}
 	if ((buf.st_mode & S_IFIFO) == 0) {
 		tst_brkm(TBROK, cleanup, "Mode does not indicate fifo file");
-	 }
+	}
 
 	rfd = open(fifo, O_RDONLY | O_NONBLOCK);
 	wfd = open(fifo, O_WRONLY | O_NONBLOCK);

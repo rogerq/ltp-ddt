@@ -64,8 +64,8 @@ ino_t oldino, oldino1;
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/*
 	 * parse standard options
@@ -131,11 +131,11 @@ void setup()
 	/* create "old" directory */
 	if (stat(fdir, &buf1) != -1) {
 		tst_brkm(TBROK, cleanup, "tmp directory %s found!", fdir);
-	 }
+	}
 
 	if (mkdir(fdir, 00770) == -1) {
 		tst_brkm(TBROK, cleanup, "Could not create directory %s", fdir);
-	 }
+	}
 
 	if (stat(fdir, &buf1) == -1) {
 		tst_brkm(TBROK, cleanup, "failed to stat directory %s "

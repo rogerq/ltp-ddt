@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -83,7 +83,6 @@
 char *TCID = "nanosleep02";	/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 
-
 struct timespec timereq;	/* time struct. buffer for nanosleep() */
 struct timespec timerem;	/* time struct. buffer for nanosleep() */
 
@@ -106,8 +105,8 @@ void sig_handler();		/* signal catching function */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	pid_t cpid;		/* Child process id */
 	int status;		/* child exit status */
 
@@ -159,10 +158,10 @@ int main(int ac, char **av)
 		wait(&status);
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
 			tst_resm(TPASS, "Functionality of nanosleep() is "
-					"correct");
+				 "correct");
 		} else {
 			tst_resm(TFAIL, "child process exited abnormally; "
-					"status = %d", status);
+				 "status = %d", status);
 		}
 	}
 
@@ -246,8 +245,8 @@ void do_child()
 			 */
 			req = timereq.tv_sec * 1000000 + timereq.tv_nsec / 1000;
 			elapsed =
-			    (ntime.tv_sec - otime.tv_sec) * 1000000 + ntime.tv_usec -
-			    otime.tv_usec;
+			    (ntime.tv_sec - otime.tv_sec) * 1000000 +
+			    ntime.tv_usec - otime.tv_usec;
 			if (elapsed - req > USEC_PRECISION) {
 				tst_resm(TWARN,
 					 "This test could fail if the system "
@@ -255,10 +254,10 @@ void do_child()
 					 "of the way it calculates the system "
 					 "call execution time.");
 				tst_resm(TFAIL, "Child execution not suspended "
-						"for %jd seconds %lu "
-						"nanoseconds",
-						(intmax_t)timereq.tv_sec,
-						timereq.tv_nsec);
+					 "for %jd seconds %lu "
+					 "nanoseconds",
+					 (intmax_t) timereq.tv_sec,
+					 timereq.tv_nsec);
 			} else {
 				tst_resm(TINFO, "call succeeded");
 			}

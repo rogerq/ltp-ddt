@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * Module: .c
  */
@@ -33,22 +33,22 @@
 #include <unistd.h>
 #include <limits.h>
 
-int main()
+int main(void)
 {
 	int fd;
 	int i;
-	char buf[32*1024];
+	char buf[32 * 1024];
 	char filename[PATH_MAX];
 
 	printf("Starting dirty tests...\n");
 
 	snprintf(filename, sizeof(filename), "%s/aiodio/file.xx.%d",
-		getenv("TMP") ? getenv("TMP") : "/tmp", getpid());
+		 getenv("TMP") ? getenv("TMP") : "/tmp", getpid());
 
-	fd = open(filename, O_CREAT|O_WRONLY, 0666);
+	fd = open(filename, O_CREAT | O_WRONLY, 0666);
 
 	memset(buf, 0xaa, sizeof(buf));
-	for (i = 0 ; i < 3000; i++)
+	for (i = 0; i < 3000; i++)
 		write(fd, buf, sizeof(buf));
 	fsync(fd);
 	close(fd);

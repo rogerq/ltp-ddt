@@ -13,14 +13,13 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program;  if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
 
 top_srcdir		?= ../../../..
 
 include	$(top_srcdir)/include/mk/env_pre.mk
 
-LDLIBS			+= -lmm
 LIBDIR			:= lib
 LIB			:= $(LIBDIR)/libipc_hugetlb.a
 FILTER_OUT_DIRS		:= $(LIBDIR)
@@ -36,6 +35,6 @@ MAKE_DEPS		:= $(LIB)
 trunk-clean:: | lib-clean
 
 lib-clean:: $(LIBDIR)
-	$(MAKE) -C $^ -f "$(abs_srcdir)/$^/Makefile" clean 
+	$(MAKE) -C $^ -f "$(abs_srcdir)/$^/Makefile" clean
 
 include $(top_srcdir)/include/mk/generic_trunk_target.mk

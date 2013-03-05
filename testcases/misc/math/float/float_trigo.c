@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /******************************************************************************/
@@ -26,20 +26,20 @@
 #include "tfloat.h"
 
 const TH_FUNC th_func[] = {
-	{FUNC_NORMAL, 50, acos,  "acos",  "dacos",         "racos",
-		""},
-	{FUNC_NORMAL, 50, asin,  "asin",  "dasin",         "rasin",
-		""},
-	{FUNC_NORMAL, 50, atan,  "atan",  "datan",         "ratan",
-		""},
-	{FUNC_ATAN2,  50, atan2, "atan2", "datan2",        "ratan2",
-		""},
-	{FUNC_NORMAL, 50, cos,   "cos",   "dcos",          "rcos",
-		""},
-	{FUNC_NORMAL, 50, sin,   "sin",   "dsin",          "rsin",
-		""},
-	{FUNC_NORMAL, 50, tan,   "tan",   "dtan",          "rtan",
-		""}
+	{FUNC_NORMAL, 50, acos, "acos", "dacos", "racos",
+	 ""},
+	{FUNC_NORMAL, 50, asin, "asin", "dasin", "rasin",
+	 ""},
+	{FUNC_NORMAL, 50, atan, "atan", "datan", "ratan",
+	 ""},
+	{FUNC_ATAN2, 50, atan2, "atan2", "datan2", "ratan2",
+	 ""},
+	{FUNC_NORMAL, 50, cos, "cos", "dcos", "rcos",
+	 ""},
+	{FUNC_NORMAL, 50, sin, "sin", "dsin", "rsin",
+	 ""},
+	{FUNC_NORMAL, 50, tan, "tan", "dtan", "rtan",
+	 ""}
 };
 
 #define NB_FUNC  (sizeof(th_func)/sizeof(TH_FUNC))

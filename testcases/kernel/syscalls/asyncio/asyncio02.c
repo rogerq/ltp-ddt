@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -123,6 +123,7 @@ char *TCID = "asyncio02";	/* Test program identifier.    */
 int TST_TOTAL = 6;		/* Total number of test cases. */
 
 int exp_enos[] = { 0 };		/* Array of expected errnos */
+
 char *filename;			/* name of the temporary file */
 
 char *Progname;
@@ -141,11 +142,11 @@ int Num_flags;
 int main(int ac, char **av)
 {
 
-	int i;			/* counter */
-	int ret_val;		/* return value from testrun call */
+	int i;
+	int ret_val;
 	int eok;		/* everything is ok flag */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int flag_cnt;
 
 	Num_flags = sizeof(Flags) / sizeof(int);
@@ -198,7 +199,7 @@ int main(int ac, char **av)
 				if ((ret_val =
 				     testrun(Flags[flag_cnt], i, 3)) != OK) {
 					tst_resm(TFAIL, ERR_MSG2, ret_val,
-						      i * WRITES);
+						 i * WRITES);
 				}
 			}
 
@@ -224,7 +225,7 @@ int testrun(int flag, int bytes, int ti)
 	 */
 
 	if ((fildes = open(filename, flag, MODE)) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup, "open(%s) failed", filename);
+		tst_brkm(TBROK | TERRNO, cleanup, "open(%s) failed", filename);
 	}
 
 	/*
@@ -235,7 +236,7 @@ int testrun(int flag, int bytes, int ti)
 		TEST(write(fildes, dp, (unsigned)bytes));
 
 		if (TEST_RETURN == -1) {
-			tst_brkm(TBROK|TTERRNO, cleanup, "write() failed");
+			tst_brkm(TBROK | TTERRNO, cleanup, "write() failed");
 		}
 	}			/* end for () */
 
@@ -244,7 +245,7 @@ int testrun(int flag, int bytes, int ti)
 	 */
 
 	if (close(fildes) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup, "close() failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "close() failed");
 	}
 
 	ret = OK;
@@ -256,7 +257,7 @@ int testrun(int flag, int bytes, int ti)
 		 */
 
 		if (stat(filename, &buffer) == -1) {
-			tst_brkm(TBROK|TERRNO, cleanup, "stat() failed");
+			tst_brkm(TBROK | TERRNO, cleanup, "stat() failed");
 		}
 
 		if (buffer.st_size != (off_t) (bytes * WRITES)) {
@@ -265,7 +266,8 @@ int testrun(int flag, int bytes, int ti)
 	}
 
 	if (unlink(filename) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup, "unlink(%s) failed", filename);
+		tst_brkm(TBROK | TERRNO, cleanup, "unlink(%s) failed",
+			 filename);
 	}
 
 	return ret;
@@ -293,7 +295,7 @@ void setup()
 	 */
 
 	if ((dp = (char *)malloc((unsigned)BUFSIZ + 1)) == NULL) {
-		tst_brkm(TBROK|TERRNO, cleanup, "malloc() failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "malloc() failed");
 	}
 
 }

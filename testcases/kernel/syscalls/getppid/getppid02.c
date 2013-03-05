@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -55,10 +55,10 @@ void cleanup(void);
 int main(int ac, char **av)
 {
 
-	int lc;			/* loop counter */
+	int lc;
 	int status;
 	pid_t pid, ppid;
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -79,19 +79,20 @@ int main(int ac, char **av)
 			if (STD_FUNCTIONAL_TEST) {
 				if (TEST_RETURN != ppid)
 					errx(1, "getppid failed (%ld != %d)",
-					    TEST_RETURN, ppid);
+					     TEST_RETURN, ppid);
 				else
 					printf("return value and parent's pid "
-					    "value match\n");
+					       "value match\n");
 			} else
 				tst_resm(TPASS, "call succeeded");
 			exit(0);
 		} else {
 			if (wait(&status) == -1)
-				tst_brkm(TBROK|TERRNO, cleanup, "wait failed");
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "wait failed");
 			if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 				tst_resm(TFAIL,
-				    "getppid functionality incorrect");
+					 "getppid functionality incorrect");
 		}
 	}
 	cleanup();

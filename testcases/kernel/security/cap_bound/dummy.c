@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include "config.h"
+#include "test.h"
 
 #if HAVE_SYS_CAPABILITY_H
+#include <linux/types.h>
 #include <sys/capability.h>
 #endif
+
+char *TCID = "dummy";
+int TST_TOTAL = 1;
 
 int main(void)
 {
@@ -15,11 +20,9 @@ int main(void)
 	cap_free(cur);
 	return 0;
 #else /* libcap */
-	printf("System doesn't support POSIX capabilities.\n");
-	return 1;
+	tst_brkm(TCONF, NULL, "System doesn't support POSIX capabilities.");
 #endif
 #else /* capability_h */
-	printf("System doesn't support sys/capability.h\n");
-	return 1;
+	tst_brkm(TCONF, NULL, "System doesn't support sys/capability.h.");
 #endif
 }

@@ -13,7 +13,7 @@
 /*									    */
 /* You should have received a copy of the GNU General Public License	  */
 /* along with this program;  if not, write to the Free Software	       */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*									    */
 /******************************************************************************/
 /******************************************************************************/
@@ -48,8 +48,8 @@
 #include "linux_syscall_numbers.h"
 
 /* Global Variables */
-char *TCID = "add_key01";	/* Test program identifier.*/
-int  TST_TOTAL = 1;		/* total number of tests in this file.   */
+char *TCID = "add_key01";	/* Test program identifier. */
+int TST_TOTAL = 1;		/* total number of tests in this file.   */
 
 /* Extern Global Functions */
 /******************************************************************************/
@@ -69,7 +69,8 @@ int  TST_TOTAL = 1;		/* total number of tests in this file.   */
 /*	      On success - Exits calling tst_exit(). With '0' return code.  */
 /*									    */
 /******************************************************************************/
-extern void cleanup() {
+extern void cleanup()
+{
 
 	TEST_CLEANUP;
 	tst_rmdir();
@@ -93,26 +94,29 @@ extern void cleanup() {
 /*	      On success - returns 0.				       */
 /*									    */
 /******************************************************************************/
-void setup() {
+void setup()
+{
 	/* Capture signals if any */
 	/* Create temporary directories */
 	TEST_PAUSE;
 	tst_tmpdir();
 }
 
-int main(int ac, char **av) {
-	char *msg;	      /* message returned from parse_opts */
+int main(int ac, char **av)
+{
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
 	setup();
 
 	/* Call add_key. */
-	TEST(syscall(__NR_add_key, "keyring", "wjkey", NULL, 0, KEY_SPEC_THREAD_KEYRING));
+	TEST(syscall
+	     (__NR_add_key, "keyring", "wjkey", NULL, 0,
+	      KEY_SPEC_THREAD_KEYRING));
 	if (TEST_RETURN == -1)
-		tst_resm(TFAIL|TTERRNO, "add_key call failed");
+		tst_resm(TFAIL | TTERRNO, "add_key call failed");
 	else
 		tst_resm(TPASS, "add_key call succeeded");
 

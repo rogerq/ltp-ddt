@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -86,7 +86,6 @@
 #include "test.h"
 #include "usctest.h"
 
-
 #define DUMMY_MOD		 "dummy_del_mod"
 #define DUMMY_MOD_DEP		 "dummy_del_mod_dep"
 #define EXP_RET_VAL		 -1
@@ -95,33 +94,32 @@
 
 char *TCID = "delete_module03";
 /*static int exp_enos[] = {EBUSY, 0}; */
-static int exp_enos[] = {EWOULDBLOCK, 0};
+static int exp_enos[] = { EWOULDBLOCK, 0 };
+
 int TST_TOTAL = 1;
 
 static void setup(void);
 static void cleanup(void);
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-	int lc;		 		 /* loop counter */
-	char *msg;	 		 /* message returned from parse_opts */
+	int lc;
+	char *msg;
 	char cmd[50];
 
-	/* parse standard options */
 	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
 	if (STD_COPIES != 1) {
 		tst_resm(TINFO, "-c option has no effect for this testcase - "
-				"doesn't allow running more than one instance "
-		 		"at a time");
+			 "doesn't allow running more than one instance "
+			 "at a time");
 		STD_COPIES = 1;
 	}
 
 	/* Load first kernel module */
 	if (sprintf(cmd, "/sbin/insmod %s/%s.ko", dirname(argv[0]),
-		DUMMY_MOD) <= 0) {
+		    DUMMY_MOD) <= 0) {
 		tst_resm(TBROK, "sprintf failed");
 		return 1;
 	}
@@ -131,15 +129,15 @@ main(int argc, char **argv)
 	}
 
 	/* Load dependant kernel module */
-        if (sprintf(cmd, "/sbin/insmod %s/%s.ko", dirname(argv[0]),
-		DUMMY_MOD_DEP) <= 0) {
+	if (sprintf(cmd, "/sbin/insmod %s/%s.ko", dirname(argv[0]),
+		    DUMMY_MOD_DEP) <= 0) {
 		tst_resm(TBROK, "sprintf failed");
 		goto END;
 	}
-        if ((system(cmd)) != 0) {
+	if ((system(cmd)) != 0) {
 		tst_resm(TBROK, "Failed to load %s module", DUMMY_MOD_DEP);
 		goto END;
-        }
+	}
 
 	setup();
 
@@ -151,20 +149,20 @@ main(int argc, char **argv)
 		TEST(delete_module(DUMMY_MOD));
 
 		TEST_ERROR_LOG(TEST_ERRNO);
-		if ((TEST_RETURN == (int) EXP_RET_VAL) &&
-		     (TEST_ERRNO == EXP_ERRNO) ) {
+		if ((TEST_RETURN == (int)EXP_RET_VAL) &&
+		    (TEST_ERRNO == EXP_ERRNO)) {
 			tst_resm(TPASS, "Expected failure for module in-use, "
-		 			"errno: %d", TEST_ERRNO);
+				 "errno: %d", TEST_ERRNO);
 		} else {
 			tst_resm(TFAIL, "Unexpected results for module in-use; "
-		 			"returned %d (expected %d), errno %d "
-					"(expected %d)", TEST_RETURN,
-					EXP_RET_VAL, TEST_ERRNO, EXP_ERRNO);
+				 "returned %d (expected %d), errno %d "
+				 "(expected %d)", TEST_RETURN,
+				 EXP_RET_VAL, TEST_ERRNO, EXP_ERRNO);
 		}
 	}
 	cleanup();
 END:
-	if (system("rmmod "DUMMY_MOD) != 0) {
+	if (system("rmmod " DUMMY_MOD) != 0) {
 		tst_resm(TBROK, "Failed to unload %s module", DUMMY_MOD);
 		return 1;
 	}
@@ -175,8 +173,7 @@ END:
  * setup()
  *	performs all ONE TIME setup for this test
  */
-void
-setup(void)
+void setup(void)
 {
 
 	tst_sig(FORK, DEF_HANDLER, cleanup);
@@ -199,17 +196,15 @@ setup(void)
  *	performs all ONE TIME cleanup for this test at
  *	completion or premature exit
  */
-void
-cleanup(void)
+void cleanup(void)
 {
 	/* Unload dependent kernel module */
-	if (system("rmmod "DUMMY_MOD_DEP) != 0) {
+	if (system("rmmod " DUMMY_MOD_DEP) != 0) {
 		tst_resm(TBROK, "Failed to unload %s module", DUMMY_MOD_DEP);
 	}
 	/* Unload first kernel module */
-	if (system("rmmod "DUMMY_MOD) != 0) {
-		tst_resm(TBROK, "Failed to unload %s module",
-		DUMMY_MOD);
+	if (system("rmmod " DUMMY_MOD) != 0) {
+		tst_resm(TBROK, "Failed to unload %s module", DUMMY_MOD);
 	}
 	/*
 	 * print timing stats if that option was specified.

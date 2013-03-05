@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /*
@@ -26,13 +26,14 @@
 #include <errno.h>
 #include "config.h"
 #if HAVE_SYS_CAPABILITY_H
+#include <linux/types.h>
 #include <sys/capability.h>
 #endif
 #include <sys/prctl.h>
 #include "test.h"
 
 char *TCID = "cap_bounds_rw";
-int TST_TOTAL=1;
+int TST_TOTAL = 1;
 
 int check_remaining_caps(int lastdropped)
 {
@@ -47,14 +48,18 @@ int check_remaining_caps(int lastdropped)
 		ret = -1;
 #endif
 		if (ret == -1) {
-			tst_resm(TBROK, "Failed to read bounding set during sanity check\n");
+			tst_resm(TBROK,
+				 "Failed to read bounding set during sanity check\n");
 			tst_exit();
 		}
 		if (ret == 1) {
-			tst_resm(TFAIL, "Bit %d should have been dropped but wasn't\n", i);
+			tst_resm(TFAIL,
+				 "Bit %d should have been dropped but wasn't\n",
+				 i);
 			return i;
 		}
 	}
+#ifdef HAVE_LIBCAP
 	for (; i <= CAP_LAST_CAP; i++) {
 #if HAVE_DECL_PR_CAPBSET_READ
 		ret = prctl(PR_CAPBSET_READ, i);
@@ -63,14 +68,18 @@ int check_remaining_caps(int lastdropped)
 		ret = -1;
 #endif
 		if (ret == -1) {
-			tst_resm(TBROK, "Failed to read bounding set during sanity check\n");
+			tst_resm(TBROK,
+				 "Failed to read bounding set during sanity check\n");
 			tst_exit();
 		}
 		if (ret == 0) {
-			tst_resm(TFAIL, "Bit %d wasn't yet dropped, but isn't in bounding set\n", i);
+			tst_resm(TFAIL,
+				 "Bit %d wasn't yet dropped, but isn't in bounding set\n",
+				 i);
 			return -i;
 		}
 	}
+#endif
 	return 0;
 }
 
@@ -79,6 +88,7 @@ int main(int argc, char *argv[])
 	int ret = 1;
 	int i;
 
+#ifdef HAVE_LIBCAP
 #if HAVE_DECL_PR_CAPBSET_DROP
 	ret = prctl(PR_CAPBSET_READ, -1);
 #else
@@ -86,7 +96,8 @@ int main(int argc, char *argv[])
 	ret = -1;
 #endif
 	if (ret != -1) {
-		tst_resm(TFAIL, "prctl(PR_CAPBSET_DROP, -1) returned %d\n", ret);
+		tst_resm(TFAIL, "prctl(PR_CAPBSET_DROP, -1) returned %d\n",
+			 ret);
 		tst_exit();
 	}
 	/* Ideally I'd check CAP_LAST_CAP+1, but userspace
@@ -96,14 +107,16 @@ int main(int argc, char *argv[])
 #define INSANE 63
 #define max(x,y) (x > y ? x : y)
 #if HAVE_DECL_PR_CAPBSET_DROP
-	ret = prctl(PR_CAPBSET_DROP, max(INSANE,CAP_LAST_CAP+1));
+	ret = prctl(PR_CAPBSET_DROP, max(INSANE, CAP_LAST_CAP + 1));
 #else
 	errno = ENOSYS;
 	ret = -1;
 #endif
 	if (ret != -1) {
-		tst_resm(TFAIL, "prctl(PR_CAPBSET_DROP, %d) returned %d\n", max(INSANE, CAP_LAST_CAP+1), ret);
-		tst_resm(TINFO, " %d is should not exist\n", max(INSANE, CAP_LAST_CAP+1));
+		tst_resm(TFAIL, "prctl(PR_CAPBSET_DROP, %d) returned %d\n",
+			 max(INSANE, CAP_LAST_CAP + 1), ret);
+		tst_resm(TINFO, " %d is should not exist\n",
+			 max(INSANE, CAP_LAST_CAP + 1));
 		tst_exit();
 	}
 	for (i = 0; i <= CAP_LAST_CAP; i++) {
@@ -114,22 +127,29 @@ int main(int argc, char *argv[])
 		ret = -1;
 #endif
 		if (ret != 0) {
-			tst_resm(TFAIL, "prctl(PR_CAPBSET_DROP, %d) returned %d\n", i, ret);
+			tst_resm(TFAIL,
+				 "prctl(PR_CAPBSET_DROP, %d) returned %d\n", i,
+				 ret);
 			if (ret == -1)
 				tst_resm(TINFO, "errno was %d\n", errno);
 			tst_exit();
 		}
 		ret = check_remaining_caps(i);
 		if (ret > 0) {
-			tst_resm(TFAIL, "after dropping bits 0..%d, %d was still in bounding set\n",
-				i, ret);
+			tst_resm(TFAIL,
+				 "after dropping bits 0..%d, %d was still in bounding set\n",
+				 i, ret);
 			tst_exit();
 		} else if (ret < 0) {
-			tst_resm(TFAIL, "after dropping bits 0..%d, %d was not in bounding set\n",
-				i, -ret);
+			tst_resm(TFAIL,
+				 "after dropping bits 0..%d, %d was not in bounding set\n",
+				 i, -ret);
 			tst_exit();
 		}
 	}
 	tst_resm(TPASS, "PR_CAPBSET_DROP tests passed\n");
+#else
+	tst_resm(TCONF, "System doesn't have POSIX capabilities.");
+#endif
 	tst_exit();
 }

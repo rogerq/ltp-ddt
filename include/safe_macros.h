@@ -17,6 +17,7 @@
 #define __SAFE_MACROS_H__
 
 #include <sys/types.h>
+#include <sys/resource.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <libgen.h>
@@ -57,6 +58,11 @@ struct passwd*	safe_getpwnam(const char *file, const int lineno,
 	    void (*cleanup_fn)(void), const char *name);
 #define SAFE_GETPWNAM(cleanup_fn, name)	\
 	safe_getpwnam(__FILE__, __LINE__, cleanup_fn, (name))
+
+int     safe_getrusage(const char *file, const int lineno,
+	    void (*cleanup_fn)(void), int who, struct rusage *usage);
+#define SAFE_GETRUSAGE(cleanup_fn, who, usage) \
+	safe_getrusage(__FILE__, __LINE__, (cleanup_fn), (who), (usage))
 
 void*	safe_malloc(const char *file, const int lineno,
 	    void (*cleanup_fn)(void), size_t size);
@@ -129,6 +135,31 @@ ssize_t	safe_write(const char *file, const int lineno,
 #define SAFE_WRITE(cleanup_fn, len_strict, fildes, buf, nbyte)	\
 	safe_write(__FILE__, __LINE__, cleanup_fn, (len_strict), (fildes), \
 	    (buf), (nbyte))
+
+int safe_ftruncate(const char *file, const int lineno,
+	    void (cleanup_fn)(void), int fd, off_t length);
+#define SAFE_FTRUNCATE(cleanup_fn, fd, length) \
+	safe_ftruncate(__FILE__, __LINE__, cleanup_fn, (fd), (length))
+
+int safe_truncate(const char *file, const int lineno,
+	    void (cleanup_fn)(void), const char *path, off_t length);
+#define SAFE_TRUNCATE(cleanup_fn, fd, length) \
+	safe_truncate(__FILE__, __LINE__, cleanup_fn, (path), (length))
+
+long safe_strtol(const char *file, const int lineno,
+	    void (cleanup_fn)(void), char *str, long min, long max);
+#define SAFE_STRTOL(cleanup_fn, str, min, max) \
+	safe_strtol(__FILE__, __LINE__, cleanup_fn, (str), (min), (max))
+
+unsigned long safe_strtoul(const char *file, const int lineno, void (cleanup_fn)(void),
+            char *str, unsigned long min, unsigned long max);
+#define SAFE_STRTOUL(cleanup_fn, str, min, max) \
+	safe_strtoul(__FILE__, __LINE__, cleanup_fn, (str), (min), (max))
+
+long safe_sysconf(const char *file, const int lineno,
+		  void (cleanup_fn)(void), int name);
+#define SAFE_SYSCONF(cleanup_fn, name) \
+	safe_sysconf(__FILE__, __LINE__, cleanup_fn, name);
 
 #endif
 #endif

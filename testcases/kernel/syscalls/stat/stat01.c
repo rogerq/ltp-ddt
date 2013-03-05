@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -87,6 +87,7 @@
 char *TCID = "stat01";		/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 int exp_enos[] = { 0 };
+
 uid_t user_id;			/* Owner id of the test file */
 gid_t group_id;			/* Group id of the test file */
 char nobody_uid[] = "nobody";
@@ -98,8 +99,8 @@ void cleanup();			/* Cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat structure buffer */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	msg = parse_opts(ac, av, NULL, NULL);
@@ -202,7 +203,7 @@ void setup()
 		tst_brkm(TBROK, cleanup,
 			 "open(%s, O_RDWR|O_CREAT, %#o) Failed, errno=%d : %s",
 			 TESTFILE, FILE_MODE, errno, strerror(errno));
-	 }
+	}
 
 	/* Fill the test buffer with the known data */
 	for (i = 0; i < BUF_SIZE; i++) {
@@ -215,7 +216,7 @@ void setup()
 			tst_brkm(TBROK, cleanup,
 				 "write(2) on %s Failed, errno=%d : %s",
 				 TESTFILE, errno, strerror(errno));
-		 } else {
+		} else {
 			write_len += wbytes;
 		}
 	}

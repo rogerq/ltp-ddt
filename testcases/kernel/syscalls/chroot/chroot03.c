@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -118,11 +118,10 @@ void cleanup(void);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
+	int lc;
 	int i;
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -147,12 +146,12 @@ int main(int ac, char **av)
 			}
 
 			if (TEST_ERRNO == TC[i].error) {
-				tst_resm(TPASS|TTERRNO, "failed as expected");
+				tst_resm(TPASS | TTERRNO, "failed as expected");
 			} else {
-				tst_resm(TFAIL|TTERRNO,
-				    "didn't fail as expected (expected errno "
-				    "= %d : %s)",
-				    TC[i].error, strerror(TC[i].error));
+				tst_resm(TFAIL | TTERRNO,
+					 "didn't fail as expected (expected errno "
+					 "= %d : %s)",
+					 TC[i].error, strerror(TC[i].error));
 			}
 		}
 	}
