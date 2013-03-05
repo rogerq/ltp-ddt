@@ -89,8 +89,6 @@ int main(int ac, char **av)
 	if (sflag)
 		hugepages = SAFE_STRTOL(NULL, nr_opt, 0, LONG_MAX);
 
-	page_sz = getpagesize();
-
 	setup();
 
 	map_sz = read_meminfo("Hugepagesize:") * 1024;
