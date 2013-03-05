@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -63,10 +63,9 @@ int main(int ac, char **av)
 	char filename0[40], filename1[40];
 	char buf[40];
 
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -143,7 +142,7 @@ int main(int ac, char **av)
 		}
 		if (fcntl(fd0, F_SETFD, 1) == -1) {
 			tst_brkm(TBROK, cleanup, "setting close on exec flag "
-				"on fd0 failed");
+				 "on fd0 failed");
 		}
 
 		if ((fd2 = creat(filename1, 0666)) == -1) {
@@ -165,15 +164,16 @@ int main(int ac, char **av)
 			}
 
 			if ((rval = fcntl(fd1, F_GETFD, 0)) != 0) {
-				tst_resm(TBROK|TERRNO,
-				    "fcntl F_GETFD on fd1 failed; expected a "
-				    "return value of 0x0, got %#x", rval);
+				tst_resm(TBROK | TERRNO,
+					 "fcntl F_GETFD on fd1 failed; expected a "
+					 "return value of 0x0, got %#x", rval);
 				break;
 			}
 			if ((rval = (fcntl(fd0, F_GETFL, 0) & O_ACCMODE)) !=
 			    O_WRONLY) {
 				tst_resm(TFAIL, "fctnl F_GETFL bad rval on fd0 "
-					"Expected %#x got %#x", O_WRONLY, rval);
+					 "Expected %#x got %#x", O_WRONLY,
+					 rval);
 			}
 			tst_resm(TPASS, "dup2 test 2 functionality is correct");
 		} else {

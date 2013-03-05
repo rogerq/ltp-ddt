@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -25,8 +25,8 @@
  *	hugeshmctl03 - check for EACCES, and EPERM errors
  *
  * ALGORITHM
- *	create a large shared memory segment with root only read & write permissions
- *	fork a child process
+ *	create a large shared memory segment with root only read & write
+ *	permissions fork a child process
  *	if child
  *	  set the ID of the child process to that of "ltpuser1"
  *	  call do_child()
@@ -58,23 +58,26 @@
  *	test must be run as root
  */
 
-#include "ipcshm.h"
 #include <sys/types.h>
 #include <sys/wait.h>
-#include "system_specific_hugepages_info.h"
+#include "ipcshm.h"
+#include "safe_macros.h"
+#include "mem.h"
 
 char *TCID = "hugeshmctl03";
 int TST_TOTAL = 3;
-unsigned long huge_pages_shm_to_be_allocated;
 
-int exp_enos[] = {EACCES, EPERM, 0};	/* 0 terminated list of */
-					/* expected errnos 	*/
-int shm_id_1 = -1;
+static size_t shm_size;
+static int shm_id_1 = -1;
+static struct shmid_ds buf;
+static uid_t ltp_uid;
+static char *ltp_user = "nobody";
 
-uid_t ltp_uid;
-char *ltp_user = "nobody";
-
-struct shmid_ds buf;
+static long hugepages = 128;
+static option_t options[] = {
+	{"s:", &sflag, &nr_opt},
+	{NULL, NULL, NULL}
+};
 
 struct test_case_t {
 	int *shmid;
@@ -83,150 +86,106 @@ struct test_case_t {
 	int error;
 } TC[] = {
 	/* EACCES - child has no read permission for segment */
-	{&shm_id_1, IPC_STAT, &buf, EACCES},
+	{
+	&shm_id_1, IPC_STAT, &buf, EACCES},
+	    /* EPERM - IPC_SET - child doesn't have permission to change segment */
+	{
+	&shm_id_1, IPC_SET, &buf, EPERM},
+	    /* EPERM - IPC_RMID - child can not remove the segment */
+	{
+&shm_id_1, IPC_RMID, &buf, EPERM},};
 
-	/* EPERM - IPC_SET - child doesn't have permission to change segment */
-	{&shm_id_1, IPC_SET, &buf, EPERM},
-
-	/* EPERM - IPC_RMID - child can not remove the segment */
-	{&shm_id_1, IPC_RMID, &buf, EPERM},
-};
+static void do_child(void);
 
 int main(int ac, char **av)
 {
-	char *msg;			/* message returned from parse_opts */
-	int pid;
-	void do_child(void);
+	char *msg;
+	pid_t pid;
+	int status;
 
-	/* parse standard options */
-	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
-		tst_brkm(TBROK, cleanup, "OPTION PARSING ERROR - %s", msg);
+	msg = parse_opts(ac, av, options, &help);
+	if (msg != NULL)
+		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
+	if (sflag)
+		hugepages = SAFE_STRTOL(NULL, nr_opt, 0, LONG_MAX);
 
-        if (get_no_of_hugepages() <= 0 || hugepages_size() <= 0)
-             tst_brkm(TCONF, cleanup, "Not enough available Hugepages");
-        else
-             huge_pages_shm_to_be_allocated = ( get_no_of_hugepages() * hugepages_size() * 1024) / 2 ;
+	setup();
 
-	setup();			/* global setup */
-
-	if ((pid = fork()) == -1) {
-		tst_brkm(TBROK, cleanup, "could not fork");
-	}
-
-	if (pid == 0) {		/* child */
+	switch (pid = fork()) {
+	case -1:
+		tst_brkm(TBROK | TERRNO, cleanup, "fork");
+	case 0:
 		/* set  the user ID of the child to the non root user */
-		if (setuid(ltp_uid) == -1) {
-			tst_resm(TBROK, "setuid() failed");
-			exit(1);
-		}
-
+		if (setuid(ltp_uid) == -1)
+			tst_brkm(TBROK | TERRNO, cleanup, "setuid");
 		do_child();
-	} else {
-		/* wait for the child to return */
-		if (waitpid(pid, NULL, 0) == -1) {
-			tst_brkm(TBROK, cleanup, "waitpid failed");
-		}
-
-		/* if it exists, remove the shared memory resource */
-		rm_shm(shm_id_1);
-
-		tst_rmdir();
+		tst_exit();
+	default:
+		if (waitpid(pid, &status, 0) == -1)
+			tst_brkm(TBROK | TERRNO, cleanup, "waitpid");
 	}
-
-	cleanup ();
+	cleanup();
 	tst_exit();
 }
 
-/*
- * do_child - make the call as the child process
- */
-void
-do_child()
+static void do_child(void)
 {
 	int i, lc;
 
-	/* The following loop checks looping state if -i option given */
-
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
-		/* reset Tst_count in case we are looping */
 		Tst_count = 0;
 
-		/* loop through the test cases */
-		for (i=0; i<TST_TOTAL; i++) {
-			/*
-			 * use the TEST() macro to make the call
-			 */
-
+		for (i = 0; i < TST_TOTAL; i++) {
 			TEST(shmctl(*(TC[i].shmid), TC[i].cmd, TC[i].sbuf));
-
 			if (TEST_RETURN != -1) {
-				tst_resm(TFAIL, "call succeeded unexpectedly");
+				tst_resm(TFAIL, "shmctl succeeded "
+					 "unexpectedly");
 				continue;
 			}
-
-			TEST_ERROR_LOG(TEST_ERRNO);
-
-			if (TEST_ERRNO == TC[i].error) {
-				tst_resm(TPASS, "expected failure - errno = "
-					 "%d : %s", TEST_ERRNO,
-					 strerror(TEST_ERRNO));
-			} else {
-				tst_resm(TFAIL, "call failed with an "
-					 "unexpected error - %d : %s",
-					 TEST_ERRNO, strerror(TEST_ERRNO));
-			}
+			if (TEST_ERRNO == TC[i].error)
+				tst_resm(TPASS | TTERRNO, "shmctl failed "
+					 "as expected");
+			else
+				tst_resm(TFAIL | TTERRNO, "shmctl failed "
+					 "unexpectedly - expect errno = "
+					 "%d, got", TC[i].error);
 		}
 	}
 }
 
-/*
- * setup() - performs all the ONE TIME setup for this test.
- */
-void
-setup(void)
+void setup(void)
 {
-	/* check for root as process owner */
-	check_root();
+	long hpage_size;
 
+	tst_require_root(NULL);
 	tst_sig(FORK, DEF_HANDLER, cleanup);
-
-	/* Set up the expected error numbers for -e option */
-	TEST_EXP_ENOS(exp_enos);
-
-	TEST_PAUSE;
-
-	/*
-	 * Create a temporary directory and cd into it.
-	 * This helps to ensure that a unique msgkey is created.
-	 * See ../lib/libipc.c for more information.
-	 */
 	tst_tmpdir();
 
-	/* get an IPC resource key */
-	shmkey = getipckey();
+	orig_hugepages = get_sys_tune("nr_hugepages");
+	set_sys_tune("nr_hugepages", hugepages, 1);
+	hpage_size = read_meminfo("Hugepagesize:") * 1024;
 
-	/* create a shared memory segment with read and write permissions */
-	if ((shm_id_1 = shmget(shmkey, huge_pages_shm_to_be_allocated, SHM_HUGETLB | IPC_CREAT | IPC_EXCL |
-	     SHM_RW)) == -1) {
-		tst_brkm(TBROK, cleanup, "couldn't create shared memory "
-			 "segment in setup()");
-	}
+	shm_size = hpage_size * hugepages / 2;
+	update_shm_size(&shm_size);
+	shmkey = getipckey();
+	shm_id_1 = shmget(shmkey, shm_size,
+			  SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW);
+	if (shm_id_1 == -1)
+		tst_brkm(TBROK | TERRNO, cleanup, "shmget");
 
 	/* get the userid for a non root user */
 	ltp_uid = getuserid(ltp_user);
+
+	TEST_PAUSE;
 }
 
-/*
- * cleanup() - performs all the ONE TIME cleanup for this test at completion
- * 	       or premature exit.
- */
-void
-cleanup(void)
+void cleanup(void)
 {
-	/*
-	 * print timing stats if that option was specified.
-	 * print errno log if that option was specified.
-	 */
 	TEST_CLEANUP;
 
+	rm_shm(shm_id_1);
+
+	set_sys_tune("nr_hugepages", orig_hugepages, 0);
+
+	tst_rmdir();
 }

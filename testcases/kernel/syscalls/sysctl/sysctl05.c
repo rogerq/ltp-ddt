@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -106,7 +106,6 @@ int main(int ac, char **av)
 	int i;
 	int ret = 0;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -138,15 +137,16 @@ int main(int ac, char **av)
 			TEST_ERROR_LOG(TEST_ERRNO);
 
 			if (TEST_ERRNO == ENOSYS) {
-				tst_resm(TCONF, "You may need to make CONFIG_SYSCTL_SYSCALL=y"
-						" to your kernel config.");
+				tst_resm(TCONF,
+					 "You may need to make CONFIG_SYSCTL_SYSCALL=y"
+					 " to your kernel config.");
 			} else if (TEST_ERRNO != testcases[i].exp_errno) {
 				tst_resm(TFAIL, "sysctl(2) returned unexpected "
 					 "errno, expected: %d, got: %d",
 					 testcases[i].exp_errno, errno);
 			} else {
 				tst_resm(TPASS, "sysctl(2) set errno correctly "
-						"to %d", testcases[i].exp_errno);
+					 "to %d", testcases[i].exp_errno);
 			}
 
 			if (testcases[i].cleanup) {

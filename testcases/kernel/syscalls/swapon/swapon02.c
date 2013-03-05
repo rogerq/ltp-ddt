@@ -9,8 +9,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**************************************************************************
@@ -138,10 +138,9 @@ static struct test_case_t {
 
 int main(int ac, char **av)
 {
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -162,7 +161,7 @@ int main(int ac, char **av)
 				continue;
 			} else {
 				/* run the test */
-				TEST(syscall(__NR_swapon,testcase[i].path, 0));
+				TEST(syscall(__NR_swapon, testcase[i].path, 0));
 			}
 			/* do the clean if the test have one */
 			if (testcase[i].cleanfunc
@@ -190,8 +189,11 @@ int main(int ac, char **av)
 					 testcase[i].exp_errval, TEST_ERRNO);
 				/*If swapfile is turned on, turn it off */
 				if (TEST_RETURN == 0) {
-					if (syscall(__NR_swapoff, testcase[i].path) != 0) {
-						tst_resm(TWARN, "Failed to"
+					if (syscall
+					    (__NR_swapoff,
+					     testcase[i].path) != 0) {
+						tst_resm(TWARN,
+							 "Failed to"
 							 " turn off swapfile"
 							 " swapfile. System"
 							 " reboot after"
@@ -265,8 +267,8 @@ int setup01()
 int cleanup01()
 {
 	if (seteuid(0) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup,
-			"seteuid failed to set uid to root");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "seteuid failed to set uid to root");
 	}
 
 	return 0;

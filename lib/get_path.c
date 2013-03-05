@@ -17,7 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
  /*
@@ -53,11 +54,10 @@ static int file_exist(const char *path)
 
 int tst_get_path(const char *prog_name, char *buf, size_t buf_len)
 {
-	const char *path = (const char*) getenv("PATH");
+	const char *path = (const char *)getenv("PATH");
 	const char *start = path;
 	const char *end;
 	size_t size, ret;
-
 
 	if (path == NULL)
 		return -1;
@@ -66,7 +66,8 @@ int tst_get_path(const char *prog_name, char *buf, size_t buf_len)
 		end = strchr(start, ':');
 
 		if (end != NULL)
-			snprintf(buf, MIN(buf_len, (size_t)(end - start + 1)), "%s", start);
+			snprintf(buf, MIN(buf_len, (size_t) (end - start + 1)),
+				 "%s", start);
 		else
 			snprintf(buf, buf_len, "%s", start);
 
@@ -85,9 +86,13 @@ int tst_get_path(const char *prog_name, char *buf, size_t buf_len)
 		 * If there is no '/' ad the end of path from $PATH add it.
 		 */
 		if (buf[size - 1] != '/')
-			ret = snprintf(buf + size, buf_len - size, "/%s", prog_name);
+			ret =
+			    snprintf(buf + size, buf_len - size, "/%s",
+				     prog_name);
 		else
-			ret = snprintf(buf + size, buf_len - size, "%s", prog_name);
+			ret =
+			    snprintf(buf + size, buf_len - size, "%s",
+				     prog_name);
 
 		if (buf_len - size > ret && file_exist(buf))
 			return 0;

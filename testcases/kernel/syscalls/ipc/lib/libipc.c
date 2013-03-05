@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -202,7 +202,7 @@ int get_used_msgqueues()
 
 	f = popen("ipcs -q", "r");
 	if (!f) {
-		tst_brkm(TBROK|TERRNO, NULL, "pipe failed");
+		tst_brkm(TBROK | TERRNO, NULL, "pipe failed");
 	}
 	/* FIXME: Start at -4 because ipcs prints four lines of header */
 	for (used_queues = -4; fgets(buff, BUFSIZE, f); used_queues++) ;

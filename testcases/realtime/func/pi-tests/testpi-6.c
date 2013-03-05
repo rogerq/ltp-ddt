@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * NAME
  *      testpi-6.c
@@ -75,7 +75,7 @@ int do_test(int argc, char **argv)
 		printf("Failed to init mutexattr\n");
 
 	if (pthread_mutexattr_setrobust_np(&mutexattr,
-	    PTHREAD_MUTEX_ROBUST_NP) != 0)
+					   PTHREAD_MUTEX_ROBUST_NP) != 0)
 		printf("Can't set robust mutex\n");
 
 	if (pthread_mutexattr_getrobust_np(&mutexattr, &robust) != 0)

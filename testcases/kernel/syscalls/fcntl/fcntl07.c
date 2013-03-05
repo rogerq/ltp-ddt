@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -193,8 +193,8 @@ int do_exec(char *prog, int fd, char *tcd);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	int exec_return;	/* return from do_exec */
 	int **tcp;		/* testcase pointer (pointer to FD) */
@@ -220,10 +220,9 @@ int main(int ac, char **av)
 			TEST(fcntl(**tcp, F_SETFD, FD_CLOEXEC));
 
 			if (TEST_RETURN == -1) {
-				tst_resm(TFAIL|TTERRNO,
+				tst_resm(TFAIL | TTERRNO,
 					 "fcntl(%s[%d], F_SETFD, FD_CLOEXEC) "
-					 "failed",
-					 *tcd, **tcp);
+					 "failed", *tcd, **tcp);
 			} else {
 
 				if (STD_FUNCTIONAL_TEST) {
@@ -277,7 +276,7 @@ void setup(char *path)
 
 	tst_tmpdir();
 
-	file_fd = SAFE_OPEN(cleanup, File1, O_CREAT|O_RDWR, 0666);
+	file_fd = SAFE_OPEN(cleanup, File1, O_CREAT | O_RDWR, 0666);
 	SAFE_PIPE(cleanup, pipe_fds);
 }
 

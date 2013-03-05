@@ -13,7 +13,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 #include <sys/mman.h>
@@ -37,7 +37,7 @@ long get_page_size()
 void free_pages(void **pages, unsigned int num)
 {
 
-#if HAS_NUMA_H
+#if HAVE_NUMA_H
 	int i;
 	size_t onepage = get_page_size();
 
@@ -112,18 +112,25 @@ int alloc_pages_linear(void **pages, unsigned int num)
 {
 	int nodes[num];
 
-#if HAS_NUMA_H
+#if HAVE_NUMA_H
 	unsigned int i;
-	unsigned int n;
+	unsigned int n = 0;
+	int num_allowed_nodes;
+	int *allowed_nodes;
+	int ret;
 
-	n = 0;
+	ret = get_allowed_nodes_arr(NH_MEMS, &num_allowed_nodes,
+				    &allowed_nodes);
+	if (ret < 0)
+		tst_brkm(TBROK | TERRNO, NULL, "get_allowed_nodes(): %d", ret);
+
 	for (i = 0; i < num; i++) {
-		nodes[i] = n;
-
+		nodes[i] = allowed_nodes[n];
 		n++;
-		if (n > numa_max_node())
+		if (n >= num_allowed_nodes)
 			n = 0;
 	}
+	free(allowed_nodes);
 #endif
 
 	return alloc_pages_on_nodes(pages, num, nodes);
@@ -183,7 +190,7 @@ verify_pages_on_nodes(void **pages, int *status, unsigned int num, int *nodes)
 				    pages[i], MPOL_F_NODE | MPOL_F_ADDR);
 		if (ret == -1) {
 			tst_resm(TBROK | TERRNO, "error getting memory policy "
-				 		 "for page %p", pages[i]);
+				 "for page %p", pages[i]);
 			return;
 		}
 
@@ -208,20 +215,26 @@ verify_pages_on_nodes(void **pages, int *status, unsigned int num, int *nodes)
  */
 void verify_pages_linear(void **pages, int *status, unsigned int num)
 {
-#if HAS_NUMA_H
+#if HAVE_NUMA_H
 	unsigned int i;
-	unsigned int n;
+	unsigned int n = 0;
 	int nodes[num];
+	int num_allowed_nodes;
+	int *allowed_nodes;
+	int ret;
 
-	n = 0;
+	ret = get_allowed_nodes_arr(NH_MEMS, &num_allowed_nodes,
+				    &allowed_nodes);
+	if (ret < 0)
+		tst_brkm(TBROK | TERRNO, NULL, "get_allowed_nodes(): %d", ret);
 
 	for (i = 0; i < num; i++) {
-		nodes[i] = i;
-
+		nodes[i] = allowed_nodes[n];
 		n++;
-		if (n > numa_max_node())
+		if (n >= num_allowed_nodes)
 			n = 0;
 	}
+	free(allowed_nodes);
 
 	verify_pages_on_nodes(pages, status, num, nodes);
 #endif
@@ -257,7 +270,7 @@ void verify_pages_on_node(void **pages, int *status, unsigned int num, int node)
  */
 int alloc_shared_pages_on_node(void **pages, unsigned int num, int node)
 {
-#if HAS_NUMA_H
+#if HAVE_NUMA_H
 	char *shared;
 	unsigned int i;
 	int nodes[num];
@@ -335,7 +348,7 @@ sem_t *alloc_sem(int num)
 		ret = sem_init(&sem[i], 1, 0);
 		if (ret == -1) {
 			tst_resm(TBROK | TERRNO, "semaphore initialization "
-						 "failed");
+				 "failed");
 			goto err_free_mem;
 		}
 	}
@@ -380,16 +393,23 @@ void free_sem(sem_t * sem, int num)
  */
 void check_config(unsigned int min_nodes)
 {
-#if HAS_NUMA_H
+#if HAVE_NUMA_H && HAVE_NUMAIF_H
+	int num_allowed_nodes;
+	int ret;
+
+	ret = get_allowed_nodes_arr(NH_MEMS, &num_allowed_nodes, NULL);
+	if (ret < 0)
+		tst_brkm(TBROK | TERRNO, NULL, "get_allowed_nodes(): %d", ret);
+
 	if (numa_available() < 0) {
-		tst_resm(TCONF, "NUMA support is not available");
-	} else if (numa_max_node() < (min_nodes - 1)) {
-		tst_resm(TCONF, "atleast 2 NUMA nodes are required");
+		tst_brkm(TCONF, NULL, "NUMA support is not available");
+	} else if (num_allowed_nodes < min_nodes) {
+		tst_brkm(TCONF, NULL, "at least %d allowed NUMA nodes"
+			 " are required", min_nodes);
 	} else if (tst_kvercmp(2, 6, 18) < 0) {
-		tst_resm(TCONF, "2.6.18 or greater kernel required");
+		tst_brkm(TCONF, NULL, "2.6.18 or greater kernel required");
 	}
 #else
-	tst_resm(TCONF, "NUMA support not provided");
+	tst_brkm(TCONF, NULL, "NUMA support not provided");
 #endif
-	tst_exit();
 }

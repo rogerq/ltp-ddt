@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -55,7 +55,7 @@ void cleanup(void);
 int main(int ac, char **av)
 {
 	struct passwd *pwent;
-	int lc;			/* loop counter */
+	int lc;
 	char *msg;		/* message returned by parse_opts */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -70,12 +70,12 @@ int main(int ac, char **av)
 		TEST(GETUID());
 
 		if (TEST_RETURN == -1)
-			tst_brkm(TBROK|TTERRNO, cleanup, "getuid failed");
+			tst_brkm(TBROK | TTERRNO, cleanup, "getuid failed");
 
 		if (STD_FUNCTIONAL_TEST) {
 			pwent = getpwuid(TEST_RETURN);
 			if (pwent == NULL)
-				tst_resm(TFAIL|TERRNO, "getpwuid failed");
+				tst_resm(TFAIL | TERRNO, "getpwuid failed");
 			else if (!UID_SIZE_CHECK(pwent->pw_uid))
 				tst_brkm(TBROK, cleanup,
 					 "uid = %ld is too large for testing "

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -133,12 +133,13 @@ struct test_case_t {
 	{
 	NULL, EFAULT, NULL}
 };
+
 int TST_TOTAL = (sizeof(TC) / sizeof(*TC));
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i;
 
 	/*
@@ -228,7 +229,7 @@ void set_condition(int num)
 		if (mkdir(tstdir1, PERMS) == -1) {
 			tst_brkm(TBROK, cleanup, "mkdir(%s, %#o) Failed",
 				 tstdir1, PERMS);
-		 }
+		}
 
 		/* create a file under tstdir1 */
 		do_file_setup(tstfile);
@@ -249,7 +250,7 @@ void set_condition(int num)
 		/* create a file */
 		if ((fd = creat(tstfile, PERMS)) == -1) {
 			tst_brkm(TBROK, cleanup, "creat() failed");
-		 }
+		}
 		close(fd);
 		break;
 	default:

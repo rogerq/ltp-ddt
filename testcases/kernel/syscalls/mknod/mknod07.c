@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -91,11 +91,11 @@ struct test_case_t {		/* test case struct. to hold ref. test cond's */
 	char *pathname;
 	int mode;
 	int exp_errno;
-	void (*setupfunc)(void);
+	void (*setupfunc) (void);
 } test_cases[] = {
-	{ "tnode_1", SOCKET_MODE, EACCES, NULL },
-	{ "tnode_2", NEWMODE, EACCES, setup2 },
-};
+	{
+	"tnode_1", SOCKET_MODE, EACCES, NULL}, {
+"tnode_2", NEWMODE, EACCES, setup2},};
 
 char *TCID = "mknod07";		/* Test program identifier.    */
 int TST_TOTAL = 2;		/* Total number of test cases. */
@@ -109,10 +109,10 @@ void cleanup();			/* cleanup function for the tests */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	char *node_name;	/* ptr. for node name created */
-	int i;		/* counter to test different test conditions */
+	int i;
 	int mode;		/* creation mode for the node created */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -138,13 +138,13 @@ int main(int ac, char **av)
 			}
 
 			if (TEST_ERRNO == test_cases[i].exp_errno)
-				tst_resm(TPASS|TTERRNO,
-				    "mknod failed as expected");
+				tst_resm(TPASS | TTERRNO,
+					 "mknod failed as expected");
 			else
-				tst_resm(TFAIL|TTERRNO,
-				    "mknod failed unexpectedly; expected: "
-				    "%d - %s", test_cases[i].exp_errno,
-				    strerror(test_cases[i].exp_errno));
+				tst_resm(TFAIL | TTERRNO,
+					 "mknod failed unexpectedly; expected: "
+					 "%d - %s", test_cases[i].exp_errno,
+					 strerror(test_cases[i].exp_errno));
 		}
 
 	}
@@ -163,22 +163,22 @@ void setup()
 
 	ltpuser = getpwnam(nobody_uid);
 	if (ltpuser == NULL)
-		tst_brkm(TBROK|TERRNO, NULL, "getpwnam failed");
+		tst_brkm(TBROK | TERRNO, NULL, "getpwnam failed");
 	if (seteuid(ltpuser->pw_uid) == -1)
-		tst_brkm(TBROK|TERRNO, NULL, "setuid failed");
+		tst_brkm(TBROK | TERRNO, NULL, "setuid failed");
 
 	TEST_PAUSE;
 
 	tst_tmpdir();
 
 	if (mkdir(DIR_TEMP, MODE_RWX) < 0)
-		tst_brkm(TBROK|TERRNO, cleanup, "mkdir failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "mkdir failed");
 
 	if (chmod(DIR_TEMP, MODE_RWX) < 0)
-		tst_brkm(TBROK|TERRNO, cleanup, "chmod failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "chmod failed");
 
 	if (chdir(DIR_TEMP) < 0)
-		tst_brkm(TBROK|TERRNO, cleanup, "chdir failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "chdir failed");
 
 	for (i = 0; i < TST_TOTAL; i++)
 		if (test_cases[i].setupfunc != NULL)

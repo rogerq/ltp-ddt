@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -41,8 +41,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 
 #ifndef VERBOSE
 #define VERBOSE 1
@@ -80,8 +80,8 @@ void read_catalog(nl_catd cat, char *who)
 }
 
 static char *messcat_in =
-"$set 1\n1 First sentence\n2 Second sentence\n"
-"$set 2\n1 First translated sentence\n2 Second translated sentence\n";
+    "$set 1\n1 First sentence\n2 Second sentence\n"
+    "$set 2\n1 First translated sentence\n2 Second translated sentence\n";
 
 static int create_catalog(void)
 {
@@ -105,7 +105,7 @@ static int create_catalog(void)
 	return 0;
 }
 
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret, status;
 	pid_t child, ctl;
@@ -117,19 +117,20 @@ int main(int argc, char * argv[])
 	if (system(NULL)) {
 
 		if (create_catalog() != 0)
-			UNRESOLVED(errno, "Can't create "MESSCAT_IN);
+			UNRESOLVED(errno, "Can't create " MESSCAT_IN);
 
-		ret = system("gencat "MESSCAT_OUT" "MESSCAT_IN);
+		ret = system("gencat " MESSCAT_OUT " " MESSCAT_IN);
 
 		if (ret != 0)
-			output("Could not find the source file for message catalog.\n" \
-			        "You may need to execute gencat yourself.\n");
+			output
+			    ("Could not find the source file for message catalog.\n"
+			     "You may need to execute gencat yourself.\n");
 	}
 
-	messcat = catopen("./"MESSCAT_OUT, 0);
+	messcat = catopen("./" MESSCAT_OUT, 0);
 
-	if (messcat == (nl_catd) -1)
-		UNRESOLVED(errno, "Could not open ./"MESSCAT_OUT);
+	if (messcat == (nl_catd) - 1)
+		UNRESOLVED(errno, "Could not open ./" MESSCAT_OUT);
 
 	read_catalog(messcat, "parent");
 
@@ -156,7 +157,7 @@ int main(int argc, char * argv[])
 	if (ret != 0)
 		UNRESOLVED(errno, "Failed to close the message catalog");
 
-	system("rm -f "MESSCAT_IN" "MESSCAT_OUT);
+	system("rm -f " MESSCAT_IN " " MESSCAT_OUT);
 
 #if VERBOSE > 0
 	output("Test passed\n");

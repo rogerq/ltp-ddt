@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -66,24 +66,25 @@ void *addr1;
 struct test_case_t {
 	void **addr;
 	int len;
-	void (*setupfunc)();
+	void (*setupfunc) ();
 } TC[] = {
 	/* mlock should return ENOMEM when some or all of the address
 	 * range pointed to by addr and len are not valid mapped pages
 	 * in the address space of the process
 	 */
-	{ &addr1, 1, setup1},
-	{ &addr1, 1024, setup1},
-	{ &addr1, 1024 * 1024, setup1},
-	{ &addr1, 1024 * 1024 * 10, setup1}
+	{
+	&addr1, 1, setup1}, {
+	&addr1, 1024, setup1}, {
+	&addr1, 1024 * 1024, setup1}, {
+	&addr1, 1024 * 1024 * 10, setup1}
 };
 
 #if !defined(UCLINUX)
 
 int main(int ac, char **av)
 {
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -114,7 +115,7 @@ int main(int ac, char **av)
 			 * should fail as designed, but this application
 			 * */
 			if (TEST_RETURN == -1)
-				tst_resm(TFAIL|TTERRNO, "mlock failed");
+				tst_resm(TFAIL | TTERRNO, "mlock failed");
 			else
 				tst_resm(TPASS, "mlock passed");
 		}

@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /*
@@ -60,6 +60,7 @@ char testfile[256] = "";
 struct passwd *ltpuser;
 
 int exp_enos[] = { EACCES, 0 };
+
 int fd = -1;
 
 void setup(void);
@@ -69,10 +70,9 @@ void do_master_child();
 int main(int ac, char **av)
 {
 	pid_t pid;
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 	int status;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	setup();
@@ -87,7 +87,7 @@ int main(int ac, char **av)
 		do_master_child();
 
 	if (waitpid(pid, &status, 0) == -1)
-		tst_resm(TBROK|TERRNO, "waitpid failed");
+		tst_resm(TBROK | TERRNO, "waitpid failed");
 	if (!WIFEXITED(status) || (WEXITSTATUS(status) != 0))
 		tst_resm(TFAIL, "child process terminated abnormally");
 
@@ -100,7 +100,7 @@ int main(int ac, char **av)
  */
 void do_master_child()
 {
-	int lc;			/* loop counter */
+	int lc;
 	int pid;
 	int status;
 

@@ -146,5 +146,20 @@ int safe_truncate(const char *file, const int lineno,
 #define SAFE_TRUNCATE(cleanup_fn, fd, length) \
 	safe_truncate(__FILE__, __LINE__, cleanup_fn, (path), (length))
 
+long safe_strtol(const char *file, const int lineno,
+	    void (cleanup_fn)(void), char *str, long min, long max);
+#define SAFE_STRTOL(cleanup_fn, str, min, max) \
+	safe_strtol(__FILE__, __LINE__, cleanup_fn, (str), (min), (max))
+
+unsigned long safe_strtoul(const char *file, const int lineno, void (cleanup_fn)(void),
+            char *str, unsigned long min, unsigned long max);
+#define SAFE_STRTOUL(cleanup_fn, str, min, max) \
+	safe_strtoul(__FILE__, __LINE__, cleanup_fn, (str), (min), (max))
+
+long safe_sysconf(const char *file, const int lineno,
+		  void (cleanup_fn)(void), int name);
+#define SAFE_SYSCONF(cleanup_fn, name) \
+	safe_sysconf(__FILE__, __LINE__, cleanup_fn, name);
+
 #endif
 #endif

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -81,17 +81,6 @@ int main(int ac, char **av)
 	char *dir_name = NULL;
 	struct dirent *dirp;
 
-	/*
-	 * Here's a case where invoking the system call directly
-	 * doesn't seem to work.  getdents.h has an assembly
-	 * macro to do the job.
-	 *
-	 * equivalent to  - getdents(fd, dirp, count);
-	 * if we could call getdents that way.
-	 */
-
-#define getdents(arg1, arg2, arg3) syscall(__NR_getdents, arg1, arg2, arg3)
-
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -120,17 +109,16 @@ int main(int ac, char **av)
 		rval = getdents(fd, dirp, count);
 		if (rval < 0) {
 
-			rval *= -1;
-			TEST_ERROR_LOG(rval);
+			TEST_ERROR_LOG(errno);
 
-			tst_resm(TFAIL, "%s call failed - errno = %d "
-				 ": %s", TCID, rval, strerror(rval));
+			tst_resm(TFAIL | TERRNO,
+				 "getdents failed unexpectedly");
 			continue;
 		}
 
 		if (rval == 0) {
-			tst_resm(TFAIL, "%s call failed - returned "
-				 "end of directory", TCID);
+			tst_resm(TFAIL,
+				 "getdents failed - returned end of directory");
 			continue;
 		}
 

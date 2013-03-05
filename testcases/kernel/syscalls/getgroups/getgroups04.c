@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -92,15 +92,15 @@ struct test_case_t {		/* test case struct. to hold ref. test cond's */
 	int exp_errno;
 	int (*setupfunc) ();
 } test_cases[] = {
-	{ -1, 1, "Size is < no. suppl. gids", EINVAL },
-};
+	{
+-1, 1, "Size is < no. suppl. gids", EINVAL},};
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int gidsetsize;		/* total no. of groups */
-	int i;		/* counter to test different test conditions */
+	int i;
 	char *test_desc;	/* test specific error message */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -122,17 +122,18 @@ int main(int ac, char **av)
 
 			if (TEST_RETURN == -1) {
 				if (TEST_ERRNO == test_cases[i].exp_errno)
-					tst_resm(TPASS|TTERRNO,
-					    "getgroups failed as expected");
+					tst_resm(TPASS | TTERRNO,
+						 "getgroups failed as expected");
 				else
-					tst_resm(TFAIL|TTERRNO,
-					    "getgroups failed unexpectedly; "
-					    "expected: %d - %s",
-					    test_cases[i].exp_errno,
-					    strerror(test_cases[i].exp_errno));
+					tst_resm(TFAIL | TTERRNO,
+						 "getgroups failed unexpectedly; "
+						 "expected: %d - %s",
+						 test_cases[i].exp_errno,
+						 strerror(test_cases[i].
+							  exp_errno));
 			} else
 				tst_resm(TFAIL,
-				    "getgroups succeeded unexpectedly");
+					 "getgroups succeeded unexpectedly");
 		}
 
 	}

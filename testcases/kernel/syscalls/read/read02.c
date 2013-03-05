@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -106,10 +106,9 @@ char *bad_addr = 0;
 int main(int ac, char **av)
 {
 	int i;
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -176,7 +175,7 @@ void setup(void)
 
 	if (write(fd3, "A", 1) != 1) {
 		tst_brkm(TBROK, cleanup, "can't write to fd3");
-	 }
+	}
 	close(fd3);
 	if ((fd3 = open(fname, O_RDWR | O_CREAT, 0666)) == -1) {
 		tst_brkm(TBROK, cleanup, "open of fd3 (temp file) failed");

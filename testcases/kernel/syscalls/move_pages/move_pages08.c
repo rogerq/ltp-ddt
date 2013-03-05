@@ -18,7 +18,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -46,7 +46,7 @@
  *		Initial Version.
  *
  * Restrictions
- *	None
+ *	kernel < 2.6.29
  */
 
 #include <sys/mman.h>
@@ -61,37 +61,38 @@
 #define TEST_PAGES 2
 #define TEST_NODES 2
 
-void setup(void);
-void cleanup(void);
+static void setup(void);
+static void cleanup(void);
 
 char *TCID = "move_pages08";
 int TST_TOTAL = 1;
 
 int main(int argc, char **argv)
 {
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
-	/* parse standard options */
 	msg = parse_opts(argc, argv, NULL, NULL);
-	if (msg != NULL) {
+	if (msg != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-
-	}
 
 	setup();
 
 #if HAVE_NUMA_MOVE_PAGES
 	unsigned int i;
-	int lc;			/* loop counter */
-	unsigned int from_node = 0;
-	unsigned int to_node = 1;
+	int lc;
+	unsigned int from_node;
+	unsigned int to_node;
+	int ret;
+
+	ret = get_allowed_nodes(NH_MEMS, 2, &from_node, &to_node);
+	if (ret < 0)
+		tst_brkm(TBROK | TERRNO, cleanup, "get_allowed_nodes: %d", ret);
 
 	/* check for looping state if -i option is given */
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		void *pages[TEST_PAGES] = { 0 };
 		int nodes[TEST_PAGES];
 		int status[TEST_PAGES];
-		int ret;
 
 		/* reset Tst_count in case we are looping */
 		Tst_count = 0;
@@ -127,8 +128,19 @@ int main(int argc, char **argv)
 /*
  * setup() - performs all ONE TIME setup for this test
  */
-void setup(void)
+static void setup(void)
 {
+	/*
+	 * commit 3140a2273009c01c27d316f35ab76a37e105fdd8
+	 * Author: Brice Goglin <Brice.Goglin@inria.fr>
+	 * Date:   Tue Jan 6 14:38:57 2009 -0800
+	 *     mm: rework do_pages_move() to work on page_sized chunks
+	 *
+	 * reworked do_pages_move() to work by page-sized chunks and removed E2BIG
+	 */
+	if ((tst_kvercmp(2, 6, 29)) >= 0)
+		tst_brkm(TCONF, NULL, "move_pages: E2BIG was removed in "
+			 "commit 3140a227");
 
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 
@@ -143,7 +155,7 @@ void setup(void)
 /*
  * cleanup() - performs all ONE TIME cleanup for this test at completion
  */
-void cleanup(void)
+static void cleanup(void)
 {
 	/*
 	 * print timing stats if that option was specified.
@@ -151,4 +163,4 @@ void cleanup(void)
 	 */
 	TEST_CLEANUP;
 
- }
+}

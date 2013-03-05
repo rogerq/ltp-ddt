@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -45,8 +45,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -79,18 +79,16 @@
 /***************************    Test case   ***********************************/
 /******************************************************************************/
 
-void * threaded (void * arg)
+void *threaded(void *arg)
 {
 	int ret = 0;
 
-	do
-	{
+	do {
 		ret = sem_wait(arg);
 	}
 	while ((ret != 0) && (errno == EINTR));
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to wait for the semaphore");
 	}
 
@@ -98,11 +96,11 @@ void * threaded (void * arg)
 }
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret;
 	pthread_t thread;
-	sem_t * sem;
+	sem_t *sem;
 
 	/* Initialize output */
 	output_init();
@@ -110,22 +108,19 @@ int main(int argc, char * argv[])
 	/* Create the semaphore */
 	sem = sem_open(SEM_NAME, O_CREAT | O_EXCL, 0777, 1);
 
-	if ((sem == SEM_FAILED) && (errno == EEXIST))
-	{
+	if ((sem == SEM_FAILED) && (errno == EEXIST)) {
 		sem_unlink(SEM_NAME);
 		sem = sem_open(SEM_NAME, O_CREAT | O_EXCL, 0777, 1);
 	}
 
-	if (sem == SEM_FAILED)
-	{
+	if (sem == SEM_FAILED) {
 		UNRESOLVED(errno, "Failed to create the semaphore");
 	}
 
 	/* Create the child thread */
 	ret = pthread_create(&thread, NULL, threaded, sem);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to create the thread");
 	}
 
@@ -135,32 +130,28 @@ int main(int argc, char * argv[])
 	/* Unlink */
 	ret = sem_unlink(SEM_NAME);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to unlink the semaphore");
 	}
 
 	/* Now, we're success */
 	ret = sem_post(sem);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to post the semaphore");
 	}
 
 	/* Join the thread */
 	ret = pthread_join(thread, NULL);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to join the thread");
 	}
 
 	/* close  */
 	ret = sem_close(sem);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(errno, "Failed to close the semaphore");
 	}
 

@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -126,8 +126,8 @@ long Beg_brk_val;
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int incr;		/* increment */
 	long nbrkpt;		/* new brk point value */
 	long cur_brk_val;	/* current size returned by sbrk */
@@ -190,7 +190,7 @@ int main(int ac, char **av)
 		if (TEST_RETURN == -1) {
 
 			aft_brk_val = (long)sbrk(0);
-			tst_resm(TFAIL|TTERRNO,
+			tst_resm(TFAIL | TTERRNO,
 				 "brk(%ld) failed (size before %ld, after %ld)",
 				 nbrkpt, cur_brk_val, aft_brk_val);
 
@@ -234,13 +234,13 @@ void setup()
 	   tst_brkm(TBROK|TERRNO, cleanup, "ulimit(3,0) failed"); */
 
 	if (getrlimit(RLIMIT_DATA, &lim) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "getrlimit(RLIMIT_DATA,%p) failed", &lim);
 	ulim_sz = lim.rlim_cur;
 
 #ifdef CRAY
 	if ((usr_mem_sz = sysconf(_SC_CRAY_USRMEM)) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "sysconf(_SC_CRAY_USRMEM) failed");
 
 	usr_mem_sz *= 8;	/* convert to bytes */
@@ -256,7 +256,8 @@ void setup()
 #define _SC_NPROC_ONLN _SC_NPROCESSORS_ONLN
 #endif
 	if ((ncpus = sysconf(_SC_NPROC_ONLN)) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "sysconf(_SC_NPROC_ONLN) failed");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "sysconf(_SC_NPROC_ONLN) failed");
 
 	/*
 	 * allow 2*ncpus copies to run.

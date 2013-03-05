@@ -15,14 +15,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program;  if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  ************************************************************************/
 
 #include "set_thread_area.h"
 
 char *TCID = "set_thread_area_01";
-int  TST_TOTAL = 6;
+int TST_TOTAL = 6;
 
 #if defined(HAVE_ASM_LDT_H) && defined(HAVE_STRUCT_USER_DESC)
 
@@ -49,16 +49,16 @@ struct test {
  * So when we call get_thread_area on u_info1, the entry number is initalized
  * corectly by the previous set_thread_area.
  */
-static struct user_desc u_info1 = {.entry_number = -1};
-static struct user_desc u_info2 = {.entry_number = -2};
+static struct user_desc u_info1 = {.entry_number = -1 };
+static struct user_desc u_info2 = {.entry_number = -2 };
 
 static struct test tests[] = {
-	{__NR_set_thread_area, &u_info1,   0, 0},
-	{__NR_get_thread_area, &u_info1,   0, 0},
-	{__NR_set_thread_area, &u_info2,  -1, EINVAL},
-	{__NR_get_thread_area, &u_info2,  -1, EINVAL},
-	{__NR_set_thread_area, (void*)-9, -1, EFAULT},
-	{__NR_get_thread_area, (void*)-9, -1, EFAULT},
+	{__NR_set_thread_area, &u_info1, 0, 0},
+	{__NR_get_thread_area, &u_info1, 0, 0},
+	{__NR_set_thread_area, &u_info2, -1, EINVAL},
+	{__NR_get_thread_area, &u_info2, -1, EINVAL},
+	{__NR_set_thread_area, (void *)-9, -1, EFAULT},
+	{__NR_get_thread_area, (void *)-9, -1, EFAULT},
 };
 
 static const char *get_name(int syscall)
@@ -66,10 +66,10 @@ static const char *get_name(int syscall)
 	switch (syscall) {
 	case __NR_set_thread_area:
 		return "set_thread_area()";
-	break;
+		break;
 	case __NR_get_thread_area:
 		return "get_thread_area()";
-	break;
+		break;
 	default:
 		return "invalid syscall";
 	}
@@ -81,31 +81,33 @@ int main(int argc, char *argv[])
 	char *msg;
 
 	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL)
-		 tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
+		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
 	setup();
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		for (i = 0; i < sizeof(tests) / sizeof(struct test); i++) {
 			TEST(syscall(tests[i].syscall, tests[i].u_info));
-			
+
 			if (TEST_RETURN != tests[i].exp_ret) {
 				tst_resm(TFAIL, "%s returned %li expected %i",
-				         get_name(tests[i].syscall),
+					 get_name(tests[i].syscall),
 					 TEST_RETURN, tests[i].exp_ret);
 				continue;
 			}
 
 			if (TEST_ERRNO != tests[i].exp_errno) {
-				tst_resm(TFAIL, "%s failed with %i (%s) expected %i (%s)",
-				         get_name(tests[i].syscall), TEST_ERRNO,
-					 strerror(TEST_ERRNO), tests[i].exp_errno,
+				tst_resm(TFAIL,
+					 "%s failed with %i (%s) expected %i (%s)",
+					 get_name(tests[i].syscall), TEST_ERRNO,
+					 strerror(TEST_ERRNO),
+					 tests[i].exp_errno,
 					 strerror(tests[i].exp_errno));
 				continue;
 			}
-			
+
 			tst_resm(TPASS, "%s returned %li errno %i (%s)",
-			         get_name(tests[i].syscall), TEST_RETURN,
+				 get_name(tests[i].syscall), TEST_RETURN,
 				 TEST_ERRNO, strerror(TEST_ERRNO));
 		}
 	}
@@ -116,7 +118,8 @@ int main(int argc, char *argv[])
 #else
 int main(void)
 {
-	tst_brkm(TCONF, NULL, "set_thread_area isn't available for this architecture");
+	tst_brkm(TCONF, NULL,
+		 "set_thread_area isn't available for this architecture");
 	tst_exit();
 }
 #endif

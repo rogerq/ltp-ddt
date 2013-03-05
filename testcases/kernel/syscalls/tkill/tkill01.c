@@ -13,7 +13,7 @@
 /*									    */
 /* You should have received a copy of the GNU General Public License	  */
 /* along with this program;  if not, write to the Free Software	       */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*									    */
 /******************************************************************************/
 /******************************************************************************/
@@ -56,17 +56,19 @@
 /* Extern Global Variables */
 
 /* Global Variables */
-char *TCID = "tkill01";  /* Test program identifier.*/
-int  testno;
-int  TST_TOTAL = 2;		   /* total number of tests in this file.   */
+char *TCID = "tkill01";		/* Test program identifier. */
+int testno;
+int TST_TOTAL = 2;		/* total number of tests in this file.   */
 
-void cleanup() {
+void cleanup()
+{
 
 	TEST_CLEANUP;
 	tst_rmdir();
 }
 
-void setup() {
+void setup()
+{
 	TEST_PAUSE;
 	tst_tmpdir();
 }
@@ -78,10 +80,11 @@ void sig_action(int sig)
 	sig_count = 1;
 }
 
-int main(int ac, char **av) {
+int main(int ac, char **av)
+{
 	int tid;
-	int lc;		 /* loop counter */
-	char *msg;	      /* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -92,17 +95,17 @@ int main(int ac, char **av) {
 		Tst_count = 0;
 		for (testno = 0; testno < TST_TOTAL; ++testno) {
 			if (signal(SIGUSR1, &sig_action) == SIG_ERR)
-				tst_brkm(TBROK|TERRNO, cleanup,
-				    "signal(SIGUSR1, ..) failed");
-			TEST(tid = syscall( __NR_gettid));
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "signal(SIGUSR1, ..) failed");
+			TEST(tid = syscall(__NR_gettid));
 			if (TEST_RETURN == -1) {
-				tst_resm(TFAIL|TTERRNO, "tkill failed");
+				tst_resm(TFAIL | TTERRNO, "tkill failed");
 			}
-			TEST(syscall(__NR_tkill,tid, SIGUSR1));
+			TEST(syscall(__NR_tkill, tid, SIGUSR1));
 			if (TEST_RETURN == 0) {
 				tst_resm(TPASS, "tkill call succeeded");
 			} else {
-				tst_resm(TFAIL|TTERRNO, "tkill failed");
+				tst_resm(TFAIL | TTERRNO, "tkill failed");
 			}
 		}
 	}

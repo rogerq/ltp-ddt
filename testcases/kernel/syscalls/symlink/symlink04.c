@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -92,15 +92,15 @@ void cleanup();			/* Cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat structure buffer */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	msg = parse_opts(ac, av, NULL, NULL);
 	if (msg != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
-	 }
+	}
 
 	setup();
 
@@ -136,7 +136,7 @@ int main(int ac, char **av)
 					tst_brkm(TFAIL, cleanup, "lstat(2) of "
 						 "%s failed, error:%d", SYMFILE,
 						 errno);
-				 }
+				}
 
 				/* Check if the st_mode contains a link  */
 				if (!S_ISLNK(stat_buf.st_mode)) {
@@ -158,7 +158,7 @@ int main(int ac, char **av)
 			tst_brkm(TBROK, cleanup,
 				 "unlink(%s) Failed, errno=%d : %s",
 				 SYMFILE, errno, strerror(errno));
-		 }
+		}
 		Tst_count++;	/* incr TEST_LOOP counter */
 	}
 
@@ -193,7 +193,7 @@ void setup()
 		tst_brkm(TBROK, cleanup,
 			 "open(%s, O_RDWR|O_CREAT, %#o) Failed, errno=%d : %s",
 			 TESTFILE, FILE_MODE, errno, strerror(errno));
-	 }
+	}
 
 	/* Close the temporary file created above */
 	if (close(fd) == -1) {

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -103,11 +103,10 @@ struct test_case_t {		/* This allows testing of many negative */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -136,9 +135,9 @@ int main(int ac, char **av)
 			TEST_ERROR_LOG(TEST_ERRNO);
 
 			if (TEST_ERRNO == TC[i].error) {
-				tst_resm(TPASS|TTERRNO, "expected failure");
+				tst_resm(TPASS | TTERRNO, "expected failure");
 			} else {
-				tst_resm(TFAIL|TTERRNO, "unexpected error");
+				tst_resm(TFAIL | TTERRNO, "unexpected error");
 				tst_resm(TINFO, "expected error is - %d : %s",
 					 TC[i].error, strerror(TC[i].error));
 			}
@@ -186,13 +185,15 @@ void setup(void)
 
 	/* now we have a key, so let's create a message queue */
 	if ((msg_q_1 = msgget(msgkey, IPC_CREAT | IPC_EXCL)) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup, "Can't create message queue #1");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "Can't create message queue #1");
 	}
 
 	/* now let's create another message queue with read & write access */
 	if ((msg_q_2 =
 	     msgget(msgkey2, IPC_CREAT | IPC_EXCL | MSG_RD | MSG_WR)) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup, "Can't create message queue #2");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "Can't create message queue #2");
 	}
 }
 

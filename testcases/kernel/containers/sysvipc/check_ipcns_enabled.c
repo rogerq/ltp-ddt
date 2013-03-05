@@ -11,7 +11,7 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 * Author: Rishikesh K Rajak <risrajak@in.ibm.com>
 ***************************************************************************/
@@ -22,18 +22,19 @@
 
 int dummy(void *v)
 {
-      return 0;
+	return 0;
 }
+
 int main()
 {
-        int pid;
+	int pid;
 
-        if (tst_kvercmp(2,6,19) < 0)
-                return 1;
+	if (tst_kvercmp(2, 6, 19) < 0)
+		return 1;
 
 	pid = ltp_clone_quick(CLONE_NEWIPC, dummy, NULL);
 
-        if (pid == -1)
-                return 3;
-      return 0;
+	if (pid == -1)
+		return 3;
+	return 0;
 }

@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -131,8 +131,8 @@ int fork_pid;
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int status;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -149,7 +149,7 @@ int main(int ac, char **av)
 		Tst_count = 0;
 
 		if ((fork_pid = FORK_OR_VFORK()) == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "fork failed");
+			tst_brkm(TBROK | TERRNO, cleanup, "fork failed");
 
 		if (fork_pid == 0) {
 #ifdef UCLINUX
@@ -164,11 +164,12 @@ int main(int ac, char **av)
 
 		TEST(kill(fork_pid, SIGKILL));
 		if (TEST_RETURN == -1)
-			tst_resm(TFAIL|TTERRNO, "kill(.., SIGKILL) failed");
+			tst_resm(TFAIL | TTERRNO, "kill(.., SIGKILL) failed");
 		else {
 
 			if (STD_FUNCTIONAL_TEST) {
-				tst_resm(TPASS, "kill(%d, SIGKILL) returned %ld",
+				tst_resm(TPASS,
+					 "kill(%d, SIGKILL) returned %ld",
 					 fork_pid, TEST_RETURN);
 			}
 		}

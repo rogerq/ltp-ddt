@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -92,8 +92,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	char read_buf[1];	/* data read from temp. file */
 
 	/* Parse standard options given to run the test. */
@@ -113,8 +113,8 @@ int main(int ac, char **av)
 		TEST(lseek(fildes, 0, SEEK_END));
 
 		if (TEST_RETURN == -1) {
-			tst_resm(TFAIL|TTERRNO,
-			    "lseek of %s failed", TEMP_FILE);
+			tst_resm(TFAIL | TTERRNO,
+				 "lseek of %s failed", TEMP_FILE);
 			continue;
 		}
 		/*
@@ -128,7 +128,7 @@ int main(int ac, char **av)
 			 */
 			if (TEST_RETURN != file_size) {
 				tst_resm(TFAIL, "lseek() returned incorrect "
-					 "value %ld, expected %d",
+					 "value %ld, expected %zu",
 					 TEST_RETURN, file_size);
 				continue;
 			}
@@ -178,20 +178,20 @@ void setup()
 
 	/* Creat/open a temporary file under above directory */
 	if ((fildes = open(TEMP_FILE, O_RDWR | O_CREAT, FILE_MODE)) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "open(%s, O_RDWR|O_CREAT, %#o) failed",
 			 TEMP_FILE, FILE_MODE);
 	}
 
 	/* Write data into temporary file */
 	if (write(fildes, write_buf, strlen(write_buf)) <= 0) {
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "writing to %s failed", TEMP_FILE);
 	}
 
 	/* Get the size of the file using fstat */
 	if (fstat(fildes, &stat_buf) < 0) {
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "fstat of %s failed", TEMP_FILE);
 	}
 

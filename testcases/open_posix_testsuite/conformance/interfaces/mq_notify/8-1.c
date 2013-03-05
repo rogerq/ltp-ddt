@@ -36,7 +36,7 @@ int main()
 	mqd_t mqdes;
 	struct sigevent notification;
 
-	mqdes = (mqd_t) -1;
+	mqdes = (mqd_t) - 1;
 
 	notification.sigev_notify = SIGEV_SIGNAL;
 	notification.sigev_signo = SIGUSR1;
@@ -49,7 +49,7 @@ int main()
 			printf("Test FAILED (errno != EBADF)\n");
 			return PTS_FAIL;
 		}
-	}	
+	}
 	printf("Test FAILED\n");
 	return PTS_FAIL;
 }

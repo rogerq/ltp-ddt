@@ -23,8 +23,8 @@
 int main(int argc, char *argv[])
 {
 #if !defined(_POSIX_CPUTIME) || _POSIX_CPUTIME == -1
-        printf("_POSIX_CPUTIME unsupported\n");
-        return PTS_UNSUPPORTED;
+	printf("_POSIX_CPUTIME unsupported\n");
+	return PTS_UNSUPPORTED;
 #else
 	unsigned long time_to_set;
 	clockid_t clockid_1, clockid_2;
@@ -61,14 +61,14 @@ int main(int argc, char *argv[])
 		printf("clock_gettime(clockid_2,) failed\n");
 		return PTS_FAIL;
 	}
-	
+
 	if (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &t3) != 0) {
 		printf("clock_gettime(CLOCK_PROCESS_CPUTIME_ID,) failed\n");
 		return PTS_FAIL;
 	}
 
-	if (timespec_nsec_diff(&t1, &t2) > NSEC_IN_SEC/2 ||
-	    timespec_nsec_diff(&t2, &t3) > NSEC_IN_SEC/2) {
+	if (timespec_nsec_diff(&t1, &t2) > NSEC_IN_SEC / 2 ||
+	    timespec_nsec_diff(&t2, &t3) > NSEC_IN_SEC / 2) {
 		printf("reported times differ too much\n");
 		return PTS_FAIL;
 	}

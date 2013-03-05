@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -52,142 +52,120 @@
  */
 
 #include "ipcshm.h"
-#include "system_specific_hugepages_info.h"
+#include "safe_macros.h"
+#include "mem.h"
 
 char *TCID = "hugeshmget02";
 int TST_TOTAL = 4;
-unsigned long huge_pages_shm_to_be_allocated;
 
-int exp_enos[] = {ENOENT, EEXIST, EINVAL, 0};	/* 0 terminated list of */
-						/* expected errnos 	*/
+static size_t shm_size;
+static int shm_id_1 = -1;
+static int shm_nonexistent_key = -1;
+static key_t shmkey2;
 
-int shm_id_1 = -1;
-int shm_id_2 = -1;
-int shmkey2;
+static long hugepages = 128;
+static option_t options[] = {
+	{"s:", &sflag, &nr_opt},
+	{NULL, NULL, NULL}
+};
 
 struct test_case_t {
 	int *skey;
-	int size;
+	int size_coe;
 	int flags;
 	int error;
+} TC[] = {
+	/* EINVAL - size is 0 */
+	{
+	&shmkey2, 0, SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW, EINVAL},
+	    /* EINVAL - size is larger than created segment */
+	{
+	&shmkey, 2, SHM_HUGETLB | SHM_RW, EINVAL},
+	    /* EEXIST - the segment exists and IPC_CREAT | IPC_EXCL is given */
+	{
+	&shmkey, 1, SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW, EEXIST},
+	    /* ENOENT - no segment exists for the key and IPC_CREAT is not given */
+	    /* use shm_nonexistend_key (-1) as the key */
+	{
+	&shm_nonexistent_key, 1, SHM_HUGETLB | SHM_RW, ENOENT}
 };
 
-int main(int ac, char **av) {
-	int lc;				/* loop counter */
-	char *msg;			/* message returned from parse_opts */
-	int i;
+int main(int ac, char **av)
+{
+	int lc, i;
+	char *msg;
+	int shm_id_2 = -1;
 
-	/* parse standard options */
-	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
-		tst_brkm(TBROK, cleanup, "OPTION PARSING ERROR - %s", msg);
+	msg = parse_opts(ac, av, options, &help);
+	if (msg != NULL)
+		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
+	if (sflag)
+		hugepages = SAFE_STRTOL(NULL, nr_opt, 0, LONG_MAX);
 
-        if (get_no_of_hugepages() <= 0 || hugepages_size() <= 0)
-             tst_brkm(TCONF, NULL, "Not enough available Hugepages");
-        else
-             huge_pages_shm_to_be_allocated = ( get_no_of_hugepages() * hugepages_size() * 1024) / 2 ;
-
-        struct test_case_t TC[] = {
-         /* EINVAL - size is 0 */
-         {&shmkey2, 0, SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW, EINVAL},
-         /* EINVAL - size is negative */
-         //{&shmkey2, -1, SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW, EINVAL},
-         /* EINVAL - size is larger than created segment */
-         {&shmkey, huge_pages_shm_to_be_allocated * 2, SHM_HUGETLB | SHM_RW, EINVAL},
-         /* EEXIST - the segment exists and IPC_CREAT | IPC_EXCL is given */
-         {&shmkey, huge_pages_shm_to_be_allocated, SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW, EEXIST},
-         /* ENOENT - no segment exists for the key and IPC_CREAT is not given */
-         /* use shm_id_2 (-1) as the key */
-         {&shm_id_2, huge_pages_shm_to_be_allocated, SHM_HUGETLB | SHM_RW, ENOENT}
-        };
-
-	setup();			/* global setup */
-
-	/* The following loop checks looping state if -i option given */
+	setup();
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
-		/* reset Tst_count in case we are looping */
 		Tst_count = 0;
 
-		/* loop through the test cases */
-		for (i=0; i<TST_TOTAL; i++) {
-			/*
-			 * Look for a failure ...
-			 */
+		for (i = 0; i < TST_TOTAL; i++) {
+			/* If this key is existent, just remove it */
+			if (*TC[i].skey == -1) {
+				shm_id_2 = shmget(*(TC[i].skey), 0, 0);
+				if (shm_id_2 != -1)
+					shmctl(shm_id_2, IPC_RMID, NULL);
+			}
 
-			TEST(shmget(*(TC[i].skey), TC[i].size, TC[i].flags));
-
+			TEST(shmget(*(TC[i].skey), TC[i].size_coe * shm_size,
+				    TC[i].flags));
 			if (TEST_RETURN != -1) {
-				tst_resm(TFAIL, "call succeeded unexpectedly");
+				tst_resm(TFAIL, "shmget succeeded "
+					 "unexpectedly");
 				continue;
 			}
-
-			TEST_ERROR_LOG(TEST_ERRNO);
-
-			if (TEST_ERRNO == TC[i].error) {
-				tst_resm(TPASS, "expected failure - errno = "
-					 "%d : %s", TEST_ERRNO,
-					 strerror(TEST_ERRNO));
-			} else {
-				tst_resm(TFAIL, "call failed with an "
-					 "unexpected error - %d : %s",
-					 TEST_ERRNO, strerror(TEST_ERRNO));
-			}
+			if (TEST_ERRNO == TC[i].error)
+				tst_resm(TPASS | TTERRNO, "shmget failed "
+					 "as expected");
+			else
+				tst_resm(TFAIL | TTERRNO, "shmget failed "
+					 "unexpectedly - expect errno=%d, "
+					 "got", TC[i].error);
 		}
 	}
-
 	cleanup();
-
 	tst_exit();
 }
 
-/*
- * setup() - performs all the ONE TIME setup for this test.
- */
-void
-setup(void)
+void setup(void)
 {
+	long hpage_size;
 
+	tst_require_root(NULL);
 	tst_sig(NOFORK, DEF_HANDLER, cleanup);
-
-	/* Set up the expected error numbers for -e option */
-	TEST_EXP_ENOS(exp_enos);
-
-	TEST_PAUSE;
-
-	/*
-	 * Create a temporary directory and cd into it.
-	 * This helps to ensure that a unique msgkey is created.
-	 * See ../lib/libipc.c for more information.
-	 */
 	tst_tmpdir();
 
-	/* get an IPC resource key */
+	orig_hugepages = get_sys_tune("nr_hugepages");
+	set_sys_tune("nr_hugepages", hugepages, 1);
+	hpage_size = read_meminfo("Hugepagesize:") * 1024;
+
+	shm_size = hpage_size * hugepages / 2;
+	update_shm_size(&shm_size);
+
 	shmkey = getipckey();
-
 	shmkey2 = shmkey + 1;
+	shm_id_1 = shmget(shmkey, shm_size, IPC_CREAT | IPC_EXCL | SHM_RW);
+	if (shm_id_1 == -1)
+		tst_brkm(TBROK | TERRNO, cleanup, "shmget #setup");
 
-	if ((shm_id_1 = shmget(shmkey, huge_pages_shm_to_be_allocated, IPC_CREAT | IPC_EXCL | SHM_RW)) == -1) {
-		tst_brkm(TBROK, cleanup, "couldn't create shared memory segment in setup()");
-	}
-
+	TEST_PAUSE;
 }
 
-/*
- * cleanup() - performs all the ONE TIME cleanup for this test at completion
- * 	       or premature exit.
- */
-void
-cleanup(void)
+void cleanup(void)
 {
-	/* if it exists, remove the shared memory resource */
-	rm_shm(shm_id_1);
-
-	tst_rmdir();
-
-	/*
-	 * print timing stats if that option was specified.
-	 * print errno log if that option was specified.
-	 */
 	TEST_CLEANUP;
 
+	rm_shm(shm_id_1);
+
+	set_sys_tune("nr_hugepages", orig_hugepages, 0);
+
+	tst_rmdir();
 }

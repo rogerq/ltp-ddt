@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -62,16 +62,19 @@ struct test_case_t {
 	int policy;
 } TC[] = {
 	/* set scheduling policy to SCHED_RR */
-	{ 1, SCHED_RR},
-	/* set scheduling policy to SCHED_OTHER */
-	{ 0, SCHED_OTHER},
-	/* set scheduling policy to SCHED_FIFO */
-	{ 1, SCHED_FIFO}
+	{
+	1, SCHED_RR},
+	    /* set scheduling policy to SCHED_OTHER */
+	{
+	0, SCHED_OTHER},
+	    /* set scheduling policy to SCHED_FIFO */
+	{
+	1, SCHED_FIFO}
 };
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
+	int lc;
 	char *msg;		/* message returned by parse_opts */
 
 	int i;
@@ -92,7 +95,7 @@ int main(int ac, char **av)
 
 			if (sched_setscheduler(0, TC[i].policy, &param) == -1)
 				tst_brkm(TBROK, cleanup,
-				    "sched_setscheduler failed");
+					 "sched_setscheduler failed");
 
 			TEST(sched_getscheduler(0));
 
@@ -104,11 +107,11 @@ int main(int ac, char **av)
 			if (STD_FUNCTIONAL_TEST) {
 				if (TEST_RETURN != TC[i].policy)
 					tst_resm(TFAIL,
-					    "policy value returned is not "
-					    "correct");
+						 "policy value returned is not "
+						 "correct");
 				else
 					tst_resm(TPASS,
-					    "policy value returned is correct");
+						 "policy value returned is correct");
 			} else
 				tst_resm(TPASS, "call succeeded");
 		}

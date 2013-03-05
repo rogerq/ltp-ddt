@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -82,8 +82,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	pid_t cpid;		/* Child process id */
 	int status;		/* child exit status */
 
@@ -142,11 +142,11 @@ int main(int ac, char **av)
 		wait(&status);
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
 			tst_resm(TPASS, "nanosleep() failed, when provided "
-					"invalid pause time, with expected "
-					"errno: %d", EINVAL);
+				 "invalid pause time, with expected "
+				 "errno: %d", EINVAL);
 		} else if (WEXITSTATUS(status) == 1) {
 			tst_resm(TFAIL, "child process exited abnormally; "
-					"status = %d", status);
+				 "status = %d", status);
 		}
 	}
 

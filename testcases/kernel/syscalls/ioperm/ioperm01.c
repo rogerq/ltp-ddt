@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -74,7 +74,7 @@ char *TCID = "ioperm01";	/* Test program identifier.    */
 #include "test.h"
 #include "usctest.h"
 
-unsigned long io_addr;			/*kernel version dependant io start address */
+unsigned long io_addr;		/*kernel version dependant io start address */
 #define NUM_BYTES 3		/* number of bytes from start address */
 #define TURN_ON 1
 #define TURN_OFF 0
@@ -90,10 +90,9 @@ int TST_TOTAL = 1;		/* Total number of test cases. */
 int main(int ac, char **av)
 {
 
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -134,7 +133,7 @@ void setup()
 	/* Check whether we are root  */
 	if (geteuid() != 0) {
 		tst_brkm(TBROK, NULL, "Must be root for this test!");
-	 }
+	}
 
 	/*
 	 * The value of IO_BITMAP_BITS (include/asm-i386/processor.h) changed

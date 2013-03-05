@@ -18,8 +18,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Author: Liu Bo <liubo2009@cn.fujitsu.com>
  * Author: Garrett Cooper <yanegomi@gmail.com>
@@ -67,17 +67,15 @@ struct kernel_sigaction {
 	sigset_t sa_mask;
 };
 
-void (*restore_rt) (void);
+void (*restore_rt)(void);
 
-inline void
-handler_h (int signal)
+static void handler_h(int signal)
 {
 	return;
 }
 
 /* Setup an initial signal handler for signal number = sig for x86_64. */
-inline int
-sig_initial(int sig)
+static inline int sig_initial(int sig)
 {
 	int ret_code = -1;
 	struct sigaction act, oact;

@@ -17,9 +17,12 @@ LOOP=200
 
 # Use up to 10% of free memory
 free_mem=`cat /proc/meminfo | grep '^MemFree' | awk '{ print $2 }'`
-step=$(( $free_mem / 10 / $LOOP ))
+cpus=`tst_ncpus`
+
+step=$(( $free_mem / 10 / $LOOP / $cpus ))
+
 if [ $step -eq 0 ]; then
-	$step=1
+	step=1
 	LOOP=50
 fi
 
@@ -40,4 +43,3 @@ for ((; ;))
 
 	sleep 1
 }
-

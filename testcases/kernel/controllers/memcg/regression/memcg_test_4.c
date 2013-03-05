@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /* Author: Li Zefan <lizf@cn.fujitsu.com>                                     */
 /*                                                                            */
@@ -31,12 +31,12 @@
 
 #define MEM_SIZE	(1024 * 1024 * 100)
 
-void sigusr_handler(int __attribute__((unused)) signo)
+void sigusr_handler(int __attribute__ ((unused)) signo)
 {
 	char *p;
 
-	p = mmap(NULL, MEM_SIZE, PROT_READ|PROT_WRITE,
-	    MAP_PRIVATE|MAP_ANONYMOUS, 0, 0);
+	p = mmap(NULL, MEM_SIZE, PROT_READ | PROT_WRITE,
+		 MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
 	if (p == MAP_FAILED) {
 		err(1, "failed to allocate memory!");
 	}

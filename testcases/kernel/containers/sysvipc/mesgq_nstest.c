@@ -11,13 +11,13 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 * Author: Veerendra C <vechandr@in.ibm.com>
 *
 * In Parent Process , create mesgq with key 154326L
 * Now create container by passing 1 of the flag values..
-* 	Flag = clone, clone(CLONE_NEWIPC), or unshare(CLONE_NEWIPC)
+*	Flag = clone, clone(CLONE_NEWIPC), or unshare(CLONE_NEWIPC)
 * In cloned process, try to access the created mesgq
 * Test PASS: If the mesgq is readable when flag is None.
 * Test FAIL: If the mesgq is readable when flag is Unshare or Clone.
@@ -43,22 +43,22 @@ int TST_TOTAL = 1;
 int p1[2];
 int p2[2];
 struct msg_buf {
-		long int mtype;	 /* type of received/sent message */
-		char mtext[80];	 /* text of the message */
-	} msg;
+	long int mtype;		/* type of received/sent message */
+	char mtext[80];		/* text of the message */
+} msg;
 
 void mesgq_read(id)
 {
 	int READMAX = 80;
 	int n;
-	/* read msg type 5 on the Q; msgtype, flags are last 2 params..*/
+	/* read msg type 5 on the Q; msgtype, flags are last 2 params.. */
 
 	n = msgrcv(id, &msg, READMAX, 5, 0);
 	if (n == -1)
 		perror("msgrcv"), tst_exit();
 
-	tst_resm(TINFO, "Mesg read of %d bytes; Type %ld: Msg: %.*s\n",
-					n, msg.mtype, n, msg.mtext);
+	tst_resm(TINFO, "Mesg read of %d bytes; Type %ld: Msg: %.*s",
+		 n, msg.mtype, n, msg.mtext);
 }
 
 int check_mesgq(void *vtest)
@@ -89,15 +89,21 @@ int main(int argc, char *argv[])
 	char buf[7];
 
 	if (argc != 2) {
-		tst_resm(TFAIL, "Usage: %s <clone|unshare|none>\n", argv[0]);
+		tst_resm(TFAIL, "Usage: %s <clone|unshare|none>", argv[0]);
 		tst_resm(TFAIL, " where clone, unshare, or fork specifies"
-				" unshare method.");
+			 " unshare method.");
 		tst_exit();
 	}
 
 	/* Using PIPE's to sync between container and Parent */
-	if (pipe(p1) == -1) { perror("pipe"); exit(EXIT_FAILURE); }
-	if (pipe(p2) == -1) { perror("pipe"); exit(EXIT_FAILURE); }
+	if (pipe(p1) == -1) {
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
+	if (pipe(p2) == -1) {
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
 
 	tsttype = NONESTR;
 
@@ -114,20 +120,21 @@ int main(int argc, char *argv[])
 		perror("msgget");
 		/* Retry without attempting to create the MQ */
 		id = msgget(KEY_VAL, 0);
-		if (id == -1) perror("msgget failure"), exit(1);
+		if (id == -1)
+			perror("msgget failure"), exit(1);
 	}
 
 	msg.mtype = 5;
 	strcpy(msg.mtext, "Message of type 5!");
-	n = msgsnd(id, &msg, strlen( msg.mtext), 0);
+	n = msgsnd(id, &msg, strlen(msg.mtext), 0);
 	if (n == -1)
 		perror("msgsnd"), tst_exit();
 
-	tst_resm(TINFO, "mesgq namespaces test : %s\n", tsttype);
+	tst_resm(TINFO, "mesgq namespaces test : %s", tsttype);
 	/* fire off the test */
 	ret = do_clone_unshare_test(use_clone, CLONE_NEWIPC, check_mesgq, NULL);
 	if (ret < 0) {
-		tst_resm(TFAIL, "%s failed\n", tsttype);
+		tst_resm(TFAIL, "%s failed", tsttype);
 		tst_exit();
 	}
 
@@ -139,15 +146,18 @@ int main(int argc, char *argv[])
 	if (strcmp(buf, "exists") == 0) {
 		if (use_clone == T_NONE)
 			tst_resm(TPASS, "Plain cloned process found mesgq "
-				  "inside container\n");
+				 "inside container");
 		else
-			tst_resm(TFAIL, "%s: Container init process found mesgq\n",
-				tsttype);
+			tst_resm(TFAIL,
+				 "%s: Container init process found mesgq",
+				 tsttype);
 	} else {
 		if (use_clone == T_NONE)
-			tst_resm(TFAIL, "Plain cloned process didn't find mesgq\n");
+			tst_resm(TFAIL,
+				 "Plain cloned process didn't find mesgq");
 		else
-			tst_resm(TPASS, "%s: Container didn't find mesgq", tsttype);
+			tst_resm(TPASS, "%s: Container didn't find mesgq",
+				 tsttype);
 	}
 
 	/* Delete the mesgQ */

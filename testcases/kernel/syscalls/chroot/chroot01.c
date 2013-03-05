@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -56,14 +56,14 @@ int fail;
 
 char path[] = "/tmp";
 int exp_enos[] = { EPERM, 0 };
+
 char nobody_uid[] = "nobody";
 struct passwd *ltpuser;
 
 void setup(void);
 void cleanup(void);
 
-int
-main(int ac, char **av)
+int main(int ac, char **av)
 {
 	int lc;
 	char *msg;
@@ -84,7 +84,7 @@ main(int ac, char **av)
 		if (TEST_RETURN != -1)
 			tst_resm(TFAIL, "call succeeded unexpectedly");
 		else if (errno != EPERM)
-			tst_resm(TFAIL|TTERRNO, "chroot failed unexpectedly");
+			tst_resm(TFAIL | TTERRNO, "chroot failed unexpectedly");
 		else
 			tst_resm(TPASS, "chroot set errno to EPERM.");
 	}
@@ -94,31 +94,30 @@ main(int ac, char **av)
 
 }
 
-void
-setup(void)
+void setup(void)
 {
 	tst_require_root(NULL);
 
 	tst_tmpdir();
 
 	if ((ltpuser = getpwnam(nobody_uid)) == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "getpwnam(\"nobody\") failed");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "getpwnam(\"nobody\") failed");
 
 	if (seteuid(ltpuser->pw_uid) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "seteuid to nobody failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "seteuid to nobody failed");
 
 	tst_sig(NOFORK, DEF_HANDLER, cleanup);
 
 	TEST_PAUSE;
 }
 
-void
-cleanup(void)
+void cleanup(void)
 {
 	TEST_CLEANUP;
 
 	if (seteuid(0) == -1)
-		tst_brkm(TBROK|TERRNO, NULL, "setuid(0) failed");
+		tst_brkm(TBROK | TERRNO, NULL, "setuid(0) failed");
 
 	tst_rmdir();
 }

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -103,9 +103,7 @@ int main(int ac, char **av)
 	pid_t pid;
 	struct passwd *ltpuser;
 
-	/* parse standard options */
-	if ((msg = parse_opts(ac, av, NULL, NULL)) !=
-	    NULL) {
+	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
 
@@ -115,7 +113,8 @@ int main(int ac, char **av)
 		exp_eno = EPERM;
 	} else {
 		/* ^^ Look above this warning. ^^ */
-		tst_resm(TWARN, "this test's results are based on potentially undocumented behavior in the kernel. read the NOTE in the source file for more details");
+		tst_resm(TWARN,
+			 "this test's results are based on potentially undocumented behavior in the kernel. read the NOTE in the source file for more details");
 		exp_eno = EACCES;
 		exp_enos[0] = EACCES;
 	}
@@ -138,12 +137,14 @@ int main(int ac, char **av)
 			TEST_ERROR_LOG(TEST_ERRNO);
 
 			if (TEST_ERRNO == exp_eno) {
-				tst_resm(TPASS|TTERRNO, "Got expected error");
+				tst_resm(TPASS | TTERRNO, "Got expected error");
 			} else if (errno == ENOSYS) {
-				tst_resm(TCONF, "You may need to make CONFIG_SYSCTL_SYSCALL=y"
-						" to your kernel config.");
+				tst_resm(TCONF,
+					 "You may need to make CONFIG_SYSCTL_SYSCALL=y"
+					 " to your kernel config.");
 			} else {
-				tst_resm(TFAIL|TTERRNO, "Got unexpected error");
+				tst_resm(TFAIL | TTERRNO,
+					 "Got unexpected error");
 			}
 		}
 
@@ -162,7 +163,7 @@ int main(int ac, char **av)
 			tst_brkm(TBROK, cleanup, "fork() failed");
 		}
 
-		if (pid == 0) {	/* child */
+		if (pid == 0) {
 			TEST(sysctl(name, SIZE(name), 0, 0, osname, osnamelth));
 
 			if (TEST_RETURN != -1) {
@@ -171,20 +172,21 @@ int main(int ac, char **av)
 				TEST_ERROR_LOG(TEST_ERRNO);
 
 				if (TEST_ERRNO == exp_eno) {
-					tst_resm(TPASS|TTERRNO,
-						"Got expected error");
+					tst_resm(TPASS | TTERRNO,
+						 "Got expected error");
 				} else if (TEST_ERRNO == ENOSYS) {
-					tst_resm(TCONF, "You may need to make CONFIG_SYSCTL_SYSCALL=y"
-							" to your kernel config.");
+					tst_resm(TCONF,
+						 "You may need to make CONFIG_SYSCTL_SYSCALL=y"
+						 " to your kernel config.");
 				} else {
-					tst_resm(TFAIL|TTERRNO,
-						"Got unexpected error");
+					tst_resm(TFAIL | TTERRNO,
+						 "Got unexpected error");
 				}
 			}
 
 			cleanup();
 
-		} else {	/* parent */
+		} else {
 			/* wait for the child to finish */
 			wait(&status);
 		}
@@ -198,31 +200,16 @@ int main(int ac, char **av)
 	tst_exit();
 }
 
-/*
- * setup() - performs all ONE TIME setup for this test.
- */
-void setup()
+void setup(void)
 {
-	/* test must be run as root */
-	if (geteuid() != 0) {
-		tst_brkm(TBROK, NULL, "Test must be run as root");
-	}
+	tst_require_root(NULL);
 
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 
 	TEST_PAUSE;
 }
 
-/*
- * cleanup() - performs all ONE TIME cleanup for this test at
- *	       completion or premature exit.
- */
-void cleanup()
+void cleanup(void)
 {
-	/*
-	 * print timing stats if that option was specified.
-	 * print errno log if that option was specified.
-	 */
 	TEST_CLEANUP;
-
 }

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -30,7 +30,6 @@
  *
  */
 
-
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -42,7 +41,7 @@ void get_kver(int *k1, int *k2, int *k3)
 	char *kver;
 	char *r1, *r2, *r3;
 #if !defined(linux)
-	extern char *strsep();          /* shut up some compilers */
+	extern char *strsep();	/* shut up some compilers */
 #endif
 
 	uname(&uval);
@@ -56,7 +55,8 @@ void get_kver(int *k1, int *k2, int *k3)
 	*k3 = atoi(r3);
 }
 
-int tst_kvercmp(int r1, int r2, int r3) {
+int tst_kvercmp(int r1, int r2, int r3)
+{
 	int a1, a2, a3;
 	int testver, currver;
 

@@ -30,9 +30,7 @@
  *   5. Check if the shared value has been changed by the child process. If
  *      not, the test fail.
  */
-
-#define _XOPEN_SOURCE 600
-
+#define _GNU_SOURCE
 #include <sched.h>
 #include <stdio.h>
 #include <signal.h>
@@ -42,51 +40,50 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "posixtest.h"
+#include "affinity.h"
 
 #ifdef BSD
-# include <sys/types.h>
-# include <sys/param.h>
-# include <sys/sysctl.h>
+#include <sys/types.h>
+#include <sys/param.h>
+#include <sys/sysctl.h>
 #endif
 
 #ifdef HPUX
-# include <sys/param.h>
-# include <sys/pstat.h>
+#include <sys/param.h>
+#include <sys/pstat.h>
 #endif
 
-/* Max number of loop for child_process */
-#define NB_LOOP 100000
+static int nb_cpu;
+static int *shmptr;
 
-int nb_cpu;
-int *shmptr; /* shared memory */
-
-/* Get the number of CPUs */
-int get_ncpu() {
+static int get_ncpu(void)
+{
 	int ncpu = -1;
 
 	/* This syscall is not POSIX but it should work on many system */
 #ifdef _SC_NPROCESSORS_ONLN
 	ncpu = sysconf(_SC_NPROCESSORS_ONLN);
 #else
-# ifdef BSD
+#ifdef BSD
 	int mib[2];
 	size_t len = sizeof(ncpu);
 	mib[0] = CTL_HW;
 	mib[1] = HW_NCPU;
 	sysctl(mib, 2, &ncpu, &len, NULL, 0);
-# else
-#  ifdef HPUX
+#else /* !BSD */
+#ifdef HPUX
 	struct pst_dynamic psd;
 	pstat_getdynamic(&psd, sizeof(psd), 1, 0);
 	ncpu = (int)psd.psd_proc_cnt;
-#  endif /* HPUX */
-# endif /* BSD */
+#endif /* HPUX */
+#endif /* BSD */
 #endif /* _SC_NPROCESSORS_ONLN */
 
 	return ncpu;
 }
 
-void child_process() {
+static void child_process(void)
+{
 	struct sched_param param;
 
 	param.sched_priority = sched_get_priority_max(SCHED_FIFO);
@@ -97,11 +94,11 @@ void child_process() {
 
 	/* to avoid blocking */
 	alarm(2);
-	while (1);
-
+	while (1) ;
 }
 
-void test_process() {
+static void test_process(void)
+{
 	/* to avoid blocking */
 	alarm(2);
 
@@ -111,37 +108,42 @@ void test_process() {
 	}
 }
 
-void kill_children(int *child_pid) {
+static void kill_children(int *child_pid)
+{
 	int i;
 
-	for (i=0; i<nb_cpu; i++) {
+	for (i = 0; i < nb_cpu; i++)
 		kill(child_pid[i], SIGTERM);
-	}
 }
 
-int main() {
-        int *child_pid, oldcount, newcount, shm_id, i, j;
+int main(void)
+{
+	int *child_pid, oldcount, newcount, shm_id, i, j;
 	struct sched_param param;
 	key_t key;
-
-	/* Get the number of CPUs */
-	nb_cpu = get_ncpu();
-	if (nb_cpu == -1) {
-		printf("Can not get the number of CPUs of your machines.\n");
-		return PTS_UNRESOLVED;
+	int rc = set_affinity(0);
+	if (rc) {
+		nb_cpu = get_ncpu();
+		if (nb_cpu == -1) {
+			printf("Can not get the number of"
+			       " CPUs of the machine.\n");
+			return PTS_UNRESOLVED;
+		}
+	} else {
+		nb_cpu = 1;
 	}
 
-	child_pid = malloc(nb_cpu);
+	child_pid = malloc(nb_cpu * sizeof(int));
 
-	key = ftok("conformance/interfaces/sched_setparam/9-1.c",1234);
-	shm_id = shmget(key, sizeof(int), IPC_CREAT|0600);
+	key = ftok("conformance/interfaces/sched_setparam/9-1.c", 1234);
+	shm_id = shmget(key, sizeof(int), IPC_CREAT | 0600);
 	if (shm_id < 0) {
 		perror("An error occurs when calling shmget()");
 		return PTS_UNRESOLVED;
 	}
 
-	shmptr = (int *)shmat(shm_id, 0, 0);
-	if (shmptr < (int*)0) {
+	shmptr = shmat(shm_id, 0, 0);
+	if (shmptr == (void *)-1) {
 		perror("An error occurs when calling shmat()");
 		return PTS_UNRESOLVED;
 	}
@@ -150,9 +152,12 @@ int main() {
 	param.sched_priority = sched_get_priority_min(SCHED_FIFO);
 	if (sched_setscheduler(getpid(), SCHED_FIFO, &param) != 0) {
 		if (errno == EPERM) {
-			printf("This process does not have the permission to set its own scheduling parameter.\nTry to launch this test as root\n");
+			printf("This process does not have the permission"
+			       " to set its own scheduling parameter.\n"
+			       "Try to launch this test as root\n");
 		} else {
-			perror("An error occurs when calling sched_setscheduler()");
+			perror("An error occurs when calling"
+			       " sched_setscheduler()");
 		}
 		return PTS_UNRESOLVED;
 	}
@@ -161,9 +166,9 @@ int main() {
 		child_pid[i] = fork();
 		if (child_pid[i] == -1) {
 			perror("An error occurs when calling fork()");
-			for (j = 0; j < i; j++) {
+			for (j = 0; j < i; j++)
 				kill(child_pid[j], SIGTERM);
-			}
+
 			return PTS_UNRESOLVED;
 		} else if (child_pid[i] == 0) {
 
@@ -177,9 +182,9 @@ int main() {
 	child_pid[i] = fork();
 	if (child_pid[i] == -1) {
 		perror("An error occurs when calling fork()");
-		for (j = 0; j < i; j++) {
+		for (j = 0; j < i; j++)
 			kill(child_pid[j], SIGTERM);
-		}
+
 		return PTS_UNRESOLVED;
 	} else if (child_pid[i] == 0) {
 
@@ -203,7 +208,8 @@ int main() {
 	newcount = *shmptr;
 
 	if (newcount == oldcount) {
-		printf("The target process does not preempt the calling process\n");
+		printf("The target process does not preempt"
+		       " the calling process\n");
 		kill_children(child_pid);
 		return PTS_FAIL;
 	}

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -97,8 +97,8 @@ int exp_enos[] = { EPERM, 0 };	/* List must end with 0 */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	pid_t pid;
 	int status;
 
@@ -131,7 +131,7 @@ int main(int ac, char **av)
 
 		if ((pid = FORK_OR_VFORK()) == -1) {
 			tst_brkm(TBROK, cleanup, "fork() failed");
-		 }
+		}
 
 		if (pid == 0) {	/* child */
 			/* set to nobody */
@@ -139,7 +139,7 @@ int main(int ac, char **av)
 				tst_resm(TWARN, "setreuid failed");
 				perror("setreuid");
 				exit(1);
-			 }
+			}
 
 			/* rename "old" to "new" */
 			TEST(rename(fname, mname));
@@ -147,7 +147,7 @@ int main(int ac, char **av)
 			if (TEST_RETURN != -1) {
 				tst_resm(TFAIL, "call succeeded unexpectedly");
 				exit(1);
-			 }
+			}
 
 			TEST_ERROR_LOG(TEST_ERRNO);
 
@@ -156,7 +156,7 @@ int main(int ac, char **av)
 					 "Expected EPERM or EACCES, got %d",
 					 TEST_ERRNO);
 				exit(1);
-			 } else {
+			} else {
 				tst_resm(TPASS,
 					 "rename returned EPERM or EACCES");
 			}
@@ -189,7 +189,7 @@ void setup()
 	/* must run as root */
 	if (geteuid() != 0) {
 		tst_brkm(TBROK, NULL, "Must run this as root");
-	 }
+	}
 
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 
@@ -207,7 +207,7 @@ void setup()
 	/* create a directory */
 	if (mkdir(fdir, PERMS) == -1) {
 		tst_brkm(TBROK, cleanup, "Could not create directory %s", fdir);
-	 }
+	}
 
 	if (stat(fdir, &buf1) == -1) {
 		tst_brkm(TBROK, cleanup, "failed to stat directory %s", fdir);

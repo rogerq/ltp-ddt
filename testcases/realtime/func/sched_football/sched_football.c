@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * NAME
  *      sched_football.c
@@ -91,40 +91,40 @@ int parse_args(int c, char *v)
 
 	int handled = 1;
 	switch (c) {
-		case 'h':
-			usage();
-			exit(0);
-		case 'n':
-			players_per_team = atoi(v);
-			break;
-		case 'l':
-			game_length= atoi(v);
-			break;
-		default:
-			handled = 0;
-			break;
+	case 'h':
+		usage();
+		exit(0);
+	case 'n':
+		players_per_team = atoi(v);
+		break;
+	case 'l':
+		game_length = atoi(v);
+		break;
+	default:
+		handled = 0;
+		break;
 	}
 	return handled;
 }
 
 /* This is the defensive team. They're trying to block the offense */
-void *thread_defense(void* arg)
+void *thread_defense(void *arg)
 {
 	atomic_inc(&players_ready);
 	/*keep the ball from being moved */
 	while (1) {
-		sched_yield(); /* let other defenders run */
+		sched_yield();	/* let other defenders run */
 	}
 	return NULL;
 }
 
 /* This is the offensive team. They're trying to move the ball */
-void *thread_offense(void* arg)
+void *thread_offense(void *arg)
 {
 	atomic_inc(&players_ready);
 	while (1) {
-		the_ball++; /* move the ball ahead one yard */
-		sched_yield(); /* let other offensive players run */
+		the_ball++;	/* move the ball ahead one yard */
+		sched_yield();	/* let other offensive players run */
 	}
 	return NULL;
 }
@@ -154,7 +154,7 @@ int referee(int game_length)
 	return final_ball != 0;
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	struct sched_param param;
 	int priority;
@@ -162,7 +162,7 @@ int main(int argc, char* argv[])
 	int result;
 	setup();
 
-	rt_init("n:l:h",parse_args,argc,argv);
+	rt_init("n:l:h", parse_args, argc, argv);
 
 	if (players_per_team == 0)
 		players_per_team = sysconf(_SC_NPROCESSORS_ONLN);
@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
 	 */
 	priority = 15;
 	printf("Starting %d offense threads at priority %d\n",
-			players_per_team, priority);
+	       players_per_team, priority);
 	for (i = 0; i < players_per_team; i++)
 		create_fifo_thread(thread_offense, NULL, priority);
 
@@ -193,7 +193,7 @@ int main(int argc, char* argv[])
 	/* Start the defense */
 	priority = 30;
 	printf("Starting %d defense threads at priority %d\n",
-			players_per_team, priority);
+	       players_per_team, priority);
 	for (i = 0; i < players_per_team; i++)
 		create_fifo_thread(thread_defense, NULL, priority);
 

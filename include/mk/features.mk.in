@@ -20,9 +20,6 @@
 # Garrett Cooper, October 2010
 #
 
-# Path to capset program
-CAPSET				:= @CAPSET@
-
 # Tools enable knobs
 WITH_EXPECT			:= @WITH_EXPECT@
 

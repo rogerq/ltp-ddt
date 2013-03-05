@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -73,19 +73,17 @@ int TST_TOTAL = 1;
 int status;
 char file1[BUFSIZ];
 
-
 #ifndef UCLINUX
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	char *addr;
 	int fd, pid;
 	char *buf = "abcdefghijklmnopqrstuvwxyz";
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -100,7 +98,7 @@ int main(int ac, char **av)
 
 		if ((fd = open(file1, O_RDWR | O_CREAT, 0777)) < 0) {	//mode must be specified when O_CREAT is in the flag
 			tst_brkm(TBROK, cleanup, "open failed");
-		 }
+		}
 
 		(void)write(fd, buf, strlen(buf));
 
@@ -111,7 +109,7 @@ int main(int ac, char **av)
 			    fd, 0);
 		if (addr < 0) {
 			tst_brkm(TBROK, cleanup, "mmap failed");
-		 }
+		}
 
 		/*
 		 * Try to change the protection to WRITE.
@@ -130,7 +128,7 @@ int main(int ac, char **av)
 					tst_resm(TINFO, "memcpy() did "
 						 "not generate SIGSEGV");
 					exit(1);
-				 }
+				}
 
 				/* parent */
 				(void)waitpid(pid, &status, 0);
@@ -147,7 +145,7 @@ int main(int ac, char **av)
 		} else {
 			tst_resm(TFAIL, "mprotect failed "
 				 "unexpectedly, errno: %d", errno);
-		 }
+		}
 
 		/* clean up things in case we are looping */
 		if (munmap(addr, strlen(buf)) == -1) {

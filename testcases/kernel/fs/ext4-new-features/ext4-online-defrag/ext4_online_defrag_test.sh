@@ -16,7 +16,7 @@
 #                                                                              #
 # You should have received a copy of the GNU General Public License            #
 # along with this program;  if not, write to the Free Software                 #
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA      #
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA      #
 #                                                                              #
 ################################################################################
 
@@ -42,6 +42,11 @@ LARGE=3
 FILE=1
 DIR=2
 FILESYSTEM=3
+E4DEFRAG=`which e4defrag`
+if [ -z $E4DEFRAG ]; then
+	echo "Please install the e2fsprogs, for the e4defrag command."
+	exit 1
+fi
 
 age_filesystem()
 {
@@ -94,23 +99,23 @@ my_e4defrag()
 {
 	if [ $1 -eq $FILE ]; then
 		if [ $2 -eq $SMALL ]; then
-			./e4defrag -v mnt_point/data0/
+			$E4DEFRAG -v mnt_point/data0/
 			return $?
 		# EMPTY or LARGE
 		else
-			./e4defrag -v mnt_point/tmp_file
+			$E4DEFRAG -v mnt_point/tmp_file
 			return $?
 		fi
 	elif [ $1 -eq $DIR ]; then
 		if [ $2 -eq $SMALL ]; then
-			./e4defrag -v mnt_point/data0/
+			$E4DEFRAG -v mnt_point/data0/
 			return $?
 		else
-			./e4defrag -v mnt_point/tmp_dir
+			$E4DEFRAG -v mnt_point/tmp_dir
 			return $?
 		fi
 	else
-		./e4defrag -v $EXT4_DEV
+		$E4DEFRAG -v $EXT4_DEV
 		return $?
 	fi
 }

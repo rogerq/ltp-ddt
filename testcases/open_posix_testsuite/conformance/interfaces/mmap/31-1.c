@@ -1,5 +1,7 @@
 /*
  * Copyright (c) 2002, Intel Corporation. All rights reserved.
+ * Copyright (c) 2012, Cyril Hrubis <chrubis@suse.cz>
+ *
  * This file is licensed under the GPL license.  For the full content
  * of this license, see the COPYING file at the top level of this
  * source tree.
@@ -9,19 +11,18 @@
  * plus len exceeds the offset maximum established in the open
  * file description associated with fildes.
  *
- * Test Steps:
- * 1. Set off and let to ULONG_MAX (make them align to page_size
- * 2. Assume the offset maximum is ULONG_MAX (on both 32 and 64 system).
+ * Note: This error condition came to the standard with large
+ *       file extension and cannot be triggered without it.
  *
- * FIXME: Not quite sure how to make "the value of off plus len
- * exceeds the offset maxium established in the open file description
- * associated with files".
- *
+ *       So in order to trigger this we need 32 bit architecture
+ *       and largefile support turned on.
  */
 
 #define _XOPEN_SOURCE 600
 
-#include <pthread.h>
+/* Turn on large file support, has no effect on 64 bit archs */
+#define _FILE_OFFSET_BITS 64
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -35,72 +36,60 @@
 #include <errno.h>
 #include "posixtest.h"
 
-#define TNAME "mmap/31-1.c"
-
-int main()
+int main(void)
 {
-  char tmpfname[256];
+	char tmpfname[256];
 
-  void *pa = NULL;
-  void *addr = NULL;
-  size_t len;
-  int flag;
-  int fd;
-  off_t off = 0;
-  int prot;
+	void *pa;
+	size_t len;
+	int fd;
+	off_t off = 0;
 
-  long page_size = sysconf(_SC_PAGE_SIZE);
+	/* check for 64 bit arch */
+	if (sizeof(void *) == 8) {
+		printf("USUPPORTED: Cannot be tested on 64 bit architecture\n");
+		return PTS_UNSUPPORTED;
+	}
 
-  snprintf(tmpfname, sizeof(tmpfname), "/tmp/pts_mmap_31_1_%d",
-           getpid());
-  unlink(tmpfname);
-  fd = open(tmpfname, O_CREAT | O_RDWR | O_EXCL,
-            S_IRUSR | S_IWUSR);
-  if (fd == -1)
-  {
-    printf(TNAME " Error at open(): %s\n",
-           strerror(errno));
-    exit(PTS_UNRESOLVED);
-  }
-  unlink(tmpfname);
+	long page_size = sysconf(_SC_PAGE_SIZE);
 
-  flag = MAP_SHARED;
-  prot = PROT_READ | PROT_WRITE;
+	snprintf(tmpfname, sizeof(tmpfname), "/tmp/pts_mmap_31_1_%d", getpid());
+	unlink(tmpfname);
+	fd = open(tmpfname, O_CREAT | O_RDWR | O_EXCL, S_IRUSR | S_IWUSR);
+	if (fd == -1) {
+		printf("Error at open(): %s\n", strerror(errno));
+		return PTS_UNRESOLVED;
+	}
+	unlink(tmpfname);
 
-  /* len + off > maximum offset
-   * FIXME: We assume maximum offset is ULONG_MAX
-   * */
+	/* Set lenght to maximal multiple of page size */
+	len = ~((size_t) 0) & (~(page_size - 1));
 
-  len = ULONG_MAX;
-  if (len % page_size)
-  {
-    /* Lower boundary */
-    len &= ~(page_size - 1);
-  }
+	/*
+	 * Now we need offset that fits into 32 bit
+	 * value when divided by page size but is big
+	 * enough so that offset + PAGE_ALIGN(len) / page_size
+	 * overflows 32 bits.
+	 */
+	off = ((off_t) ~ ((size_t) 0)) * page_size;
+	off &= ~(page_size - 1);
 
-  off = ULONG_MAX;
-  if (off % page_size)
-  {
-    /* Lower boundary */
-    off &= ~(page_size - 1);
-  }
+	printf("off: %llx, len: %llx\n", (unsigned long long)off,
+	       (unsigned long long)len);
 
-  printf("off: %lx, len: %lx\n", (unsigned long)off,
-		(unsigned long)len);
-  pa = mmap(addr, len, prot, flag, fd, off);
-  if (pa == MAP_FAILED && errno == EOVERFLOW)
-  {
-  	printf ("Test Pass: " TNAME " Error at mmap: %s\n",
-            strerror(errno));
-    exit(PTS_PASS);
-  }
+	pa = mmap(NULL, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, off);
+	if (pa == MAP_FAILED && errno == EOVERFLOW) {
+		printf("Got EOVERFLOW\n");
+		printf("Test PASSED\n");
+		return PTS_PASS;
+	}
 
-  if (pa == MAP_FAILED)
-    perror("Test FAIL: expect EOVERFLOW but get other error");
-  else
-    printf ("Test FAIL : Expect EOVERFLOW but got no error\n");
+	if (pa == MAP_FAILED)
+		perror("Test FAILED: expect EOVERFLOW but get other error");
+	else
+		printf("Test FAILED: Expect EOVERFLOW but got no error\n");
 
-  close (fd);
-  munmap (pa, len);
-  return PTS_FAIL;
+	close(fd);
+	munmap(pa, len);
+	return PTS_FAIL;
 }

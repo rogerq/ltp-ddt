@@ -10,7 +10,7 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 ***************************************************************************
 
@@ -42,7 +42,7 @@
 *
 * History:
 *
-* FLAG DATE     	NAME	   		DESCRIPTION
+* FLAG DATE		NAME			DESCRIPTION
 * 27/12/07  RISHIKESH K RAJAK <risrajak@in.ibm.com> Created this test
 *
 *******************************************************************************************/
@@ -75,13 +75,13 @@ int child_fn1(void *ttype)
 	cpid = getpid();
 	ppid = getppid();
 
-	tst_resm(TINFO, "PIDNS test is running inside container\n");
+	tst_resm(TINFO, "PIDNS test is running inside container");
 	if (cpid == CHILD_PID && ppid == PARENT_PID) {
 		printf("Got expected cpid and ppid\n");
 		exit_val = 0;
 	} else {
 		printf("Got unexpected result of cpid=%d ppid=%d\n",
-		    cpid, ppid);
+		       cpid, ppid);
 		exit_val = 1;
 	}
 
@@ -95,16 +95,16 @@ int main(int argc, char *argv[])
 	TEST(do_clone_unshare_test(T_CLONE, CLONE_NEWPID, child_fn1, NULL));
 
 	if (TEST_RETURN == -1) {
-		tst_brkm(TFAIL|TTERRNO, cleanup, "clone failed");
+		tst_brkm(TFAIL | TTERRNO, cleanup, "clone failed");
 	} else if ((wait(&status)) == -1) {
-		tst_brkm(TWARN|TERRNO, cleanup, "wait failed");
+		tst_brkm(TWARN | TERRNO, cleanup, "wait failed");
 	}
 
 	if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 		tst_resm(TFAIL, "child exited abnormally");
 	else if (WIFSIGNALED(status)) {
 		tst_resm(TFAIL, "child was killed with signal = %d",
-		    WTERMSIG(status));
+			 WTERMSIG(status));
 	}
 
 	cleanup();

@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -46,8 +46,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -79,7 +79,7 @@
 /******************************************************************************/
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret, i;
 	sem_t *sems;
@@ -92,31 +92,29 @@ int main(int argc, char * argv[])
 
 	max = sysconf(_SC_SEM_NSEMS_MAX);
 
-	if (max <= 0)
-	{
+	if (max <= 0) {
 		output("sysconf(_SC_SEM_NSEMS_MAX) = %ld\n", max);
 		UNTESTED("There is no constraint on SEM_NSEMS_MAX");
 	}
 
 	sems = (sem_t *) calloc(max, sizeof(sem_t));
 
-	if (sems == NULL)
-	{
+	if (sems == NULL) {
 		UNRESOLVED(errno, "Failed to alloc space");
 	}
 
-	for (i = 0; i < max; i++)
-	{
-		ret = sem_init(&sems[ i ], 0, 0);
+	for (i = 0; i < max; i++) {
+		ret = sem_init(&sems[i], 0, 0);
 
-		if (ret != 0)
-		{
-			output("sem_init failed to initialize the %d nth semaphore.\n", i);
+		if (ret != 0) {
+			output
+			    ("sem_init failed to initialize the %d nth semaphore.\n",
+			     i);
 			output("Tryed to initialize %ld.\n", max);
 			output("Error is %d: %s\n", errno, strerror(errno));
 
 			for (; i > 0; i--)
-				sem_destroy(&sems[i-1]);
+				sem_destroy(&sems[i - 1]);
 
 			free(sems);
 
@@ -126,13 +124,12 @@ int main(int argc, char * argv[])
 
 	ret = sem_init(&sem_last, 0, 1);
 
-	if (ret == 0)
-	{
-		FAILED("We were able to sem_init more than SEM_NSEMS_MAX semaphores");
+	if (ret == 0) {
+		FAILED
+		    ("We were able to sem_init more than SEM_NSEMS_MAX semaphores");
 	}
 
-	if (errno != ENOSPC)
-	{
+	if (errno != ENOSPC) {
 		output("Error is %d: %s\n", errno, strerror(errno));
 	}
 

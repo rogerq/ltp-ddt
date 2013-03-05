@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * NAME
  *      swapon03.c
@@ -86,6 +86,7 @@ char *TCID = "swapon03";	/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 
 static int exp_enos[] = { EPERM, 0 };
+
 static int swapfiles;		/* Number of swapfiles turned on */
 
 struct utsname uval;
@@ -106,8 +107,8 @@ int expected_errno = EPERM;	/* Expected errno when doing the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -138,28 +139,31 @@ int main(int ac, char **av)
 		/* Check return code */
 		if ((TEST_RETURN == -1) && (TEST_ERRNO == expected_errno)) {
 			tst_resm(TPASS, "swapon(2) got expected failure (%d),",
-				expected_errno);
+				 expected_errno);
 		} else if (TEST_RETURN < 0) {
-			tst_resm(TFAIL|TTERRNO,
-				"swapon(2) failed to produce expected error "
-				"(%d). System reboot recommended.",
-				expected_errno);
+			tst_resm(TFAIL | TTERRNO,
+				 "swapon(2) failed to produce expected error "
+				 "(%d). System reboot recommended.",
+				 expected_errno);
 		} else {
 			/* Probably the system supports MAX_SWAPFILES > 30,
 			 * let's try with MAX_SWAPFILES == 32 */
 
 			/* Call swapon sys call once again for 32
 			 * now we can't receive an error */
-			TEST(syscall(__NR_swapon, swap_testfiles[1].filename, 0));
+			TEST(syscall
+			     (__NR_swapon, swap_testfiles[1].filename, 0));
 
 			/* Check return code (now we're expecting success) */
 			if (TEST_RETURN < 0) {
-				tst_resm(TFAIL|TTERRNO,
+				tst_resm(TFAIL | TTERRNO,
 					 "swapon(2) got an unexpected failure");
 			} else {
 				/* Call swapon sys call once again for 33
 				 * now we have to receive an error */
-				TEST(syscall(__NR_swapon, swap_testfiles[2].filename, 0));
+				TEST(syscall
+				     (__NR_swapon, swap_testfiles[2].filename,
+				      0));
 
 				/* Check return code (should be an error) */
 				if ((TEST_RETURN == -1)
@@ -213,19 +217,19 @@ int setup_swap()
 	swapfiles = 0;
 
 	if (seteuid(0) < 0) {
-		tst_brkm(TFAIL|TERRNO, cleanup, "Failed to call seteuid");
+		tst_brkm(TFAIL | TERRNO, cleanup, "Failed to call seteuid");
 	}
 
 	/* This includes the first (header) line */
 	if ((fd = open("/proc/swaps", O_RDONLY)) == -1) {
-		tst_brkm(TFAIL|TERRNO, cleanup,
+		tst_brkm(TFAIL | TERRNO, cleanup,
 			 "Failed to find out existing number of swap files");
 	}
 	do {
 		char *p = buf;
 		res = read(fd, buf, BUFSIZ);
 		if (res < 0) {
-			tst_brkm(TFAIL|TERRNO, cleanup,
+			tst_brkm(TFAIL | TERRNO, cleanup,
 				 "Failed to find out existing number of swap "
 				 "files");
 		}
@@ -241,7 +245,7 @@ int setup_swap()
 
 	if (swapfiles < 0) {
 		tst_brkm(TFAIL, cleanup,
-			"Failed to find existing number of swapfiles");
+			 "Failed to find existing number of swapfiles");
 	}
 
 	/* Determine how many more files are to be created */
@@ -269,8 +273,8 @@ int setup_swap()
 
 			/* prepare filename for the iteration */
 			if (sprintf(filename, "swapfile%02d", j + 2) < 0) {
-				printf( "sprintf() failed to create "
-					"filename");
+				printf("sprintf() failed to create "
+				       "filename");
 				exit(1);
 			}
 
@@ -283,12 +287,12 @@ int setup_swap()
 			/* turn on the swap file */
 			if ((res = syscall(__NR_swapon, filename, 0)) != 0) {
 				if (errno == EPERM) {
-					printf(	"Successfully created %d "
-						"swapfiles\n", j);
+					printf("Successfully created %d "
+					       "swapfiles\n", j);
 					break;
 				} else {
-					printf( "Failed to create "
-						"swapfile: %s\n", filename);
+					printf("Failed to create "
+					       "swapfile: %s\n", filename);
 					exit(1);
 				}
 			}
@@ -319,40 +323,39 @@ int setup_swap()
  ***************************************************************/
 int create_swapfile(char *swapfile, int bs, int count)
 {
-	char *cmd_buffer;
-	int rc = -1;
+	char cmd_buffer[256];
 
-	/* prepare the buffer. */
-	if ((cmd_buffer = calloc(sysconf(_SC_ARG_MAX)+1, sizeof(char))) == NULL) {
-		tst_resm(TWARN,
-			"failed to allocate enough memory for the command "
-			"buffer");
 	/* prepare the path string for dd command */
-	} else if (snprintf(cmd_buffer, sysconf(_SC_ARG_MAX),
-		    "dd if=/dev/zero of=%s bs=%d "
-		    "count=%d > tmpfile 2>&1", swapfile, bs, count) < 0) {
+	if (snprintf(cmd_buffer, sizeof(cmd_buffer),
+		     "dd if=/dev/zero of=%s bs=%d "
+		     "count=%d > tmpfile 2>&1", swapfile, bs, count) < 0) {
 		tst_resm(TWARN,
 			 "sprintf() failed to create the command string");
+
+		return -1;
 	}
-	else if (system(cmd_buffer) != 0) {
+
+	if (system(cmd_buffer) != 0) {
 		tst_resm(TWARN, "dd command failed to create file via "
-				"command: %s", cmd_buffer);
+			 "command: %s", cmd_buffer);
+		return -1;
 	}
+
 	/* make the file swapfile */
-	else if (snprintf(cmd_buffer, sysconf(_SC_ARG_MAX),
-		    "mkswap %s > tmpfile 2>&1", swapfile) < 0) {
+	if (snprintf(cmd_buffer, sizeof(cmd_buffer),
+		     "mkswap %s > tmpfile 2>&1", swapfile) < 0) {
 		tst_resm(TWARN,
 			 "snprintf() failed to create mkswap command string");
-	} else if (system(cmd_buffer) != 0) {
-		tst_resm(TWARN, "failed to make swap file %s via command %s",
-			 swapfile, cmd_buffer);
-	} else {
-		rc = 0;
+		return -1;
 	}
 
-	free(cmd_buffer);
+	if (system(cmd_buffer) != 0) {
+		tst_resm(TWARN, "failed to make swap file %s via command %s",
+			 swapfile, cmd_buffer);
+		return -1;
+	}
 
-	return rc;
+	return 0;
 }
 
 /***************************************************************
@@ -360,12 +363,12 @@ int create_swapfile(char *swapfile, int bs, int count)
  ***************************************************************/
 int clean_swap()
 {
-	int j;			/* loop counter */
+	int j;
 	char filename[FILENAME_MAX];
 
 	for (j = 0; j < swapfiles; j++) {
 		if (snprintf(filename, sizeof(filename),
-			    "swapfile%02d", j+2) < 0) {
+			     "swapfile%02d", j + 2) < 0) {
 			tst_resm(TWARN, "sprintf() failed to create filename");
 			tst_resm(TWARN, "Failed to turn off swap files. System"
 				 " reboot after execution of LTP test"
@@ -396,16 +399,11 @@ int clean_swap()
  ***************************************************************/
 int check_and_swapoff(char *filename)
 {
-	char *cmd_buffer;	/* temp buffer for commands */
+	char cmd_buffer[256];
 	int rc = -1;
 
-	if ((cmd_buffer = calloc(sysconf(_SC_ARG_MAX)+1, sizeof(char))) == NULL) {
-		/* prepare the cmd string for grep command */
-		tst_resm(TWARN,
-			"failed to allocate enough memory for the command "
-			"buffer");
-	} else if (snprintf(cmd_buffer, sysconf(_SC_ARG_MAX),
-		    "grep -q '%s.*file' /proc/swaps", filename) < 0) {
+	if (snprintf(cmd_buffer, sizeof(cmd_buffer),
+		     "grep -q '%s.*file' /proc/swaps", filename) < 0) {
 		tst_resm(TWARN,
 			 "sprintf() failed to create the command string");
 	} else {
@@ -418,17 +416,15 @@ int check_and_swapoff(char *filename)
 			if (syscall(__NR_swapoff, filename) != 0) {
 
 				tst_resm(TWARN, "Failed to turn off swap "
-						"file. system reboot after "
-						"execution of LTP test suite "
-						"is recommended");
+					 "file. system reboot after "
+					 "execution of LTP test suite "
+					 "is recommended");
 				rc = -1;
 
 			}
 
-		} /* else nothing to clean up. */
-
+		}
 	}
-	free(cmd_buffer);
 
 	return rc;
 

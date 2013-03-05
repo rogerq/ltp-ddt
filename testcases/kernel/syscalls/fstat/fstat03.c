@@ -65,6 +65,7 @@
 char *TCID = "fstat03";		/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 int exp_enos[] = { EBADF, 0 };
+
 int fildes;			/* testfile descriptor */
 
 void setup();			/* Main setup function for the tests */
@@ -73,8 +74,8 @@ void cleanup();			/* cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat structure buffer */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	msg = parse_opts(ac, av, NULL, NULL);
@@ -107,12 +108,15 @@ int main(int ac, char **av)
 		if (TEST_RETURN == -1) {
 			TEST_ERROR_LOG(TEST_ERRNO);
 			if (TEST_ERRNO == EBADF) {
-				tst_resm(TPASS, "fstat() fails with expected error EBADF");
+				tst_resm(TPASS,
+					 "fstat() fails with expected error EBADF");
 			} else {
-				tst_resm(TFAIL|TTERRNO, "fstat() did not fail with EBADF");
+				tst_resm(TFAIL | TTERRNO,
+					 "fstat() did not fail with EBADF");
 			}
 		} else {
-			tst_resm(TFAIL, "fstat() returned %ld, expected -1", TEST_RETURN);
+			tst_resm(TFAIL, "fstat() returned %ld, expected -1",
+				 TEST_RETURN);
 		}
 	}
 
@@ -146,11 +150,12 @@ void setup()
 	/* Create a testfile under temporary directory */
 	fildes = open(TEST_FILE, O_RDWR | O_CREAT, 0666);
 	if (fildes == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "open(%s, O_RDWR|O_CREAT, 0666) failed", TEST_FILE);
 
 	if (close(fildes) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "close(%s) failed", TEST_FILE);
+		tst_brkm(TBROK | TERRNO, cleanup, "close(%s) failed",
+			 TEST_FILE);
 }
 
 /*

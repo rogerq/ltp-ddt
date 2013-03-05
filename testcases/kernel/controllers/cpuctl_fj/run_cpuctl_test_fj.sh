@@ -16,7 +16,7 @@
 ##                                                                            ##
 ## You should have received a copy of the GNU General Public License          ##
 ## along with this program;  if not, write to the Free Software               ##
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    ##
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    ##
 ##                                                                            ##
 ## Author: Miao Xie <miaox@cn.fujitsu.com>                                    ##
 ## Restructure for LTP: Shi Weihua <shiwh@cn.fujitsu.com>                     ##
@@ -95,7 +95,8 @@ get_cpu_usage()
 	# gcooper@optimus ~ $ expr 0.0 \< 42.0 \& 42.0 \< 100.0
 	# 0
 	# ... so we have to lop off the fractional piece.
-	ps -p $1 pcpu | awk -F. '{ print $1 }'
+	# ps -p $1 pcpu | awk -F. '{ print $1 }'
+	top -bn1 -p $1 | sed -n "8p" | awk '{ print $9 }' | awk -F. '{ print $1 }'
 }
 
 kill_all_pid()
@@ -674,7 +675,7 @@ case22()
 		ret=$?
 		: $(( top_times+=1 ))
 	done
-	
+
 	kill -s KILL $pid $loop_pid > /dev/null 2>&1
 	wait $pid $loop_pid >/dev/null 2>&1
 	return $ret
@@ -702,7 +703,7 @@ do_test ()
 		cleanup || {
 			tst_resm TFAIL "case$i    FAIL"
 		}
-		
+
 		tst_resm TPASS "case$i    PASS"
 	done
 }

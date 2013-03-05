@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -137,8 +137,8 @@ fd_set Readfds;
  ***********************************************************************/
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	struct timeval timeout;
 	long test_time = 0;	/* in usecs */
 
@@ -222,7 +222,7 @@ void setup()
 	tst_tmpdir();
 
 	if ((Fd = open(FILENAME, O_CREAT | O_RDWR, 0777)) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "open(%s, O_CREAT | O_RDWR) failed", FILENAME);
 
 	/*
@@ -248,7 +248,7 @@ void cleanup()
 
 	if (Fd >= 0) {
 		if (close(Fd) == -1)
-			tst_resm(TWARN|TERRNO, "close(%s) failed", FILENAME);
+			tst_resm(TWARN | TERRNO, "close(%s) failed", FILENAME);
 		Fd = -1;
 	}
 

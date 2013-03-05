@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**************************************************************************
@@ -121,10 +121,9 @@ static struct test_case_t {
 int main(int ac, char **av)
 {
 
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -152,9 +151,10 @@ int main(int ac, char **av)
 			}
 
 			/* check return code */
-			if ((TEST_RETURN == -1) && (TEST_ERRNO == testcase[i].
-						    exp_errno)) {
-				tst_resm(TPASS, "swapoff(2) expected failure;"
+			if ((TEST_RETURN == -1)
+			    && (TEST_ERRNO == testcase[i].exp_errno)) {
+				tst_resm(TPASS,
+					 "swapoff(2) expected failure;"
 					 " Got errno - %s : %s",
 					 testcase[i].exp_errval,
 					 testcase[i].err_desc);
@@ -167,7 +167,9 @@ int main(int ac, char **av)
 					 testcase[i].exp_errval, TEST_ERRNO);
 
 				if ((TEST_RETURN == 0) && (i == 2)) {
-					if (syscall(__NR_swapon, "./swapfile01", 0) != 0) {
+					if (syscall
+					    (__NR_swapon, "./swapfile01",
+					     0) != 0) {
 						tst_brkm(TBROK, cleanup,
 							 " Failed to turn on"
 							 " swap file");
@@ -294,8 +296,10 @@ void cleanup()
 	 */
 	TEST_CLEANUP;
 
-	if (need_swapfile_cleanup && (syscall(__NR_swapoff, "./swapfile01") != 0)) {
-		tst_resm(TWARN, " Failed to turn off swap file. System reboot"
+	if (need_swapfile_cleanup
+	    && (syscall(__NR_swapoff, "./swapfile01") != 0)) {
+		tst_resm(TWARN,
+			 " Failed to turn off swap file. System reboot"
 			 " after execution of LTP test suite is"
 			 " recommended.");
 	}

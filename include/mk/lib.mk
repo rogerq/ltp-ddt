@@ -19,6 +19,8 @@
 #
 # Garrett Cooper, July 2009
 #
+# Copyright (C) Cyril Hrubis <chrubis@suse.cz> 2012
+#
 
 # Makefile to include for libraries.
 
@@ -30,19 +32,26 @@ INSTALL_DIR	:= $(libdir)
 .PHONY: install_headers
 
 ifndef LIB
-$(error You must define LIB when including this Makefile)
+ifndef INTERNAL_LIB
+$(error You must define LIB or INTERNAL_LIB when including this Makefile)
+endif
 endif
 
 install_headers: $(addprefix $(DESTDIR)/$(includedir)/,$(notdir $(HEADER_FILES)))
 
 INSTALL_MODE	?= 00664
 
+# Hide the LIB target for internal libs on install
+ifneq ($(MAKECMDGOALS),install)
+LIB ?= $(INTERNAL_LIB)
+endif
+
 MAKE_TARGETS	:= $(LIB)
 
 LIBSRCS		?= $(wildcard $(abs_srcdir)/*.c)
 
 ifdef MAKE_3_80_COMPAT
-LIBSRCS		:= $(call MAKE_3_80_abspath,$(LIBSRCS)) 
+LIBSRCS		:= $(call MAKE_3_80_abspath,$(LIBSRCS))
 else
 LIBSRCS		:= $(abspath $(LIBSRCS))
 endif

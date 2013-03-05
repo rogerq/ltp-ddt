@@ -13,7 +13,7 @@
 /*									    */
 /* You should have received a copy of the GNU General Public License	  */
 /* along with this program;  if not, write to the Free Software	       */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*									    */
 /******************************************************************************/
 /******************************************************************************/
@@ -88,20 +88,23 @@
 #include "linux_syscall_numbers.h"
 
 char *TCID = "bdflush01";
-int  testno;
-int  TST_TOTAL = 1;
+int testno;
+int TST_TOTAL = 1;
 
-void cleanup() {
-        TEST_CLEANUP;
-        tst_rmdir();
+void cleanup()
+{
+	TEST_CLEANUP;
+	tst_rmdir();
 }
 
-void setup() {
+void setup()
+{
 	TEST_PAUSE;
 	tst_tmpdir();
 }
 
-int main(int ac, char **av) {
+int main(int ac, char **av)
+{
 	long data;
 	char *msg;
 
@@ -119,7 +122,7 @@ int main(int ac, char **av) {
 	for (testno = 0; testno < TST_TOTAL; ++testno) {
 		TEST(syscall(__NR_bdflush, 3, data));
 		if (TEST_RETURN == -1)
-			tst_brkm(TFAIL|TTERRNO, cleanup, "bdflush failed");
+			tst_brkm(TFAIL | TTERRNO, cleanup, "bdflush failed");
 		else
 			tst_resm(TPASS, "bdflush() = %ld", TEST_RETURN);
 	}

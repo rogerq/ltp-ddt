@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -83,8 +83,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -108,7 +108,7 @@ int main(int ac, char **av)
 		if (errno == EINVAL)
 			tst_resm(TPASS, "msync failed with EINVAL as expected");
 		else
-			tst_resm(TFAIL|TERRNO, "msync failed unexpectedly");
+			tst_resm(TFAIL | TERRNO, "msync failed unexpectedly");
 	}
 
 	cleanup();
@@ -124,11 +124,11 @@ void setup()
 	TEST_PAUSE;
 
 	if ((page_sz = getpagesize()) == -1)
-		tst_brkm(TBROK|TERRNO, NULL, "getpagesize failed");
+		tst_brkm(TBROK | TERRNO, NULL, "getpagesize failed");
 
 	getrlimit(RLIMIT_DATA, &brkval);
 
-	addr = (void*) brkval.rlim_max;
+	addr = (void *)brkval.rlim_max;
 }
 
 void cleanup()

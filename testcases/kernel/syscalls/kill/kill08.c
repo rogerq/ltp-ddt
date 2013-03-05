@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -70,17 +70,15 @@ void do_child(void);
 char *TCID = "kill08";
 int TST_TOTAL = 1;
 
-
 #define TEST_SIG SIGKILL
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	pid_t pid1, pid2;
 	int exno, status, nsig, i;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -125,7 +123,7 @@ int main(int ac, char **av)
 			/* Kill all processes in this process group */
 			TEST(kill(0, TEST_SIG));
 			pause();
-			  exit(exno);
+			exit(exno);
 		} else {
 			waitpid(pid1, &status, 0);
 			if (TEST_RETURN != 0) {
@@ -166,7 +164,7 @@ void do_child()
 	int exno = 1;
 
 	pause();
-	  exit(exno);
+	exit(exno);
 }
 
 /*

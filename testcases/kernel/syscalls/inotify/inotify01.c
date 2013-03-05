@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Started by Andrew Vagin <avagin@sw.ru>
  *
@@ -50,6 +50,7 @@
 #include "test.h"
 #include "usctest.h"
 #include "linux_syscall_numbers.h"
+#include "inotify.h"
 
 #if defined(HAVE_SYS_INOTIFY_H)
 #include <sys/inotify.h>
@@ -76,25 +77,10 @@ int event_set[EVENT_MAX];
 
 char event_buf[EVENT_BUF_LEN];
 
-static long myinotify_init()
-{
-	return syscall(__NR_inotify_init);
-}
-
-static long myinotify_add_watch(int fd, const char *pathname, int mask)
-{
-	return syscall(__NR_inotify_add_watch, fd, pathname, mask);
-}
-
-static long myinotify_rm_watch(int fd, int wd)
-{
-	return syscall(__NR_inotify_rm_watch, fd, wd);
-}
-
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/*
 	 * parse standard options
@@ -118,22 +104,22 @@ int main(int ac, char **av)
 		 * generate sequence of events
 		 */
 		if (chmod(fname, 0755) < 0) {
-			tst_brkm(TBROK|TERRNO, cleanup,
+			tst_brkm(TBROK | TERRNO, cleanup,
 				 "chmod(%s, 0755) failed", fname);
 		}
 		event_set[Tst_count] = IN_ATTRIB;
 		Tst_count++;
 
 		if ((fd = open(fname, O_RDONLY)) == -1) {
-			tst_brkm(TBROK|TERRNO, cleanup,
-			    "open(%s, O_RDWR|O_CREAT,0700) failed", fname);
+			tst_brkm(TBROK | TERRNO, cleanup,
+				 "open(%s, O_RDWR|O_CREAT,0700) failed", fname);
 		}
 		event_set[Tst_count] = IN_OPEN;
 		Tst_count++;
 
 		if (read(fd, buf, BUF_SIZE) == -1) {
-			tst_brkm(TBROK|TERRNO, cleanup,
-			    "read(%d, buf, %d) failed", fd, BUF_SIZE);
+			tst_brkm(TBROK | TERRNO, cleanup,
+				 "read(%d, buf, %d) failed", fd, BUF_SIZE);
 		}
 		event_set[Tst_count] = IN_ACCESS;
 		Tst_count++;
@@ -146,28 +132,27 @@ int main(int ac, char **av)
 
 		if ((fd = open(fname, O_RDWR | O_CREAT, 0700)) == -1) {
 			tst_brkm(TBROK, cleanup,
-			    "open(%s, O_RDWR|O_CREAT,0700) failed", fname);
+				 "open(%s, O_RDWR|O_CREAT,0700) failed", fname);
 		}
 		event_set[Tst_count] = IN_OPEN;
 		Tst_count++;
 
 		if (write(fd, buf, BUF_SIZE) == -1) {
 			tst_brkm(TBROK, cleanup,
-			    "write(%d, %s, 1) failed", fd, fname);
+				 "write(%d, %s, 1) failed", fd, fname);
 		}
 		event_set[Tst_count] = IN_MODIFY;
 		Tst_count++;
 
 		if (close(fd) == -1) {
-			tst_brkm(TBROK, cleanup,
-			    "close(%s) failed", fname);
+			tst_brkm(TBROK, cleanup, "close(%s) failed", fname);
 		}
 		event_set[Tst_count] = IN_CLOSE_WRITE;
 		Tst_count++;
 
 		if (TST_TOTAL != Tst_count) {
 			tst_brkm(TBROK, cleanup,
-			     "TST_TOTAL and Tst_count are not equal");
+				 "TST_TOTAL and Tst_count are not equal");
 		}
 		Tst_count = 0;
 
@@ -177,8 +162,8 @@ int main(int ac, char **av)
 		int len, i = 0, test_num = 0;
 		if ((len = read(fd_notify, event_buf, EVENT_BUF_LEN)) < 0) {
 			tst_brkm(TBROK, cleanup,
-			    "read(%d, buf, %d) failed",
-			    fd_notify, EVENT_BUF_LEN);
+				 "read(%d, buf, %zu) failed",
+				 fd_notify, EVENT_BUF_LEN);
 
 		}
 
@@ -212,7 +197,7 @@ int main(int ac, char **av)
 		}
 		for (; test_num < TST_TOTAL; test_num++) {
 			tst_resm(TFAIL, "didn't get event: mask=%x",
-			    event_set[test_num]);
+				 event_set[test_num]);
 
 		}
 
@@ -236,13 +221,12 @@ void setup()
 
 	sprintf(fname, "tfile_%d", getpid());
 	if ((fd = open(fname, O_RDWR | O_CREAT, 0700)) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup,
-			 "open(%s, O_RDWR|O_CREAT,0700) failed",
-			 fname);
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "open(%s, O_RDWR|O_CREAT,0700) failed", fname);
 	}
 	if ((write(fd, fname, 1)) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup, "write(%d, %s, 1) failed",
-		    fd, fname);
+		tst_brkm(TBROK | TERRNO, cleanup, "write(%d, %s, 1) failed",
+			 fd, fname);
 	}
 
 	/* close the file we have open */
@@ -254,14 +238,15 @@ void setup()
 			tst_brkm(TCONF, cleanup,
 				 "inotify is not configured in this kernel.");
 		} else {
-			tst_brkm(TBROK|TERRNO, cleanup, "inotify_init failed");
+			tst_brkm(TBROK | TERRNO, cleanup,
+				 "inotify_init failed");
 		}
 	}
 
 	if ((wd = myinotify_add_watch(fd_notify, fname, IN_ALL_EVENTS)) < 0) {
-		tst_brkm(TBROK|TERRNO, cleanup,
-		    "inotify_add_watch (%d, %s, IN_ALL_EVENTS) failed",
-		    fd_notify, fname);
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "inotify_add_watch (%d, %s, IN_ALL_EVENTS) failed",
+			 fd_notify, fname);
 	};
 
 }
@@ -273,7 +258,7 @@ void setup()
 void cleanup()
 {
 	if (myinotify_rm_watch(fd_notify, wd) < 0) {
-		tst_resm(TWARN|TERRNO, "inotify_rm_watch (%d, %d) failed",
+		tst_resm(TWARN | TERRNO, "inotify_rm_watch (%d, %d) failed",
 			 fd_notify, wd);
 
 	}

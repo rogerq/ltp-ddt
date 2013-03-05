@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -89,11 +89,11 @@ struct test_case_t {		/* test case structure */
 	PF_INET, SOCK_STREAM, 0, (struct sockaddr *)0,
 		    &sinlen, -1, EFAULT, setup1, cleanup1,
 		    "invalid socket buffer"}, {
-	/* invalid salen test for aligned input */
+		/* invalid salen test for aligned input */
 	PF_INET, SOCK_STREAM, 0, (struct sockaddr *)&fsin1,
 		    (socklen_t *) 0, -1, EFAULT, setup1, cleanup1,
 		    "invalid aligned salen"}, {
-	/* invalid salen test for unaligned input */
+		/* invalid salen test for unaligned input */
 	PF_INET, SOCK_STREAM, 0, (struct sockaddr *)&fsin1,
 		    (socklen_t *) 1, -1, EFAULT, setup1, cleanup1,
 		    "invalid unaligned salen"},
@@ -104,11 +104,10 @@ int TST_TOTAL = sizeof(tdat) / sizeof(tdat[0]);	/* Total number of test cases. *
 
 int exp_enos[] = { EBADF, ENOTSOCK, EFAULT, 0 };
 
-
 int main(int argc, char *argv[])
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	msg = parse_opts(argc, argv, NULL, NULL);

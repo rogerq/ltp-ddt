@@ -15,7 +15,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -92,6 +92,7 @@ int TST_TOTAL = 1;		/* Total number of test conditions */
 
 char test_desc[] = "File is a directory";
 int exp_enos[] = { EISDIR, 0 };
+
 int r_val;
 int fd;
 
@@ -100,8 +101,8 @@ void cleanup();			/* Main cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	char *file_name;	/* testfile name */
 
 	/* Parse standard options given to run the test. */

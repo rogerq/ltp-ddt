@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -86,17 +86,17 @@ static void cleanup(void);
 char *TCID = "prctl01";		/* Test program identifier.    */
 
 int option[2] = { PR_GET_PDEATHSIG, PR_SET_PDEATHSIG };
+
 int TST_TOTAL = 2;
 
 int main(int ac, char **av)
 {
 
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 	pid_t child_pid;
 	int status, sig;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -127,7 +127,8 @@ int main(int ac, char **av)
 				if (TEST_RETURN == 0) {
 					exit(0);
 				} else {
-					tst_resm(TWARN|TTERRNO, "prctl() returned %ld",
+					tst_resm(TWARN | TTERRNO,
+						 "prctl() returned %ld",
 						 TEST_RETURN);
 					exit(1);
 				}

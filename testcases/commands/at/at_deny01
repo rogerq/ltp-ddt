@@ -38,6 +38,10 @@ test_user1_home="/home/${test_user1}"
 test_user2_home="/home/${test_user2}"
 tmpfile="$TMP/at_deny_test"
 
+if [ "$(id -ru)" = 0 ]; then
+	. cmdlib.sh
+fi
+
 #-----------------------------------------------------------------------
 # FUNCTION:  do_setup
 #-----------------------------------------------------------------------
@@ -86,8 +90,7 @@ do_setup()
 		exit 1
 	fi
 
-	# Restart atd daemon.
-	/etc/init.d/atd restart
+	restart_daemon atd
 }
 
 #-----------------------------------------------------------------------
@@ -114,7 +117,7 @@ do_cleanup()
 #-----------------------------------------------------------------------
 run_test()
 {
-	if [ $(whoami) = "${test_user1}" ]; then 
+	if [ $(whoami) = "${test_user1}" ]; then
 		. "${test_user1_home}/cached_ltproot" || exit 1
 		export PATH="$PATH:$LTPROOT/testcases/bin"
 
@@ -125,7 +128,7 @@ run_test()
 			echo "Error while adding job using at for user ${test_user1}."
 			exit 1
 		fi
-		echo " Sleeping for 75 seconds...."	
+		echo " Sleeping for 75 seconds...."
 		sleep 75
 
 		exit_code=1

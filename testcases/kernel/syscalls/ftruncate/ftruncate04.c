@@ -13,7 +13,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program;  if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -188,8 +188,8 @@ void doparent()
 	}
 	if (sb.st_size != recstart + (RECLEN / 2)) {
 		tst_resm(TFAIL, "unexpected ftruncate failure case 4");
-		tst_resm(TFAIL, "expected size of %d, got size of %"PRId64,
-			 recstart + (RECLEN / 2), (int64_t)sb.st_size);
+		tst_resm(TFAIL, "expected size of %d, got size of %" PRId64,
+			 recstart + (RECLEN / 2), (int64_t) sb.st_size);
 		local_flag = FAILED;
 		cleanup();
 	}
@@ -212,8 +212,8 @@ void doparent()
 	}
 	if (sb.st_size != RECLEN) {
 		tst_resm(TFAIL, "unexpected ftruncate failure case 5");
-		tst_resm(TFAIL, "expected size of %d, got size of %"PRId64,
-			 RECLEN, (int64_t)sb.st_size);
+		tst_resm(TFAIL, "expected size of %d, got size of %" PRId64,
+			 RECLEN, (int64_t) sb.st_size);
 		local_flag = FAILED;
 		cleanup();
 	}
@@ -231,8 +231,8 @@ void doparent()
 	}
 	if (sb.st_size != (2 * len)) {
 		tst_resm(TFAIL, "unexpected ftruncate failure case 6");
-		tst_resm(TFAIL, "expected size of %d, got size of %"PRId64,
-			 (2 * len), (int64_t)sb.st_size);
+		tst_resm(TFAIL, "expected size of %d, got size of %" PRId64,
+			 (2 * len), (int64_t) sb.st_size);
 		local_flag = FAILED;
 		cleanup();
 	}
@@ -284,8 +284,8 @@ int main(int ac, char **av)
 	int fd, i;
 	int tlen = 0;
 	struct sigaction act;
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	struct statvfs fs;
 
 	/*
@@ -303,7 +303,7 @@ int main(int ac, char **av)
 	local_flag = PASSED;
 	tst_tmpdir();
 	if (statvfs(".", &fs) == -1) {
-		tst_resm(TFAIL|TERRNO, "statvfs failed");
+		tst_resm(TFAIL | TERRNO, "statvfs failed");
 		tst_rmdir();
 		tst_exit();
 	}

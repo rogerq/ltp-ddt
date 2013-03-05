@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -99,8 +99,8 @@ void cleanup();			/* Main cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat struct. */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	mode_t file_mode;	/* mode permissions set on testfile */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -115,7 +115,7 @@ int main(int ac, char **av)
 		TEST(fchmod(fd, PERMS));
 
 		if (TEST_RETURN == -1) {
-			tst_resm(TFAIL|TTERRNO, "fchmod failed");
+			tst_resm(TFAIL | TTERRNO, "fchmod failed");
 			continue;
 		}
 		/*
@@ -128,7 +128,8 @@ int main(int ac, char **av)
 			 * fstat(2).
 			 */
 			if (fstat(fd, &stat_buf) == -1)
-				tst_brkm(TFAIL|TERRNO, cleanup, "fstat failed");
+				tst_brkm(TFAIL | TERRNO, cleanup,
+					 "fstat failed");
 			file_mode = stat_buf.st_mode;
 
 			/* Verify STICKY BIT set on testfile */
@@ -156,9 +157,9 @@ void setup()
 
 	ltpuser = getpwnam(nobody_uid);
 	if (ltpuser == NULL)
-		tst_brkm(TBROK|TERRNO, NULL, "getpwnam failed");
+		tst_brkm(TBROK | TERRNO, NULL, "getpwnam failed");
 	if (seteuid(ltpuser->pw_uid) == -1)
-		tst_brkm(TBROK|TERRNO, NULL, "seteuid failed");
+		tst_brkm(TBROK | TERRNO, NULL, "seteuid failed");
 
 	TEST_PAUSE;
 
@@ -170,7 +171,7 @@ void setup()
 	 * uid/gid of guest user.
 	 */
 	if ((fd = open(TESTFILE, O_RDWR | O_CREAT, FILE_MODE)) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "open failed");
 }
 
 void cleanup()
@@ -178,7 +179,7 @@ void cleanup()
 	TEST_CLEANUP;
 
 	if (close(fd) == -1)
-		tst_resm(TWARN|TERRNO, "close failed");
+		tst_resm(TWARN | TERRNO, "close failed");
 
 	tst_rmdir();
 

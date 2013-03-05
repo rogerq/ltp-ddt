@@ -16,7 +16,7 @@
 ##                                                                            ##
 ## You should have received a copy of the GNU General Public License          ##
 ## along with this program;  if not, write to the Free Software               ##
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    ##
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    ##
 ##                                                                            ##
 ## Author: Shi Weihua <shiwh@cn.fujitsu.com>                                  ##
 ##                                                                            ##
@@ -95,11 +95,11 @@ echo `uname -a` >> $LOGFILE
 echo "" >> $LOGFILE
 echo "Now, we start the test for basic function of cgroup..." >> $LOGFILE
 
-nlines=`cat cgroup_fj_testcases | wc -l`
+nlines=`cat cgroup_fj_testcases.sh | wc -l`
 for i in `seq 1 $nlines`
 do
-	CASETYPE=`sed -n "$i""p" cgroup_fj_testcases | cut -f1`
-	CASECMD=`sed -n "$i""p" cgroup_fj_testcases | cut -f2`
+	CASETYPE=`sed -n "$i""p" cgroup_fj_testcases.sh | cut -f1`
+	CASECMD=`sed -n "$i""p" cgroup_fj_testcases.sh | cut -f2`
 	echo $CASETYPE | grep "#"
 	if [ $? -ne 0 ]; then
 		case $CASETYPE in
@@ -122,9 +122,9 @@ do
 
 		ret=$?
 		if [ $ret -eq 0 ]; then
-			tst_resm TPASS "case$i(`sed -n "$i""p" cgroup_fj_testcases`)    PASS"
+			tst_resm TPASS "case$i(`sed -n "$i""p" cgroup_fj_testcases.sh`)    PASS"
 		elif [ $ret -ne 9 ]; then
-			tst_resm TFAIL "case$i(`sed -n "$i""p" cgroup_fj_testcases`)    FAIL"
+			tst_resm TFAIL "case$i(`sed -n "$i""p" cgroup_fj_testcases.sh`)    FAIL"
 		fi
 	fi
 done

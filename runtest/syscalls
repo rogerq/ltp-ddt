@@ -274,7 +274,7 @@ fork08 fork08
 fork09 fork09
 fork10 fork10
 fork11 fork11
-fork13 fork13 -c 2 -i 1000000
+fork13 fork13 -i 1000000
 
 fpathconf01 fpathconf01
 
@@ -421,6 +421,10 @@ getuid02_16 getuid02_16
 getuid03 getuid03
 getuid03_16 getuid03_16
 
+getxattr01 getxattr01
+getxattr02 getxattr02
+getxattr03 getxattr03
+
 #Needs tty device.
 #ioctl01 ioctl01 -D /dev/tty0
 #ioctl02 ioctl02 -D /dev/tty0
@@ -435,6 +439,7 @@ inotify_init1_02 inotify_init1_02
 inotify01 inotify01
 inotify02 inotify02
 inotify03 inotify03 -D DEVICE -T DEVICE_FS_TYPE
+inotify04 inotify04
 
 ioperm01 ioperm01
 ioperm02 ioperm02
@@ -512,6 +517,9 @@ memset01 memset01
 memcmp01 memcmp01
 memcpy01 memcpy01
 
+migrate_pages01 migrate_pages01
+migrate_pages02 migrate_pages02
+
 mlockall01 mlockall01
 mlockall02 mlockall02
 mlockall03 mlockall03
@@ -572,8 +580,6 @@ mount02 mount02 -D DEVICE -T DEVICE_FS_TYPE
 mount03 mount03 -D DEVICE -T DEVICE_FS_TYPE
 mount04 mount04 -D DEVICE -T DEVICE_FS_TYPE
 
-mount1234 test_mount
-
 move_pages01 move_pages.sh 01
 move_pages02 move_pages.sh 02
 move_pages03 cd $LTPROOT/testcases/bin && chown root move_pages03 && chmod 04755 move_pages03 && move_pages.sh 03
@@ -600,6 +606,7 @@ mremap01 mremap01
 mremap02 mremap02
 mremap03 mremap03
 mremap04 mremap04
+mremap05 mremap05
 
 msgctl01 msgctl01
 msgctl02 msgctl02
@@ -683,6 +690,7 @@ mincore02 mincore02
 madvise01 madvise01
 madvise02 madvise02
 madvise03 madvise03
+madvise04 madvise04
 
 newuname01 newuname01
 
@@ -729,6 +737,12 @@ pread03_64 pread03_64
 
 profil01 profil01
 
+process_vm_readv01 process_vm01 -r
+process_vm_readv02 process_vm_readv02
+process_vm_readv03 process_vm_readv03
+process_vm_writev01 process_vm01 -w
+process_vm_writev02 process_vm_writev02
+
 pselect01 pselect01
 pselect01_64 pselect01_64
 
@@ -756,6 +770,9 @@ read01 read01
 read02 read02
 read03 read03
 read04 read04
+
+readahead01 readahead01
+readahead02 readahead02
 
 readdir01 readdir01
 readdir02 readdir02
@@ -888,6 +905,8 @@ sendfile06 sendfile06
 sendfile06_64 sendfile06_64
 sendfile07 sendfile07
 sendfile07_64 sendfile07_64
+sendfile08 sendfile08
+sendfile08_64 sendfile08_64
 
 
 sendmsg01 sendmsg01
@@ -1018,6 +1037,10 @@ setuid03 setuid03
 setuid03_16 setuid03_16
 setuid04 setuid04
 setuid04_16 setuid04_16
+
+setxattr01 setxattr01
+setxattr02 setxattr02
+setxattr03 setxattr03
 
 shmat01 shmat01
 shmat02 shmat02
@@ -1233,8 +1256,6 @@ unshare02 unshare02
 umount01 umount01 -D DEVICE -T DEVICE_FS_TYPE
 umount02 umount02 -D DEVICE -T DEVICE_FS_TYPE
 umount03 umount03 -D DEVICE -T DEVICE_FS_TYPE
-
-umount123 test_umount
 
 ustat01 ustat01
 ustat02 ustat02

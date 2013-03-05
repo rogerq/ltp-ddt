@@ -14,14 +14,15 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
  * Test Name: hugemmap04
  *
  * Test Description:
- *  Verify that, a hugetlb mmap() succeeds when used to map the largest size possible.
+ *  Verify that, a hugetlb mmap() succeeds when used to map the largest
+ *  size possible.
  *
  * Expected Result:
  *  mmap() should succeed returning the address of the hugetlb mapped region.
@@ -33,159 +34,141 @@
  *   Pause for SIGUSR1 if option specified.
  *   Create temporary directory.
  *
- *  Test:
- *   Loop if the proper options are given.
- *   Execute system call
- *   Check return code, if system call failed (return=-1)
- *   	Log the errno and Issue a FAIL message.
- *  Cleanup:
- *   Print timing stats if options given
- *   Delete the temporary directory created.
- *
- * Usage:  <for command-line>
- *  hugemmap04 [-c n] [-f] [-i n] [-I x] [-P x] [-t]
- *     where,  -c n : Run n copies concurrently.
- *             -f   : Turn off functionality Testing.
- *	       -i n : Execute test n times.
- *	       -I x : Execute test for x seconds.
- *	       -P x : Pause for x seconds between iterations.
- *	       -t   : Turn on syscall timing.
+ * Test:
+ *  Loop if the proper options are given.
+ *  Execute system call
+ *  Check return code, if system call failed (return=-1)
+ *  Log the errno and Issue a FAIL message.
+ * Cleanup:
+ *  Print timing stats if options given
+ *  Delete the temporary directory created.
  *
  * HISTORY
- *	04/2004 Written by Robbie Williamson
- *
- * RESTRICTIONS:
- *  None.
+ *  04/2004 Written by Robbie Williamson
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/mman.h>
+#include <sys/mount.h>
+#include <sys/stat.h>
 #include <errno.h>
-#include <unistd.h>
 #include <fcntl.h>
-#include <string.h>
 #include <signal.h>
 #include <stdint.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <sys/types.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include "test.h"
 #include "usctest.h"
-#include "system_specific_hugepages_info.h"
+#include "safe_macros.h"
+#include "mem.h"
 
-#define BUFFER_SIZE  256
+static char TEMPFILE[MAXPATHLEN];
 
-char* TEMPFILE="mmapfile";
+char *TCID = "hugemmap04";
+int TST_TOTAL = 1;
+static long *addr;
+static long long mapsize;
+static int fildes;
+static long freepages;
+static long beforetest;
+static long aftertest;
+static long hugepagesmapped;
+static long hugepages = 128;
+static long orig_hugepages;
+static char *Hopt;
+static char *nr_opt;
 
-char *TCID="hugemmap04";	/* Test program identifier.    */
-int TST_TOTAL=1;		/* Total number of test cases. */
-long *addr;			/* addr of memory mapped region */
-long long mapsize;		/* size of mapped region */
-int fildes;			/* file descriptor for tempfile */
-int freepages=0;		/* Amount of free huge pages to use for testing */
-int beforetest=0;		/* Amount of free huge pages before testing */
-int aftertest=0;		/* Amount of free huge pages after testing */
-int hugepagesmapped=0;		/* Amount of huge pages mapped after testing */
-char *Hopt;                     /* location of hugetlbfs */
+static void help(void);
 
-void setup();			/* Main setup function of test */
-void cleanup();			/* cleanup function for the test */
-
-void help()
+int main(int ac, char **av)
 {
-	printf("  -H /..  Location of hugetlbfs, i.e. -H /var/hugetlbfs \n");
-}
+	int lc;
+	char *msg;
+	int Hflag = 0;
+	int sflag = 0;
+	int huge_pagesize = 0;
 
-int
-main(int ac, char **av)
-{
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
-        int Hflag=0;              /* binary flag: opt or not */
-	int huge_pagesize=0;
+	option_t options[] = {
+		{"H:", &Hflag, &Hopt},
+		{"s:", &sflag, &nr_opt},
+		{NULL, NULL, NULL}
+	};
 
-       	option_t options[] = {
-        	{ "H:",   &Hflag, &Hopt },    /* Required for location of hugetlbfs */
-            	{ NULL, NULL, NULL }          /* NULL required to end array */
-       	};
-
-	/* Parse standard options given to run the test. */
 	msg = parse_opts(ac, av, options, &help);
-	if (msg != (char *) NULL) {
-		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s, use -help", msg);
-		tst_exit();
-	}
+	if (msg)
+		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s,"
+			 " use -help", msg);
 
-	if (Hflag == 0) {
-		tst_brkm(TBROK, NULL, "-H option is REQUIRED for this test, use -h for options help");
-		tst_exit();
+	if (!Hflag) {
+		tst_tmpdir();
+		Hopt = get_tst_tmpdir();
 	}
-
-	/* Check number of hugepages */
-	if (get_no_of_hugepages() <= 0 || hugepages_size() <= 0)
-		tst_brkm(TCONF, cleanup, "Not enough available Hugepages");
+	if (sflag)
+		hugepages = SAFE_STRTOL(NULL, nr_opt, 0, LONG_MAX);
 
 	setup();
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
+		/* Creat a temporary file used for huge mapping */
+		fildes = open(TEMPFILE, O_RDWR | O_CREAT, 0666);
+		if (fildes < 0)
+			tst_brkm(TFAIL | TERRNO, cleanup, "open %s failed",
+				 TEMPFILE);
 
-	        /* Creat a temporary file used for mapping */
-		if ((fildes = open(TEMPFILE, O_RDWR | O_CREAT, 0666)) < 0) {
-			tst_brkm(TFAIL, cleanup,
-				 "open() on %s Failed, errno=%d : %s",
-				 TEMPFILE, errno, strerror(errno));
-		}
-
-		Tst_count=0;
+		Tst_count = 0;
 
 		/* Note the number of free huge pages BEFORE testing */
-		freepages = get_no_of_free_hugepages();
+		freepages = read_meminfo("HugePages_Free:");
 		beforetest = freepages;
 
 		/* Note the size of huge page size BEFORE testing */
-		huge_pagesize = hugepages_size();
-		tst_resm(TINFO,"Size of huge pages is %d KB",huge_pagesize);
+		huge_pagesize = read_meminfo("Hugepagesize:");
+		tst_resm(TINFO, "Size of huge pages is %d KB", huge_pagesize);
 
-#if __WORDSIZE==32
-		tst_resm(TINFO,"Total amount of free huge pages is %d",freepages);
-		tst_resm(TINFO,"Max number allowed for 1 mmap file in 32-bits is 128");
+#if __WORDSIZE == 32
+		tst_resm(TINFO, "Total amount of free huge pages is %d",
+			 freepages);
+		tst_resm(TINFO, "Max number allowed for 1 mmap file in"
+			 " 32-bits is 128");
 		if (freepages > 128)
-		  freepages=128;
+			freepages = 128;
 #endif
-		/*
-		 * Call mmap
-		 */
-		errno = 0;
-                mapsize=(long long)freepages*huge_pagesize*1024;
+		mapsize = (long long)freepages *huge_pagesize * 1024;
 		addr = mmap(NULL, mapsize, PROT_READ | PROT_WRITE,
 			    MAP_SHARED, fildes, 0);
-		TEST_ERRNO = errno;
 		sleep(2);
-		/* Check for the return value of mmap() */
 		if (addr == MAP_FAILED) {
-			tst_resm(TFAIL, "mmap() Failed on %s, errno=%d : %s",
-				 TEMPFILE, errno, strerror(errno));
+			tst_resm(TFAIL | TERRNO, "mmap() Failed on %s",
+				 TEMPFILE);
+			close(fildes);
 			continue;
 		} else {
-			tst_resm(TPASS, "Succeeded mapping file using %d pages",freepages);
+			tst_resm(TPASS,
+				 "Succeeded mapping file using %ld pages",
+				 freepages);
 			/* force to allocate page and change HugePages_Free */
-			*(int*)addr = 0;
+			*(int *)addr = 0;
 		}
 
-		/* Make sure the number of free huge pages AFTER testing decreased */
-		aftertest = get_no_of_free_hugepages();
+		/*
+		 * Make sure the number of free huge pages
+		 * AFTER testing decreased
+		 */
+		aftertest = read_meminfo("HugePages_Free:");
 		hugepagesmapped = beforetest - aftertest;
-		if (hugepagesmapped < 1) {
-			tst_resm(TWARN,"Number of HUGEPAGES_FREE stayed the same. Okay if");
-			tst_resm(TWARN,"multiple copies running due to test collision.");
-		}
+		if (hugepagesmapped < 1)
+			tst_resm(TWARN, "Number of HUGEPAGES_FREE stayed the"
+				 " same. Okay if multiple copies running due"
+				 " to test collision.");
+
 		/* Clean up things in case we are looping */
 		/* Unmap the mapped memory */
-		if (munmap(addr, mapsize) != 0) {
-			tst_brkm(TFAIL, NULL, "munmap() fails to unmap the "
-				 "memory, errno=%d", errno);
-		}
+		if (munmap(addr, mapsize) != 0)
+			tst_brkm(TFAIL | TERRNO, NULL, "munmap failed");
+
 		close(fildes);
 	}
 
@@ -193,44 +176,29 @@ main(int ac, char **av)
 	tst_exit();
 }
 
-/*
- * setup() - performs all ONE TIME setup for this test.
- *
- * 	     Get system page size, allocate and initialize the string dummy.
- * 	     Initialize addr such that it is more than one page below the break
- * 	     address of the process, and initialize one page region from addr
- * 	     with char 'A'.
- * 	     Creat a temporary directory and a file under it.
- * 	     Write some known data into file and get the size of the file.
- */
-void
-setup()
+void setup(void)
 {
-	char mypid[40];
-
-	sprintf(mypid,"/%d",getpid());
-	TEMPFILE=strcat(mypid,TEMPFILE);
-	TEMPFILE=strcat(Hopt,TEMPFILE);
-
-	tst_sig(FORK, DEF_HANDLER, cleanup);
-
 	TEST_PAUSE;
-
+	tst_require_root(NULL);
+	if (mount("none", Hopt, "hugetlbfs", 0, NULL) < 0)
+		tst_brkm(TBROK | TERRNO, NULL, "mount failed on %s", Hopt);
+	orig_hugepages = get_sys_tune("nr_hugepages");
+	set_sys_tune("nr_hugepages", hugepages, 1);
+	snprintf(TEMPFILE, sizeof(TEMPFILE), "%s/mmapfile%d", Hopt, getpid());
 }
 
-/*
- * cleanup() - performs all ONE TIME cleanup for this test at
- *             completion or premature exit.
- * 	       Remove the temporary directory created.
- */
-void
-cleanup()
+void cleanup(void)
 {
-	/*
-	 * print timing stats if that option was specified.
-	 */
 	TEST_CLEANUP;
 
 	unlink(TEMPFILE);
+	set_sys_tune("nr_hugepages", orig_hugepages, 0);
 
+	umount(Hopt);
+	tst_rmdir();
+}
+
+static void help(void)
+{
+	printf("  -H /..  Location of hugetlbfs, i.e. -H /var/hugetlbfs\n");
 }

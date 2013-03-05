@@ -15,7 +15,7 @@
 #                                                                                #
 #  You should have received a copy of the GNU General Public License             #
 #  along with this program;  if not, write to the Free Software                  #
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA       #
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA       #
 #                                                                                #
 ##################################################################################
 # Name Of File: test_controllers.sh                                              #
@@ -78,8 +78,6 @@ then
 	then
 		$LTPROOT/testcases/bin/run_memctl_test.sh 1;
 		$LTPROOT/testcases/bin/run_memctl_test.sh 2;
-		$LTPROOT/testcases/bin/run_memctl_test.sh 3;
-		$LTPROOT/testcases/bin/run_memctl_test.sh 4;
 	else
 		echo "CONTROLLERS TESTCASES: WARNING";
 		echo "Either Kernel does not support for memory controller or functionality is not enabled";

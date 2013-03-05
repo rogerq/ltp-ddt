@@ -11,8 +11,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
  * This utility software allows to run any executable file with a timeout limit.
  * The syntax is:
@@ -53,14 +53,14 @@ void sighandler(int sig)
 	if (0 < pid_to_monitor) {
 		if (kill(pid_to_monitor, SIGKILL) == -1) {
 			perror("kill(.., SIGKILL) failed");
-			abort(); /* Something's really screwed up if we get here. */
+			abort();	/* Something's really screwed up if we get here. */
 		}
 		waitpid(pid_to_monitor, NULL, WNOHANG);
 	}
 	exit(SIGALRM + 128);
 }
 
-int main (int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int status, timeout;
 
@@ -78,14 +78,18 @@ int main (int argc, char * argv[])
 		printf("\nWhere:\n");
 		printf("  n       is the timeout duration in seconds,\n");
 		printf("  exe     is the executable filename to run,\n");
-		printf("  arglist is the arguments to be passed to executable.\n\n");
-		printf("  The second use case will emulate an immediate timeout.\n\n");
+		printf
+		    ("  arglist is the arguments to be passed to executable.\n\n");
+		printf
+		    ("  The second use case will emulate an immediate timeout.\n\n");
 		exit(1);
 	}
 
 	timeout = atoi(argv[1]);
 	if (timeout < 1) {
-		fprintf(stderr, "Invalid timeout value \"%s\". Timeout must be a positive integer.\n", argv[1]);
+		fprintf(stderr,
+			"Invalid timeout value \"%s\". Timeout must be a positive integer.\n",
+			argv[1]);
 		exit(1);
 	}
 
@@ -122,7 +126,7 @@ int main (int argc, char * argv[])
 		else if (WIFSIGNALED(status))
 			exit(WTERMSIG(status) + 128);
 
-	}	
+	}
 
 	exit(1);
 }

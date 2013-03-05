@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -87,8 +87,8 @@ int exp_enos[] = { 0 };
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	time_t tloc;		/* time_t variables for time(2) */
 
 	/* Parse standard options given to run the test. */
@@ -124,12 +124,12 @@ int main(int ac, char **av)
 				if (tloc == TEST_RETURN) {
 					tst_resm(TPASS, "time() returned value "
 						 "%ld, stored value %jd are same",
-						 TEST_RETURN, (intmax_t)tloc);
+						 TEST_RETURN, (intmax_t) tloc);
 				} else {
 					tst_resm(TFAIL, "time() returned value "
 						 "%ld, stored value %jd are "
 						 "different", TEST_RETURN,
-						 (intmax_t)tloc);
+						 (intmax_t) tloc);
 				}
 			} else {
 				tst_resm(TPASS, "call succeeded");

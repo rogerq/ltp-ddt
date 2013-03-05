@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -72,7 +72,6 @@
 #include "test.h"
 #include "usctest.h"
 
-
 static int fd;
 static char filename[30];
 static void setup(void);
@@ -83,12 +82,10 @@ int TST_TOTAL = 1;		/* Total number of test cases. */
 
 int main(int argc, char **argv)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) !=
-	    NULL) {
+	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
 
@@ -135,13 +132,13 @@ void setup(void)
 	/* Initialize unique filename for each child process */
 	if (sprintf(filename, "fdatasync_%d", getpid()) <= 0) {
 		tst_brkm(TBROK, cleanup, "Failed to initialize filename");
-	 }
+	}
 	if ((fd = open(filename, O_CREAT | O_WRONLY, 0777)) == -1) {	//mode must be specified when O_CREATE is in the flag
 		tst_brkm(TBROK, cleanup, "open() failed");
-	 }
+	}
 	if ((write(fd, filename, strlen(filename) + 1)) == -1) {
 		tst_brkm(TBROK, cleanup, "write() failed");
-	 }
+	}
 }
 
 /*
@@ -161,4 +158,4 @@ void cleanup(void)
 
 	tst_rmdir();
 
- }
+}

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -74,9 +74,8 @@ int main(int ac, char **av)
 {
 	int fail = 0;
 
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -88,8 +87,8 @@ int main(int ac, char **av)
 	if (fcntl(fd, F_RGETLK, &tl) == -1) {
 		if (errno == EINVAL)
 			tst_brkm(TCONF, cleanup,
-			    "fcntl remote locking feature not implemented in "
-			    "the kernel");
+				 "fcntl remote locking feature not implemented in "
+				 "the kernel");
 		else {
 			/*
 			 * FIXME (garrcoop): having it always pass on
@@ -107,7 +106,7 @@ int main(int ac, char **av)
 		tst_resm(TFAIL, "F_RSETLK WRLCK failed");
 
 	if (do_lock(F_RSETLK, F_UNLCK, 0, 5, 5) == -1)
-		tst_resm(TFAIL|TERRNO, "F_RSETLK UNLOCK failed");
+		tst_resm(TFAIL | TERRNO, "F_RSETLK UNLOCK failed");
 
 	unlock_file();
 #else
@@ -134,10 +133,10 @@ void setup()
 	snprintf(template, PATH_MAX, "fcntl06XXXXXX");
 
 	if ((fd = mkstemp(template)) == -1)
-		tst_resm(TBROK|TERRNO, "mkstemp failed");
+		tst_resm(TBROK | TERRNO, "mkstemp failed");
 
 	if (write(fd, buf, STRINGSIZE) == -1)
-		tst_resm(TBROK|TERRNO, "write failed");
+		tst_resm(TBROK | TERRNO, "write failed");
 }
 
 int do_lock(int cmd, short type, short whence, int start, int len)
@@ -155,7 +154,7 @@ void unlock_file()
 {
 	if (do_lock(F_RSETLK, (short)F_UNLCK, (short)0, 0, 0) == -1) {
 		/* Same as FIXME comment above. */
-		tst_resm(TPASS|TERRNO, "fcntl on file failed");
+		tst_resm(TPASS | TERRNO, "fcntl on file failed");
 	}
 }
 
@@ -163,7 +162,7 @@ void cleanup()
 {
 
 	if (close(fd) == -1)
-		tst_resm(TWARN|TERRNO, "close failed");
+		tst_resm(TWARN | TERRNO, "close failed");
 
 	TEST_CLEANUP;
 

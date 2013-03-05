@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /* 10/31/2002   Port to LTP     robbiew@us.ibm.com */
@@ -250,8 +250,7 @@ struct list mnem[] = {
 int npathdats, ngoods, nbads, nmnem;
 
 /*--------------------------------------------------------------*/
-int
-main(void)
+int main(void)
 {
 	setup();		/* temp file is now open        */
 

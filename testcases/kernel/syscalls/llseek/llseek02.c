@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -68,7 +68,7 @@
  */
 
 #ifndef _GNU_SOURCE
-# define _GNU_SOURCE
+#define _GNU_SOURCE
 #endif
 
 #include <stdio.h>
@@ -120,8 +120,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int fildes;		/* file handle for testfile */
 	int whence;		/* position of file handle in the file */
 	char *test_desc;	/* test specific error message */
@@ -163,7 +163,8 @@ int main(int ac, char **av)
 			TEST(lseek64(fildes, (loff_t) 0, whence));
 
 			if (TEST_RETURN != (loff_t) - 1) {
-				tst_resm(TFAIL, "llseek() returned %ld, expected"
+				tst_resm(TFAIL,
+					 "llseek() returned %ld, expected"
 					 " -1, errno:%d", TEST_RETURN,
 					 Test_cases[ind].exp_errno);
 				continue;

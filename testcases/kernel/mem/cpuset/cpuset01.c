@@ -28,49 +28,46 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+#include "config.h"
+#include <sys/types.h>
+#include <sys/mman.h>
+#include <sys/mount.h>
+#include <sys/stat.h>
+#include <sys/wait.h>
+#include <ctype.h>
+#include <err.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <math.h>
+#if HAVE_NUMAIF_H
+#include <numaif.h>
+#endif
+#include <signal.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 #include "test.h"
 #include "usctest.h"
-#include "config.h"
+#include "mem.h"
+#include "numa_helper.h"
 
 char *TCID = "cpuset01";
 int TST_TOTAL = 1;
 
 #if HAVE_NUMA_H && HAVE_LINUX_MEMPOLICY_H && HAVE_NUMAIF_H \
 	&& HAVE_MPOL_CONSTANTS
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <sys/mman.h>
-#include <sys/mount.h>
-#include <numaif.h>
-#include <errno.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <ctype.h>
-#include <err.h>
-#include <math.h>
-#include <signal.h>
-#include <stdarg.h>
-
-#define MAXNODES		512
-#define CPATH			"/dev/cpuset"
-#define CPATH_NEW		"/dev/cpuset/1"
-#define PATH_SYS_SYSTEM		"/sys/devices/system"
-
-static pid_t *pids;
 volatile int end;
+static int *nodes;
+static int nnodes;
+static long ncpus;
 
-static void setup(void);
-static void cleanup(void) LTP_ATTRIBUTE_NORETURN;
 static void testcpuset(void);
 static void sighandler(int signo LTP_ATTRIBUTE_UNUSED);
 static int mem_hog(void);
-static long count_numa(void);
-static long count_cpu(void);
-static int path_exist(const char *path, ...);
 static int mem_hog_cpuset(int ntasks);
+static long count_cpu(void);
 
 int main(int argc, char *argv[])
 {
@@ -79,98 +76,53 @@ int main(int argc, char *argv[])
 	msg = parse_opts(argc, argv, NULL, NULL);
 	if (msg != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
+
+	ncpus = count_cpu();
+	if (get_allowed_nodes_arr(NH_MEMS | NH_CPUS, &nnodes, &nodes) < 0)
+		tst_brkm(TBROK | TERRNO, NULL, "get_allowed_nodes_arr");
+	if (nnodes <= 1)
+		tst_brkm(TCONF, NULL, "requires a NUMA system.");
+
 	setup();
 	testcpuset();
 	cleanup();
+	tst_exit();
 }
 
-void testcpuset(void)
+static void testcpuset(void)
 {
 	int lc;
-	FILE *fp;
-	char buf[BUFSIZ], value[BUFSIZ];
-	int fd, child, i, status;
-	unsigned long nnodes = 1, nmask = 0, ncpus = 1;
+	int child, i, status;
+	unsigned long nmask = 0;
+	char mems[BUFSIZ], buf[BUFSIZ];
 
-	nnodes = count_numa();
-	ncpus = count_cpu();
-
-	snprintf(buf, BUFSIZ, "%s/cpus", CPATH);
-	fp = fopen(buf, "r");
-	if (fp == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "fopen");
-	if (fgets(value, BUFSIZ, fp) == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "fgets");
-	fclose(fp);
-
-	/* Remove the trailing newline. */
-	value[strlen(value) - 1] = '\0';
-	snprintf(buf, BUFSIZ, "%s/cpus", CPATH_NEW);
-	fd = open(buf, O_WRONLY);
-	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open");
-	if (write(fd, value, strlen(value)) != strlen(value))
-		tst_brkm(TBROK|TERRNO, cleanup, "write");
-	close(fd);
-
-	snprintf(buf, BUFSIZ, "%s/mems", CPATH);
-	fp = fopen(buf, "r");
-	if (fp == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "fopen");
-	if (fgets(value, BUFSIZ, fp) == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "fgets");
-	fclose(fp);
-
-	snprintf(buf, BUFSIZ, "%s/mems", CPATH_NEW);
-	fd = open(buf, O_WRONLY);
-	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open");
-	if (write(fd, value, strlen(value)) != strlen(value))
-		tst_brkm(TBROK|TERRNO, cleanup, "write");
-	close(fd);
-
-	snprintf(buf, BUFSIZ, "%s/tasks", CPATH_NEW);
-	fd = open(buf, O_WRONLY);
-	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open");
+	read_cpuset_files(CPATH, "cpus", buf);
+	write_cpuset_files(CPATH_NEW, "cpus", buf);
+	read_cpuset_files(CPATH, "mems", mems);
+	write_cpuset_files(CPATH_NEW, "mems", mems);
 	snprintf(buf, BUFSIZ, "%d", getpid());
-	if (write(fd, buf, strlen(buf)) != strlen(buf))
-		tst_brkm(TBROK|TERRNO, cleanup, "write");
-	close(fd);
-
-	pids = malloc(nnodes * sizeof(pid_t));
-	if (!pids)
-		tst_brkm(TBROK|TERRNO, cleanup, "malloc");
+	write_file(CPATH_NEW "/tasks", buf);
 
 	switch (child = fork()) {
-        case -1:
-		tst_brkm(TBROK|TERRNO, cleanup, "fork");
-        case 0:
+	case -1:
+		tst_brkm(TBROK | TERRNO, cleanup, "fork");
+	case 0:
 		for (i = 0; i < nnodes; i++)
-			nmask += exp2f(i);
+			nmask += 1 << nodes[i];
 		if (set_mempolicy(MPOL_BIND, &nmask, MAXNODES) == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "set_mempolicy");
-		mem_hog_cpuset(ncpus > 1 ? ncpus : 1);
-		exit(0);
+			tst_brkm(TBROK | TERRNO, cleanup, "set_mempolicy");
+		exit(mem_hog_cpuset(ncpus > 1 ? ncpus : 1));
 	}
-	snprintf(buf, BUFSIZ, "%s/mems", CPATH_NEW);
-	fd = open(buf, O_WRONLY);
-	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open");
-
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		Tst_count = 0;
-		if (write(fd, "0", 1) != 1)
-			tst_brkm(TBROK|TERRNO, cleanup, "write");
-		if (lseek(fd, 0, SEEK_SET) == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "lseek");
-		if (write(fd, "1", 1) != 1)
-			tst_brkm(TBROK|TERRNO, cleanup, "write");
+		snprintf(buf, BUFSIZ, "%d", nodes[0]);
+		write_cpuset_files(CPATH_NEW, "mems", buf);
+		snprintf(buf, BUFSIZ, "%d", nodes[1]);
+		write_cpuset_files(CPATH_NEW, "mems", buf);
 	}
-	close(fd);
 
 	if (waitpid(child, &status, WUNTRACED | WCONTINUED) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "waitpid");
+		tst_brkm(TBROK | TERRNO, cleanup, "waitpid");
 	if (WEXITSTATUS(status) != 0)
 		tst_resm(TFAIL, "child exit status is %d", WEXITSTATUS(status));
 }
@@ -179,60 +131,28 @@ void setup(void)
 {
 	tst_require_root(NULL);
 
-	if (count_numa() <= 1)
-		tst_brkm(TCONF, NULL, "required a NUMA system.");
+	if (tst_kvercmp(2, 6, 32) < 0)
+		tst_brkm(TCONF, NULL, "2.6.32 or greater kernel required");
+
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 	TEST_PAUSE;
-	if (mkdir(CPATH, 0777) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "mkdir");
-	if (mount("cpuset", CPATH, "cpuset", 0, NULL) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "mount");
-	if (mkdir(CPATH_NEW, 0777) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "mkdir");
+
+	mount_mem("cpuset", "cpuset", NULL, CPATH, CPATH_NEW);
 }
+
 void cleanup(void)
 {
-	FILE *fp;
-	int fd;
-	char s_new[BUFSIZ], s[BUFSIZ], value[BUFSIZ];
-
-	/* Move all processes in task to its parent cpuset node. */
-	snprintf(s, BUFSIZ, "%s/tasks", CPATH);
-	fd = open(s, O_WRONLY);
-	if (fd == -1)
-		tst_resm(TWARN|TERRNO, "open");
-
-	snprintf(s_new, BUFSIZ, "%s/tasks", CPATH_NEW);
-	fp = fopen(s_new, "r");
-	if (fp == NULL)
-		tst_resm(TWARN|TERRNO, "fopen");
-
-	if ((fd != -1) && (fp != NULL)) {
-		while (fgets(value, BUFSIZ, fp) != NULL)
-			if (write(fd, value, strlen(value) - 1)
-				!= strlen(value) - 1)
-				tst_resm(TWARN|TERRNO, "write");
-	}
-	if (fd != -1)
-		close(fd);
-	if (fp != NULL)
-		fclose(fp);
-	if (rmdir(CPATH_NEW) == -1)
-		tst_resm(TWARN|TERRNO, "rmdir");
-	if (umount(CPATH) == -1)
-		tst_resm(TWARN|TERRNO, "umount");
-	if (rmdir(CPATH) == -1)
-		tst_resm(TWARN|TERRNO, "rmdir");
+	umount_mem(CPATH, CPATH_NEW);
 
 	TEST_CLEANUP;
 }
 
-void sighandler(int signo LTP_ATTRIBUTE_UNUSED)
+static void sighandler(int signo LTP_ATTRIBUTE_UNUSED)
 {
 	end = 1;
 }
 
-int mem_hog(void)
+static int mem_hog(void)
 {
 	long pagesize;
 	unsigned long *addr;
@@ -241,10 +161,10 @@ int mem_hog(void)
 	pagesize = getpagesize();
 	while (!end) {
 		addr = mmap(NULL, pagesize * 10, PROT_READ | PROT_WRITE,
-			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+			    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 		if (addr == MAP_FAILED) {
 			ret = 1;
-			tst_resm(TFAIL|TERRNO, "mmap");
+			tst_resm(TFAIL | TERRNO, "mmap");
 			break;
 		}
 		memset(addr, 0xF7, pagesize * 10);
@@ -253,82 +173,73 @@ int mem_hog(void)
 	return ret;
 }
 
-int mem_hog_cpuset(int ntasks)
+static int mem_hog_cpuset(int ntasks)
 {
-	int i, pid, status, ret = 0;
+	int i, lc, status, ret = 0;
 	struct sigaction sa;
+	pid_t *pids;
 
 	if (ntasks <= 0)
-		tst_brkm(TBROK|TERRNO, cleanup, "ntasks is small.");
+		tst_brkm(TBROK | TERRNO, cleanup, "ntasks is small.");
 	sa.sa_handler = sighandler;
 	if (sigemptyset(&sa.sa_mask) < 0)
-		tst_brkm(TBROK|TERRNO, cleanup, "sigemptyset");
+		tst_brkm(TBROK | TERRNO, cleanup, "sigemptyset");
 	sa.sa_flags = 0;
 	if (sigaction(SIGUSR1, &sa, NULL) < 0)
-		tst_brkm(TBROK|TERRNO, cleanup, "sigaction");
+		tst_brkm(TBROK | TERRNO, cleanup, "sigaction");
 
+	pids = malloc(sizeof(pid_t) * ntasks);
+	if (pids == NULL)
+		tst_brkm(TBROK | TERRNO, cleanup, "malloc");
 	for (i = 0; i < ntasks; i++) {
-		switch (pid = fork()) {
+		switch (pids[i] = fork()) {
 		case -1:
-			tst_resm(TFAIL|TERRNO, "fork");
+			tst_resm(TFAIL | TERRNO, "fork %d", pids[i]);
 			ret = 1;
 			break;
 		case 0:
 			ret = mem_hog();
 			exit(ret);
 		default:
-			if (kill(pid, SIGUSR1) == -1) {
-				tst_resm(TINFO|TERRNO, "kill");
-				ret = 1;
-			}
 			break;
 		}
 	}
+	for (lc = 0; TEST_LOOPING(lc); lc++) ;
+	while (i--) {
+		if (kill(pids[i], SIGUSR1) == -1) {
+			tst_resm(TFAIL | TERRNO, "kill %d", pids[i]);
+			ret = 1;
+		}
+	}
 	while (waitpid(-1, &status, WUNTRACED | WCONTINUED) > 0) {
-		if (WEXITSTATUS(status) != 0) {
-			tst_resm(TFAIL, "child exit status is %d",
-				WEXITSTATUS(status));
+		if (WIFEXITED(status)) {
+			if (WEXITSTATUS(status) != 0) {
+				tst_resm(TFAIL, "child exit status is %d",
+					 WEXITSTATUS(status));
+				ret = 1;
+			}
+		} else if (WIFSIGNALED(status)) {
+			tst_resm(TFAIL, "child caught signal %d",
+				 WTERMSIG(status));
 			ret = 1;
 		}
 	}
 	return ret;
 }
 
-long count_numa(void)
-{
-	int nnodes = 0;
-
-	while(path_exist(PATH_SYS_SYSTEM "/node/node%d", nnodes))
-		nnodes++;
-
-	return nnodes;
-}
-
-long count_cpu(void)
+static long count_cpu(void)
 {
 	int ncpus = 0;
 
-	while(path_exist(PATH_SYS_SYSTEM "/cpu/cpu%d", ncpus))
+	while (path_exist(PATH_SYS_SYSTEM "/cpu/cpu%d", ncpus))
 		ncpus++;
 
 	return ncpus;
 }
 
-static int path_exist(const char *path, ...)
-{
-	va_list ap;
-	char pathbuf[PATH_MAX];
-
-	va_start(ap, path);
-	vsnprintf(pathbuf, sizeof(pathbuf), path, ap);
-	va_end(ap);
-
-	return access(pathbuf, F_OK) == 0;
-}
-
 #else /* no NUMA */
-int main(void) {
-	tst_resm(TCONF, "no NUMA development packages installed.");
-	tst_exit();
+int main(void)
+{
+	tst_brkm(TCONF, NULL, "no NUMA development packages installed.");
 }
 #endif

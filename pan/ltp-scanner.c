@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -131,32 +131,33 @@
 #include "reporter.h"
 #include "symbol.h"
 
-char *cnf;              /* current filename */
-int extended=0;		/* -e option        */
+char *cnf;			/* current filename */
+int extended = 0;		/* -e option        */
 
 int main(int argc, char *argv[])
 {
-	SYM tags;			/* tag data */
+	SYM tags;		/* tag data */
 	int c;
 
 	while ((c = getopt(argc, argv, "D:ehi")) != -1) {
-		switch(c) {
-			case 'i':
-			    set_iscanner();
-			    break;
-			case 'D':
-			    set_debug(optarg);
-			    break;
-			case 'e':
-			    extended++;
-			    break;
-			case 'h':
-			    fprintf(stderr, "%s [-e] [-i] [ -D area, level ] input-filenames\n",
-				    argv[0]);
-			    exit(0);
-			default:
-			    fprintf(stderr, "invalid argument, %c\n", c);
-			    exit(1);
+		switch (c) {
+		case 'i':
+			set_iscanner();
+			break;
+		case 'D':
+			set_debug(optarg);
+			break;
+		case 'e':
+			extended++;
+			break;
+		case 'h':
+			fprintf(stderr,
+				"%s [-e] [-i] [ -D area, level ] input-filenames\n",
+				argv[0]);
+			exit(0);
+		default:
+			fprintf(stderr, "invalid argument, %c\n", c);
+			exit(1);
 		}
 	}
 
@@ -166,7 +167,7 @@ int main(int argc, char *argv[])
 	scanner(tags);
 #ifdef DEBUGGING
 	DEBUG(D_INIT, 1)
-	sym_dump_s(tags, 0);
+	    sym_dump_s(tags, 0);
 #endif
 	reporter(tags);
 

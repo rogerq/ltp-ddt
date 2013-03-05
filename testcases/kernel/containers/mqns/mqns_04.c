@@ -11,7 +11,7 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 * Author: Serge Hallyn <serue@us.ibm.com>
 *
@@ -42,7 +42,7 @@
 #include "mqns.h"
 
 char *TCID = "posixmq_namespace_04";
-int TST_TOTAL=1;
+int TST_TOTAL = 1;
 
 int p1[2];
 int p2[2];
@@ -59,10 +59,11 @@ int check_mqueue(void *vtest)
 	close(p1[1]);
 	close(p2[0]);
 
-	read(p1[0], buf, 3); /* go */
+	read(p1[0], buf, 3);	/* go */
 
-	mqd = syscall(__NR_mq_open, NOSLASH_MQ1, O_RDWR|O_CREAT|O_EXCL, 0755,
-			NULL);
+	mqd =
+	    syscall(__NR_mq_open, NOSLASH_MQ1, O_RDWR | O_CREAT | O_EXCL, 0755,
+		    NULL);
 	if (mqd == -1) {
 		write(p2[1], "mqfail", 7);
 		tst_exit();
@@ -92,22 +93,30 @@ int main(int argc, char *argv[])
 	int use_clone = T_UNSHARE;
 
 	if (argc == 2 && strcmp(argv[1], "-clone") == 0) {
-		tst_resm(TINFO, "Testing posix mq namespaces through clone(2).\n");
+		tst_resm(TINFO,
+			 "Testing posix mq namespaces through clone(2).");
 		use_clone = T_CLONE;
 	} else
-		tst_resm(TINFO, "Testing posix mq namespaces through unshare(2).\n");
+		tst_resm(TINFO,
+			 "Testing posix mq namespaces through unshare(2).");
 
-	if (pipe(p1) == -1) { perror("pipe"); exit(EXIT_FAILURE); }
-	if (pipe(p2) == -1) { perror("pipe"); exit(EXIT_FAILURE); }
+	if (pipe(p1) == -1) {
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
+	if (pipe(p2) == -1) {
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
 
 	mkdir(DEV_MQUEUE2, 0755);
 
-	tst_resm(TINFO, "Checking mqueue filesystem lifetime\n");
+	tst_resm(TINFO, "Checking mqueue filesystem lifetime");
 
 	/* fire off the test */
 	rc = do_clone_unshare_test(use_clone, CLONE_NEWIPC, check_mqueue, NULL);
 	if (rc < 0) {
-		tst_resm(TFAIL, "failed clone/unshare\n");
+		tst_resm(TFAIL, "failed clone/unshare");
 		goto fail;
 	}
 
@@ -117,10 +126,10 @@ int main(int argc, char *argv[])
 
 	read(p2[0], buf, 7);
 	if (!strcmp(buf, "mqfail")) {
-		tst_resm(TFAIL, "child process could not create mqueue\n");
+		tst_resm(TFAIL, "child process could not create mqueue");
 		goto fail;
 	} else if (!strcmp(buf, "mount")) {
-		tst_resm(TFAIL, "child process could not mount mqueue\n");
+		tst_resm(TFAIL, "child process could not mount mqueue");
 		goto fail;
 	}
 
@@ -128,7 +137,7 @@ int main(int argc, char *argv[])
 	if (rc == -1) {
 		perror("stat");
 		write(p1[1], "go", 3);
-		tst_resm(TFAIL, "parent could not see child's created mq\n");
+		tst_resm(TFAIL, "parent could not see child's created mq");
 		goto fail;
 	}
 	write(p1[1], "go", 3);
@@ -136,26 +145,29 @@ int main(int argc, char *argv[])
 	rc = wait(&status);
 	if (rc == -1) {
 		perror("wait");
-		tst_resm(TFAIL, "error while parent waited on child to exit\n");
+		tst_resm(TFAIL, "error while parent waited on child to exit");
 		goto fail;
 	}
 	if (!WIFEXITED(status)) {
-		tst_resm(TFAIL, "Child did not exit normally (status %d)\n", status);
+		tst_resm(TFAIL, "Child did not exit normally (status %d)",
+			 status);
 		goto fail;
 	}
 	rc = stat(FNAM1, &statbuf);
 	if (rc == -1) {
-		tst_resm(TFAIL, "parent's view of child's mq died with child\n");
+		tst_resm(TFAIL,
+			 "parent's view of child's mq died with child");
 		goto fail;
 	}
 
 	rc = creat(FNAM2, 0755);
 	if (rc != -1) {
-		tst_resm(TFAIL, "parent was able to create a file in dead child's mqfs\n");
+		tst_resm(TFAIL,
+			 "parent was able to create a file in dead child's mqfs");
 		goto fail;
 	}
 
-	tst_resm(TPASS, "Child mqueue fs still visible for parent\n");
+	tst_resm(TPASS, "Child mqueue fs still visible for parent");
 
 fail:
 	umount(DEV_MQUEUE2);

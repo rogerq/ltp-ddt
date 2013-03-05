@@ -17,8 +17,8 @@
 * other software, or any other product whatsoever.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 *
 * History:
 * Created by: Cyril Lacabanne (Cyril.Lacabanne@bull.net)
@@ -42,49 +42,45 @@
 int main(int argn, char *argc[])
 {
 	//Program parameters : argc[1] : HostName or Host IP
-	//					   argc[2] : Server Program Number
-	//					   other arguments depend on test case
+	//                                         argc[2] : Server Program Number
+	//                                         other arguments depend on test case
 
 	//run_mode can switch into stand alone program or program launch by shell script
 	//1 : stand alone, debug mode, more screen information
 	//0 : launch by shell script as test case, only one printf -> result status
 	int run_mode = 0;
-	int test_status = 1; //Default test result set to FAILED
+	int test_status = 1;	//Default test result set to FAILED
 	int progNum = atoi(argc[2]);
-    int sndVar = 0;
-    int recVar = -1;
-    CLIENT *client = NULL;
+	int sndVar = 0;
+	int recVar = -1;
+	CLIENT *client = NULL;
 	struct netconfig *nconf = NULL;
 	struct timeval tv;
 	enum clnt_stat rslt;
 
-    //First, test initialization : create client using intermediate level API
+	//First, test initialization : create client using intermediate level API
 	nconf = getnetconfigent("udp");
 
-    if ((struct netconfig *)nconf == NULL)
-    {
-    	//Test failed
-    	printf("5\n");
-    	return 5;
-    }
+	if ((struct netconfig *)nconf == NULL) {
+		//Test failed
+		printf("5\n");
+		return 5;
+	}
 
-    tv.tv_sec = 1;
+	tv.tv_sec = 1;
 	tv.tv_usec = 1;
 
-    client = clnt_tp_create_timed(argc[1], progNum,
-                                  VERSNUM, (struct netconfig *)nconf, &tv);
+	client = clnt_tp_create_timed(argc[1], progNum,
+				      VERSNUM, (struct netconfig *)nconf, &tv);
 
-    if (client == NULL)
-    {
-    	printf("5\n");
-    	return 5;
-    }
-
+	if (client == NULL) {
+		printf("5\n");
+		return 5;
+	}
 	//Call routine
-	rslt = clnt_call(client, PROCNUM,
-					 (xdrproc_t)xdr_int, (char *)&sndVar, // xdr_in
-                     (xdrproc_t)xdr_int, (char *)&recVar, // xdr_out
-                     tv);
+	rslt = clnt_call(client, PROCNUM, (xdrproc_t) xdr_int, (char *)&sndVar,	// xdr_in
+			 (xdrproc_t) xdr_int, (char *)&recVar,	// xdr_out
+			 tv);
 
 	test_status = (rslt == RPC_SUCCESS) ? 0 : 1;
 

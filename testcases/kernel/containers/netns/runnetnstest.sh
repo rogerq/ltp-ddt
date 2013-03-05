@@ -1,6 +1,6 @@
 #!/bin/sh
 
-################################################################################ 
+################################################################################
 ##                                                                            ##
 ## Copyright (c) International Business Machines  Corp., 2008                 ##
 ##                                                                            ##
@@ -16,10 +16,10 @@
 ##                                                                            ##
 ## You should have received a copy of the GNU General Public License          ##
 ## along with this program;  if not, write to the Free Software               ##
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    ##
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    ##
 ##                                                                            ##
 ## Author:      Veerendra <veeren@linux.vnet.ibm.com>                         ##
-################################################################################ 
+################################################################################
 
 
 rc=0
@@ -106,6 +106,15 @@ echo
 #fi
 #echo
 
+. cmdlib.sh
+flag=0
+
+status_daemon vsftpd
+if [ $? -ne 0 ]; then
+	start_daemon vsftpd
+	flag=1
+fi
+
 par_chld_ftp
 rc=$?
 if [ $rc -ne 0 ]; then
@@ -115,5 +124,10 @@ if [ $rc -ne 0 ]; then
 else
    echo "par_chld_ftp: PASS"
 fi
+
+if [ $flag -eq 1 ]; then
+	stop_daemon vsftpd
+fi
+
 echo
 exit $exit_code

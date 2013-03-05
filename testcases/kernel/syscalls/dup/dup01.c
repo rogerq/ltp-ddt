@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -130,8 +130,8 @@ int fd;
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -153,20 +153,20 @@ int main(int ac, char **av)
 		/* check return code */
 		if (TEST_RETURN == -1) {
 			TEST_ERROR_LOG(TEST_ERRNO);
-			tst_resm(TFAIL, "dup(%s) Failed, errno=%d : %s", filename,
-				 TEST_ERRNO, strerror(TEST_ERRNO));
+			tst_resm(TFAIL, "dup(%s) Failed, errno=%d : %s",
+				 filename, TEST_ERRNO, strerror(TEST_ERRNO));
 		} else {
 
 			if (STD_FUNCTIONAL_TEST) {
 				/* No Verification test, yet... */
 				tst_resm(TPASS, "dup(%s) returned %ld",
-				    filename, TEST_RETURN);
+					 filename, TEST_RETURN);
 			}
 
 			/* close the new file so loops do not open too many files */
 			if (close(TEST_RETURN) == -1) {
-				tst_brkm(TBROK|TERRNO, cleanup,
-				    "closing %s failed", filename);
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "closing %s failed", filename);
 			}
 		}
 
@@ -189,7 +189,7 @@ void setup()
 
 	sprintf(filename, "dupfile");
 	if ((fd = open(filename, O_RDWR | O_CREAT, 0700)) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "open failed");
 }
 
 void cleanup()
@@ -198,7 +198,7 @@ void cleanup()
 
 	if (fd != -1)
 		if (close(fd) == -1)
-			tst_resm(TWARN|TERRNO, "closing %s failed", filename);
+			tst_resm(TWARN | TERRNO, "closing %s failed", filename);
 
 	tst_rmdir();
 

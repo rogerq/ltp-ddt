@@ -30,12 +30,12 @@
  */
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
-#include <errno.h>
 #include "test.h"
 #include "usctest.h"
-#include "../include/mem.h"
+#include "mem.h"
 
 char *TCID = "oom03";
 int TST_TOTAL = 1;
@@ -43,10 +43,11 @@ int TST_TOTAL = 1;
 int main(int argc, char *argv[])
 {
 	char *msg;
-	int lc, fd;
+	int lc;
 	char buf[BUFSIZ], mem[BUFSIZ];
 
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL)
+	msg = parse_opts(argc, argv, NULL, NULL);
+	if (msg != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
 #if __WORDSIZE == 32
@@ -57,38 +58,24 @@ int main(int argc, char *argv[])
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		Tst_count = 0;
-		fd = open(SYSFS_OVER, O_WRONLY);
-		if (fd == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "open");
-		if (write(fd, "1", 1) != 1)
-			tst_brkm(TBROK|TERRNO, cleanup, "write");
-		close(fd);
 
-		fd = open(MEMCG_PATH_NEW "/memory.limit_in_bytes", O_WRONLY);
-		if (fd == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "open %s", buf);
-		sprintf(mem, "%ld", TESTMEM);
-		if (write(fd, mem, strlen(mem)) != strlen(mem))
-			tst_brkm(TBROK|TERRNO, cleanup, "write %s", buf);
-		close(fd);
-
-		fd = open(MEMCG_PATH_NEW "/tasks", O_WRONLY);
-		if (fd == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "open %s", buf);
 		snprintf(buf, BUFSIZ, "%d", getpid());
-		if (write(fd, buf, strlen(buf)) != strlen(buf))
-			tst_brkm(TBROK|TERRNO, cleanup, "write %s", buf);
-		close(fd);
+		write_file(MEMCG_PATH_NEW "/tasks", buf);
+
+		snprintf(mem, BUFSIZ, "%ld", TESTMEM);
+		write_file(MEMCG_PATH_NEW "/memory.limit_in_bytes", mem);
 		testoom(0, 0, 0);
 
-		fd = open(MEMCG_PATH_NEW "/memory.memsw.limit_in_bytes",
-			O_WRONLY);
-		if (fd == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "open %s", buf);
-		if (write(fd, mem, strlen(mem)) != strlen(mem))
-			tst_brkm(TBROK|TERRNO, cleanup, "write %s", buf);
-		close(fd);
-		testoom(0, 1, 0);
+		if (access(MEMCG_SW_LIMIT, F_OK) == -1) {
+			if (errno == ENOENT)
+				tst_resm(TCONF,
+					 "memcg swap accounting is disabled");
+			else
+				tst_brkm(TBROK | TERRNO, cleanup, "access");
+		} else {
+			write_file(MEMCG_SW_LIMIT, mem);
+			testoom(0, 1, 0);
+		}
 	}
 	cleanup();
 	tst_exit();
@@ -96,35 +83,19 @@ int main(int argc, char *argv[])
 
 void setup(void)
 {
-	int fd;
-
 	tst_require_root(NULL);
-
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 	TEST_PAUSE;
 
-	fd = open(SYSFS_OVER, O_RDONLY);
-	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, NULL, "open");
-	if (read(fd, &overcommit, 1) != 1)
-		tst_brkm(TBROK|TERRNO, NULL, "read");
-	close(fd);
-
+	overcommit = get_sys_tune("overcommit_memory");
+	set_sys_tune("overcommit_memory", 1, 1);
 	mount_mem("memcg", "cgroup", "memory", MEMCG_PATH, MEMCG_PATH_NEW);
 }
 
 void cleanup(void)
 {
-	int fd;
-
-	fd = open(SYSFS_OVER, O_WRONLY);
-	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open");
-	if (write(fd, &overcommit, 1) != 1)
-		tst_brkm(TBROK|TERRNO, cleanup, "write");
-	close(fd);
-
+	set_sys_tune("overcommit_memory", overcommit, 0);
 	umount_mem(MEMCG_PATH, MEMCG_PATH_NEW);
-	
+
 	TEST_CLEANUP;
 }

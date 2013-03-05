@@ -38,6 +38,10 @@ test_user1_home="/home/${test_user1}"
 test_user2_home="/home/${test_user2}"
 tmpfile="$TMP/at_allow_test"
 
+if [ "$(id -ru)" = 0 ]; then
+	. cmdlib.sh
+fi
+
 #-----------------------------------------------------------------------
 # FUNCTION:  do_setup
 #-----------------------------------------------------------------------
@@ -80,8 +84,7 @@ do_setup()
 		exit 1
 	fi
 
-	# Restart atd daemon.
-	/etc/init.d/atd restart
+	restart_daemon atd
 }
 
 #-----------------------------------------------------------------------
@@ -115,7 +118,7 @@ run_test()
 			echo "Error while adding job using at for user ${test_user1}."
 			exit 1
 		fi
-		echo " Sleeping for 75 seconds...."	
+		echo " Sleeping for 75 seconds...."
 		sleep 75
 
 		exit_code=1

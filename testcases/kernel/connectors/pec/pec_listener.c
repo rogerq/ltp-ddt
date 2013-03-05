@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /* Author: Li Zefan <lizf@cn.fujitsu.com>                                     */
 /*                                                                            */
@@ -72,7 +72,7 @@ struct nlmsghdr *nlhdr;
  *
  * @signo: the signal number, not used
  */
-static void sigint_handler(int __attribute__((unused)) signo)
+static void sigint_handler(int __attribute__ ((unused)) signo)
 {
 	exit_flag = 1;
 }
@@ -198,20 +198,17 @@ static void process_event(struct nlmsghdr *nlhdr)
 		       pe->event_data.fork.child_pid);
 		break;
 	case PROC_EVENT_EXEC:
-		printf("exec pid: %d\n",
-		       pe->event_data.exec.process_pid);
+		printf("exec pid: %d\n", pe->event_data.exec.process_pid);
 		break;
 	case PROC_EVENT_UID:
 		printf("uid pid: %d euid: %d ruid: %d\n",
 		       pe->event_data.id.process_pid,
-		       pe->event_data.id.e.euid,
-		       pe->event_data.id.r.ruid);
+		       pe->event_data.id.e.euid, pe->event_data.id.r.ruid);
 		break;
 	case PROC_EVENT_GID:
 		printf("gid pid: %d egid: %d rgid: %d\n",
 		       pe->event_data.id.process_pid,
-		       pe->event_data.id.e.egid,
-		       pe->event_data.id.r.rgid);
+		       pe->event_data.id.e.egid, pe->event_data.id.r.rgid);
 		break;
 	case PROC_EVENT_EXIT:
 		printf("exit pid: %d exit_code: %d exit_signal: %d\n",
@@ -259,8 +256,7 @@ int main(int argc, char **argv)
 	l_local.nl_pid = getpid();
 	l_local.nl_groups = CN_IDX_PROC;
 
-	ret = bind(sd, (struct sockaddr *)&l_local,
-		   sizeof(struct sockaddr_nl));
+	ret = bind(sd, (struct sockaddr *)&l_local, sizeof(struct sockaddr_nl));
 	if (ret == -1) {
 		fprintf(stderr, "failed to bind socket\n");
 		exit(1);

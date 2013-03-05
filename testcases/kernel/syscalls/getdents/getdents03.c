@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -72,21 +72,12 @@ int TST_TOTAL = 1;
 
 int exp_enos[] = { EINVAL, 0 };	/* 0 terminated list of expected errnos */
 
-#ifndef __i386__
-int main(void)
-{
-	tst_brkm(TCONF, NULL, "this test will only run on i386");
-	tst_exit();
-}
-#else
-
 int main(int ac, char **av)
 {
 	int lc;
 	char *msg;
 	int rval, fd;
 	int count;
-	const int cnum = __NR_getdents;
 	size_t size = 0;
 	char *dir_name = NULL;
 	struct dirent *dirp;
@@ -98,7 +89,6 @@ int main(int ac, char **av)
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		Tst_count = 0;
-
 
 		if ((dir_name = getcwd(dir_name, size)) == NULL)
 			tst_brkm(TBROK, cleanup, "Can not get current "
@@ -114,33 +104,23 @@ int main(int ac, char **av)
 		if ((fd = open(dir_name, O_RDONLY)) == -1)
 			tst_brkm(TBROK, cleanup, "open of directory failed");
 
-		/*
-		 * here's a case where invoking the system call directly
-		 * doesn't seem to work.  getdents.h has an assembly
-		 * macro to do the job.
-		 *
-		 * equivalent to  - getdents(fd, dirp, count)
-		 * if we could call getdents that way.
-		 */
-
-		rval = GETDENTS_ASM();
+		rval = getdents(fd, dirp, count);
 
 		/*
 		 * Hopefully we get an error due to the small buffer.
 		 */
 
 		if (rval < 0) {
-			rval *= -1;
-			TEST_ERROR_LOG(rval);
+			TEST_ERROR_LOG(errno);
 
-			switch (rval) {
+			switch (errno) {
 			case EINVAL:
 				tst_resm(TPASS,
-				    "getdents failed with EINVAL as expected");
+					 "getdents failed with EINVAL as expected");
 				break;
 			default:
-				tst_resm(TFAIL|TERRNO,
-				    "getdents call failed unexpectedly");
+				tst_resm(TFAIL | TERRNO,
+					 "getdents call failed unexpectedly");
 				break;
 			}
 		} else
@@ -181,5 +161,3 @@ void cleanup(void)
 
 	tst_rmdir();
 }
-
-#endif /* __i386__ */

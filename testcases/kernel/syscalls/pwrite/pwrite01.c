@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -101,8 +101,8 @@ void check_file_contents();	/* function to verify the contents of file */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int nwrite;		/* no. of bytes written by pwrite() */
 
 	/* Parse standard options given to run the test. */
@@ -265,9 +265,9 @@ void l_seek(int fdesc, off_t offset, int whence, off_t checkoff)
 	off_t offloc;		/* offset ret. from lseek() */
 
 	if ((offloc = lseek(fdesc, offset, whence)) != checkoff) {
-		tst_resm(TWARN, "lseek returned %"PRId64", expected %"PRId64, (int64_t)offloc,
-			 (int64_t)checkoff);
-		tst_brkm(TBROK|TERRNO, cleanup, "lseek() on %s Failed",
+		tst_resm(TWARN, "lseek returned %" PRId64 ", expected %" PRId64,
+			 (int64_t) offloc, (int64_t) checkoff);
+		tst_brkm(TBROK | TERRNO, cleanup, "lseek() on %s Failed",
 			 TEMPFILE);
 	}
 }
@@ -296,17 +296,16 @@ void check_file_contents()
 		/* Seek to specified offset position from beginning */
 		offloc = lseek(fildes, count * K1, SEEK_SET);
 		if (offloc != (count * K1)) {
-			tst_brkm(TBROK|TERRNO, cleanup,
-				 "lseek() failed: offloc=%"PRId64,
-				 (int64_t)offloc);
+			tst_brkm(TBROK | TERRNO, cleanup,
+				 "lseek() failed: offloc=%" PRId64,
+				 (int64_t) offloc);
 		}
 
 		/* Read the data from file into a buffer */
 		nread = read(fildes, read_buf, K1);
 		if (nread != K1) {
-			tst_brkm(TBROK|TERRNO, cleanup,
-				 "read() failed: nread=%d",
-				 nread);
+			tst_brkm(TBROK | TERRNO, cleanup,
+				 "read() failed: nread=%d", nread);
 		}
 
 		/* Compare the read data with the data written using pwrite */

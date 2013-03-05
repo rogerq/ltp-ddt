@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -72,17 +72,15 @@ char filename[100];
 
 int main(int argc, char **argv)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	char wbuf[BUFSIZ], rbuf[BUFSIZ];
 	int fd;
 
-	/* parse standard options */
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) !=
-	    NULL) {
+	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-	 }
+	}
 
 	/* global setup */
 	setup();
@@ -101,31 +99,31 @@ int main(int argc, char **argv)
 		if (fd < 0) {
 			tst_resm(TBROK, "creating a new file failed");
 			cleanup();
-		 }
+		}
 
 		(void)memset(wbuf, '0', 100);
 
 		if (write(fd, wbuf, 100) == -1) {
 			tst_resm(TFAIL, "failed to write to %s", filename);
 			cleanup();
-		 }
+		}
 
 		if (write(fd, bad_addr, 100) != -1) {
 			tst_resm(TFAIL, "write(2) failed to fail");
 			cleanup();
-		 }
+		}
 		TEST_ERROR_LOG(errno);
 		close(fd);
 
 		if ((fd = open(filename, O_RDONLY)) == -1) {
 			tst_resm(TBROK, "open(2) failed, errno: %d", errno);
 			cleanup();
-		 }
+		}
 
 		if (read(fd, rbuf, 100) == -1) {
 			tst_resm(TBROK, "read(2) failed, errno: %d", errno);
 			cleanup();
-		 }
+		}
 
 		if (memcmp(wbuf, rbuf, 100) == 0) {
 			tst_resm(TPASS, "failure of write(2) didnot corrupt "
@@ -197,4 +195,4 @@ void cleanup(void)
 	unlink(filename);
 	tst_rmdir();
 
- }
+}

@@ -26,16 +26,13 @@ LIBIPC			:= $(LIBIPCDIR)/libipc_hugetlb.a
 
 $(LIBIPCDIR):
 	mkdir -p "$@"
-
 $(LIBIPC): $(LIBIPCDIR)
 	$(MAKE) -C "$^" -f "$(abs_srcdir)/$^/Makefile" all
 
 CPPFLAGS		+= -I$(abs_srcdir)/$(LIBIPCDIR)
-
 LDFLAGS			+= -L$(abs_builddir)/$(LIBIPCDIR)
-
 LDLIBS			+= -lipc_hugetlb
+MAKE_DEPS		+= $(LIBIPC)
 
-MAKE_DEPS		:= $(LIBIPC)
-
+include $(top_srcdir)/testcases/kernel/mem/include/libmem.mk
 # vim: syntax=make

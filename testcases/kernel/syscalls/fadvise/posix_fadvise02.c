@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -78,8 +78,8 @@ int TST_TOTAL = sizeof(TC) / sizeof(TC[0]);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i;
 
 	/* Check this system has fadvise64 system which is used
@@ -154,7 +154,7 @@ void setup()
 	TEST_PAUSE;
 
 	/* Make WRONG_FD really wrong. */
-      retry:
+retry:
 	errno = 0;
 	if (close(WRONG_FD) != 0) {
 		if (errno == EBADF) ;	/* Good. Do nothing. */

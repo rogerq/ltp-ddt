@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -115,14 +115,15 @@ int main(int ac, char **av)
 			TEST(chmod(TESTFILE, mode));
 
 			if (TEST_RETURN == -1) {
-				tst_resm(TFAIL|TTERRNO,
-				    "chmod(%s, %#o) failed", TESTFILE, mode);
+				tst_resm(TFAIL | TTERRNO,
+					 "chmod(%s, %#o) failed", TESTFILE,
+					 mode);
 				continue;
 			}
 			if (STD_FUNCTIONAL_TEST) {
 				if (stat(TESTFILE, &stat_buf) < 0)
-					tst_brkm(TFAIL|TERRNO, cleanup,
-					    "stat(%s) failed", TESTFILE);
+					tst_brkm(TFAIL | TERRNO, cleanup,
+						 "stat(%s) failed", TESTFILE);
 				stat_buf.st_mode &= ~S_IFREG;
 
 				if (stat_buf.st_mode == mode)
@@ -155,13 +156,13 @@ void setup()
 
 	tst_tmpdir();
 
-	fd = open(TESTFILE, O_RDWR|O_CREAT, FILE_MODE);
+	fd = open(TESTFILE, O_RDWR | O_CREAT, FILE_MODE);
 	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
-		    "open(%s, O_RDWR|O_CREAT, %o) failed",
-		    TESTFILE, FILE_MODE);
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "open(%s, O_RDWR|O_CREAT, %o) failed",
+			 TESTFILE, FILE_MODE);
 	if (close(fd) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "close(%s) failed", TESTFILE);
+		tst_brkm(TBROK | TERRNO, cleanup, "close(%s) failed", TESTFILE);
 
 }
 

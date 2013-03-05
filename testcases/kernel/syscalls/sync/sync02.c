@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -91,8 +91,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	char read_buffer[BUFSIZ];	/* buffer used to read data from file */
 
 	/* Parse standard options given to run the test. */
@@ -124,7 +124,7 @@ int main(int ac, char **av)
 					tst_brkm(TFAIL, cleanup, "lseek() "
 						 "failed on %s, error=%d",
 						 TEMP_FILE, errno);
-				 }
+				}
 
 				/* Read the contents of file */
 				if (read(fildes, read_buffer,
@@ -142,7 +142,7 @@ int main(int ac, char **av)
 					tst_brkm(TFAIL, cleanup,
 						 "read() Fails on %s, error=%d",
 						 TEMP_FILE, errno);
-				 }
+				}
 			} else {
 				tst_resm(TPASS, "call succeeded");
 			}
@@ -184,7 +184,7 @@ void setup()
 		tst_brkm(TBROK, cleanup,
 			 "open(%s, O_RDWR | O_CREAT, %#o) Failed, errno=%d :%s",
 			 TEMP_FILE, FILE_MODE, errno, strerror(errno));
-	 }
+	}
 
 	/* Write the buffer data into file */
 	if (write(fildes, write_buffer, strlen(write_buffer) + 1) !=
@@ -192,7 +192,7 @@ void setup()
 		tst_brkm(TBROK, cleanup,
 			 "write() failed to write buffer data to %s",
 			 TEMP_FILE);
-	 }
+	}
 
 }
 

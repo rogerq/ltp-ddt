@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -95,9 +95,9 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
-	int ret_val;		/* getgroups(2) return value */
+	int lc;
+	char *msg;
+	int ret_val;
 	int gidsetsize = NGROUPS;	/* total groups */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -112,14 +112,14 @@ int main(int ac, char **av)
 		TEST(getgroups(gidsetsize, groups_list));
 
 		if ((ret_val = TEST_RETURN) == -1) {
-			tst_resm(TFAIL|TTERRNO, "getgroups failed");
+			tst_resm(TFAIL | TTERRNO, "getgroups failed");
 			continue;
 		}
 		if (STD_FUNCTIONAL_TEST) {
 			fflag = verify_groups(ret_val);
 			if (fflag)
 				tst_resm(TPASS,
-				    "getgroups functionality correct");
+					 "getgroups functionality correct");
 		} else
 			tst_resm(TPASS, "call succeeded");
 	}
@@ -150,7 +150,7 @@ void setup()
 	 * getgroups()
 	 */
 	if (setgroups(ngroups, groups) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "setgroups failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "setgroups failed");
 
 }
 
@@ -279,13 +279,12 @@ int verify_groups(int ret_val)
 	 * Now, if ngroups matches ret_val, as above comparisons of the array
 	 * are successful, this implies that the array contents match.
 	 */
-	if (egid_flag == 0) 	/* If egid is not returned */
+	if (egid_flag == 0)	/* If egid is not returned */
 		ngroups--;
 	if (ngroups != ret_val) {
 		tst_resm(TFAIL,
 			 "getgroups(2) returned incorrect no. of gids %d "
-			 "(expected %d)",
-			 ret_val, ngroups);
+			 "(expected %d)", ret_val, ngroups);
 		fflag = 0;
 	}
 
