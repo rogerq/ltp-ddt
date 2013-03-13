@@ -27,6 +27,14 @@ include $(top_srcdir)/include/mk/env_pre.mk
 # Define directories to exclude from build/installation
 #FILTER_OUT_DIRS		:= kdump
 
+ifeq ($(PLATFORM),omap5-evm)
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+FILTER_OUT_DIRS                 += mc_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
+FILTER_OUT_DIRS                 += edma_test_suite
+endif
+
 ifeq ($(PLATFORM),dm6467-evm)
 FILTER_OUT_DIRS			+= fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite
