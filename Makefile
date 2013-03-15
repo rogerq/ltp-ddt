@@ -76,7 +76,7 @@ $(1):: | $$(abs_top_builddir)/$$(basename $$(subst -,.,$(1)))
 endif
 endef
 
-COMMON_TARGETS		+= tools testcases/ddt 
+COMMON_TARGETS    += tools testcases/ddt 
 COMMON_TARGETS    += testcases/kernel/timers
 COMMON_TARGETS    += testcases/kernel/ipc
 COMMON_TARGETS    += testcases/kernel/mem
@@ -224,7 +224,7 @@ endif
 
 ## Compile Modules
 MODULES_TO_BUILD :=
-PLATFORMSwEDMA   := am180x-evm|am181x-evm|am389x-evm|am387x-evm|am335x-evm|dm385-evm|dm813x-evm|da830-omapl137-evm|am170x-evm
+PLATFORMSwEDMA   := am180x-evm|am181x-evm|am389x-evm|am387x-evm|dm385-evm|dm813x-evm|da830-omapl137-evm|am170x-evm
 
 ifneq (,$(findstring $(PLATFORM),$(PLATFORMSwEDMA)))
 MODULES_TO_BUILD += modules_edma
