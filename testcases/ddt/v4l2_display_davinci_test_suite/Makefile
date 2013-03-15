@@ -17,7 +17,7 @@ INSTALL_MODE            := 00755
 
 CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
 LDFLAGS         += -g -static
-INCLUDES        = -I $(KERNEL_INC) 
+INCLUDES        = -I $(KERNEL_USR_INC) -I $(KERNEL_INC) 
 
 #List of source files- Update this on adding a new C file
 SOURCES := 	v4l2_colors.c 

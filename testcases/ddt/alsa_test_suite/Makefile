@@ -24,7 +24,7 @@ INSTALL_MODE            := 00755
 
 CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
 LDFLAGS         += -g 
-INCLUDES        = -I $(KERNEL_INC) -I src/interface/common -I ../utils/user -I $(ALSA_INCPATH)
+INCLUDES        = -I $(KERNEL_USR_INC) -I $(KERNEL_INC) -I src/interface/common -I ../utils/user -I $(ALSA_INCPATH)
 
 #List of source files- Update this on adding a new C file
 SOURCES := \

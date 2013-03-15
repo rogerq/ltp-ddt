@@ -18,7 +18,8 @@ INSTALL_MODE            := 00755
 
 CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
 LDFLAGS         += -g -static
-INCLUDES        = -I $(KERNEL_INC) -I src/interface/common -I ../utils/user -I $(KERNEL_DIR)/arch/arm/include
+INCLUDES        = -I $(KERNEL_USR_INC) -I $(KERNEL_INC) -I src/interface/common -I ../utils/user -I $(KERNEL_DIR)/arch/arm/include
+
 
 #List of source files- Update this on adding a new C file
 SOURCES := \
