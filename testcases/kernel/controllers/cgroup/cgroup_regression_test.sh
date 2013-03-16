@@ -16,7 +16,7 @@
 ##                                                                            ##
 ## You should have received a copy of the GNU General Public License          ##
 ## along with this program;  if not, write to the Free Software               ##
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    ##
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    ##
 ##                                                                            ##
 ## Author: Li Zefan <lizf@cn.fujitsu.com>                                     ##
 ##                                                                            ##
@@ -31,7 +31,7 @@ export TST_COUNT=1
 tst_kvercmp 2 6 29
 if [ $? -eq 0 ]; then
 	tst_brkm TCONF ignored "test must be run with kernel 2.6.29 or newer"
-	exit 0 
+	exit 0
 elif [ ! -f /proc/cgroups ]; then
 	tst_brkm TCONF ignored "Kernel does not support for control groups; skipping testcases";
 	exit 0
@@ -40,6 +40,7 @@ elif [ "x$(id -ru)" != x0 ]; then
 	exit 0
 fi
 
+dmesg -c > /dev/null
 nr_bug=`dmesg | grep -c "kernel BUG"`
 nr_null=`dmesg | grep -c "kernel NULL pointer dereference"`
 nr_warning=`dmesg | grep -c "^WARNING"`
@@ -78,6 +79,8 @@ check_kernel_bug()
 	nr_warning=$new_warning
 	nr_lockdep=$new_lockdep
 
+	echo "check_kernel_bug found something!"
+	dmesg
 	failed=1
 	return 0
 }
@@ -97,7 +100,7 @@ test_1()
 	./fork_processes &
 	sleep 1
 
-	mount -t cgroup xxx cgroup/
+	mount -t cgroup -o none,name=foo cgroup cgroup/
 	if [ $? -ne 0 ]; then
 		tst_resm TFAIL "failed to mount cgroup filesystem"
 		failed=1
@@ -124,7 +127,7 @@ test_1()
 #---------------------------------------------------------------------------
 test_2()
 {
-	mount -t cgroup xxx cgroup/
+	mount -t cgroup -o none,name=foo cgroup cgroup/
 	if [ $? -ne 0 ]; then
 		tst_resm TFAIL "Failed to mount cgroup filesystem"
 		failed=1
@@ -204,7 +207,7 @@ test_3()
 # Bug:    cgroup hierarchy lock's lockdep subclass may overflow
 # Kernel: 2.6.29-rcX
 # Link:   http://lkml.org/lkml/2009/2/4/67
-# Fix:    
+# Fix:
 #---------------------------------------------------------------------------
 test_4()
 {
@@ -220,7 +223,7 @@ test_4()
 		return
 	fi
 
-	mount -t cgroup xxx cgroup/
+	mount -t cgroup -o none,name=foo cgroup cgroup/
 	mkdir cgroup/0
 	rmdir cgroup/0
 	umount cgroup/
@@ -254,7 +257,7 @@ test_5()
 	subsys1=`tail -n 1 /proc/cgroups | awk '{ print $1 }'`
 	subsys2=`tail -n 2 /proc/cgroups | head -1 | awk '{ print $1 }'`
 
-	mount -t cgroup -o $subsys1,$subsys xxx cgroup/
+	mount -t cgroup -o $subsys1,$subsys2 xxx cgroup/
 	if [ $? -ne 0 ]; then
 		tst_resm TFAIL "mount $subsys1 and $subsys2 failed"
 		failed=1
@@ -325,7 +328,7 @@ test_6()
 
 	# clean up
 	mount -t cgroup -o ns xxx cgroup/ > /dev/null 2>&1
-	rmdir cgroup/[1-9] > /dev/null 2>&1
+	rmdir cgroup/[1-9]* > /dev/null 2>&1
 	umount cgroup/
 }
 
@@ -360,9 +363,9 @@ test_7_1()
 
 test_7_2()
 {
-	mount -t cgroup xxx cgroup/
+	mount -t cgroup -o none,name=foo cgroup cgroup/
 	if [ $? -ne 0 ]; then
-		tst_resm TFAIL "failed to mount $subsys"
+		tst_resm TFAIL "failed to mount cgroup"
 		failed=1
 		return
 	fi
@@ -429,7 +432,7 @@ test_7()
 #---------------------------------------------------------------------------
 test_8()
 {
-	mount -t cgroup xxx cgroup/
+	mount -t cgroup -o none,name=foo cgroup cgroup/
 	if [ $? -ne 0 ]; then
 		tst_resm TFAIL "failed to mount cgroup filesystem"
 		failed=1
@@ -499,8 +502,9 @@ test_10()
 	wait $pid1
 	wait $pid2
 
-	rmdir cgroup/0 2> /dev/null
-	umount cgroup/ 2> /dev/null
+	mount -t cgroup none cgroup 2> /dev/null
+	rmdir cgroup/0
+	umount cgroup/
 
 	check_kernel_bug
 	if [ $? -eq 1 ]; then

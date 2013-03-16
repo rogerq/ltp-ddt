@@ -13,7 +13,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -90,10 +90,9 @@ int main(int ac, char **av)
 
 	sys_buf = (struct sysinfo *)malloc(sizeof(struct sysinfo));
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-	 }
+	}
 
 	setup();		/* Global setup */
 
@@ -109,7 +108,7 @@ int main(int ac, char **av)
 			/* To gather stats on errnos returned, log the errno */
 			tst_brkm(TFAIL, cleanup, "sysinfo() Failed, errno=%d"
 				 " : %s", TEST_ERRNO, strerror(TEST_ERRNO));
-		 } else {
+		} else {
 			/* Test succeeded */
 
 			/* This portion of the code generates information
@@ -146,7 +145,8 @@ int main(int ac, char **av)
 				printf("procs %lu\n",
 				       (unsigned long)sys_buf->procs);
 			} else {
-				tst_resm(TPASS, "Test to check the return code PASSED");
+				tst_resm(TPASS,
+					 "Test to check the return code PASSED");
 			}
 		}
 	}

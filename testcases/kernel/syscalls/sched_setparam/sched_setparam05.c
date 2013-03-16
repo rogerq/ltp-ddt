@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -86,18 +86,18 @@ int TST_TOTAL = 1;		/* Total number of test cases. */
 
 static struct sched_param param = { 0 };
 static int exp_enos[] = { EPERM, 0 };
+
 static char nobody_uid[] = "nobody";
 struct passwd *ltpuser;
 
 int main(int ac, char **av)
 {
 
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int status;
 	pid_t child_pid;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -139,9 +139,9 @@ int main(int ac, char **av)
 				exit(0);
 			}
 
-			tst_resm(TWARN|TTERRNO, "Test failed, sched_setparam()"
-				 " returned : %ld",
-				 TEST_RETURN);
+			tst_resm(TWARN | TTERRNO,
+				 "Test failed, sched_setparam()"
+				 " returned : %ld", TEST_RETURN);
 			TEST_ERROR_LOG(TEST_ERRNO);
 			exit(1);
 

@@ -14,9 +14,12 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
+
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -29,7 +32,7 @@
 
 static int child(void *arg)
 {
-	char **argv = (char **) arg;
+	char **argv = (char **)arg;
 	argv++;
 	mount("/tmp/", "/tmp/", "tmpfs", 0, NULL);
 	execvp(argv[0], argv);
@@ -39,8 +42,8 @@ static int child(void *arg)
 int main(int argc, char *argv[])
 {
 	char c = 0;
-	const pid_t pid = ltp_clone_quick(CLONE_NEWNS, child, (void *) argv);
+	const pid_t pid = ltp_clone_quick(CLONE_NEWNS, child, (void *)argv);
 	while (waitpid(pid, NULL, __WALL) == EOF && errno == EINTR)
-		c++; /* Dummy. */
+		c++;		/* Dummy. */
 	return 0;
 }

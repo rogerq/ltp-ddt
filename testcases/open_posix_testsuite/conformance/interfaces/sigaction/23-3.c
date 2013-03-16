@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertions:
 *
@@ -46,8 +46,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -88,34 +88,29 @@ void handler(int sig)
 	sigset_t pending;
 	called++;
 
-	if (called == 2)
-	{
+	if (called == 2) {
 		FAILED("Signal was not masked in signal handler");
 	}
 
-	if (called == 1)
-	{
+	if (called == 1) {
 
 		/* Raise the signal again. It should be masked */
 		ret = raise(SIGNAL);
 
-		if (ret != 0)
-		{
+		if (ret != 0) {
 			UNRESOLVED(ret, "Failed to raise SIGBUS again");
 		}
 
 		/* check the signal is pending */
 		ret = sigpending(&pending);
 
-		if (ret != 0)
-		{
+		if (ret != 0) {
 			UNRESOLVED(ret, "Failed to get pending signal set");
 		}
 
 		ret = sigismember(&pending, SIGNAL);
 
-		if (ret != 1)
-		{
+		if (ret != 1) {
 			FAILED("signal is not pending");
 		}
 	}
@@ -140,23 +135,20 @@ int main()
 
 	ret = sigemptyset(&sa.sa_mask);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to empty signal set");
 	}
 
 	/* Install the signal handler for SIGBUS */
 	ret = sigaction(SIGNAL, &sa, 0);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to set signal handler");
 	}
 
 	ret = raise(SIGNAL);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to raise SIGBUS");
 	}
 

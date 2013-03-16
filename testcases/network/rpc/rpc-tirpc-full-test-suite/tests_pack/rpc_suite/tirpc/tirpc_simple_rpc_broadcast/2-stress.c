@@ -17,8 +17,8 @@
 * other software, or any other product whatsoever.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 *
 * History:
 * Created by: Cyril Lacabanne (Cyril.Lacabanne@bull.net)
@@ -39,7 +39,7 @@
 #define PROCNUM 1
 #define VERSNUM 1
 
-int eachresult (char *out, struct sockaddr_in *addr)
+int eachresult(char *out, struct sockaddr_in *addr)
 {
 	//Nothing to do for that test
 }
@@ -47,41 +47,38 @@ int eachresult (char *out, struct sockaddr_in *addr)
 int main(int argn, char *argc[])
 {
 	//Program parameters : argc[1] : HostName or Host IP -> not used for this test
-	//					   argc[2] : Server Program Number
-	//					   argc[3] : Number of testes function calls
-	//					   other arguments depend on test case
+	//                                         argc[2] : Server Program Number
+	//                                         argc[3] : Number of testes function calls
+	//                                         other arguments depend on test case
 
 	//run_mode can switch into stand alone program or program launch by shell script
 	//1 : stand alone, debug mode, more screen information
 	//0 : launch by shell script as test case, only one printf -> result status
 	int run_mode = 0;
-	int test_status = 1; //Default test result set to FAILED
+	int test_status = 1;	//Default test result set to FAILED
 	int progNum = atoi(argc[2]);
 	enum clnt_stat rslt;
-    char nettype[16] = "visible";
-    int sndVar = 0;
-    int recVar = -1;
-    int nbCall = atoi(argc[3]);
+	char nettype[16] = "visible";
+	int sndVar = 0;
+	int recVar = -1;
+	int nbCall = atoi(argc[3]);
 	int nbOk = 0;
 	int i;
 
-	if (run_mode == 1)
-	{
+	if (run_mode == 1) {
 		printf("Server # %d\n", progNum);
 	}
 
-	for (i = 0; i < nbCall; i++)
-	{
+	for (i = 0; i < nbCall; i++) {
 		rslt = rpc_broadcast(progNum, VERSNUM, PROCNUM,
-							  (xdrproc_t)xdr_int, (char *)&sndVar,
-							  (xdrproc_t)xdr_int, (char *)&recVar,
-							  (resultproc_t)eachresult, nettype);
-    	if (rslt == RPC_SUCCESS)
+				     (xdrproc_t) xdr_int, (char *)&sndVar,
+				     (xdrproc_t) xdr_int, (char *)&recVar,
+				     (resultproc_t) eachresult, nettype);
+		if (rslt == RPC_SUCCESS)
 			nbOk++;
 	}
 
-	if (run_mode == 1)
-	{
+	if (run_mode == 1) {
 		printf("Aimed : %d\n", nbCall);
 		printf("Got : %d\n", nbOk);
 	}

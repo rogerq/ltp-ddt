@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -103,11 +103,10 @@ extern int getipckey();
 
 int main(int ac, char **av)
 {
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 	pid_t pid;
 	int status;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 #ifdef UCLINUX
@@ -123,7 +122,7 @@ int main(int ac, char **av)
 		do_master_child(av);
 
 	if (waitpid(pid, &status, 0) == -1)
-		tst_resm(TBROK|TERRNO, "waitpid failed");
+		tst_resm(TBROK | TERRNO, "waitpid failed");
 	else if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		tst_resm(TFAIL, "child exited abnormally");
 	else
@@ -164,7 +163,7 @@ void do_master_child(char **av)
 	pid1 = FORK_OR_VFORK();
 
 	if (pid1 == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "Fork failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "Fork failed");
 
 	if (pid1 == 0) {
 		ltpuser1 = SAFE_GETPWNAM(NULL, user1name);
@@ -234,11 +233,11 @@ void setup(void)
 
 	semkey = getipckey();
 
-	if ((shmid1 = shmget(semkey, getpagesize(), 0666|IPC_CREAT)) == -1)
+	if ((shmid1 = shmget(semkey, getpagesize(), 0666 | IPC_CREAT)) == -1)
 		tst_brkm(TBROK, cleanup, "Failed to setup shared memory");
 
 	if ((flag = (int *)shmat(shmid1, 0, 0)) == (int *)-1)
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "Failed to attach shared memory:%d", shmid1);
 }
 

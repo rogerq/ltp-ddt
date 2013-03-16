@@ -11,7 +11,7 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 **************************************************************************/
 /*
@@ -43,9 +43,9 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	dlerror();    /* Clear any existing error */
+	dlerror();		/* Clear any existing error */
 	ret = dlsym(handle, "unshare");
-	if ((error = dlerror()) != NULL)  {
+	if ((error = dlerror()) != NULL) {
 		fprintf(stderr, "Error: %s\n", error);
 		exit(1);
 	}

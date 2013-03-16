@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -56,7 +56,7 @@ char *TCID = "sysctl01";
 int TST_TOTAL = 3;
 
 static int sysctl(int *name, int nlen, void *oldval, size_t * oldlenp,
-	   void *newval, size_t newlen)
+		  void *newval, size_t newlen)
 {
 	struct __sysctl_args args =
 	    { name, nlen, oldval, oldlenp, newval, newlen };
@@ -102,7 +102,6 @@ int main(int ac, char **av)
 
 	comp_string = NULL;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -134,11 +133,13 @@ int main(int ac, char **av)
 
 			if (TEST_RETURN != 0) {
 				if (TEST_ERRNO == ENOSYS) {
-					tst_resm(TCONF, "You may need to make CONFIG_SYSCTL_SYSCALL=y"
-							" to your kernel config.");
+					tst_resm(TCONF,
+						 "You may need to make CONFIG_SYSCTL_SYSCALL=y"
+						 " to your kernel config.");
 				} else {
-					tst_resm(TFAIL, "sysctl(2) failed unexpectedly "
-							"errno:%d", TEST_ERRNO);
+					tst_resm(TFAIL,
+						 "sysctl(2) failed unexpectedly "
+						 "errno:%d", TEST_ERRNO);
 				}
 				continue;
 			}

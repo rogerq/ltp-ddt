@@ -17,8 +17,8 @@
 * other software, or any other product whatsoever.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 *
 * History:
 * Created by: Cyril Lacabanne (Cyril.Lacabanne@bull.net)
@@ -37,42 +37,39 @@
 int main(int argn, char *argc[])
 {
 	//Program parameters : argc[1] : HostName or Host IP
-	//					   argc[2] : Server Program Number
-	//					   argc[3] : Number of testes function calls
-	//					   other arguments depend on test case
+	//                                         argc[2] : Server Program Number
+	//                                         argc[3] : Number of testes function calls
+	//                                         other arguments depend on test case
 
 	//run_mode can switch into stand alone program or program launch by shell script
 	//1 : stand alone, debug mode, more screen information
 	//0 : launch by shell script as test case, only one printf -> result status
 	int run_mode = 0;
-	int test_status = 1; //Default test result set to FAILED
+	int test_status = 1;	//Default test result set to FAILED
 	int progNum = atoi(argc[2]);
 	enum clnt_stat cs;
 	int varSnd = 10;
 	int varRec = -1;
-    int nbCall = atoi(argc[3]);
+	int nbCall = atoi(argc[3]);
 	int nbOk = 0;
 	int i;
 
 	//Initialization
-	if (run_mode == 1)
-	{
+	if (run_mode == 1) {
 		printf("progNum : %d\n", progNum);
 	}
 
-	for (i = 0; i < nbCall; i++)
-	{
+	for (i = 0; i < nbCall; i++) {
 		cs = callrpc(argc[1], progNum, VERSNUM, PROCNUM,
-					   (xdrproc_t)xdr_int, (char *)&varSnd,
-					   (xdrproc_t)xdr_int, (char *)&varRec);
+			     (xdrproc_t) xdr_int, (char *)&varSnd,
+			     (xdrproc_t) xdr_int, (char *)&varRec);
 
 		if (cs == RPC_SUCCESS)
 			nbOk++;
 	}
 
 	//If we are here, macro call was successful
-	if (run_mode == 1)
-	{
+	if (run_mode == 1) {
 		printf("Aimed : %d\n", nbCall);
 		printf("Got : %d\n", nbOk);
 	}

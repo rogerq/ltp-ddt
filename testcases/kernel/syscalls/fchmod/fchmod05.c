@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -71,7 +71,7 @@
  */
 
 #ifndef _GNU_SOURCE
-# define _GNU_SOURCE
+#define _GNU_SOURCE
 #endif
 
 #include <stdio.h>
@@ -103,8 +103,8 @@ void cleanup();			/* Main cleanup function for test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat struct */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	mode_t dir_mode;	/* mode permissions set on test directory */
 
 	/* Parse standard options given to run the test. */
@@ -153,7 +153,8 @@ int main(int ac, char **av)
 					 TESTDIR, dir_mode, PERMS & ~S_ISGID);
 			} else {
 				tst_resm(TPASS, "Functionality of fchmod(%d, "
-					 "%#o) successful", fd, PERMS & ~S_ISGID);
+					 "%#o) successful", fd,
+					 PERMS & ~S_ISGID);
 			}
 		} else {
 			tst_resm(TPASS, "call succeeded");
@@ -211,17 +212,18 @@ void setup()
 	}
 
 	if (setgroups(1, &nobody_u->pw_gid) == -1)
-		tst_brkm(TBROK, cleanup, "Couldn't change supplementary group Id: %s",
-				strerror(errno));
+		tst_brkm(TBROK, cleanup,
+			 "Couldn't change supplementary group Id: %s",
+			 strerror(errno));
 
 	if (chown(TESTDIR, nobody_u->pw_uid, bin_group->gr_gid) == -1)
 		tst_brkm(TBROK, cleanup, "Couldn't change owner of testdir: %s",
-				strerror(errno));
+			 strerror(errno));
 
 	/* change to nobody:nobody */
 	if (setegid(nobody_u->pw_gid) == -1 || seteuid(nobody_u->pw_uid) == -1)
 		tst_brkm(TBROK, cleanup, "Couldn't switch to nobody:nobody: %s",
-				strerror(errno));
+			 strerror(errno));
 
 	/* Open the test directory for reading */
 	fd = open(TESTDIR, O_RDONLY);

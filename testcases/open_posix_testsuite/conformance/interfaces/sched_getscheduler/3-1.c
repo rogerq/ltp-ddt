@@ -22,27 +22,22 @@ struct unique {
 } sym[] = {
 #ifdef SCHED_FIFO
 	{
-		 SCHED_FIFO, "SCHED_FIFO"
-	},
+	SCHED_FIFO, "SCHED_FIFO"},
 #endif
 #ifdef SCHED_RR
 	{
-		 SCHED_RR, "SCHED_RR"
-	},
+	SCHED_RR, "SCHED_RR"},
 #endif
 #ifdef SCHED_SPORADIC
 	{
-	  SCHED_SPORADIC,"SCHED_SPORADIC"
-	},
+	SCHED_SPORADIC, "SCHED_SPORADIC"},
 #endif
 #ifdef SCHED_OTHER
 	{
-		 SCHED_OTHER, "SCHED_OTHER"
-	},
+	SCHED_OTHER, "SCHED_OTHER"},
 #endif
 	{
-		 0, 0
-	}
+	0, 0}
 };
 
 int main(int argc, char **argv)
@@ -57,7 +52,7 @@ int main(int argc, char **argv)
 		printf("Returned code is -1.\n");
 		return PTS_FAIL;
 	}
-	if (errno != 0 ) {
+	if (errno != 0) {
 		perror("Unexpected error");
 		return PTS_FAIL;
 	}
@@ -70,6 +65,7 @@ int main(int argc, char **argv)
 		tst++;
 	}
 
-	printf("The resulting scheduling policy is not one of standard policy.\nIt could be an implementation defined policy.");
+	printf("The resulting scheduling policy is not one of standard "
+	       "policy.\nIt could be an implementation defined policy.");
 	return PTS_UNRESOLVED;
 }

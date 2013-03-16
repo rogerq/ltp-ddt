@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Started by Andrew Vagin <avagin@gmail.com>
  *
@@ -49,6 +49,7 @@
 #include "test.h"
 #include "usctest.h"
 #include "linux_syscall_numbers.h"
+#include "inotify.h"
 
 #if defined(HAVE_SYS_INOTIFY_H)
 #include <sys/inotify.h>
@@ -76,21 +77,6 @@ int event_set[EVENT_MAX];
 
 char event_buf[EVENT_BUF_LEN];
 
-static long myinotify_init()
-{
-	return syscall(__NR_inotify_init);
-}
-
-static long myinotify_add_watch(int fd, const char *pathname, int mask)
-{
-	return syscall(__NR_inotify_add_watch, fd, pathname, mask);
-}
-
-static long myinotify_rm_watch(int fd, int wd)
-{
-	return syscall(__NR_inotify_rm_watch, fd, wd);
-}
-
 #define DEFAULT_FSTYPE	"ext2"
 #define DIR_MODE	S_IRWXU | S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP
 
@@ -110,11 +96,10 @@ static option_t options[] = {	/* options supported by mount01 test */
 
 int main(int ac, char **av)
 {
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 	int ret;
 	int len, i, test_num;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, options, &help)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -128,14 +113,14 @@ int main(int ac, char **av)
 	if (Tflag) {
 		Fstype = (char *)malloc(strlen(fstype) + 1);
 		if (Fstype == NULL) {
-			tst_brkm(TBROK, NULL, "malloc - failed to alloc %d"
+			tst_brkm(TBROK, NULL, "malloc - failed to alloc %zu"
 				 "errno %d", strlen(fstype), errno);
 		}
 		strncpy(Fstype, fstype, strlen(fstype) + 1);
 	} else {
 		Fstype = (char *)malloc(strlen(DEFAULT_FSTYPE) + 1);
 		if (Fstype == NULL) {
-			tst_brkm(TBROK, NULL, "malloc - failed to alloc %d"
+			tst_brkm(TBROK, NULL, "malloc - failed to alloc %zu"
 				 "errno %d", strlen(DEFAULT_FSTYPE), errno);
 		}
 		strncpy(Fstype, DEFAULT_FSTYPE, strlen(DEFAULT_FSTYPE) + 1);
@@ -171,9 +156,8 @@ int main(int ac, char **av)
 
 	len = read(fd_notify, event_buf, EVENT_BUF_LEN);
 	if (len < 0) {
-		tst_brkm(TBROK|TERRNO, cleanup,
-			 "read(%d, buf, %d) failed",
-			 fd_notify, EVENT_BUF_LEN);
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "read(%d, buf, %zu) failed", fd_notify, EVENT_BUF_LEN);
 	}
 
 	/* check events */
@@ -211,12 +195,12 @@ int main(int ac, char **av)
 	}
 	ret = myinotify_rm_watch(fd_notify, wd);
 	if (ret != -1 || errno != EINVAL)
-		tst_resm(TFAIL|TERRNO,
-			"inotify_rm_watch (%d, %d) didn't return EINVAL",
-			fd_notify, wd);
+		tst_resm(TFAIL | TERRNO,
+			 "inotify_rm_watch (%d, %d) didn't return EINVAL",
+			 fd_notify, wd);
 	else
 		tst_resm(TPASS, "inotify_rm_watch (%d, %d) returned EINVAL",
-			fd_notify, wd);
+			 fd_notify, wd);
 
 	cleanup();
 	tst_exit();
@@ -238,8 +222,8 @@ void setup()
 	(void)sprintf(mntpoint, "mnt_%d", getpid());
 
 	if (mkdir(mntpoint, DIR_MODE) < 0) {
-		tst_brkm(TBROK|TERRNO, cleanup, "mkdir(%s, %#o) failed",
-			mntpoint, DIR_MODE);
+		tst_brkm(TBROK | TERRNO, cleanup, "mkdir(%s, %#o) failed",
+			 mntpoint, DIR_MODE);
 	}
 
 	/* Call mount(2) */
@@ -249,28 +233,26 @@ void setup()
 	/* check return code */
 	if (TEST_RETURN != 0) {
 		TEST_ERROR_LOG(TEST_ERRNO);
-		tst_brkm(TBROK|TTERRNO, cleanup, "mount(2) failed");
+		tst_brkm(TBROK | TTERRNO, cleanup, "mount(2) failed");
 	}
 	mount_flag = 1;
 
 	sprintf(fname, "%s/tfile_%d", mntpoint, getpid());
 	fd = open(fname, O_RDWR | O_CREAT, 0700);
 	if (fd == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup,
-			 "open(%s, O_RDWR|O_CREAT,0700) failed",
-			 fname);
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "open(%s, O_RDWR|O_CREAT,0700) failed", fname);
 	}
 
 	ret = write(fd, fname, 1);
 	if (ret == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup,
-			 "write(%d, %s, 1) failed",
-			 fd, fname);
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "write(%d, %s, 1) failed", fd, fname);
 	}
 
 	/* close the file we have open */
 	if (close(fd) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup, "close(%s) failed", fname);
+		tst_brkm(TBROK | TERRNO, cleanup, "close(%s) failed", fname);
 	}
 
 	fd_notify = myinotify_init();
@@ -280,13 +262,14 @@ void setup()
 			tst_brkm(TCONF, cleanup,
 				 "inotify is not configured in this kernel.");
 		} else {
-			tst_brkm(TBROK|TERRNO, cleanup, "inotify_init failed");
+			tst_brkm(TBROK | TERRNO, cleanup,
+				 "inotify_init failed");
 		}
 	}
 
 	wd = myinotify_add_watch(fd_notify, fname, IN_ALL_EVENTS);
 	if (wd < 0) {
-		tst_brkm(TBROK|TERRNO, cleanup,
+		tst_brkm(TBROK | TERRNO, cleanup,
 			 "inotify_add_watch (%d, %s, IN_ALL_EVENTS) failed.",
 			 fd_notify, fname);
 	};
@@ -301,13 +284,14 @@ void cleanup()
 {
 	free(Fstype);
 	if (close(fd_notify) == -1) {
-		tst_resm(TWARN|TERRNO, "close(%d) failed", fd_notify);
+		tst_resm(TWARN | TERRNO, "close(%d) failed", fd_notify);
 	}
 
 	if (mount_flag) {
 		TEST(umount(mntpoint));
 		if (TEST_RETURN != 0) {
-			tst_resm(TWARN|TTERRNO, "umount(%s) failed", mntpoint);
+			tst_resm(TWARN | TTERRNO, "umount(%s) failed",
+				 mntpoint);
 		}
 	}
 

@@ -14,9 +14,9 @@
 #
 #   You should have received a copy of the GNU General Public License
 #   along with this program;  if not, write to the Free Software
-#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 #
-#  FILE   : cron02 
+#  FILE   : cron02
 #
 #  PURPOSE: Test a postive cron job
 #			- add new job
@@ -44,7 +44,7 @@ do_setup(){
         userdel $TEST_USER
 	sleep 1
 
-        useradd -m -g $TEST_USER_GROUP $TEST_USER 
+        useradd -m -g $TEST_USER_GROUP $TEST_USER
         if [ $? != 0 ]
         then {
                 echo "Could not add test user $TEST_USER to system $RHOST."
@@ -52,12 +52,26 @@ do_setup(){
         }
         fi
 
+	# running under systemd?
+	if command -v systemctl >/dev/null 2>&1; then
+		HAVE_SYSTEMCTL=true
+	else
+		HAVE_SYSTEMCTL=false
+	fi
+
 	# restart cron daemon
 	# Red Hat uses crond, SuSE/Other uses cron.
 	if [ -x /etc/init.d/crond ]; then
 		/etc/init.d/crond restart
 	elif [ -x /etc/init.d/cron ]; then
 		/etc/init.d/cron restart
+	elif $HAVE_SYSTEMCTL; then
+		for crond in "crond" "cron"; do
+			if systemctl is-enabled $crond.service >/dev/null 2>&1; then
+				systemctl restart $crond.service
+				break
+			fi
+		done
 	else
 		echo "Could not determine cron init.d script."
 		exit 1
@@ -70,7 +84,7 @@ do_setup(){
 
 do_cleanup(){
         rm -rf /home/$TEST_USER
-        userdel $TEST_USER 
+        userdel $TEST_USER
 }
 
 #-----------------------------------------------------------------------

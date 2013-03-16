@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -100,8 +100,8 @@ void cleanup();			/* Cleanup function for the test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat struct. */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	mode_t dir_mode;	/* mode permissions set on testdirectory */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -120,7 +120,7 @@ int main(int ac, char **av)
 		TEST(chmod(TESTDIR, PERMS));
 
 		if (TEST_RETURN == -1) {
-			tst_resm(TFAIL|TTERRNO, "chmod(%s, %#o) failed",
+			tst_resm(TFAIL | TTERRNO, "chmod(%s, %#o) failed",
 				 TESTDIR, PERMS);
 			continue;
 		}
@@ -173,7 +173,7 @@ void setup()
 	tst_require_root(NULL);
 	ltpuser = getpwnam(nobody_uid);
 	if (setuid(ltpuser->pw_uid) == -1)
-		tst_resm(TINFO|TERRNO, "setuid(%u) failed", ltpuser->pw_uid);
+		tst_resm(TINFO | TERRNO, "setuid(%u) failed", ltpuser->pw_uid);
 
 	TEST_PAUSE;
 

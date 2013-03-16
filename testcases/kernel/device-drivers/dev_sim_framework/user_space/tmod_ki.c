@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
 
  * This file will include user space functions that will drive
@@ -42,39 +42,38 @@
 #include <sys/ioctl.h>
 #include "../kernel_space/tmod.h"
 
-int ki_generic(int fd, int flag) {
-        int                     rc;
-        tmod_interface_t        tif;
+int ki_generic(int fd, int flag)
+{
+	int rc;
+	tmod_interface_t tif;
 
-        /*
-         * build interface structure
-         */
-        tif.in_len = 0;
-        tif.in_data = 0;
-        tif.out_len = 0;
-        tif.out_data = 0;
-        tif.out_rc = 0;
+	/*
+	 * build interface structure
+	 */
+	tif.in_len = 0;
+	tif.in_data = 0;
+	tif.out_len = 0;
+	tif.out_data = 0;
+	tif.out_rc = 0;
 
-        /*
-         * ioctl call for flag
-         */
-        rc = ioctl(fd, flag, &tif);
-        if (rc) {
-                printf("Ioctl error\n");
-                return rc;
-        }
-        if (tif.out_rc) {
-                printf("Specific errorr: ");
-                return tif.out_rc;
-        }
+	/*
+	 * ioctl call for flag
+	 */
+	rc = ioctl(fd, flag, &tif);
+	if (rc) {
+		printf("Ioctl error\n");
+		return rc;
+	}
+	if (tif.out_rc) {
+		printf("Specific errorr: ");
+		return tif.out_rc;
+	}
 
-        return rc;
+	return rc;
 }
 
 #if 0
-An example of using in_data to pass in a structure:
-
-ki_write_t      wif;
+An example of using in_data to pass in a structure:ki_write_t wif;
 tmod_interface_t tif;
 
 //fill out wif structure
@@ -82,29 +81,27 @@ tmod_interface_t tif;
 /*
  * build interface structure
  */
-tif.in_len = sizeof (ki_write_t);
-tif.in_data = (caddr_t) &wif;
+tif.in_len = sizeof(ki_write_t);
+tif.in_data = (caddr_t) & wif;
 tif.out_len = 0;
 tif.out_data = 0;
 tif.out_rc = 0;
 
 //make ioctl call
 
-An example of using out_data to get back a structure:
-
-ki_read_t       rif;
+An example of using out_data to get back a structure:ki_read_t rif;
 tmod_interface_t tif;
 
 //fill out rif structure
 rif.len = p_test->data[0];
 rif.handle = open_handle;
-rif.data = (caddr_t)p_test->data[1];
+rif.data = (caddr_t) p_test->data[1];
 
 /*
  * build interface structure
  */
-tif.in_len = sizeof (ki_read_t);
-tif.in_data = (caddr_t) &rif;
+tif.in_len = sizeof(ki_read_t);
+tif.in_data = (caddr_t) & rif;
 tif.out_len = 0;
 tif.out_data = 0;
 tif.out_rc = 0;

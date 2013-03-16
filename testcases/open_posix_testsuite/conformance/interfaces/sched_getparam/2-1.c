@@ -32,15 +32,15 @@ int main(int argc, char **argv)
 	result1 = sched_getparam(getpid(), &param1);
 
 	if (result0 == result1 &&
-	   param0.sched_priority == param1.sched_priority &&
-	   errno == 0) {
+	    param0.sched_priority == param1.sched_priority && errno == 0) {
 		printf("Test PASSED\n");
 		return PTS_PASS;
 	} else {
-		printf("Different results between pid == 0 and pid == getpid().\n");
+		printf("Different results between pid == 0 "
+		       "and pid == getpid().\n");
 		return PTS_FAIL;
 	}
 
 	printf("This code should not be executed.\n");
-        return PTS_UNRESOLVED;
+	return PTS_UNRESOLVED;
 }

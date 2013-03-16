@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -43,8 +43,8 @@
 /********************************************************************************************/
 /******************************   Test framework   *****************************************/
 /********************************************************************************************/
-#include "testfrmw.h"
- #include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int (error code for example)
@@ -82,11 +82,11 @@ void my_init(void)
 
 	control = 1;
 
-	return ;
+	return;
 }
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret;
 
@@ -100,13 +100,11 @@ int main(int argc, char * argv[])
 	/* Call the initializer */
 	ret = pthread_once(&myctl, my_init);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "pthread_once failed");
 	}
 
-	if (control != 1)
-	{
+	if (control != 1) {
 		FAILED("The initializer function did not execute");
 	}
 

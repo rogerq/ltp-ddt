@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -22,7 +22,8 @@
  *	hugeshmget01.c
  *
  * DESCRIPTION
- *	hugeshmget01 - test that shmget() correctly creates a large shared memory segment
+ *	hugeshmget01 - test that shmget() correctly creates a large
+ *			shared memory segment
  *
  * ALGORITHM
  *	loop if that option was specified
@@ -33,7 +34,7 @@
  *	  if doing functionality testing
  *		stat the shared memory resource
  *		check the size, creator pid and mode
- *	  	if correct,
+ *		if correct,
  *			issue a PASS message
  *		otherwise
  *			issue a FAIL message
@@ -58,58 +59,52 @@
  */
 
 #include "ipcshm.h"
-#include "system_specific_hugepages_info.h"
+#include "safe_macros.h"
+#include "mem.h"
 
 char *TCID = "hugeshmget01";
 int TST_TOTAL = 1;
 
-int shm_id_1 = -1;
+static size_t shm_size;
+static int shm_id_1 = -1;
+
+static long hugepages = 128;
+static option_t options[] = {
+	{"s:", &sflag, &nr_opt},
+	{NULL, NULL, NULL}
+};
 
 int main(int ac, char **av)
 {
-	int lc;				/* loop counter */
-	char *msg;			/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	struct shmid_ds buf;
-        unsigned long huge_pages_shm_to_be_allocated;
 
-	huge_pages_shm_to_be_allocated = 0;
+	msg = parse_opts(ac, av, options, &help);
+	if (msg != NULL)
+		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
+	if (sflag)
+		hugepages = SAFE_STRTOL(NULL, nr_opt, 0, LONG_MAX);
 
-	/* parse standard options */
-	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
-		tst_brkm(TBROK, cleanup, "OPTION PARSING ERROR - %s", msg);
+	setup();
 
-	/* The following loop checks looping state if -i option given */
-        if (get_no_of_hugepages() <= 0 || hugepages_size() <= 0)
-             tst_brkm(TCONF, NULL, "Not enough available Hugepages");
-        else
-              huge_pages_shm_to_be_allocated = ( get_no_of_hugepages() * hugepages_size() * 1024) / 2 ;
-
-	setup();			/* global setup */
-
-        for (lc = 0; TEST_LOOPING(lc); lc++) {
-		/* reset Tst_count in case we are looping */
+	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		Tst_count = 0;
 
-		/*
-		 * Use TEST macro to make the call
-		 */
-
-                TEST(shmget(shmkey, huge_pages_shm_to_be_allocated, (SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW)));
-
-		if (TEST_RETURN == -1) {
-			tst_resm(TFAIL, "%s call failed - errno = %d : %s",
-				 TCID, TEST_ERRNO, strerror(TEST_ERRNO));
+		shm_id_1 = shmget(shmkey, shm_size,
+				  SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW);
+		if (shm_id_1 == -1) {
+			tst_resm(TFAIL | TERRNO, "shmget");
 		} else {
-			shm_id_1 = TEST_RETURN;
 			if (STD_FUNCTIONAL_TEST) {
 				/* do a STAT and check some info */
 				if (shmctl(shm_id_1, IPC_STAT, &buf) == -1) {
-					tst_resm(TBROK, "shmctl failed in "
-						 "functional test");
+					tst_resm(TBROK | TERRNO,
+						 "shmctl(IPC_STAT)");
 					continue;
 				}
 				/* check the seqment size */
-				if (buf.shm_segsz != huge_pages_shm_to_be_allocated) {
+				if (buf.shm_segsz != shm_size) {
 					tst_resm(TFAIL, "seqment size is not "
 						 "correct");
 					continue;
@@ -140,56 +135,41 @@ int main(int ac, char **av)
 		/*
 		 * clean up things in case we are looping
 		 */
-		if (shmctl(shm_id_1, IPC_RMID, NULL) == -1) {
-			tst_resm(TBROK, "couldn't remove shared memory");
-		} else {
+		if (shmctl(shm_id_1, IPC_RMID, NULL) == -1)
+			tst_resm(TBROK | TERRNO, "shmctl(IPC_RMID)");
+		else
 			shm_id_1 = -1;
-		}
 	}
-
 	cleanup();
-
-      tst_exit();
+	tst_exit();
 }
 
-/*
- * setup() - performs all the ONE TIME setup for this test.
- */
-void
-setup(void)
+void setup(void)
 {
+	long hpage_size;
 
+	tst_require_root(NULL);
 	tst_sig(NOFORK, DEF_HANDLER, cleanup);
-
-	TEST_PAUSE;
-
-	/*
-	 * Create a temporary directory and cd into it.
-	 * This helps to ensure that a unique msgkey is created.
-	 * See ../lib/libipc.c for more information.
-	 */
 	tst_tmpdir();
 
-	/* get an IPC resource key */
+	orig_hugepages = get_sys_tune("nr_hugepages");
+	set_sys_tune("nr_hugepages", hugepages, 1);
+	hpage_size = read_meminfo("Hugepagesize:") * 1024;
+
+	shm_size = hpage_size * hugepages / 2;
+	update_shm_size(&shm_size);
 	shmkey = getipckey();
+
+	TEST_PAUSE;
 }
 
-/*
- * cleanup() - performs all the ONE TIME cleanup for this test at completion
- * 	       or premature exit.
- */
-void
-cleanup(void)
+void cleanup(void)
 {
-	/* if it exists, remove the shared memory resource */
-	rm_shm(shm_id_1);
-
-	tst_rmdir();
-
-	/*
-	 * print timing stats if that option was specified.
-	 * print errno log if that option was specified.
-	 */
 	TEST_CLEANUP;
 
+	rm_shm(shm_id_1);
+
+	set_sys_tune("nr_hugepages", orig_hugepages, 0);
+
+	tst_rmdir();
 }

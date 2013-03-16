@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * NAME
  *      testpi-0.c
@@ -71,11 +71,12 @@ int parse_args(int c, char *v)
  */
 int main(int argc, char *argv[])
 {
-	char *pathbuf; size_t n;
+	char *pathbuf;
+	size_t n;
 
 	rt_init("h", parse_args, argc, argv);
 
-	n = confstr(_CS_GNU_LIBC_VERSION, NULL, (size_t)0);
+	n = confstr(_CS_GNU_LIBC_VERSION, NULL, (size_t) 0);
 	pathbuf = malloc(n);
 	if (!pathbuf)
 		abort();
@@ -84,7 +85,7 @@ int main(int argc, char *argv[])
 	printf("LIBC_VERSION: %s\n", pathbuf);
 	free(pathbuf);
 
-	n = confstr(_CS_GNU_LIBPTHREAD_VERSION, NULL, (size_t)0);
+	n = confstr(_CS_GNU_LIBPTHREAD_VERSION, NULL, (size_t) 0);
 	pathbuf = malloc(n);
 	if (!pathbuf)
 		abort();

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -72,15 +72,16 @@ struct test_case_t {
 	 * range pointed to by addr and len are not valid mapped pages
 	 * in the address space of the process
 	 */
-	{ &addr1, 1024, ENOMEM, setup1 }
+	{
+	&addr1, 1024, ENOMEM, setup1}
 };
 
 #if !defined(UCLINUX)
 
 int main(int ac, char **av)
 {
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -102,16 +103,17 @@ int main(int ac, char **av)
 
 			if (TEST_RETURN == -1) {
 				if (TEST_ERRNO != TC[i].error)
-					tst_brkm(TFAIL|TTERRNO, cleanup,
-					    "mlock didn't fail as expected; "
-					    "expected - %d : %s",
-					    TC[i].error, strerror(TC[i].error));
+					tst_brkm(TFAIL | TTERRNO, cleanup,
+						 "mlock didn't fail as expected; "
+						 "expected - %d : %s",
+						 TC[i].error,
+						 strerror(TC[i].error));
 				else
-					tst_resm(TPASS|TTERRNO,
-					    "mlock failed as expected");
+					tst_resm(TPASS | TTERRNO,
+						 "mlock failed as expected");
 			} else
 				tst_brkm(TFAIL, cleanup,
-				    "mlock succeeded unexpectedly");
+					 "mlock succeeded unexpectedly");
 		}
 	}
 

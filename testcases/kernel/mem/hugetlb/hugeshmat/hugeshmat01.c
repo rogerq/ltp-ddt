@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -33,7 +33,7 @@
  *	otherwise,
  *	  if doing functionality testing
  *		check for the correct conditions after the call
- *	  	if correct,
+ *		if correct,
  *			issue a PASS message
  *		otherwise
  *			issue a FAIL message
@@ -57,24 +57,24 @@
  */
 
 #include "ipcshm.h"
-#include "system_specific_hugepages_info.h"
+#include "safe_macros.h"
+#include "mem.h"
 
 char *TCID = "hugeshmat01";
 int TST_TOTAL = 3;
-unsigned long huge_pages_shm_to_be_allocated;
 
-#define CASE0		10		/* values to write into the shared */
-#define CASE1		20		/* memory location.		   */
+#define CASE0		10	/* values to write into the shared */
+#define CASE1		20	/* memory location.                */
 
-#if __WORDSIZE==64
-#define UNALIGNED      0x10000000eee
-#else
-#define UNALIGNED      0x60000eee
-#endif
+static size_t shm_size;
+static int shm_id_1 = -1;
+static void *addr;
 
-int shm_id_1 = -1;
-
-void	*addr;				/* for result of shmat-call */
+static long hugepages = 128;
+static option_t options[] = {
+	{"s:", &sflag, &nr_opt},
+	{NULL, NULL, NULL}
+};
 
 struct test_case_t {
 	int *shmid;
@@ -82,75 +82,61 @@ struct test_case_t {
 	int flags;
 } TC[] = {
 	/* a straight forward read/write attach */
-	{&shm_id_1, 0, 0},
-
-       /* an attach using non aligned memory */
-	{&shm_id_1, (void *)UNALIGNED, SHM_RND},
-
-	/* a read only attach */
-	{&shm_id_1, 0, SHM_RDONLY}
+	{
+	&shm_id_1, 0, 0},
+	    /*
+	     * an attach using non aligned memory
+	     * -1 will be replaced with an unaligned addr
+	     */
+	{
+	&shm_id_1, (void *)-1, SHM_RND},
+	    /* a read only attach */
+	{
+	&shm_id_1, 0, SHM_RDONLY}
 };
+
+static void check_functionality(int i);
 
 int main(int ac, char **av)
 {
-	int lc;				/* loop counter */
-	char *msg;			/* message returned from parse_opts */
-	int i;
-	void check_functionality(int);
+	int lc, i;
+	char *msg;
 
-	/* parse standard options */
-	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
-		tst_brkm(TBROK, cleanup, "OPTION PARSING ERROR - %s", msg);
+	msg = parse_opts(ac, av, options, &help);
+	if (msg != NULL)
+		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
+	if (sflag)
+		hugepages = SAFE_STRTOL(NULL, nr_opt, 0, LONG_MAX);
 
-        if (get_no_of_hugepages() <= 0 || hugepages_size() <= 0)
-             tst_brkm(TCONF, NULL, "Not enough available Hugepages");
-        else
-             huge_pages_shm_to_be_allocated = ( get_no_of_hugepages() * hugepages_size() * 1024) / 2 ;
-
-	setup();			/* global setup */
-
-	/* The following loop checks looping state if -i option given */
+	setup();
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
-		/* reset Tst_count in case we are looping */
 		Tst_count = 0;
 
-		/* loop through the test cases */
-		for (i=0; i<TST_TOTAL; i++) {
-
-			/*
-			 * Use TEST macro to make the call
-			 */
-			errno = 0;
-			addr = shmat(*(TC[i].shmid), (void *)(TC[i].addr),
-				   TC[i].flags);
-			TEST_ERRNO = errno;
-
+		for (i = 0; i < TST_TOTAL; i++) {
+			addr = shmat(*(TC[i].shmid), TC[i].addr, TC[i].flags);
 			if (addr == (void *)-1) {
-				tst_brkm(TFAIL, cleanup, "%s call failed - "
-					 "errno = %d : %s", TCID, TEST_ERRNO,
-					 strerror(TEST_ERRNO));
+				tst_brkm(TFAIL | TERRNO, cleanup, "shmat");
 			} else {
-				if (STD_FUNCTIONAL_TEST) {
+				if (STD_FUNCTIONAL_TEST)
 					check_functionality(i);
-				} else {
-					tst_resm(TPASS, "call succeeded");
-				}
+				else
+					tst_resm(TPASS, "shmat call succeeded");
 			}
 
 			/*
-			 * clean up things in case we are looping - in
-			 * this case, detach the shared memory
+			 * addr in TC[0] will be used to generate an unaligned
+			 * address for TC[1]
 			 */
-			if (shmdt((const void *)addr) == -1) {
-				tst_brkm(TBROK, cleanup,
-					 "Couldn't detach shared memory");
-			}
+			if (i == 0 && addr != (void *)-1)
+				TC[1].addr = (void *)(((unsigned long)addr &
+						       ~(SHMLBA - 1)) + SHMLBA -
+						      1);
+			if (shmdt(addr) == -1)
+				tst_brkm(TBROK | TERRNO, cleanup, "shmdt");
 		}
 	}
-
 	cleanup();
-
 	tst_exit();
 }
 
@@ -158,20 +144,17 @@ int main(int ac, char **av)
  * check_functionality - check various conditions to make sure they
  *			 are correct.
  */
-void
-check_functionality(int i)
+static void check_functionality(int i)
 {
 	void *orig_add;
 	int *shared;
-	int fail = 0;
 	struct shmid_ds buf;
 
 	shared = (int *)addr;
 
 	/* stat the shared memory ID */
-	if (shmctl(shm_id_1, IPC_STAT, &buf) == -1) {
-		tst_brkm(TBROK, cleanup, "couldn't stat shared memory");
-	}
+	if (shmctl(shm_id_1, IPC_STAT, &buf) == -1)
+		tst_brkm(TBROK | TERRNO, cleanup, "shmctl");
 
 	/* check the number of attaches */
 	if (buf.shm_nattch != 1) {
@@ -180,13 +163,13 @@ check_functionality(int i)
 	}
 
 	/* check the size of the segment */
-	if (buf.shm_segsz != huge_pages_shm_to_be_allocated) {
+	if (buf.shm_segsz != shm_size) {
 		tst_resm(TFAIL, "segment size is incorrect");
 		return;
 	}
 
 	/* check for specific conditions depending on the type of attach */
-	switch(i) {
+	switch (i) {
 	case 0:
 		/*
 		 * Check the functionality of the first call by simply
@@ -194,7 +177,6 @@ check_functionality(int i)
 		 * If this fails the program will get a SIGSEGV, dump
 		 * core and exit.
 		 */
-
 		*shared = CASE0;
 		break;
 	case 1:
@@ -204,13 +186,12 @@ check_functionality(int i)
 		 * that the original address given was rounded down as
 		 * specified in the man page.
 		 */
-
 		*shared = CASE1;
-		orig_add = addr + ((unsigned long)TC[i].addr%SHMLBA);
+		orig_add = addr + ((unsigned long)TC[i].addr % SHMLBA);
 		if (orig_add != TC[i].addr) {
 			tst_resm(TFAIL, "shared memory address is not "
 				 "correct");
-			fail = 1;
+			return;
 		}
 		break;
 	case 2:
@@ -219,64 +200,45 @@ check_functionality(int i)
 		 * and check that it is equal to the value set in case #2,
 		 * because shared memory is persistent.
 		 */
-
 		if (*shared != CASE1) {
 			tst_resm(TFAIL, "shared memory value isn't correct");
-			fail = 1;
+			return;
 		}
 		break;
 	}
-
-	if (!fail) {
-		tst_resm(TPASS, "conditions and functionality are correct");
-	}
+	tst_resm(TPASS, "conditions and functionality are correct");
 }
 
-/*
- * setup() - performs all the ONE TIME setup for this test.
- */
-void
-setup(void)
+void setup(void)
 {
+	long hpage_size;
 
+	tst_require_root(NULL);
 	tst_sig(NOFORK, DEF_HANDLER, cleanup);
-
-	TEST_PAUSE;
-
-	/*
-	 * Create a temporary directory and cd into it.
-	 * This helps to ensure that a unique msgkey is created.
-	 * See ../lib/libipc.c for more information.
-	 */
 	tst_tmpdir();
 
-	/* Get an IPC resouce key */
-	shmkey = getipckey();
+	orig_hugepages = get_sys_tune("nr_hugepages");
+	set_sys_tune("nr_hugepages", hugepages, 1);
+	hpage_size = read_meminfo("Hugepagesize:") * 1024;
 
-	/* create a shared memory resource with read and write permissions */
-	if ((shm_id_1 = shmget(shmkey++, huge_pages_shm_to_be_allocated, SHM_HUGETLB | SHM_RW | IPC_CREAT |
-	     IPC_EXCL)) == -1) {
-		tst_brkm(TBROK, cleanup, "Failed to create shared memory "
-			 "resource 1 in setup()");
-	}
+	shm_size = hpage_size * hugepages / 2;
+	update_shm_size(&shm_size);
+	shmkey = getipckey();
+	shm_id_1 = shmget(shmkey++, shm_size,
+			  SHM_HUGETLB | SHM_RW | IPC_CREAT | IPC_EXCL);
+	if (shm_id_1 == -1)
+		tst_brkm(TBROK | TERRNO, cleanup, "shmget");
+
+	TEST_PAUSE;
 }
 
-/*
- * cleanup() - performs all the ONE TIME cleanup for this test at completion
- * 	       or premature exit.
- */
-void
-cleanup(void)
+void cleanup(void)
 {
-	/* if it exists, remove the shared memory resource */
-	rm_shm(shm_id_1);
-
-	tst_rmdir();
-
-	/*
-	 * print timing stats if that option was specified.
-	 * print errno log if that option was specified.
-	 */
 	TEST_CLEANUP;
 
+	rm_shm(shm_id_1);
+
+	set_sys_tune("nr_hugepages", orig_hugepages, 0);
+
+	tst_rmdir();
 }

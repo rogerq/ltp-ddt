@@ -15,7 +15,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /* Porting from Crackerjack to LTP is done
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 {
 	int lc;
 	char *msg;
-	
+
 	io_context_t ctx;
 
 	memset(&ctx, 0, sizeof(ctx));
@@ -88,23 +88,23 @@ int main(int argc, char *argv[])
 		switch (TEST_RETURN) {
 		case 0:
 			tst_resm(TFAIL, "call succeeded unexpectedly");
-		break;
+			break;
 		case EXP_RET:
 			tst_resm(TPASS, "expected failure - "
 				 "returned value = %ld : %s", TEST_RETURN,
 				 strerror(-TEST_RETURN));
-		break;
+			break;
 		case -ENOSYS:
 			tst_resm(TCONF, "io_cancel returned ENOSYS");
-		break;
+			break;
 		default:
 			tst_resm(TFAIL, "unexpected returned value - %s (%i) - "
 				 "expected %s (%i)", strerror(-TEST_RETURN),
 				 (int)TEST_RETURN, strerror(-EXP_RET), EXP_RET);
-		break;
+			break;
 		}
 	}
-	
+
 	cleanup();
 	tst_exit();
 }

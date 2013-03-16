@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -112,6 +112,7 @@ static int hz;			/* HZ from sysconf */
 static struct timex tim_save;
 static struct timex buff;
 static int exp_enos[] = { EPERM, EINVAL, EFAULT, 0 };
+
 static char nobody_uid[] = "nobody";
 struct passwd *ltpuser;
 
@@ -139,10 +140,9 @@ int TST_TOTAL = sizeof(test_cases) / sizeof(test_cases[0]);
 int main(int ac, char **av)
 {
 
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -179,11 +179,12 @@ int main(int ac, char **av)
 
 			if ((TEST_RETURN == -1) && (TEST_ERRNO ==
 						    test_cases[i].exp_errno)) {
-				tst_resm(TPASS|TTERRNO,
+				tst_resm(TPASS | TTERRNO,
 					 "Test Passed, adjtimex() returned -1");
 			} else {
-				tst_resm(TFAIL|TTERRNO,
-					 "Test Failed, adjtimex() returned %ld", TEST_RETURN);
+				tst_resm(TFAIL | TTERRNO,
+					 "Test Failed, adjtimex() returned %ld",
+					 TEST_RETURN);
 			}
 			TEST_ERROR_LOG(TEST_ERRNO);
 			if (test_cases[i].cleanup) {
@@ -218,8 +219,7 @@ void setup()
 	/* set the HZ from sysconf */
 	hz = sysconf(_SC_CLK_TCK);
 	if (hz == -1) {
-		tst_brkm(TBROK, NULL,
-			 "Failed to read the HZ from sysconf\n");
+		tst_brkm(TBROK, NULL, "Failed to read the HZ from sysconf\n");
 	}
 
 	TEST_PAUSE;
@@ -280,7 +280,7 @@ int setup6()
 		tst_brkm(TBROK, NULL, "\"nobody\" user not present");
 	}
 	if (seteuid(ltpuser->pw_uid) == -1) {
-		tst_resm(TWARN|TERRNO, "seteuid(%d) failed", ltpuser->pw_uid);
+		tst_resm(TWARN | TERRNO, "seteuid(%d) failed", ltpuser->pw_uid);
 		return 1;
 	}
 	return 0;
@@ -290,7 +290,7 @@ void cleanup6()
 {
 	/* Set effective user id back to root */
 	if (seteuid(0) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup, "seteuid failed to set the"
+		tst_brkm(TBROK | TERRNO, cleanup, "seteuid failed to set the"
 			 " effective uid to root");
 	}
 }

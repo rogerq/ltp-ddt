@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**************************************************************************
@@ -84,7 +84,6 @@ char *TCID = "socketcall01";	/* Test program identifier.    */
 void setup();
 void cleanup();
 
-
 struct test_case_t {
 	int call;
 	unsigned long args[3];
@@ -105,8 +104,8 @@ int TST_TOTAL = sizeof(TC) / sizeof(TC[0]);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i;			/* s is socket descriptor */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
@@ -127,9 +126,9 @@ int main(int ac, char **av)
 
 			/* check return code */
 			if (TEST_RETURN == -1) {
-				tst_resm(TFAIL|TTERRNO, "socketcall() Failed with"
-					 " return=%ld",
-					 TEST_RETURN);
+				tst_resm(TFAIL | TTERRNO,
+					 "socketcall() Failed with"
+					 " return=%ld", TEST_RETURN);
 			} else {
 				tst_resm(TPASS, "socketcall() passed for"
 					 " :%s with return=%ld ",

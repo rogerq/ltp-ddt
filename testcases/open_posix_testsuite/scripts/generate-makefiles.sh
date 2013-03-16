@@ -44,7 +44,7 @@ generate_makefile() {
 	prereq_cache=$*
 
 	# Add all source files to $make_target_prereq_cache.
-	for prereq in $prereq_cache; do 
+	for prereq in $prereq_cache; do
 		# Stuff that needs to be tested.
 		if echo "$prereq" | grep -Eq '\.(run-test|sh)'; then
 			if [ "$tests" != "" ]; then
@@ -130,9 +130,11 @@ EOF
 
 		cat > "$makefile.3" <<EOF
 all: \$(MAKE_TARGETS)
+	@if [ -d speculative ]; then \$(MAKE) -C speculative all; fi
 
 clean:
 	rm -f \$(MAKE_TARGETS) logfile* run.sh *.core
+	@if [ -d speculative ]; then \$(MAKE) -C speculative clean; fi
 
 install: \$(INSTALL_DIR) run.sh
 	set -e; for file in \$(INSTALL_TARGETS) run.sh; do	\\
@@ -141,6 +143,7 @@ install: \$(INSTALL_DIR) run.sh
 				\$(INSTALL_DIR)/\$\$file;	\\
 		fi;						\\
 	done
+	@if [ -d speculative ]; then \$(MAKE) -C speculative install; fi
 
 test: run.sh
 	@./run.sh

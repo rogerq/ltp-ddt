@@ -25,9 +25,7 @@ int main(int argc, char **argv)
 
 	result = sched_getparam(0, &param);
 
-	if (result == 0 &&
-	   param.sched_priority != -1 &&
-	   errno == 0) {
+	if (result == 0 && param.sched_priority != -1 && errno == 0) {
 		printf("Test PASSED\n");
 		return PTS_PASS;
 	}
@@ -46,5 +44,5 @@ int main(int argc, char **argv)
 	}
 
 	printf("This code should not be executed.\n");
-        return PTS_UNRESOLVED;
+	return PTS_UNRESOLVED;
 }

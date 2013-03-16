@@ -16,7 +16,7 @@
 #                                                                               #
 #  You should have received a copy of the GNU General Public License            #
 #  along with this program;  if not, write to the Free Software                 #
-#  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA      #
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA      #
 #                                                                               #
 #################################################################################
 # Name Of File: parameters.sh                                                   #
@@ -70,6 +70,8 @@ cleanup ()
         echo "Cleanup called";
 	killall cpuctl_def_task01 1>/dev/null 2>&1;
 	killall cpuctl_def_task02 1>/dev/null 2>&1;
+	killall cpuctl_task_* 1>/dev/null 2>&1;
+	sleep 1
         rm -f cpuctl_task_* 2>/dev/null
 	for task in `cat /dev/cpuctl/group_def/tasks`; do
 		echo $task > /dev/cpuctl/tasks 2>/dev/null 1>&2;

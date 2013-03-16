@@ -59,12 +59,14 @@ char *TCID = "vma01";
 int TST_TOTAL = 1;
 
 static void check_vma(void);
-static void *get_end_addr(void *addr_s, char *mapfile);
+static void create_bighole(void);
+static void *get_end_addr(void *addr_s);
 static void check_status(int status);
 static void setup(void);
 static void cleanup(void);
 
 static unsigned long ps;
+static void *p;
 
 int main(int argc, char **argv)
 {
@@ -90,40 +92,50 @@ int main(int argc, char **argv)
 static void check_vma(void)
 {
 	int status;
-	void *t, *u, *x, *y;
+	int topdown;
+	void *t, *u, *x;
 
-	t = mmap(NULL, 3*ps, PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, 0, 0);
+	create_bighole();
+	t = mmap(p, 3 * ps, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 	if (t == MAP_FAILED)
-		tst_brkm(TBROK|TERRNO, cleanup, "mmap");
+		tst_brkm(TBROK | TERRNO, cleanup, "mmap");
 	memset(t, 1, ps);
 
 	switch (fork()) {
 	case -1:
-		tst_brkm(TBROK|TERRNO, cleanup, "fork");
+		tst_brkm(TBROK | TERRNO, cleanup, "fork");
 	case 0:
 		memset(t, 2, ps);
-		u = mmap(t + 3*ps, 3*ps, PROT_WRITE,
-			    MAP_ANONYMOUS|MAP_PRIVATE, 0, 0);
+		u = mmap(t + 3 * ps, 3 * ps, PROT_WRITE,
+			 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
 		if (u == MAP_FAILED) {
-			perror("mmap failed.\n");
+			perror("mmap");
 			exit(255);
 		}
+		topdown = (u > t) ? 0 : 1;
 		printf("parent: t = %p\n", t);
 		printf("child : u = %p\n", u);
 		memset(u, 2, ps);
 
-		x = get_end_addr(u, MAPS_FILE);
-		if (x == u + 6*ps)
-			exit(1);
-		if (x == u + 3*ps) {
-			y = get_end_addr(x, MAPS_FILE);
-			if (y == x + 3*ps)
+		if (topdown) {
+			x = get_end_addr(u);
+			printf("child : x = %p\n", x);
+			if (x == t + 3 * ps)
+				exit(1);
+			else if (x == t && get_end_addr(x) == t + 3 * ps)
+				exit(0);
+		} else {
+			x = get_end_addr(t);
+			printf("child : x = %p\n", x);
+			if (x == t + 6 * ps)
+				exit(1);
+			else if (x == u && get_end_addr(x) == t + 6 * ps)
 				exit(0);
 		}
 		exit(255);
 	default:
 		if (waitpid(-1, &status, 0) == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "waitpid");
+			tst_brkm(TBROK | TERRNO, cleanup, "waitpid");
 		if (!WIFEXITED(status))
 			tst_brkm(TBROK, cleanup, "child exited abnormally.");
 		check_status(WEXITSTATUS(status));
@@ -131,15 +143,35 @@ static void check_vma(void)
 	}
 }
 
-static void *get_end_addr(void *addr_s, char *mapfile)
+static void create_bighole(void)
+{
+	void *t;
+
+	/*
+	 * |-3*ps-|
+	 * |------|------|------| hole
+	 * t      p
+	 * |======|------|        top-down alloc
+	 *        |------|======| bottom-up alloc
+	 */
+	t = mmap(NULL, 9 * ps, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+	if (t == MAP_FAILED)
+		tst_brkm(TBROK | TERRNO, cleanup, "mmap");
+	memset(t, 'a', ps);
+	p = t + 3 * ps;
+	if (munmap(t, 9 * ps) == -1)
+		tst_brkm(TBROK | TERRNO, cleanup, "munmap");
+}
+
+static void *get_end_addr(void *addr_s)
 {
 	FILE *fp;
 	void *s, *t;
 	char buf[BUFSIZ];
 
-	fp = fopen(mapfile, "r");
+	fp = fopen(MAPS_FILE, "r");
 	if (fp == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "fopen");
+		tst_brkm(TBROK | TERRNO, cleanup, "fopen");
 	while (fgets(buf, BUFSIZ, fp) != NULL) {
 		if (sscanf(buf, "%p-%p ", &s, &t) != 2)
 			continue;

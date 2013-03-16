@@ -13,7 +13,7 @@ dnl the GNU General Public License for more details.
 dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program;  if not, write to the Free Software
-dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+dnl Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 dnl
 dnl Author: Garrett Cooper <yanegomi@gmail.com>
 dnl
@@ -26,7 +26,14 @@ AC_DEFUN([LTP_CHECK_SYSCALL_NUMA],
 [dnl
 AC_CHECK_HEADERS([linux/mempolicy.h numa.h numaif.h],[
 	LTP_SYSCALL_NUMA_HEADERS=yes
-	AC_CHECK_FUNCS(numa_alloc_onnode,numa_move_pages)
+	AC_CHECK_LIB(numa,numa_alloc_onnode,[have_numa_alloc_onnode="yes"])
+	if  test "x$have_numa_alloc_onnode" = "xyes"; then
+		AC_DEFINE(HAVE_NUMA_ALLOC_ONNODE,1,[define to 1 if you have 'numa_alloc_onnode' function])
+	fi
+	AC_CHECK_LIB(numa,numa_move_pages,[have_numa_move_pages="yes"])
+	if  test "x$have_numa_move_pages" = "xyes"; then
+		AC_DEFINE(HAVE_NUMA_MOVE_PAGES,1,[define to 1 if you have 'numa_move_pages' function])
+	fi
 ]
 	AC_CHECK_LIB(numa,numa_available,[
 NUMA_CPPFLAGS="-DNUMA_VERSION1_COMPATIBILITY"

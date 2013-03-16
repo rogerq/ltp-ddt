@@ -11,7 +11,7 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 * Author: Veerendra C <vechandr@in.ibm.com>
 *
@@ -25,14 +25,14 @@
 * In Cont1, create semaphore with key 124326L
 * In Cont2, try to access the semaphore created in Cont1.
 * PASS :
-* 		If flag = None and the semaphore is accessible in Cont2.
+*		If flag = None and the semaphore is accessible in Cont2.
 *		If flag = unshare/clone and the semaphore is not accessible in Cont2.
-* 		If semaphore is not accessible in Cont2, creates new semaphore with
+*		If semaphore is not accessible in Cont2, creates new semaphore with
 *		the same key to double check isloation in IPCNS.
 *
 * FAIL :
-* 		If flag = none and the semaphore is not accessible.
-* 		If flag = unshare/clone and semaphore is accessible in Cont2.
+*		If flag = none and the semaphore is not accessible.
+*		If flag = unshare/clone and semaphore is accessible in Cont2.
 *		If the new semaphore creation Fails.
 ***************************************************************************/
 
@@ -58,12 +58,12 @@ int p2[2];
 static struct sembuf semop_lock[2] = {
 	/* sem_num, sem_op, flag */
 	{0, 0, 0},		/* wait for sem#0 to become 0 */
-	{0, 1, SEM_UNDO}  /* then increment sem#0 by 1 */
+	{0, 1, SEM_UNDO}	/* then increment sem#0 by 1 */
 };
 
 static struct sembuf semop_unlock[1] = {
 	/* sem_num, sem_op, flag */
-	{0, -1, (IPC_NOWAIT | SEM_UNDO)}   /* decrement sem#0 by 1 (sets it to 0) */
+	{0, -1, (IPC_NOWAIT | SEM_UNDO)}	/* decrement sem#0 by 1 (sets it to 0) */
 };
 
 /*
@@ -74,14 +74,14 @@ void sem_lock(int id)
 	/* Checking the semlock and simulating as if the crit-sec is updated */
 	if (semop(id, &semop_lock[0], 2) < 0) {
 		perror("sem lock error");
-		tst_resm(TBROK, "semop failed\n");
+		tst_resm(TBROK, "semop failed");
 		tst_exit();
 	}
-	tst_resm(TINFO, "Sem1: File locked, Critical section is updated...\n");
+	tst_resm(TINFO, "Sem1: File locked, Critical section is updated...");
 	sleep(2);
 	if (semop(id, &semop_unlock[0], 1) < 0) {
 		perror("sem unlock error");
-		tst_resm(TBROK, "semop failed\n");
+		tst_resm(TBROK, "semop failed");
 		tst_exit();
 	}
 }
@@ -97,16 +97,16 @@ int check_sem1(void *vtest)
 	/* 1. Create (or fetch if existing) the binary semaphore */
 	id1 = semget(MY_KEY, 1, IPC_CREAT | IPC_EXCL | 0666);
 	if (id1 == -1) {
-		perror( "Semaphore create" );
+		perror("Semaphore create");
 		if (errno != EEXIST) {
 			perror("semget failure");
-			tst_resm(TBROK, "semget failure\n");
+			tst_resm(TBROK, "semget failure");
 			tst_exit();
 		}
 		id1 = semget(MY_KEY, 1, 0);
 		if (id1 == -1) {
-			perror( "Semaphore create" );
-			tst_resm(TBROK, "semget failure\n");
+			perror("Semaphore create");
+			tst_resm(TBROK, "semget failure");
 			tst_exit();
 		}
 	}
@@ -135,18 +135,19 @@ int check_sem2(void *vtest)
 		sem_lock(id2);
 		write(p2[1], "exists", 7);
 	} else {
-			/* Trying to create a new semaphore, if semaphore is not existing */
-			id2 = semget(MY_KEY, 1, IPC_CREAT | IPC_EXCL | 0666);
-			if (id2 == -1) {
-				perror( "Semaphore create" );
-				if (errno != EEXIST) {
-					perror("semget failure");
-					tst_resm(TBROK, "semget failure\n");
-				}
-			} else
-				tst_resm(TINFO, "Cont2: Able to create semaphore with sameKey");
-			/* Passing the pipe Not-found mesg */
-			write(p2[1], "notfnd", 7);
+		/* Trying to create a new semaphore, if semaphore is not existing */
+		id2 = semget(MY_KEY, 1, IPC_CREAT | IPC_EXCL | 0666);
+		if (id2 == -1) {
+			perror("Semaphore create");
+			if (errno != EEXIST) {
+				perror("semget failure");
+				tst_resm(TBROK, "semget failure");
+			}
+		} else
+			tst_resm(TINFO,
+				 "Cont2: Able to create semaphore with sameKey");
+		/* Passing the pipe Not-found mesg */
+		write(p2[1], "notfnd", 7);
 	}
 
 	tst_exit();
@@ -155,20 +156,26 @@ int check_sem2(void *vtest)
 
 int main(int argc, char *argv[])
 {
-	int ret, id,  use_clone = T_NONE;
+	int ret, id, use_clone = T_NONE;
 	char *tsttype = NONESTR;
 	char buf[7];
 
 	if (argc != 2) {
 		tst_resm(TINFO, "Usage: %s <clone| unshare| none>", argv[0]);
 		tst_resm(TINFO, " where clone, unshare, or fork specifies"
-				" unshare method.\n");
+			 " unshare method.");
 		tst_exit();
 	}
 
 	/* Using PIPE's to sync between container and Parent */
-	if (pipe(p1) == -1) { perror("pipe1"); tst_exit(); }
-	if (pipe(p2) == -1) { perror("pipe2"); tst_exit(); }
+	if (pipe(p1) == -1) {
+		perror("pipe1");
+		tst_exit();
+	}
+	if (pipe(p2) == -1) {
+		perror("pipe2");
+		tst_exit();
+	}
 
 	if (strcmp(argv[1], "clone") == 0) {
 		use_clone = T_CLONE;
@@ -183,13 +190,13 @@ int main(int argc, char *argv[])
 	/* Create 2 containers */
 	ret = do_clone_unshare_test(use_clone, CLONE_NEWIPC, check_sem1, NULL);
 	if (ret < 0) {
-		tst_resm(TFAIL, "clone/unshare failed\n");
+		tst_resm(TFAIL, "clone/unshare failed");
 		tst_exit();
 	}
 
 	ret = do_clone_unshare_test(use_clone, CLONE_NEWIPC, check_sem2, NULL);
 	if (ret < 0) {
-		tst_resm(TFAIL, "clone/unshare failed\n");
+		tst_resm(TFAIL, "clone/unshare failed");
 		tst_exit();
 	}
 	close(p2[1]);
@@ -197,17 +204,19 @@ int main(int argc, char *argv[])
 
 	if (strcmp(buf, "exists") == 0)
 		if (use_clone == T_NONE)
-			tst_resm(TPASS, "Plain cloned process able to access the semaphore "
-							"created\n");
+			tst_resm(TPASS,
+				 "Plain cloned process able to access the semaphore "
+				 "created");
 		else
-			tst_resm(TFAIL, "%s : In namespace2 found the semaphore "
-							"created in Namespace1\n", tsttype);
+			tst_resm(TFAIL,
+				 "%s : In namespace2 found the semaphore "
+				 "created in Namespace1", tsttype);
+	else if (use_clone == T_NONE)
+		tst_resm(TFAIL, "Plain cloned process didn't find semaphore");
 	else
-		if (use_clone == T_NONE)
-			tst_resm(TFAIL, "Plain cloned process didn't find semaphore\n");
-		else
-			tst_resm(TPASS, "%s : In namespace2 unable to access the semaphore "
-							"created in Namespace1\n", tsttype);
+		tst_resm(TPASS,
+			 "%s : In namespace2 unable to access the semaphore "
+			 "created in Namespace1", tsttype);
 
 	/* Delete the semaphore */
 	id = semget(MY_KEY, 1, 0);

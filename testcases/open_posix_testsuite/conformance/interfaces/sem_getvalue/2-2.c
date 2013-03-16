@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -45,8 +45,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -77,7 +77,7 @@
 /***************************    Test case   ***********************************/
 /******************************************************************************/
 
-void *threaded(void * arg)
+void *threaded(void *arg)
 {
 	int ret;
 
@@ -128,7 +128,8 @@ int main(int argc, char *argv[])
 
 	if ((val != 0) && (val != -1)) {
 		output("Val: %d\n", val);
-		FAILED("Semaphore count is neither 0 nor # of waiting processes");
+		FAILED
+		    ("Semaphore count is neither 0 nor # of waiting processes");
 	}
 
 	/* Post the semaphore */

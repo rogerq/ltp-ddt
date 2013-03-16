@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * NAME
  *     pthread_cond_latency.c
@@ -58,12 +58,12 @@ int parse_args(int c, char *v)
 
 	int handled = 1;
 	switch (c) {
-		case 'h':
-			usage();
-			exit(0);
-		default:
-			handled = 0;
-			break;
+	case 'h':
+		usage();
+		exit(0);
+	default:
+		handled = 0;
+		break;
 	}
 	return handled;
 }
@@ -85,10 +85,9 @@ double d_gettimeofday(void)
 	return (tv.tv_sec + ((double)tv.tv_usec) / 1000000.);
 }
 
-void *
-childfunc(void *arg)
+void *childfunc(void *arg)
 {
-	pthread_cond_t *cp = (pthread_cond_t *)arg;
+	pthread_cond_t *cp = (pthread_cond_t *) arg;
 
 	while (child_waiting == 0) {
 		pthread_mutex_lock(&child_mutex);
@@ -107,8 +106,7 @@ childfunc(void *arg)
 	pthread_exit(NULL);
 }
 
-void
-test_signal(int broadcast_flag, int iter)
+void test_signal(int broadcast_flag, int iter)
 {
 	pthread_attr_t attr;
 	pthread_t childid;
@@ -177,8 +175,8 @@ test_signal(int broadcast_flag, int iter)
 		}
 		printf("%s() latency: %d microseconds\n",
 		       (broadcast_flag
-				? "pthread_cond_broadcast"
-				: "pthread_cond_signal"),
+			? "pthread_cond_broadcast"
+			: "pthread_cond_signal"),
 		       (int)((endtime - starttime) * 1000000.));
 		pthread_mutex_unlock(&child_mutex);
 	}
@@ -191,8 +189,7 @@ test_signal(int broadcast_flag, int iter)
 	}
 }
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	struct sched_param sp;
 	long iter;

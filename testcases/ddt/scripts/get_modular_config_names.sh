@@ -89,7 +89,7 @@ do
       sound=':snd-soc-evm';; #covered in below switch case for MACHINE
 
     *musb_ti81xx)
-      usb="CONFIG_USB_MUSB_TI81XX_GLUE:ti81xx";;
+      usb="CONFIG_USB_MUSB_DSPS:musb_dsps";;
     *musb_davinci)
       usb="CONFIG_USB_MUSB_DAVINCI_GLUE:davinci";;
     *musb_da8xx)

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -69,16 +69,16 @@ int TST_TOTAL = 1;
 int MAXIDS = 2048;
 
 int exp_enos[] = { ENOSPC, 0 };	/* 0 terminated list of expected errnos */
+
 int *sem_id_arr = NULL;
 int num_sems = 0;		/* count the semaphores created */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	FILE *fp;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -131,7 +131,7 @@ int main(int ac, char **av)
 
 	cleanup();
 
-	  return (0);
+	return (0);
 }
 
 /*

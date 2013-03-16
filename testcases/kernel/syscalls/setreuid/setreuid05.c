@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -132,15 +132,13 @@ void uid_verify(struct passwd *, struct passwd *, char *);
 
 int main(int argc, char **argv)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) !=
-	    NULL) {
+	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
-	 }
+	}
 
 	setup();
 
@@ -152,7 +150,7 @@ int main(int argc, char **argv)
 
 		if ((pid = FORK_OR_VFORK()) == -1) {
 			tst_brkm(TBROK, cleanup, "fork failed");
-		 } else if (pid == 0) {	/* child */
+		} else if (pid == 0) {	/* child */
 			for (i = 0; i < TST_TOTAL; i++) {
 				/* Set the real or effective user id */
 				TEST(setreuid(*test_data[i].real_uid,
@@ -165,10 +163,10 @@ int main(int argc, char **argv)
 								 "setreuid(%d, %d) "
 								 "did not set errno "
 								 "value as expected.",
-								 *test_data[i].
-								 real_uid,
-								 *test_data[i].
-								 eff_uid);
+								 *test_data
+								 [i].real_uid,
+								 *test_data
+								 [i].eff_uid);
 							flag = -1;
 							continue;
 						}
@@ -231,17 +229,17 @@ void setup(void)
 	if (getpwnam("nobody") == NULL) {
 		tst_brkm(TBROK, NULL, "nobody must be a valid user.");
 		tst_exit();
-	 }
+	}
 
 	if (getpwnam("daemon") == NULL) {
 		tst_brkm(TBROK, NULL, "daemon must be a valid user.");
 		tst_exit();
-	 }
+	}
 
 	if (getuid() != 0) {
 		tst_resm(TBROK, "Must be run as root");
 		tst_exit();
-	 }
+	}
 
 	/* set the expected errnos... */
 	TEST_EXP_ENOS(exp_enos);
@@ -277,7 +275,7 @@ void cleanup(void)
 	 */
 	TEST_CLEANUP;
 
- }
+}
 
 void uid_verify(struct passwd *ru, struct passwd *eu, char *when)
 {

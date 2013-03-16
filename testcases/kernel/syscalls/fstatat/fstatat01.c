@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * NAME
  *      fstatat01.c
@@ -110,14 +110,14 @@ int myfstatat(int dirfd, const char *filename, struct stat *statbuf, int flags)
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i;
 
 	if ((tst_kvercmp(2, 6, 16)) < 0)
 		tst_brkm(TCONF, NULL,
-		    "This test can only run on kernels that are 2.6.16 and "
-		    "higher");
+			 "This test can only run on kernels that are 2.6.16 and "
+			 "higher");
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -136,10 +136,10 @@ int main(int ac, char **av)
 			if (TEST_ERRNO == expected_errno[i]) {
 
 				if (STD_FUNCTIONAL_TEST)
-					tst_resm(TPASS|TTERRNO,
+					tst_resm(TPASS | TTERRNO,
 						 "fstatat failed as expected");
 			} else
-				tst_resm(TFAIL|TTERRNO, "fstatat failed");
+				tst_resm(TFAIL | TTERRNO, "fstatat failed");
 		}
 
 	}

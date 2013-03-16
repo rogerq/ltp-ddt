@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -92,14 +92,15 @@ struct test_case_t {
 	dev_t *olddev;
 	ino_t *oldino;
 } TC[] = {
-	{ fname, mname, "file", &f_olddev, &f_oldino},
-	{ fdir, mdir, "directory", &d_olddev, &d_oldino}
+	{
+	fname, mname, "file", &f_olddev, &f_oldino}, {
+	fdir, mdir, "directory", &d_olddev, &d_oldino}
 };
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i;
 
 	/*
@@ -179,7 +180,7 @@ int main(int ac, char **av)
 		/* remove the new directory */
 		if (rmdir(mdir) == -1) {
 			tst_brkm(TBROK, cleanup, "Couldn't remove directory %s",
-			    mdir);
+				 mdir);
 		}
 	}
 

@@ -24,34 +24,8 @@ top_srcdir		?= ../../..
 
 include	$(top_srcdir)/include/mk/env_pre.mk
 
-# For broken compilers and toolchains, like Montavista, that improperly detect
-# system headers when running autoconf -_-... bleh.
-ifeq ($(strip $(CAP_LIBS)),)
-FILTER_OUT_DIRS		:= cap_bound filecaps securebits
-endif
-ifeq ($(strip $(SETCAP)),)
-FILTER_OUT_DIRS		+= filecaps
-endif
 ifneq ($(HAVE_SECUREBITS),yes)
 FILTER_OUT_DIRS		+= securebits
-endif
-
-# XXX (garrcoop): avoid compilation failures on RHEL 5.4, as reported by
-# Mitani-san, because of policy versioning issues...
-ifeq (1,1)
-FILTER_OUT_DIRS		+= selinux-testsuite
-else
-# Omit the selinux-testsuite if -lselinux is missing or the policy-devel
-# package isn't present.
-ifneq ($(strip $(SELINUX_LIBS)),)
-FILTER_OUT_DIRS		+= selinux-testsuite
-else
-# NOTE (garrcoop): Keep this in sync with
-# testcases/kernel/security/selinux-testsuite/refpolicy/Makefile
-ifeq ($(wildcard $(DESTDIR)/usr/share/selinux/devel),)
-FILTER_OUT_DIRS		+= selinux-testsuite
-endif
-endif
 endif
 
 OPT_CFLAGS		+= -O

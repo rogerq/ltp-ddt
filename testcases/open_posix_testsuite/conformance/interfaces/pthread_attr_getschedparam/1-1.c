@@ -28,7 +28,8 @@
 #define RRPOLICY SCHED_RR
 #define OTHERPOLICY SCHED_OTHER
 
-int verify_param(pthread_attr_t *attr, int priority) {
+int verify_param(pthread_attr_t * attr, int priority)
+{
 	int rc;
 	struct sched_param param;
 
@@ -41,15 +42,15 @@ int verify_param(pthread_attr_t *attr, int priority) {
 		printf(ERROR_PREFIX "got wrong sched param\n");
 		exit(PTS_FAIL);
 	}
-      return 0;
+	return 0;
 }
 
 int main()
 {
-	int                   rc=0;
-	pthread_attr_t        attr;
-	struct sched_param    param;
-	int                   priority;
+	int rc = 0;
+	pthread_attr_t attr;
+	struct sched_param param;
+	int priority;
 
 	rc = pthread_attr_init(&attr);
 	if (rc != 0) {
@@ -98,6 +99,6 @@ int main()
 		printf(ERROR_PREFIX "pthread_attr_destroy\n");
 		exit(PTS_UNRESOLVED);
 	}
-	printf("Test PASS\n");
+	printf("Test PASSED\n");
 	return PTS_PASS;
 }

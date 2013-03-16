@@ -1,7 +1,12 @@
-hugemmap01 hugemmap01 -H/tmp
-hugemmap02 hugemmap02 -H/tmp -c10
-hugemmap03 hugemmap03 -H/tmp -I2 -c10
-hugemmap04 hugemmap04 -H/tmp
+hugemmap01 hugemmap01
+# test is broken in design
+#hugemmap02 hugemmap02
+hugemmap03 hugemmap03 -I2
+hugemmap04 hugemmap04
+hugemmap05 hugemmap05
+hugemmap05_1 hugemmap05 -m
+hugemmap05_2 hugemmap05 -s
+hugemmap05_3 hugemmap05 -s -m
 
 hugeshmat01 hugeshmat01 -i 5
 hugeshmat02 hugeshmat02 -i 5
@@ -11,10 +16,9 @@ hugeshmctl01 hugeshmctl01 -i 5
 hugeshmctl02 hugeshmctl02 -i 5
 hugeshmctl03 hugeshmctl03 -i 5
 
-hugeshmdt01 hugeshmdt01 -I 5
+hugeshmdt01 hugeshmdt01 -i 5
 
 hugeshmget01 hugeshmget01 -i 10
 hugeshmget02 hugeshmget02 -i 10
 hugeshmget03 hugeshmget03 -i 10
 hugeshmget05 hugeshmget05 -i 10
-

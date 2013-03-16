@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /*
@@ -29,13 +29,14 @@
 #include <errno.h>
 #include "config.h"
 #if HAVE_SYS_CAPABILITY_H
+#include <linux/types.h>
 #include <sys/capability.h>
 #endif
 #include <sys/prctl.h>
 #include "test.h"
 
 char *TCID = "exec_with_inh";
-int TST_TOTAL=1;
+int TST_TOTAL = 1;
 
 int main(int argc, char *argv[])
 {
@@ -48,13 +49,16 @@ int main(int argc, char *argv[])
 	/* Make sure CAP_SYS_ADMIN is in pI */
 	cur = cap_from_text("all=eip");
 	if (!cur) {
-		tst_resm(TBROK, "Failed to create cap_sys_admin+i cap_t (errno %d)\n", errno);
+		tst_resm(TBROK,
+			 "Failed to create cap_sys_admin+i cap_t (errno %d)\n",
+			 errno);
 		tst_exit();
 	}
 	ret = cap_set_proc(cur);
 	if (ret) {
-		tst_resm(TBROK, "Failed to cap_set_proc with cap_sys_admin+i (ret %d errno %d)\n",
-			ret, errno);
+		tst_resm(TBROK,
+			 "Failed to cap_set_proc with cap_sys_admin+i (ret %d errno %d)\n",
+			 ret, errno);
 		tst_exit();
 	}
 	cap_free(cur);
@@ -69,7 +73,8 @@ int main(int argc, char *argv[])
 	/* drop the capability from bounding set */
 	ret = prctl(PR_CAPBSET_DROP, CAP_SYS_ADMIN);
 	if (ret) {
-		tst_resm(TFAIL, "Failed to drop CAP_SYS_ADMIN from bounding set.\n");
+		tst_resm(TFAIL,
+			 "Failed to drop CAP_SYS_ADMIN from bounding set.\n");
 		tst_resm(TINFO, "(ret=%d, errno %d)\n", ret, errno);
 		tst_exit();
 	}

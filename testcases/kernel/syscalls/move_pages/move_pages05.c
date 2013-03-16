@@ -18,7 +18,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -108,9 +108,8 @@ void child(void **pages, sem_t * sem)
 
 int main(int argc, char **argv)
 {
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
-	/* parse standard options */
 	msg = parse_opts(argc, argv, NULL, NULL);
 	if (msg != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -122,16 +121,20 @@ int main(int argc, char **argv)
 
 #if HAVE_NUMA_MOVE_PAGES
 	unsigned int i;
-	int lc;			/* loop counter */
-	unsigned int from_node = 0;
-	unsigned int to_node = 1;
+	int lc;
+	unsigned int from_node;
+	unsigned int to_node;
+	int ret;
+
+	ret = get_allowed_nodes(NH_MEMS, 2, &from_node, &to_node);
+	if (ret < 0)
+		tst_brkm(TBROK | TERRNO, cleanup, "get_allowed_nodes: %d", ret);
 
 	/* check for looping state if -i option is given */
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		void *pages[N_TEST_PAGES] = { 0 };
 		int nodes[N_TEST_PAGES];
 		int status[N_TEST_PAGES];
-		int ret;
 		pid_t cpid;
 		sem_t *sem;
 
@@ -177,7 +180,8 @@ int main(int argc, char **argv)
 				      status, MPOL_MF_MOVE);
 		TEST_ERRNO = errno;
 		if (ret == -1) {
-			tst_resm(TFAIL | TERRNO, "move_pages unexpectedly failed");
+			tst_resm(TFAIL | TERRNO,
+				 "move_pages unexpectedly failed");
 			goto err_kill_child;
 		}
 
@@ -188,17 +192,17 @@ int main(int argc, char **argv)
 			tst_resm(TFAIL, "status[%d] is %d",
 				 SHARED_PAGE, status[SHARED_PAGE]);
 
-	      err_kill_child:
+err_kill_child:
 		/* Test done. Ask child to terminate. */
 		if (sem_post(&sem[SEM_PARENT_TEST]) == -1)
 			tst_resm(TWARN | TERRNO, "error post semaphore");
 		/* Read the status, no zombies! */
 		wait(NULL);
-	      err_free_sem:
+err_free_sem:
 		free_sem(sem, MAX_SEMS);
-	      err_free_unshared:
+err_free_unshared:
 		free_pages(pages + UNSHARED_PAGE, N_UNSHARED_PAGES);
-	      err_free_shared:
+err_free_shared:
 		free_shared_pages(pages + SHARED_PAGE, N_SHARED_PAGES);
 	}
 #else
@@ -237,4 +241,4 @@ void cleanup(void)
 	 */
 	TEST_CLEANUP;
 
- }
+}

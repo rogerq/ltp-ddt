@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -99,8 +99,8 @@ int exp_enos[] = { EACCES, 0 };	/* List must end with 0 */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int rval;
 	pid_t pid, pid1;
 	int status;
@@ -134,7 +134,7 @@ int main(int ac, char **av)
 
 		if ((pid = FORK_OR_VFORK()) < 0) {
 			tst_brkm(TBROK, cleanup, "fork #1 failed");
-		 }
+		}
 
 		if (pid == 0) {	/* first child */
 			/* set to ltpuser1 */
@@ -146,13 +146,13 @@ int main(int ac, char **av)
 					 ltpuser1->pw_uid, ltpuser1->pw_uid);
 				perror("setreuid");
 				exit(1);
-			 }
+			}
 			/* create the parent directory with 0700 permits */
 			if (mkdir(tstdir1, PERMS) == -1) {
 				tst_resm(TFAIL, "mkdir(%s, %#o) Failed",
 					 tstdir1, PERMS);
 				exit(1);
-			 }
+			}
 			/* create tstdir1 succeeded */
 			exit(0);
 		}
@@ -168,7 +168,7 @@ int main(int ac, char **av)
 
 		if ((pid1 = FORK_OR_VFORK()) < 0) {
 			tst_brkm(TBROK, cleanup, "fork #2 failed");
-		 }
+		}
 
 		if (pid1 == 0) {	/* second child */
 			/* set to ltpuser2 */
@@ -180,17 +180,17 @@ int main(int ac, char **av)
 					 ltpuser2->pw_uid, ltpuser2->pw_uid);
 				perror("setreuid");
 				exit(1);
-			 }
+			}
 			if (mkdir(tstdir2, PERMS) != -1) {
 				tst_resm(TFAIL, "mkdir(%s, %#o) unexpected "
 					 "succeeded", tstdir2, PERMS);
 				exit(1);
-			 }
+			}
 			if (errno != EACCES) {
 				tst_resm(TFAIL, "Expected EACCES got %d",
 					 errno);
 				exit(1);
-			 }
+			}
 			/* PASS */
 			exit(0);
 		}
@@ -222,7 +222,7 @@ void setup()
 	/* must run as root */
 	if (geteuid() != 0) {
 		tst_brkm(TBROK, NULL, "Must run this as root");
-	 }
+	}
 
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 

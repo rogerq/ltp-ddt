@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -78,7 +78,6 @@
 #include "test.h"
 #include "usctest.h"
 
-
 #define EXP_RET_VAL	-1
 #define SPL_FILE	"/dev/null"
 
@@ -91,6 +90,7 @@ struct test_case_t {		/* test case structure */
 
 char *TCID = "fdatasync02";
 static int exp_enos[] = { EBADF, EINVAL, 0 };
+
 static int testno;
 static int fd;
 
@@ -109,12 +109,10 @@ int TST_TOTAL = sizeof(tdat) / sizeof(tdat[0]);
 
 int main(int argc, char **argv)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) !=
-	    NULL) {
+	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
 
@@ -211,4 +209,4 @@ void cleanup(void)
 	 */
 	TEST_CLEANUP;
 
- }
+}

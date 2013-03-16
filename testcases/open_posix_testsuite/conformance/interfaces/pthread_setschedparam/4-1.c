@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -46,8 +46,8 @@
 /******************************************************************************/
 /***********************   Test framework   ***********************************/
 /******************************************************************************/
-#include "testfrmw.h"
- #include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -89,32 +89,28 @@ void check_param(pthread_t thread, int policy, int priority)
 
 	/* Check the priority is valid */
 
-	if (priority == -1)
-	{
+	if (priority == -1) {
 		UNRESOLVED(errno, "Wrong priority value");
 	}
 
 	/* Get the thread's parameters */
 	ret = pthread_getschedparam(thread, &t_pol, &t_parm);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to get thread's parameters");
 	}
 
-	if (t_pol != policy)
-	{
+	if (t_pol != policy) {
 		FAILED("The thread's policy is not as expected");
 	}
 
-	if (t_parm.sched_priority != priority)
-	{
+	if (t_parm.sched_priority != priority) {
 		FAILED("The thread's priority is not as expected");
 	}
 }
 
 /* thread function */
-void * threaded (void * arg)
+void *threaded(void *arg)
 {
 	int ret = 0;
 
@@ -125,13 +121,13 @@ void * threaded (void * arg)
 
 	ret = pthread_setschedparam(pthread_self(), SCHED_RR, &sp);
 
-	if (ret != 0)
-	{
-		UNRESOLVED(ret, "Failed to set thread policy -- need to be root?");
+	if (ret != 0) {
+		UNRESOLVED(ret,
+			   "Failed to set thread policy -- need to be root?");
 	}
 
 	/* check the thread attributes have been applied
-	  (we only check what is reported, not the real behavior)
+	   (we only check what is reported, not the real behavior)
 	 */
 	check_param(pthread_self(), SCHED_RR, sp.sched_priority);
 
@@ -140,19 +136,16 @@ void * threaded (void * arg)
 
 	ret = pthread_setschedparam(pthread_self(), SCHED_RR, &sp);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		/* check the thread attributes have been applied
-		  (we only check what is reported, not the real behavior)
+		   (we only check what is reported, not the real behavior)
 		 */
 		check_param(pthread_self(), SCHED_RR, sp.sched_priority - 1);
 #if VERBOSE > 0
-		output("Setting to a wrong priority failed with error %d (%s).\n",
-		        ret,
-		        strerror(ret));
-	}
-	else
-	{
+		output
+		    ("Setting to a wrong priority failed with error %d (%s).\n",
+		     ret, strerror(ret));
+	} else {
 		output("UNTESTED: setting to max prio + 1 did not fail.\n");
 #endif
 
@@ -173,18 +166,15 @@ int main(int argc, char *argv[])
 	/* Create the controler thread */
 	ret = pthread_create(&child, NULL, threaded, NULL);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "thread creation failed");
 	}
 
 	ret = pthread_join(child, NULL);
 
-	if (ret != 0)
-	{
+	if (ret != 0) {
 		UNRESOLVED(ret, "Failed to join the thread");
 	}
-
 #if VERBOSE > 0
 	output("Test PASSED.\n");
 

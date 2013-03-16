@@ -15,7 +15,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -82,8 +82,8 @@ extern struct passwd *my_getpwnam(char *);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	pid_t pid;
 	int status;
@@ -126,7 +126,7 @@ int main(int ac, char **av)
 				exit(1);
 			} else if (TEST_ERRNO != EACCES) {
 				printf("Expected %d - got %d\n",
-				    EACCES, TEST_ERRNO);
+				       EACCES, TEST_ERRNO);
 				exit(1);
 			} else
 				printf("Got EACCES as expected\n");
@@ -137,11 +137,12 @@ int main(int ac, char **av)
 
 		} else {
 			if (wait(&status) == -1)
-				tst_brkm(TBROK|TERRNO, cleanup, "wait failed");
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "wait failed");
 			else if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 				tst_brkm(TBROK, cleanup,
-				    "child exited abnormally (wait status = "
-				    "%d", status);
+					 "child exited abnormally (wait status = "
+					 "%d", status);
 			else {
 				/* let the child carry on */
 				exit(0);
@@ -170,7 +171,7 @@ void setup()
 	tst_tmpdir();
 
 	if ((cur_dir = getcwd(cur_dir, 0)) == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "getcwd failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "getcwd failed");
 
 	sprintf(good_dir, "%s.%d", cur_dir, getpid());
 

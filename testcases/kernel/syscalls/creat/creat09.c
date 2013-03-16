@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -157,9 +157,11 @@ int main(int ac, char **av)
 
 		/* close and remove file, possibly for next loop */
 		if (close(TEST_RETURN) == -1) {
-			tst_brkm(TBROK|TERRNO, cleanup, "closing %s failed", fname);
+			tst_brkm(TBROK | TERRNO, cleanup, "closing %s failed",
+				 fname);
 		} else if (unlink(fname) == -1) {
-			tst_brkm(TBROK|TERRNO, cleanup, "unlinking %s failed", fname);
+			tst_brkm(TBROK | TERRNO, cleanup, "unlinking %s failed",
+				 fname);
 		}
 
 	}

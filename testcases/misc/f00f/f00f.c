@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -42,48 +42,43 @@
 #include "test.h"
 #include "usctest.h"
 
-char *TCID="f00f";
-int TST_TOTAL=1;
+char *TCID = "f00f";
+int TST_TOTAL = 1;
 
 #ifdef __i386__
 
-void
-sigill (int sig)
+void sigill(int sig)
 {
-  tst_resm(TPASS, "SIGILL received from f00f instruction.  Good.");
-  tst_exit();
+	tst_resm(TPASS, "SIGILL received from f00f instruction.  Good.");
+	tst_exit();
 }
 
-int
-main ()
+int main()
 {
-  signal (SIGILL, sigill);
-  tst_resm(TINFO, "Testing for proper f00f instruction handling.");
+	signal(SIGILL, sigill);
+	tst_resm(TINFO, "Testing for proper f00f instruction handling.");
 
-  /*
-   * an f00f instruction
-   */
-  asm volatile (".byte	0xf0\n"
-		".byte	0x0f\n"
-		".byte	0xc7\n"
-		".byte	0xc8\n");
+	/*
+	 * an f00f instruction
+	 */
+	asm volatile (".byte	0xf0\n"
+		      ".byte	0x0f\n" ".byte	0xc7\n" ".byte	0xc8\n");
 
-  /*
-   * we shouldn't get here, the f00f instruction should trigger
-   * a SIGILL or lock the system.
-   */
-  tst_resm(TFAIL, "f00f instruction did not properly cause SIGILL");
-  tst_exit();
+	/*
+	 * we shouldn't get here, the f00f instruction should trigger
+	 * a SIGILL or lock the system.
+	 */
+	tst_resm(TFAIL, "f00f instruction did not properly cause SIGILL");
+	tst_exit();
 }
 
 #else /* __i386__ */
 
-int
-main ()
+int main()
 {
-  tst_resm(TCONF, "f00f bug test only for i386");
-  tst_exit();
-        return 0;
+	tst_resm(TCONF, "f00f bug test only for i386");
+	tst_exit();
+	return 0;
 }
 
 #endif /* __i386__ */

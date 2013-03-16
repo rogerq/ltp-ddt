@@ -40,20 +40,18 @@ int main()
 #define BUF_SIZE 111
 	unsigned char check[BUF_SIZE];
 	int fd;
+	int ret;
 	struct aiocb aiocb;
 
 	if (sysconf(_SC_ASYNCHRONOUS_IO) < 200112L)
 		return PTS_UNSUPPORTED;
 
 	snprintf(tmpfname, sizeof(tmpfname), "/tmp/pts_aio_read_7_1_%d",
-		  getpid());
+		 getpid());
 	unlink(tmpfname);
-	fd = open(tmpfname, O_CREAT | O_RDWR | O_EXCL,
-		  S_IRUSR | S_IWUSR);
-	if (fd == -1)
-	{
-		printf(TNAME " Error at open(): %s\n",
-		       strerror(errno));
+	fd = open(tmpfname, O_CREAT | O_RDWR | O_EXCL, S_IRUSR | S_IWUSR);
+	if (fd == -1) {
+		printf(TNAME " Error at open(): %s\n", strerror(errno));
 		exit(PTS_UNRESOLVED);
 	}
 
@@ -65,14 +63,17 @@ int main()
 	aiocb.aio_buf = check;
 	aiocb.aio_nbytes = BUF_SIZE;
 
-	if (aio_read(&aiocb) == -1)
-	{
-		printf(TNAME " Error at aio_read(): %s\n",
-		       strerror(errno));
+	if (aio_read(&aiocb) == -1) {
+		printf(TNAME " Error at aio_read(): %s\n", strerror(errno));
 		exit(PTS_FAIL);
 	}
 
+	do {
+		usleep(10000);
+		ret = aio_error(&aiocb);
+	} while (ret == EINPROGRESS);
+
 	close(fd);
-	printf ("Test PASSED\n");
+	printf("Test PASSED\n");
 	return PTS_PASS;
 }

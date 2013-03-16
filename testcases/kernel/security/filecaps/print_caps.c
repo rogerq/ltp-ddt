@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /*
@@ -33,6 +33,7 @@
 #include "config.h"
 
 #if HAVE_SYS_CAPABILITY_H
+#include <linux/types.h>
 #include <sys/capability.h>
 #endif
 
@@ -46,7 +47,7 @@ int main(int argc, char *argv[])
 	int seqno = 0;
 	char buf[2000];
 
-	if (argc>1)
+	if (argc > 1)
 		seqno = atoi(argv[1]);
 
 	if (!cap) {
@@ -61,7 +62,7 @@ int main(int argc, char *argv[])
 	}
 
 	snprintf(buf, 2000, "%d.%s", seqno, cap_to_text(cap, NULL));
-	write(fd, buf, strlen(buf)+1);
+	write(fd, buf, strlen(buf) + 1);
 	close(fd);
 
 	cap_free(cap);

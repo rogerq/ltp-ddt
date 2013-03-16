@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**********************************************************
@@ -107,12 +107,11 @@ int TST_TOTAL = sizeof(test_cases) / sizeof(test_cases[0]);
 int main(int ac, char **av)
 {
 
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 	pid_t child_pid;
 	int status;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -137,11 +136,12 @@ int main(int ac, char **av)
 				TEST(prctl(test_cases[i].option,
 					   test_cases[i].arg2));
 				if ((TEST_RETURN == -1) && (TEST_ERRNO ==
-							    test_cases[i].
-							    exp_errno)) {
+							    test_cases
+							    [i].exp_errno)) {
 					exit(TEST_ERRNO);
 				} else {
-					tst_resm(TWARN|TTERRNO, "prctl() returned %ld",
+					tst_resm(TWARN | TTERRNO,
+						 "prctl() returned %ld",
 						 TEST_RETURN);
 					exit(TEST_ERRNO);
 				}
@@ -154,8 +154,9 @@ int main(int ac, char **av)
 				}
 
 				if ((WIFEXITED(status)) && (WEXITSTATUS(status)
-							    == test_cases[i].
-							    exp_errno)) {
+							    ==
+							    test_cases
+							    [i].exp_errno)) {
 					tst_resm(TPASS, "Test Passed");
 				} else {
 					tst_resm(TFAIL, "Test Failed");

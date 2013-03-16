@@ -11,8 +11,8 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 *
 * You should have received a copy of the GNU General Public License along
-* with this program; if not, write the Free Software Foundation, Inc., 59
-* Temple Place - Suite 330, Boston MA 02111-1307, USA.
+* with this program; if not, write the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 * This sample test aims to check the following assertion:
 *
@@ -53,8 +53,8 @@
 /******************************************************************************/
 /***************************   Test framework   *******************************/
 /******************************************************************************/
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 /* This header is responsible for defining the following macros:
  * UNRESOLVED(ret, descr);
  *    where descr is a description of the error and ret is an int
@@ -88,12 +88,12 @@
 /******************************************************************************/
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret, error;
-	sem_t * sem;
+	sem_t *sem;
 	long PATH_MAX, NAME_MAX;
-	char * sem_name;
+	char *sem_name;
 
 	/* Initialize output */
 	output_init();
@@ -105,47 +105,45 @@ int main(int argc, char * argv[])
 	output("PATH_MAX: %ld\n", PATH_MAX);
 #endif
 
-	if (PATH_MAX > 0)
-	{
+	if (PATH_MAX > 0) {
 		/* create a semaphore with a name longer than PATH_MAX */
 		sem_name = calloc(PATH_MAX + 1, sizeof(char));
 
-		if (sem_name == NULL)
-		{
-			UNRESOLVED(errno, "Failed to allocate space for the semaphore name");
+		if (sem_name == NULL) {
+			UNRESOLVED(errno,
+				   "Failed to allocate space for the semaphore name");
 		}
 
 		/* the space was allocated */
-		sem_name[ 0 ] = '/';
+		sem_name[0] = '/';
 
-		sem_name[ PATH_MAX ] = '\0';
+		sem_name[PATH_MAX] = '\0';
 
-		memset(sem_name + 1, 'P', PATH_MAX -1);
+		memset(sem_name + 1, 'P', PATH_MAX - 1);
 
 		/* Create the semaphore */
 		sem = sem_open(sem_name, O_CREAT, 0777, 1);
 
-		if (sem != SEM_FAILED)
-		{
+		if (sem != SEM_FAILED) {
 			ret = sem_unlink(sem_name);
 			error = errno;
 			free(sem_name);
 
-			if (ret == 0)
-			{
-				FAILED("The function did not return ENAMETOOLONG as expected");
-			}
-			else
-			{
-				output("Error was %d: %s\n", error, strerror(error));
-				FAILED("Unable to unlink a semaphore which we just created");
+			if (ret == 0) {
+				FAILED
+				    ("The function did not return ENAMETOOLONG as expected");
+			} else {
+				output("Error was %d: %s\n", error,
+				       strerror(error));
+				FAILED
+				    ("Unable to unlink a semaphore which we just created");
 			}
 		}
-
 #if VERBOSE > 0
-		else
-		{
-			output("Creation of the semaphore failed with error %d: %s\n", errno, strerror(errno));
+		else {
+			output
+			    ("Creation of the semaphore failed with error %d: %s\n",
+			     errno, strerror(errno));
 		}
 
 #endif
@@ -160,47 +158,45 @@ int main(int argc, char * argv[])
 
 #endif
 
-	if (NAME_MAX > 0)
-	{
+	if (NAME_MAX > 0) {
 		/* create a semaphore with a name longer than NAME_MAX */
 		sem_name = calloc(NAME_MAX + 2, sizeof(char));
 
-		if (sem_name == NULL)
-		{
-			UNRESOLVED(errno, "Failed to allocate space for the semaphore name");
+		if (sem_name == NULL) {
+			UNRESOLVED(errno,
+				   "Failed to allocate space for the semaphore name");
 		}
 
 		/* the space was allocated */
-		sem_name[ 0 ] = '/';
+		sem_name[0] = '/';
 
-		sem_name[ NAME_MAX + 1 ] = '\0';
+		sem_name[NAME_MAX + 1] = '\0';
 
 		memset(sem_name + 1, 'N', NAME_MAX);
 
 		/* Create the semaphore */
-		sem = sem_open(sem_name, O_CREAT , 0777, 1);
+		sem = sem_open(sem_name, O_CREAT, 0777, 1);
 
-		if (sem != SEM_FAILED)
-		{
+		if (sem != SEM_FAILED) {
 			ret = sem_unlink(sem_name);
 			error = errno;
 			free(sem_name);
 
-			if (ret == 0)
-			{
-				FAILED("The function did not return ENAMETOOLONG as expected");
-			}
-			else
-			{
-				output("Error was %d: %s\n", error, strerror(error));
-				FAILED("Unable to unlink a semaphore which we just created");
+			if (ret == 0) {
+				FAILED
+				    ("The function did not return ENAMETOOLONG as expected");
+			} else {
+				output("Error was %d: %s\n", error,
+				       strerror(error));
+				FAILED
+				    ("Unable to unlink a semaphore which we just created");
 			}
 		}
-
 #if VERBOSE > 0
-		else
-		{
-			output("Creation of the semaphore failed with error %d: %s\n", errno, strerror(errno));
+		else {
+			output
+			    ("Creation of the semaphore failed with error %d: %s\n",
+			     errno, strerror(errno));
 		}
 
 #endif

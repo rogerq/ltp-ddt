@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**************************************************************************
@@ -94,8 +94,8 @@ struct test_case_t {
 
 int main(int ac, char **av)
 {
-	int lc, i;		/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -119,9 +119,9 @@ int main(int ac, char **av)
 			/* check return code */
 			if (TEST_RETURN == -1) {
 				TEST_ERROR_LOG(TEST_ERRNO);
-				tst_resm(TFAIL|TTERRNO, "mlock(%p, %d) Failed with "
-					 "return=%ld",
-					 TC[i].addr, TC[i].len,
+				tst_resm(TFAIL | TTERRNO,
+					 "mlock(%p, %d) Failed with "
+					 "return=%ld", TC[i].addr, TC[i].len,
 					 TEST_RETURN);
 			} else {
 				tst_resm(TPASS, "test %d passed length = %d",
@@ -146,8 +146,9 @@ void setup1(int i)
 	/* check return code */
 	if (TEST_RETURN == -1) {
 		TEST_ERROR_LOG(TEST_ERRNO);
-		tst_brkm(TFAIL|TTERRNO, cleanup, "mlock(%p, %d) Failed with return=%ld",
-			 TC[i].addr, TC[i].len, TEST_RETURN);
+		tst_brkm(TFAIL | TTERRNO, cleanup,
+			 "mlock(%p, %d) Failed with return=%ld", TC[i].addr,
+			 TC[i].len, TEST_RETURN);
 	}
 }
 

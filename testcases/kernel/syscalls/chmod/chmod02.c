@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -131,8 +131,8 @@ int Modes[] = { 0, 07, 070, 0700, 0777, 02777, 04777, 06777 };
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int ind;
 	int mode;
 
@@ -153,9 +153,8 @@ int main(int ac, char **av)
 			TEST(chmod(fname, mode));
 
 			if (TEST_RETURN == -1) {
-				tst_resm(TFAIL|TTERRNO,
-					 "chmod(%s, %#o) failed",
-					 fname, mode);
+				tst_resm(TFAIL | TTERRNO,
+					 "chmod(%s, %#o) failed", fname, mode);
 			} else {
 
 				if (STD_FUNCTIONAL_TEST) {
@@ -186,17 +185,13 @@ void setup()
 
 	strcat(fname, "tfile");
 	if ((fd = open(fname, O_RDWR | O_CREAT, 0700)) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup,
-			 "open(%s, O_RDWR|O_CREAT,0700) failed",
-			 fname);
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "open(%s, O_RDWR|O_CREAT,0700) failed", fname);
 	} else if (write(fd, &buf, strlen(buf)) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup,
-			 "write(%s, &buf, strlen(buf)) failed",
-			 fname);
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "write(%s, &buf, strlen(buf)) failed", fname);
 	} else if (close(fd) == -1) {
-		tst_brkm(TBROK|TERRNO, cleanup,
-			 "close(%s) failed",
-			 fname);
+		tst_brkm(TBROK | TERRNO, cleanup, "close(%s) failed", fname);
 	}
 }
 

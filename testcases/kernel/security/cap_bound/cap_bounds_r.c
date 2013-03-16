@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /*
@@ -27,21 +27,22 @@
 #include <errno.h>
 #include "config.h"
 #if HAVE_SYS_CAPABILITY_H
+#include <linux/types.h>
 #include <sys/capability.h>
 #endif
 #include <sys/prctl.h>
 #include "test.h"
 
 char *TCID = "cap_bounds_r";
-int TST_TOTAL=1;
+int TST_TOTAL = 1;
 
 int main(int argc, char *argv[])
 {
-#if HAVE_SYS_CAPABILITY_H
+#ifdef HAVE_LIBCAP
 	int ret = 1;
 	int i;
 
-	for (i=0; i<=CAP_LAST_CAP; i++) {
+	for (i = 0; i <= CAP_LAST_CAP; i++) {
 #if HAVE_DECL_PR_CAPBSET_READ
 		ret = prctl(PR_CAPBSET_READ, i);
 #else
@@ -49,7 +50,9 @@ int main(int argc, char *argv[])
 		ret = -1;
 #endif
 		if (ret != 1) {
-			tst_resm(TFAIL, "prctl(PR_CAPBSET_READ, %d) returned %d\n", i, ret);
+			tst_resm(TFAIL,
+				 "prctl(PR_CAPBSET_READ, %d) returned %d\n", i,
+				 ret);
 			if (ret == -1)
 				tst_resm(TINFO, "errno was %d\n", errno);
 			tst_exit();
@@ -62,7 +65,8 @@ int main(int argc, char *argv[])
 	ret = -1;
 #endif
 	if (ret != -1) {
-		tst_resm(TFAIL, "prctl(PR_CAPBSET_READ, -1) returned %d\n", ret);
+		tst_resm(TFAIL, "prctl(PR_CAPBSET_READ, -1) returned %d\n",
+			 ret);
 		tst_exit();
 	}
 
@@ -73,14 +77,16 @@ int main(int argc, char *argv[])
 #define INSANE 63
 #define max(x,y) (x > y ? x : y)
 #if HAVE_DECL_PR_CAPBSET_READ
-	ret = prctl(PR_CAPBSET_READ, max(INSANE,CAP_LAST_CAP+1));
+	ret = prctl(PR_CAPBSET_READ, max(INSANE, CAP_LAST_CAP + 1));
 #else
 	errno = ENOSYS;
 	ret = -1;
 #endif
 	if (ret != -1) {
-		tst_resm(TFAIL, "prctl(PR_CAPBSET_READ, %d) returned %d\n", CAP_LAST_CAP+1, ret);
-		tst_resm(TINFO, " %d is CAP_LAST_CAP+1 and should not exist\n", CAP_LAST_CAP+1);
+		tst_resm(TFAIL, "prctl(PR_CAPBSET_READ, %d) returned %d\n",
+			 CAP_LAST_CAP + 1, ret);
+		tst_resm(TINFO, " %d is CAP_LAST_CAP+1 and should not exist\n",
+			 CAP_LAST_CAP + 1);
 		tst_exit();
 	}
 	tst_resm(TPASS, "PR_CAPBSET_READ tests passed\n");

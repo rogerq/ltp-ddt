@@ -16,7 +16,7 @@ INSTALL_MODE            := 00755
 
 CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
 LDFLAGS         += -g -static
-KERNEL_INCLUDES        = -I $(KERNEL_INC) -I $(KERNEL_USR_INC) 
+KERNEL_INCLUDES        = -I $(KERNEL_USR_INC) -I $(KERNEL_INC)  
 
 ifeq ("$(PLATFORM)", "omap3evm")
   CFLAGS += -DCONFIG_OMAP3530

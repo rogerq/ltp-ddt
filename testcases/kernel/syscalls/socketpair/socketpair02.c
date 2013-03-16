@@ -15,7 +15,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /******************************************************************************/
@@ -58,7 +58,7 @@
 #include "usctest.h"
 
 #ifndef SOCK_NONBLOCK
-# define SOCK_NONBLOCK O_NONBLOCK
+#define SOCK_NONBLOCK O_NONBLOCK
 #endif
 
 int TST_TOTAL = 2;
@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
 
 	if ((tst_kvercmp(2, 6, 27)) < 0) {
 		tst_brkm(TCONF, NULL,
-		    "This test can only run on kernels that are 2.6.27 and higher");
+			 "This test can only run on kernels that are 2.6.27 and higher");
 	}
 	setup();
 
@@ -136,8 +136,8 @@ int main(int argc, char *argv[])
 		}
 		if (fl & O_NONBLOCK) {
 			tst_brkm(TFAIL, cleanup,
-			    "socketpair(0) set non-blocking mode for fds[%d]",
-			    i);
+				 "socketpair(0) set non-blocking mode for fds[%d]",
+				 i);
 		}
 		close(fds[i]);
 	}
@@ -152,8 +152,8 @@ int main(int argc, char *argv[])
 		}
 		if ((fl & O_NONBLOCK) == 0) {
 			tst_brkm(TFAIL, cleanup,
-			    "socketpair(SOCK_NONBLOCK) didn't set non-blocking "
-			    "mode for fds[%d]", i);
+				 "socketpair(SOCK_NONBLOCK) didn't set non-blocking "
+				 "mode for fds[%d]", i);
 		}
 		close(fds[i]);
 	}

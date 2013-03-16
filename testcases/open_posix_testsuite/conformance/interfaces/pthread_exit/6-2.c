@@ -11,8 +11,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
  * This sample test aims to check the following assertion:
  *
@@ -26,33 +26,33 @@
  */
 
  /* We are testing conformance to IEEE Std 1003.1, 2003 Edition */
- #define _POSIX_C_SOURCE 200112L
+#define _POSIX_C_SOURCE 200112L
 
  /* Some routines are part of the XSI Extensions */
 #ifndef WITHOUT_XOPEN
- #define _XOPEN_SOURCE	600
+#define _XOPEN_SOURCE	600
 #endif
 
 /********************************************************************************************/
 /****************************** standard includes *****************************************/
 /********************************************************************************************/
- #include <pthread.h>
- #include <stdarg.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <unistd.h>
+#include <pthread.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
- #include <sched.h>
- #include <semaphore.h>
- #include <errno.h>
- #include <assert.h>
+#include <sched.h>
+#include <semaphore.h>
+#include <errno.h>
+#include <assert.h>
 
  /********************************************************************************************/
 /******************************   Test framework   *****************************************/
 /********************************************************************************************/
- #include "testfrmw.h"
- #include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
  /* This header is responsible for defining the following macros:
   * UNRESOLVED(ret, descr);
   *    where descr is a description of the error and ret is an int (error code for example)
@@ -84,7 +84,7 @@
 
 /* main is defined in the next file */
 #define STD_MAIN
-#include "threads_scenarii.c"
+#include "../testfrmw/threads_scenarii.c"
 
 /* This file will define the following objects:
  * scenarii: array of struct __scenario type.
@@ -98,14 +98,18 @@
 /********************************************************************************************/
 
 /* Thread routine */
-void * threaded (void * arg)
+void *threaded(void *arg)
 {
 	int ret = 0;
 
 	/* Signal we're done (especially in case of a detached thread) */
-	do { ret = sem_post(&scenarii[sc].sem); }
+	do {
+		ret = sem_post(&scenarii[sc].sem);
+	}
 	while ((ret == -1) && (errno == EINTR));
-	if (ret == -1)  {  UNRESOLVED(errno, "Failed to wait for the semaphore");  }
+	if (ret == -1) {
+		UNRESOLVED(errno, "Failed to wait for the semaphore");
+	}
 
 	pthread_exit(arg);
 

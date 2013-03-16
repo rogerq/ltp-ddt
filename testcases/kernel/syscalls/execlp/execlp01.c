@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -133,9 +133,8 @@ int status;			/* status returned from waitpid */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
-
+	int lc;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -153,7 +152,7 @@ int main(int ac, char **av)
 			execlp("/usr/bin/test", "/usr/bin/test", NULL);
 			exit(errno);
 		case -1:
-			tst_brkm(TBROK|TERRNO, cleanup, "fork failed");
+			tst_brkm(TBROK | TERRNO, cleanup, "fork failed");
 			break;
 		default:
 			waitpid(pid, &status, 0);
@@ -165,8 +164,8 @@ int main(int ac, char **av)
 				}
 			} else
 				tst_resm(TFAIL,
-				    "child process exited abnormally; wait "
-				    "status = %d", status);
+					 "child process exited abnormally; wait "
+					 "status = %d", status);
 			break;
 		}		/* switch */
 

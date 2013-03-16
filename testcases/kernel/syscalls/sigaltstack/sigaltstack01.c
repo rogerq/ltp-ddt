@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -81,6 +81,7 @@
 char *TCID = "sigaltstack01";	/* Test program identifier.    */
 int TST_TOTAL = 1;		/* Total number of test cases. */
 int exp_enos[] = { 0 };
+
 void *addr, *main_stk;		/* address of main stack for signal */
 int got_signal = 0;
 pid_t my_pid;			/* test process id */
@@ -94,8 +95,8 @@ void sig_handler();		/* signal catching function */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	void *alt_stk;		/* address of alternate stack for signal */
 
 	/* Parse standard options given to run the test. */
@@ -103,7 +104,7 @@ int main(int ac, char **av)
 	if (msg != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
-	 }
+	}
 
 	setup();
 
@@ -209,7 +210,7 @@ void setup()
 	if ((sigaction(SIGUSR1, &act, &oact)) == -1) {
 		tst_brkm(TFAIL, cleanup,
 			 "sigaction() fails in setup, errno=%d", errno);
-	 }
+	}
 
 	/* Send the signal to the test process */
 	kill(my_pid, SIGUSR1);
@@ -224,7 +225,7 @@ void setup()
 	if ((sigstk.ss_sp = (void *)malloc(SIGSTKSZ)) == NULL) {
 		tst_brkm(TFAIL, cleanup,
 			 "could not allocate memory for the alternate stack");
-	 }
+	}
 }
 
 /*

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -85,8 +85,8 @@ void sig_handler();		/* signal catching function */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	pid_t cpid;		/* Child process id */
 	int status;		/* child exit status */
 
@@ -140,10 +140,10 @@ int main(int ac, char **av)
 		wait(&status);
 		if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
 			tst_resm(TPASS, "nanosleep() failed, interrupted"
-					" by signal (%d) as expected", EINTR);
+				 " by signal (%d) as expected", EINTR);
 		} else {
 			tst_resm(TFAIL, "child process exited abnormally; "
-					"status = %d", status);
+				 "status = %d", status);
 		}
 	}
 
@@ -173,13 +173,13 @@ void do_child()
 		/* Check for expected errno is set */
 		if (TEST_ERRNO != EINTR) {
 			tst_resm(TFAIL | TTERRNO,
-				"nanosleep() failed; expected errno: %d",
-				EINTR);
+				 "nanosleep() failed; expected errno: %d",
+				 EINTR);
 			exit(1);
 		}
 	} else {
 		tst_resm(TFAIL, "nanosleep() returns %ld, "
-				"expected -1, errno:%d", TEST_RETURN, EINTR);
+			 "expected -1, errno:%d", TEST_RETURN, EINTR);
 		exit(1);
 	}
 

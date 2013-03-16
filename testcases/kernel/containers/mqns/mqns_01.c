@@ -12,7 +12,7 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 * Author: Nadia Derbey <Nadia.Derbey@bull.net>
 *
@@ -39,7 +39,7 @@
 #include "mqns.h"
 
 char *TCID = "posixmq_namespace_01";
-int TST_TOTAL=1;
+int TST_TOTAL = 1;
 
 int p1[2];
 int p2[2];
@@ -75,8 +75,7 @@ int check_mqueue(void *vtest)
 	exit(0);
 }
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 	int r;
 	mqd_t mqd;
@@ -84,28 +83,31 @@ main(int argc, char *argv[])
 	int use_clone = T_UNSHARE;
 
 	if (argc == 2 && strcmp(argv[1], "-clone") == 0) {
-		tst_resm(TINFO, "Testing posix mq namespaces through clone(2).\n");
+		tst_resm(TINFO,
+			 "Testing posix mq namespaces through clone(2).");
 		use_clone = T_CLONE;
 	} else
-		tst_resm(TINFO, "Testing posix mq namespaces through unshare(2).\n");
+		tst_resm(TINFO,
+			 "Testing posix mq namespaces through unshare(2).");
 
 	if (pipe(p1) == -1 || pipe(p2) == -1) {
-		tst_brkm(TBROK|TERRNO, NULL, "pipe failed");
+		tst_brkm(TBROK | TERRNO, NULL, "pipe failed");
 	}
 
-	mqd = syscall(__NR_mq_open, NOSLASH_MQ1, O_RDWR|O_CREAT|O_EXCL, 0777,
-			NULL);
+	mqd =
+	    syscall(__NR_mq_open, NOSLASH_MQ1, O_RDWR | O_CREAT | O_EXCL, 0777,
+		    NULL);
 	if (mqd == -1) {
 		perror("mq_open");
-		tst_resm(TFAIL, "mq_open failed\n");
+		tst_resm(TFAIL, "mq_open failed");
 		tst_exit();
 	}
 
-	tst_resm(TINFO, "Checking namespaces isolation from parent to child\n");
+	tst_resm(TINFO, "Checking namespaces isolation from parent to child");
 	/* fire off the test */
 	r = do_clone_unshare_test(use_clone, CLONE_NEWIPC, check_mqueue, NULL);
 	if (r < 0) {
-		tst_resm(TFAIL, "failed clone/unshare\n");
+		tst_resm(TFAIL, "failed clone/unshare");
 		mq_close(mqd);
 		syscall(__NR_mq_unlink, NOSLASH_MQ1);
 		tst_exit();
@@ -119,17 +121,17 @@ main(int argc, char *argv[])
 		tst_resm(TBROK | TERRNO, "read(p2[0], buf, ...) failed");
 	else {
 		if (!strcmp(buf, "exists")) {
-			tst_resm(TFAIL, "child process found mqueue\n");
+			tst_resm(TFAIL, "child process found mqueue");
 		} else if (!strcmp(buf, "notfnd")) {
-			tst_resm(TPASS, "child process didn't find mqueue\n");
+			tst_resm(TPASS, "child process didn't find mqueue");
 		} else {
-			tst_resm(TFAIL, "UNKNOWN RESULT\n");
+			tst_resm(TFAIL, "UNKNOWN RESULT");
 		}
 	}
 
 	/* destroy the mqueue */
 	if (mq_close(mqd) == -1) {
-		tst_brkm(TBROK|TERRNO, NULL, "mq_close failed");
+		tst_brkm(TBROK | TERRNO, NULL, "mq_close failed");
 	}
 	syscall(__NR_mq_unlink, NOSLASH_MQ1);
 

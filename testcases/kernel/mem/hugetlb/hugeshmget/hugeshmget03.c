@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -25,7 +25,8 @@
  *	hugeshmget03 - test for ENOSPC error
  *
  * ALGORITHM
- *	create large shared memory segments in a loop until reaching the system limit
+ *	create large shared memory segments in a loop until reaching
+ *		the system limit
  *	loop if that option was specified
  *	  attempt to create yet another shared memory segment
  *	  check the errno value
@@ -52,144 +53,119 @@
  */
 
 #include "ipcshm.h"
-#include "system_specific_hugepages_info.h"
+#include "safe_macros.h"
+#include "mem.h"
 
 char *TCID = "hugeshmget03";
 int TST_TOTAL = 1;
 
-int exp_enos[] = {ENOSPC, 0};	/* 0 terminated list of expected errnos */
-void setup2(unsigned long huge_pages_shm_to_be_allocated);
 /*
  * The MAXIDS value is somewhat arbitrary and may need to be increased
  * depending on the system being tested.
  */
 #define MAXIDS	8192
+#define PATH_SHMMNI	"/proc/sys/kernel/shmmni"
 
-int shm_id_1 = -1;
-int num_shms = 0;
+static size_t shm_size;
+static int shm_id_1 = -1;
+static int num_shms;
+static int shm_id_arr[MAXIDS];
 
-int shm_id_arr[MAXIDS];
+static long hugepages = 128;
+static long orig_shmmni;
+static option_t options[] = {
+	{"s:", &sflag, &nr_opt},
+	{NULL, NULL, NULL}
+};
 
 int main(int ac, char **av)
 {
-	int lc;				/* loop counter */
-	char *msg;			/* message returned from parse_opts */
-        unsigned long huge_pages_shm_to_be_allocated;
+	int lc;
+	char *msg;
 
-	huge_pages_shm_to_be_allocated = 0;
+	msg = parse_opts(ac, av, options, &help);
+	if (msg != NULL)
+		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
+	if (sflag)
+		hugepages = SAFE_STRTOL(NULL, nr_opt, 0, LONG_MAX);
 
-	/* parse standard options */
-	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
-		tst_brkm(TBROK, cleanup, "OPTION PARSING ERROR - %s", msg);
-
-	/* The following loop checks looping state if -i option given */
-        if (get_no_of_hugepages() <= 0 || hugepages_size() <= 0)
-             tst_brkm(TCONF, NULL, "Not enough available Hugepages");
-        else
-             huge_pages_shm_to_be_allocated = ( get_no_of_hugepages() * hugepages_size() * 1024) / 2 ;
-
-	setup2(huge_pages_shm_to_be_allocated);			/* local  setup */
+	setup();
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
-		/* reset Tst_count in case we are looping */
 		Tst_count = 0;
 
-		/*
-		 * use the TEST() macro to make the call
-		 */
-
-		TEST(shmget(IPC_PRIVATE, huge_pages_shm_to_be_allocated, SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW));
-
+		TEST(shmget(IPC_PRIVATE, shm_size,
+			    SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW));
 		if (TEST_RETURN != -1) {
-			tst_resm(TFAIL, "call succeeded when error expected");
+			tst_resm(TFAIL, "shmget succeeded unexpectedly");
 			continue;
 		}
-
-		TEST_ERROR_LOG(TEST_ERRNO);
-
-		switch(TEST_ERRNO) {
-		case ENOSPC:
-			tst_resm(TPASS, "expected failure - errno = "
-				 "%d : %s", TEST_ERRNO, strerror(TEST_ERRNO));
-			break;
-		default:
-			tst_resm(TFAIL, "call failed with an "
-				 "unexpected error - %d : %s",
-				 TEST_ERRNO, strerror(TEST_ERRNO));
-			break;
-		}
+		if (TEST_ERRNO == ENOSPC)
+			tst_resm(TPASS | TTERRNO, "shmget failed as expected");
+		else
+			tst_resm(TFAIL | TTERRNO, "shmget failed unexpectedly "
+				 "- expect errno=ENOSPC, got");
 	}
-
 	cleanup();
-
 	tst_exit();
 }
 
-/*
- * setup2() - performs all the ONE TIME setup for this test.
- */
-void setup2(unsigned long huge_pages_shm_to_be_allocated) {
+void setup(void)
+{
+	long hpage_size;
+	char buf[BUFSIZ];
 
+	tst_require_root(NULL);
 	tst_sig(NOFORK, DEF_HANDLER, cleanup);
-
-	/* Set up the expected error numbers for -e option */
-	TEST_EXP_ENOS(exp_enos);
-
-	TEST_PAUSE;
-
-	/*
-	 * Create a temporary directory and cd into it.
-	 * This helps to ensure that a unique msgkey is created.
-	 * See ../lib/libipc.c for more information.
-	 */
 	tst_tmpdir();
 
-	/* get an IPC resource key */
-	shmkey = getipckey();
+	orig_hugepages = get_sys_tune("nr_hugepages");
+	set_sys_tune("nr_hugepages", hugepages, 1);
+	hpage_size = read_meminfo("Hugepagesize:") * 1024;
+
+	shm_size = hpage_size;
+
+	read_file(PATH_SHMMNI, buf);
+	orig_shmmni = SAFE_STRTOL(cleanup, buf, 0, LONG_MAX);
+	snprintf(buf, BUFSIZ, "%ld", hugepages / 2);
+	write_file(PATH_SHMMNI, buf);
 
 	/*
 	 * Use a while loop to create the maximum number of memory segments.
 	 * If the loop exceeds MAXIDS, then break the test and cleanup.
 	 */
-	while ((shm_id_1 = shmget(IPC_PRIVATE, huge_pages_shm_to_be_allocated, SHM_HUGETLB | IPC_CREAT |
-	     IPC_EXCL | SHM_RW)) != -1) {
+	num_shms = 0;
+	shm_id_1 = shmget(IPC_PRIVATE, shm_size,
+			  SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW);
+	while (shm_id_1 != -1) {
 		shm_id_arr[num_shms++] = shm_id_1;
-		if (num_shms == MAXIDS) {
-			tst_brkm(TBROK, cleanup, "The maximum number of shared "
-				 "memory ID's has been\n\t reached.  Please "
-				 "increase the MAXIDS value in the test.");
-		}
+		if (num_shms == MAXIDS)
+			tst_brkm(TBROK, cleanup, "The maximum number of "
+				 "shared memory ID's has been reached. "
+				 "Please increase the MAXIDS value in "
+				 "the test.");
+		shm_id_1 = shmget(IPC_PRIVATE, shm_size,
+				  SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_RW);
 	}
+	if (errno != ENOSPC)
+		tst_brkm(TBROK | TERRNO, cleanup, "shmget #setup");
 
-	/*
-	 * If the errno is other than ENOSPC, then something else is wrong.
-	 */
-	if (errno != ENOSPC) {
-		tst_resm(TINFO, "errno = %d : %s", errno, strerror(errno));
-		tst_brkm(TBROK, cleanup, "Didn't get ENOSPC in test setup");
-	}
+	TEST_PAUSE;
 }
 
-/*
- * cleanup() - performs all the ONE TIME cleanup for this test at completion
- * 	       or premature exit.
- */
-void
-cleanup(void)
+void cleanup(void)
 {
 	int i;
+	char buf[BUFSIZ];
 
-	/* remove the shared memory resources that were created */
-	for (i=0; i<num_shms; i++) {
-		rm_shm(shm_id_arr[i]);
-	}
-
-	tst_rmdir();
-
-	/*
-	 * print timing stats if that option was specified.
-	 * print errno log if that option was specified.
-	 */
 	TEST_CLEANUP;
 
+	for (i = 0; i < num_shms; i++)
+		rm_shm(shm_id_arr[i]);
+
+	snprintf(buf, BUFSIZ, "%ld", orig_shmmni);
+	write_file(PATH_SHMMNI, buf);
+	set_sys_tune("nr_hugepages", orig_hugepages, 0);
+
+	tst_rmdir();
 }

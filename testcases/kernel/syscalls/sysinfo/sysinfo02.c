@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -89,10 +89,9 @@ int main(int ac, char **av)
 
 	sysinfo_buf = (void *)INVALID_ADDRESS;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-	 }
+	}
 
 	setup();		/* Global setup */
 
@@ -106,13 +105,14 @@ int main(int ac, char **av)
 		/* check return code */
 		if (TEST_RETURN != 0 && TEST_ERRNO == EFAULT) {
 			/* Test succeeded as it was supposed to return -1 */
-			tst_resm(TPASS, "Test to check the error code %d PASSED",
+			tst_resm(TPASS,
+				 "Test to check the error code %d PASSED",
 				 TEST_ERRNO);
 		} else {
 			/* Test Failed */
 			tst_brkm(TFAIL, cleanup, "sysinfo() Failed, Expected -1"
 				 "returned %d/n", TEST_ERRNO);
-		 }
+		}
 	}
 	cleanup();
 	tst_exit();

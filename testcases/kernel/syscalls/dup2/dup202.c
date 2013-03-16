@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -73,21 +73,24 @@ struct test_case_t {
 	mode_t mode;
 } TC[] = {
 	/* The first test creat(es) a file with mode 0444 */
-	{ &duprdo, (S_IRUSR | S_IRGRP | S_IROTH) },
-	/* The second test creat(es) a file with mode 0222 */
-	{ &dupwro, (S_IWUSR | S_IWGRP | S_IWOTH) },
-	/* The third test creat(es) a file with mode 0666 */
-	{ &duprdwr, (S_IRUSR|S_IRGRP|S_IROTH|S_IWUSR|S_IWGRP|S_IWOTH) }
+	{
+	&duprdo, (S_IRUSR | S_IRGRP | S_IROTH)},
+	    /* The second test creat(es) a file with mode 0222 */
+	{
+	&dupwro, (S_IWUSR | S_IWGRP | S_IWOTH)},
+	    /* The third test creat(es) a file with mode 0666 */
+	{
+	&duprdwr,
+		    (S_IRUSR | S_IRGRP | S_IROTH | S_IWUSR | S_IWGRP | S_IWOTH)}
 };
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i, ofd;
 	struct stat oldbuf, newbuf;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -101,13 +104,14 @@ int main(int ac, char **av)
 		for (i = 0; i < TST_TOTAL; i++) {
 
 			if ((ofd = creat(testfile, TC[i].mode)) == -1)
-				tst_brkm(TBROK|TERRNO, cleanup, "creat failed");
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "creat failed");
 
 			TEST(dup2(ofd, *TC[i].nfd));
 
 			if (TEST_RETURN == -1) {
-				tst_resm(TFAIL|TERRNO,
-				    "call failed unexpectedly");
+				tst_resm(TFAIL | TERRNO,
+					 "call failed unexpectedly");
 				continue;
 			}
 
@@ -115,13 +119,13 @@ int main(int ac, char **av)
 
 				/* stat the original file */
 				if (fstat(ofd, &oldbuf) == -1)
-					tst_brkm(TBROK|TERRNO, cleanup,
-					    "fstat #1 failed");
+					tst_brkm(TBROK | TERRNO, cleanup,
+						 "fstat #1 failed");
 
 				/* stat the duped file */
 				if (fstat(*TC[i].nfd, &newbuf) == -1)
-					tst_brkm(TBROK|TERRNO, cleanup,
-					    "fstat #2 failed");
+					tst_brkm(TBROK | TERRNO, cleanup,
+						 "fstat #2 failed");
 
 				if (oldbuf.st_mode != newbuf.st_mode)
 					tst_resm(TFAIL, "original and dup "

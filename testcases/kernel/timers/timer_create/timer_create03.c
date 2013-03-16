@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /**************************************************************************
@@ -84,21 +84,19 @@ static struct sigevent evp, *evp_ptr;
  * cleanup() - Performs one time cleanup for this test at
  * completion or premature exit
  */
-void
-cleanup(void)
+void cleanup(void)
 {
 	/*
-	* print timing stats if that option was specified.
-	* print errno log if that option was specified.
-	*/
+	 * print timing stats if that option was specified.
+	 * print errno log if that option was specified.
+	 */
 	TEST_CLEANUP;
 }
 
-int
-main(int ac, char **av)
+int main(int ac, char **av)
 {
-	int lc, i;			/* loop counter */
-	char *msg;			/* message returned from parse_opts */
+	int lc, i;
+	char *msg;
 	kernel_timer_t created_timer_id;	/* holds the returned timer_id */
 	char *message[] = {
 		"SIGEV_SIGNAL",
@@ -106,9 +104,7 @@ main(int ac, char **av)
 		"SIGEV_NONE"
 	};
 
-	/* parse standard options */
-	if ((msg = parse_opts(ac, av, (option_t *) NULL, NULL)) !=
-			(char *) NULL) {
+	if ((msg = parse_opts(ac, av, (option_t *) NULL, NULL)) != (char *)NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
 
@@ -122,12 +118,12 @@ main(int ac, char **av)
 
 			setup_test(i);
 			TEST(syscall(__NR_timer_create, CLOCK_MONOTONIC,
-					evp_ptr, &created_timer_id));
+				     evp_ptr, &created_timer_id));
 
 			tst_resm((TEST_RETURN == 0 ? TPASS : TFAIL | TTERRNO),
-				"%s with notification type = %s",
-				(TEST_RETURN == 0 ? "passed" : "failed"),
-				message[i]);
+				 "%s with notification type = %s",
+				 (TEST_RETURN == 0 ? "passed" : "failed"),
+				 message[i]);
 
 		}
 
@@ -138,8 +134,7 @@ main(int ac, char **av)
 }
 
 /* setup_test() - sets up individual test */
-void
-setup_test(int option)
+void setup_test(int option)
 {
 	switch (option) {
 	case 0:
@@ -152,8 +147,8 @@ setup_test(int option)
 		evp_ptr = NULL;
 		break;
 	case 2:
-		evp.sigev_value =  (sigval_t) 0;
-		evp.sigev_signo = SIGALRM; /* any will do */
+		evp.sigev_value = (sigval_t) 0;
+		evp.sigev_signo = SIGALRM;	/* any will do */
 		evp.sigev_notify = SIGEV_NONE;
 		evp_ptr = &evp;
 		break;
@@ -161,8 +156,7 @@ setup_test(int option)
 }
 
 /* setup() - performs all ONE TIME setup for this test */
-void
-setup(void)
+void setup(void)
 {
 
 	tst_sig(NOFORK, DEF_HANDLER, cleanup);

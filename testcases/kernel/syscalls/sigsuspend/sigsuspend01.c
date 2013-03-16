@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -95,8 +95,8 @@ void sig_handler(int sig);	/* signal catching function */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -135,8 +135,7 @@ int main(int ac, char **av)
 				 * Read the current signal mask of process,
 				 * Check whether previous signal mask preserved
 				 */
-				if (sigprocmask(SIG_UNBLOCK, 0, &sigset2) ==
-				    -1) {
+				if (sigprocmask(SIG_UNBLOCK, 0, &sigset2) == -1) {
 					tst_resm(TFAIL, "sigprocmask() Failed "
 						 "to get previous signal mask "
 						 "of process");
@@ -152,7 +151,7 @@ int main(int ac, char **av)
 					 "Received expected return value.");
 			}
 		} else {
-			tst_resm(TFAIL|TTERRNO,
+			tst_resm(TFAIL | TTERRNO,
 				 "sigsuspend() returned value %ld",
 				 TEST_RETURN);
 		}
@@ -188,12 +187,12 @@ void setup()
 		tst_brkm(TFAIL, cleanup,
 			 "sigemptyset() failed, errno=%d : %s",
 			 errno, strerror(errno));
-	 }
+	}
 	if (sigfillset(&sigset2) == -1) {
 		tst_brkm(TFAIL, cleanup,
 			 "sigfillset() failed, errno=%d : %s",
 			 errno, strerror(errno));
-	 }
+	}
 
 	/* Set the signal handler function to catch the signal */
 	sa_new.sa_handler = sig_handler;
@@ -201,14 +200,14 @@ void setup()
 		tst_brkm(TFAIL, cleanup,
 			 "sigaction() failed, errno=%d : %s",
 			 errno, strerror(errno));
-	 }
+	}
 
 	/* Read the test process's current signal mask. */
 	if (sigprocmask(SIG_UNBLOCK, 0, &sigset1) == -1) {
 		tst_brkm(TFAIL, cleanup,
 			 "sigprocmask() Failed, errno=%d : %s",
 			 errno, strerror(errno));
-	 }
+	}
 }
 
 /*

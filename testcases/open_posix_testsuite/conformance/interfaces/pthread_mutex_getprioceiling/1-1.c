@@ -2,11 +2,11 @@
  * Copyright (c) 2010, Garrett Cooper.
  *
  * Test that pthread_mutex_getprioceiling() returns the current prioceiling of
- * the mutex with PTHREAD_PRIO_INHERIT.
+ * the mutex with PTHREAD_PRIO_PROTECT.
  *
  * Steps:
  * 1.  Initialize a pthread_mutexattr_t object with pthread_mutexattr_init()
- * 2.  Set the protocol using PTHREAD_PRIO_INHERIT.
+ * 2.  Set the protocol using PTHREAD_PRIO_PROTECT.
  * 3.  Call pthread_mutex_getprioceiling() to obtain the prioceiling.
  *
  */
@@ -19,8 +19,7 @@
 #include <unistd.h>
 #include "posixtest.h"
 
-int
-main(void)
+int main(void)
 {
 #if defined(_SC_PRIORITY_SCHEDULING)
 
@@ -44,10 +43,10 @@ main(void)
 	 * pthread_mutexattr_getprotocol.
 	 */
 	error = pthread_mutexattr_setprotocol(&mutex_attr,
-		PTHREAD_PRIO_INHERIT);
+					      PTHREAD_PRIO_PROTECT);
 	if (error) {
 		printf("pthread_mutexattr_setprotocol failed: %s\n",
-			strerror(error));
+		       strerror(error));
 		return PTS_UNRESOLVED;
 	}
 
@@ -62,12 +61,12 @@ main(void)
 	error = pthread_mutex_getprioceiling(&mutex, &prioceiling);
 	if (error) {
 		printf("pthread_mutex_getprioceiling failed: %s\n",
-			strerror(error));
+		       strerror(error));
 		return PTS_FAIL;
 	}
 
-	(void) pthread_mutexattr_destroy(&mutex_attr);
-	(void) pthread_mutex_destroy(&mutex);
+	(void)pthread_mutexattr_destroy(&mutex_attr);
+	(void)pthread_mutex_destroy(&mutex);
 
 	printf("Prioceiling returned: %d\n", prioceiling);
 	return PTS_PASS;

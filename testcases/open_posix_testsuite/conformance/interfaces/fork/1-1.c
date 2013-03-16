@@ -11,8 +11,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * This sample test aims to check the following assertion:
  *
@@ -43,10 +43,10 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "testfrmw.h"
-#include "testfrmw.c"
+#include "../testfrmw/testfrmw.h"
+#include "../testfrmw/testfrmw.c"
 
- /* 
+ /*
   * This header is responsible for defining the following macros:
   * UNRESOLVED(ret, descr);
   *    where descr is a description of the error and ret is an int (error code for example)
@@ -72,7 +72,7 @@
 #define SEM_NAME "/semfork1_1"
 
 /* The main test function. */
-int main(int argc, char * argv[])
+int main(int argc, char *argv[])
 {
 	int ret, status;
 	pid_t child, ctl;
@@ -88,7 +88,7 @@ int main(int argc, char * argv[])
 		UNRESOLVED(errno, "Unable to read CLOCK_REALTIME clock");
 
 	/* Set temporary value in tsfin for semaphore timeout */
-	tsfin.tv_sec  = tsini.tv_sec + 3;
+	tsfin.tv_sec = tsini.tv_sec + 3;
 	tsfin.tv_nsec = tsini.tv_nsec;
 
 	/* Create the child */
@@ -100,7 +100,7 @@ int main(int argc, char * argv[])
 	sem = sem_open(SEM_NAME, O_CREAT, O_RDWR, 0);
 	if (sem == SEM_FAILED)
 		UNRESOLVED(errno, "Failed to open the semaphore (try executing "
-		    "as root)");
+			   "as root)");
 
 	/* sleep 1 second */
 	sleep(1);

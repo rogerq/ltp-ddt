@@ -13,7 +13,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*****************************************************************************
@@ -30,29 +30,24 @@ register int fd;
 register char *ptr;
 register int maxlen;
 {
-    int n, rc;
-    char c;
-    /*
-    printf("readline: fd = %d\n", fd);
-    */
-    for (n =1; n < maxlen; n++)
-	{
-	if ((rc = read(fd, &c, 1)) == 1)
-	    {
-	    *ptr++ = c;
-	    if (c == '\n')
-		break;
-	    }
-	else if (rc == 0)
-	    {
-	    if (n ==1)
-		return 0; /* EOF no data read */
-	    else
-		break; /* EOF, some data read */
-	    }
-	else
-	    return(-1); /* error */
+	int n, rc;
+	char c;
+	/*
+	   printf("readline: fd = %d\n", fd);
+	 */
+	for (n = 1; n < maxlen; n++) {
+		if ((rc = read(fd, &c, 1)) == 1) {
+			*ptr++ = c;
+			if (c == '\n')
+				break;
+		} else if (rc == 0) {
+			if (n == 1)
+				return 0;	/* EOF no data read */
+			else
+				break;	/* EOF, some data read */
+		} else
+			return (-1);	/* error */
 	}
-    *ptr = 0;
-    return(n);
+	*ptr = 0;
+	return (n);
 }

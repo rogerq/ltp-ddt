@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program;  if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -64,11 +64,11 @@ static void _test_sysconf(long name, const char *strname)
 			break;
 		case 0:
 			tst_resm(TCONF, "Not supported sysconf resource: %s",
-					strname);
+				 strname);
 			break;
 		default:
 			tst_resm(TFAIL | TERRNO, "Unexpected errno value for "
-						 "%s", strname);
+				 "%s", strname);
 			break;
 		}
 	} else
@@ -164,7 +164,7 @@ int main(void)
 				 "errno (%i) != actual (%i)", EINVAL, actual);
 		} else
 			tst_resm(TPASS, "The invalid sysconf key was trapped "
-					"appropriately");
+				 "appropriately");
 	}
 
 	tst_exit();

@@ -76,7 +76,7 @@ $(1):: | $$(abs_top_builddir)/$$(basename $$(subst -,.,$(1)))
 endif
 endef
 
-COMMON_TARGETS		+= tools testcases/ddt 
+COMMON_TARGETS    += tools testcases/ddt 
 COMMON_TARGETS    += testcases/kernel/timers
 COMMON_TARGETS    += testcases/kernel/ipc
 COMMON_TARGETS    += testcases/kernel/mem
@@ -132,7 +132,7 @@ $(MAKE_TARGETS) include-all lib-all:
 # Let's not conflict with ac-clean, maintainer-clean, etc, so.
 $(filter-out include-clean,$(CLEAN_TARGETS))::
 	-$(MAKE) -C "$(subst -clean,,$@)" \
-		 -f "$(abs_top_srcdir)/$(subst -clean,,$@)/Makefile" clean 
+		 -f "$(abs_top_srcdir)/$(subst -clean,,$@)/Makefile" clean
 
 # Just like everything depends on include-all / -install, we need to get rid
 # of include last to ensure that things won't be monkey screwed up. Only do
@@ -182,9 +182,17 @@ SRCDIR_INSTALL_SCRIPTS	:= IDcheck.sh runltp ver_linux
 SRCDIR_INSTALL_READONLY	:= Version
 SRCDIR_INSTALL_TARGETS	:= $(SRCDIR_INSTALL_SCRIPTS) $(SRCDIR_INSTALL_READONLY)
 
-# Save space. We only need the first line in ChangeLog for runltp*.
-Version: $(top_srcdir)/ChangeLog
-	head -n 1 "$^" > "$@"
+#
+# If we are in git repository, use git describe to indentify current version,
+# otherwise if downloaded as tarball use VERSION file.
+#
+.PHONY: Version
+Version:
+	if git describe >/dev/null 2>&1; then \
+		git describe > "$@"; \
+	else \
+		cp VERSION "$@"; \
+	fi
 
 $(INSTALL_DIR)/Version: Version
 	install -m 00644 "$(top_builddir)/$(@F)" "$@"
@@ -216,7 +224,7 @@ endif
 
 ## Compile Modules
 MODULES_TO_BUILD :=
-PLATFORMSwEDMA   := am180x-evm|am181x-evm|am389x-evm|am387x-evm|am335x-evm|dm385-evm|dm813x-evm|da830-omapl137-evm|am170x-evm
+PLATFORMSwEDMA   := am180x-evm|am181x-evm|am389x-evm|am387x-evm|dm385-evm|dm813x-evm|da830-omapl137-evm|am170x-evm
 
 ifneq (,$(findstring $(PLATFORM),$(PLATFORMSwEDMA)))
 MODULES_TO_BUILD += modules_edma
@@ -241,7 +249,7 @@ menuconfig:
 	@$(SHELL) "$(top_srcdir)/ltpmenu"
 
 ## Package
-package: 
+package:
 	@$(RPMBUILD) -ba ltp-devel.spec
 
 ## End misc targets.

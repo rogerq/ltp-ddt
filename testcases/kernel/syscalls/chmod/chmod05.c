@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -85,7 +85,7 @@
  */
 
 #ifndef _GNU_SOURCE
-# define _GNU_SOURCE
+#define _GNU_SOURCE
 #endif
 
 #include <stdio.h>
@@ -119,8 +119,8 @@ void cleanup();			/* Main cleanup function for test */
 int main(int ac, char **av)
 {
 	struct stat stat_buf;	/* stat struct */
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	mode_t dir_mode;	/* mode permissions set on test directory */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -149,9 +149,8 @@ int main(int ac, char **av)
 			 * stat(2).
 			 */
 			if (stat(TESTDIR, &stat_buf) < 0) {
-				tst_brkm(TFAIL|TERRNO, cleanup,
-				    "stat(%s) failed",
-				    TESTDIR);
+				tst_brkm(TFAIL | TERRNO, cleanup,
+					 "stat(%s) failed", TESTDIR);
 			}
 			dir_mode = stat_buf.st_mode;
 #if DEBUG
@@ -204,11 +203,12 @@ void setup()
 
 	nobody_u = getpwnam("nobody");
 	if (nobody_u == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "getpwnam(\"nobody\") failed");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "getpwnam(\"nobody\") failed");
 
 	bin_group = getgrnam("bin");
 	if (bin_group == NULL)
-		tst_brkm(TBROK|TERRNO, cleanup, "getgrnam(\"bin\") failed");
+		tst_brkm(TBROK | TERRNO, cleanup, "getgrnam(\"bin\") failed");
 
 	/*
 	 * Create a test directory under temporary directory with specified
@@ -216,20 +216,20 @@ void setup()
 	 * gid.
 	 */
 	if (mkdir(TESTDIR, MODE_RWX) < 0)
-		tst_brkm(TBROK|TERRNO, cleanup, "mkdir(%s) failed", TESTDIR);
+		tst_brkm(TBROK | TERRNO, cleanup, "mkdir(%s) failed", TESTDIR);
 
 	if (setgroups(1, &nobody_u->pw_gid) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
-		    "setgroups to nobody's gid failed");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "setgroups to nobody's gid failed");
 
 	if (chown(TESTDIR, nobody_u->pw_uid, bin_group->gr_gid) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
-		    "chowning testdir to nobody:bin failed");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "chowning testdir to nobody:bin failed");
 
 	/* change to nobody:nobody */
 	if (setegid(nobody_u->pw_gid) == -1 || seteuid(nobody_u->pw_uid) == -1)
-		tst_brkm(TBROK|TERRNO, cleanup,
-		    "Couldn't switch to nobody:nobody");
+		tst_brkm(TBROK | TERRNO, cleanup,
+			 "Couldn't switch to nobody:nobody");
 }
 
 void cleanup()
@@ -237,9 +237,9 @@ void cleanup()
 	TEST_CLEANUP;
 
 	if (setegid(0) == -1)
-		tst_resm(TWARN|TERRNO, "setegid(0) failed");
+		tst_resm(TWARN | TERRNO, "setegid(0) failed");
 	if (seteuid(0) == -1)
-		tst_resm(TWARN|TERRNO, "seteuid(0) failed");
+		tst_resm(TWARN | TERRNO, "seteuid(0) failed");
 
 	tst_rmdir();
 }

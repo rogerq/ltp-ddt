@@ -28,49 +28,39 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
+#include "config.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdio.h>
 #include "test.h"
 #include "usctest.h"
-#include "config.h"
+#include "mem.h"
 
 char *TCID = "oom02";
 int TST_TOTAL = 1;
 
 #if HAVE_NUMA_H && HAVE_LINUX_MEMPOLICY_H && HAVE_NUMAIF_H \
 	&& HAVE_MPOL_CONSTANTS
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <errno.h>
-#include "../include/mem.h"
-
 int main(int argc, char *argv[])
 {
 	char *msg;
-	int lc, fd;
-	unsigned long nnodes = 1;
+	int lc;
 
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL)
+	msg = parse_opts(argc, argv, NULL, NULL);
+	if (msg != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
 #if __WORDSIZE == 32
 	tst_brkm(TCONF, NULL, "test is not designed for 32-bit system.");
 #endif
 
-	nnodes = count_numa();
-	if (count_numa() <= 1)
-		tst_brkm(TCONF, NULL, "required a NUMA system.");
-
 	setup();
 
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		Tst_count = 0;
-		fd = open(SYSFS_OVER, O_WRONLY);
-		if (fd == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "open");
-		if (write(fd, "1", 1) != 1)
-			tst_brkm(TBROK|TERRNO, cleanup, "write");
-		close(fd);
 
 		tst_resm(TINFO, "process mempolicy.");
 		testoom(1, 0, 1);
@@ -84,34 +74,18 @@ int main(int argc, char *argv[])
 
 void setup(void)
 {
-	int fd;
-
 	tst_require_root(NULL);
-
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 	TEST_PAUSE;
 
-	fd = open(SYSFS_OVER, O_RDONLY);
-	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, NULL, "open");
-	if (read(fd, &overcommit, 1) != 1)
-		tst_brkm(TBROK|TERRNO, NULL, "read");
-	close(fd);
-
+	overcommit = get_sys_tune("overcommit_memory");
+	set_sys_tune("overcommit_memory", 1, 1);
 	mount_mem("cpuset", "cpuset", NULL, CPATH, CPATH_NEW);
 }
 
 void cleanup(void)
 {
-	int fd;
-
-	fd = open(SYSFS_OVER, O_WRONLY);
-	if (fd == -1)
-		tst_brkm(TBROK|TERRNO, cleanup, "open");
-	if (write(fd, &overcommit, 1) != 1)
-		tst_brkm(TBROK|TERRNO, cleanup, "write");
-	close(fd);
-
+	set_sys_tune("overcommit_memory", overcommit, 0);
 	umount_mem(CPATH, CPATH_NEW);
 
 	TEST_CLEANUP;

@@ -11,7 +11,7 @@
 * the GNU General Public License for more details.
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 *
 ***************************************************************************/
 /*=========================================================================
@@ -23,6 +23,8 @@
 *
 * Author:	  Veerendra <veeren@linux.vnet.ibm.com>
 =========================================================================*/
+
+#define _GNU_SOURCE
 
 #include <sys/utsname.h>
 #include <sched.h>
@@ -44,7 +46,7 @@
 
 static int child_fn(void *c1);
 
-int crtchild(char *s1 , char *s2)
+int crtchild(char *s1, char *s2)
 {
 	char *cmd[] = { "--", s1, s2, (char *)0 };
 	execve("/bin/sh", cmd, __environ);
@@ -67,7 +69,7 @@ int create_net_namespace(char *p1, char *c1)
 	clone_flags |= CLONE_NEWPID;
 #endif
 
-	pid = ltp_clone_quick(clone_flags, child_fn, (void *) c1);
+	pid = ltp_clone_quick(clone_flags, child_fn, (void *)c1);
 
 	if (pid == -1) {
 		perror("Failed to do clone...");
@@ -91,7 +93,8 @@ int create_net_namespace(char *p1, char *c1)
 	}
 
 	/* We need to pass the child pid to the parentns.sh script */
-	sprintf(par, "%s/testcases/bin/parentns.sh %s %" PRId32 , ltproot, p1, pid);
+	sprintf(par, "%s/testcases/bin/parentns.sh %s %" PRId32, ltproot, p1,
+		pid);
 
 	ret = system(par);
 	status = WEXITSTATUS(ret);
@@ -104,7 +107,7 @@ int create_net_namespace(char *p1, char *c1)
 
 	ret = waitpid(pid, &status, __WALL);
 	status = WEXITSTATUS(status);
-	if (ret  == -1 || status != 0) {
+	if (ret == -1 || status != 0) {
 		printf("Error: waitpid() returns %d, status %d\n", ret, status);
 	}
 

@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -72,10 +72,9 @@ char fname[40];
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -102,7 +101,7 @@ int main(int ac, char **av)
 			tst_resm(TPASS, "call failed with expected error - "
 				 "EMFILE");
 		} else {
-			tst_resm(TFAIL|TTERRNO, "Expected EMFILE");
+			tst_resm(TFAIL | TTERRNO, "Expected EMFILE");
 		}
 
 		remove_files(ifile);
@@ -155,8 +154,8 @@ void setup()
 				 "#%d", ifile + 1);
 			if (errno != EMFILE) {
 				remove_files(ifile);
-				tst_brkm(TBROK|TERRNO, cleanup,
-				    "Failed unexpectedly (expected EMFILE)");
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "Failed unexpectedly (expected EMFILE)");
 			}
 			break;
 		}

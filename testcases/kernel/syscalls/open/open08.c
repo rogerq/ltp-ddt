@@ -96,11 +96,10 @@ int TST_TOTAL = sizeof(TC) / sizeof(TC[0]);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -165,10 +164,10 @@ void setup(void)
 	ltpuser = getpwnam(nobody_uid);
 	if (setgid(ltpuser->pw_gid) == -1) {
 		tst_brkm(TBROK | TERRNO, NULL, "setgid(%d) failed",
-			ltpuser->pw_gid);
+			 ltpuser->pw_gid);
 	} else if (setuid(ltpuser->pw_uid) == -1) {
 		tst_brkm(TBROK | TERRNO, NULL, "setuid(%d) failed",
-			ltpuser->pw_uid);
+			 ltpuser->pw_uid);
 	}
 
 	tst_tmpdir();

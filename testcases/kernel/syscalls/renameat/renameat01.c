@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
  * NAME
  *      renameat01.c
@@ -93,13 +93,14 @@ int myrenameat(int olddirfd, const char *oldfilename, int newdirfd,
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int i;
 
 	/* Disable test if the version of the kernel is less than 2.6.16 */
 	if ((tst_kvercmp(2, 6, 16)) < 0) {
-		tst_brkm(TCONF, NULL, "This test can only run on kernels that are 2.6.16 and higher");
+		tst_brkm(TCONF, NULL,
+			 "This test can only run on kernels that are 2.6.16 and higher");
 	}
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -125,12 +126,12 @@ int main(int ac, char **av)
 
 				if (STD_FUNCTIONAL_TEST) {
 					/* No Verification test, yet... */
-					tst_resm(TPASS|TTERRNO,
-					    "renameat failed as expected");
+					tst_resm(TPASS | TTERRNO,
+						 "renameat failed as expected");
 				}
 			} else {
-				tst_resm(TFAIL|TTERRNO,
-				    "renameat failed unexpectedly");
+				tst_resm(TFAIL | TTERRNO,
+					 "renameat failed unexpectedly");
 			}
 		}
 

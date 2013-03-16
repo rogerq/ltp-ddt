@@ -14,7 +14,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /* Author: Miao Xie <miaox@cn.fujitsu.com>                                    */
 /* Restructure for LTP: Shi Weihua <shiwh@cn.fujitsu.com>                     */
@@ -49,12 +49,12 @@ int main(int argc, char **argv)
 
 	if (argc != 2 && argc != 3) {
 		fprintf(stderr, "usage: %s STRING [ostream]\n",
-		    basename(argv[0]));
+			basename(argv[0]));
 		exit(1);
 	}
 
 	if (argc == 3)
-		if ((fd = open(argv[2], O_RDWR|O_SYNC)) == -1)
+		if ((fd = open(argv[2], O_RDWR | O_SYNC)) == -1)
 			err(errno, "%s", argv[2]);
 
 	if (write(fd, argv[1], strlen(argv[1])) == -1)

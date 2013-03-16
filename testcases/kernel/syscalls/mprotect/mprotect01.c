@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -114,11 +114,10 @@ struct test_case_t {
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
+	int lc;
 	int i;
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
@@ -165,7 +164,7 @@ int main(int ac, char **av)
 	}
 	cleanup();
 	tst_exit();
- }
+}
 
 #else
 
@@ -194,7 +193,7 @@ void setup2()
 	addr2 = (char *)malloc(PAGESIZE);
 	if (addr2 == NULL) {
 		tst_brkm(TINFO, cleanup, "malloc failed");
-	 }
+	}
 	addr2++;		/* Ensure addr2 is not page aligned */
 }
 
@@ -206,7 +205,7 @@ void setup3()
 	fd = open("/etc/passwd", O_RDONLY);
 	if (fd < 0) {
 		tst_brkm(TBROK, cleanup, "open failed");
-	 }
+	}
 
 	/*
 	 * mmap the PAGESIZE bytes as read only.
@@ -214,7 +213,7 @@ void setup3()
 	addr3 = mmap(0, PAGESIZE, PROT_READ, MAP_SHARED, fd, 0);
 	if (addr3 < 0) {
 		tst_brkm(TBROK, cleanup, "mmap failed");
-	 }
+	}
 }
 
 /*

@@ -17,8 +17,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -132,9 +132,8 @@ int status;			/* status returned from waitpid */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
-
+	int lc;
+	char *msg;
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -161,23 +160,23 @@ int main(int ac, char **av)
 			 */
 			exit(errno);
 		case -1:
-			tst_brkm(TBROK|TERRNO, cleanup, "fork failed");
+			tst_brkm(TBROK | TERRNO, cleanup, "fork failed");
 			break;
 		default:
 			if (waitpid(pid, &status, 0) == -1)
-				tst_brkm(TBROK|TERRNO, cleanup,
-				    "waitpid failed");
+				tst_brkm(TBROK | TERRNO, cleanup,
+					 "waitpid failed");
 			if (WIFEXITED(status)) {
 				if (STD_FUNCTIONAL_TEST) {
 					/* No Verification test, yet... */
 					tst_resm(TPASS,
-					    "execl - properly exec's a simple "
-					    "program..");
+						 "execl - properly exec's a simple "
+						 "program..");
 				}
 			} else {
 				tst_resm(TFAIL,
-				    "child exited abnormally; wait status=%d",
-				    status);
+					 "child exited abnormally; wait status=%d",
+					 status);
 			}
 		}
 
@@ -195,9 +194,9 @@ void setup()
 
 	if (STD_TIMING_ON)
 		tst_resm(TINFO,
-		    "There are NO timing statistics produced by this test.\n"
-		    "This is because the test forks to create a child process "
-		    "which then calls execl.\nThe TEST macro is NOT used.");
+			 "There are NO timing statistics produced by this test.\n"
+			 "This is because the test forks to create a child process "
+			 "which then calls execl.\nThe TEST macro is NOT used.");
 
 	TEST_PAUSE;
 

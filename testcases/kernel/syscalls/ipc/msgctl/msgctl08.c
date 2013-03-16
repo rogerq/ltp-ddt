@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /* 06/30/2001	Port to Linux	nsharoff@us.ibm.com */
@@ -115,13 +115,11 @@ char *argv[];
 	struct sigaction act;
 
 #ifdef UCLINUX
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
 	argv0 = argv[0];
 
-	/* parse standard options */
-	if ((msg =
-	     parse_opts(argc, argv, NULL, NULL)) != NULL) {
+	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
 
@@ -281,7 +279,7 @@ int child_process;
 	sighold(SIGTERM);
 	TEST(msgget(key, IPC_CREAT | S_IRUSR | S_IWUSR));
 	if (TEST_RETURN < 0) {
-		tst_resm(TFAIL|TTERRNO, "Msgget error in child %d",
+		tst_resm(TFAIL | TTERRNO, "Msgget error in child %d",
 			 child_process);
 		tst_exit();
 	}
@@ -293,7 +291,7 @@ int child_process;
 		tst_resm(TWARN, "\tFork failed (may be OK if under stress)");
 		TEST(msgctl(tid, IPC_RMID, 0));
 		if (TEST_RETURN < 0) {
-			tst_resm(TFAIL|TTERRNO, "Msgctl error in cleanup");
+			tst_resm(TFAIL | TTERRNO, "Msgctl error in cleanup");
 		}
 		tst_exit();
 	}
@@ -304,7 +302,8 @@ int child_process;
 			tst_resm(TWARN, "self_exec failed");
 			TEST(msgctl(tid, IPC_RMID, 0));
 			if (TEST_RETURN < 0) {
-				tst_resm(TFAIL|TTERRNO, "Msgctl error in cleanup");
+				tst_resm(TFAIL | TTERRNO,
+					 "Msgctl error in cleanup");
 			}
 			tst_exit();
 		}
@@ -333,7 +332,7 @@ long key;
 
 	for (i = 0; i < nreps; i++) {
 		if ((size = msgrcv(id, &buffer, 100, 0, 0)) < 0) {
-			tst_brkm(TBROK|TERRNO, cleanup,
+			tst_brkm(TBROK | TERRNO, cleanup,
 				 "Msgrcv error in child %d, read # = %d",
 				 (i + 1), child);
 			tst_exit();
@@ -372,7 +371,7 @@ long key;
 		buffer.type = 1;
 		TEST(msgsnd(id, &buffer, size + 1, 0));
 		if (TEST_RETURN < 0) {
-			tst_brkm(TBROK|TTERRNO, cleanup,
+			tst_brkm(TBROK | TTERRNO, cleanup,
 				 "Msgsnd error in child %d, key =   %lx",
 				 child, key);
 		}

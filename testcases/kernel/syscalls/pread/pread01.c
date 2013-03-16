@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -100,8 +100,8 @@ void compare_bufers();		/* function to compare o/p of pread/pwrite */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int nread;		/* no. of bytes read by pread() */
 
 	/* Parse standard options given to run the test. */
@@ -300,8 +300,9 @@ void l_seek(int fdesc, off_t offset, int whence, off_t checkoff)
 	off_t offloc;		/* offset ret. from lseek() */
 
 	if ((offloc = lseek(fdesc, offset, whence)) != checkoff) {
-		tst_resm(TWARN, "return = %"PRId64", expected %"PRId64, (int64_t)offloc, (int64_t)checkoff);
-		tst_brkm(TBROK|TERRNO, cleanup, "lseek() on %s failed",
+		tst_resm(TWARN, "return = %" PRId64 ", expected %" PRId64,
+			 (int64_t) offloc, (int64_t) checkoff);
+		tst_brkm(TBROK | TERRNO, cleanup, "lseek() on %s failed",
 			 TEMPFILE);
 	}
 }

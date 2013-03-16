@@ -18,7 +18,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -61,36 +61,37 @@
 #define TEST_PAGES 2
 #define TEST_NODES 2
 
-void setup(void);
-void cleanup(void);
+static void setup(void);
+static void cleanup(void);
 
 char *TCID = "move_pages09";
 int TST_TOTAL = 1;
 
 int main(int argc, char **argv)
 {
-	char *msg;		/* message returned from parse_opts */
+	char *msg;
 
-	/* parse standard options */
 	msg = parse_opts(argc, argv, NULL, NULL);
-	if (msg != NULL) {
+	if (msg != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-
-	}
 
 	setup();
 
 #if HAVE_NUMA_MOVE_PAGES
 	unsigned int i;
-	int lc;			/* loop counter */
-	unsigned int from_node = 0;
+	int lc;
+	unsigned int from_node;
+	int ret;
+
+	ret = get_allowed_nodes(NH_MEMS, 1, &from_node);
+	if (ret < 0)
+		tst_brkm(TBROK | TERRNO, cleanup, "get_allowed_nodes: %d", ret);
 
 	/* check for looping state if -i option is given */
 	for (lc = 0; TEST_LOOPING(lc); lc++) {
 		void *pages[TEST_PAGES] = { 0 };
 		int nodes[TEST_PAGES];
 		int status[TEST_PAGES];
-		int ret;
 
 		/* reset Tst_count in case we are looping */
 		Tst_count = 0;
@@ -105,12 +106,25 @@ int main(int argc, char **argv)
 		ret = numa_move_pages(0, TEST_PAGES, pages, nodes,
 				      status, MPOL_MF_MOVE);
 		TEST_ERRNO = errno;
-		if (ret == -1 && errno == ENOENT)
-			tst_resm(TPASS, "move_pages failed with "
-				 "ENOENT as expected");
-		else
-			tst_resm(TFAIL, "move pages did not fail "
-				 "with ENOENT");
+
+		/*
+		 * commit e78bbfa8262424417a29349a8064a535053912b9
+		 * Author: Brice Goglin <Brice.Goglin@inria.fr>
+		 * Date:   Sat Oct 18 20:27:15 2008 -0700
+		 *     mm: stop returning -ENOENT from sys_move_pages() if nothing got migrated
+		 */
+		if ((tst_kvercmp(2, 6, 28)) >= 0) {
+			if (ret == 0)
+				tst_resm(TPASS, "move_pages succeeded");
+			else
+				tst_resm(TFAIL | TERRNO, "move_pages");
+		} else {
+			if (ret == -1 && errno == ENOENT)
+				tst_resm(TPASS, "move_pages failed with "
+					 "ENOENT as expected");
+			else
+				tst_resm(TFAIL | TERRNO, "move_pages");
+		}
 
 		free_pages(pages, TEST_PAGES);
 	}
@@ -126,7 +140,7 @@ int main(int argc, char **argv)
 /*
  * setup() - performs all ONE TIME setup for this test
  */
-void setup(void)
+static void setup(void)
 {
 
 	tst_sig(FORK, DEF_HANDLER, cleanup);
@@ -142,7 +156,7 @@ void setup(void)
 /*
  * cleanup() - performs all ONE TIME cleanup for this test at completion
  */
-void cleanup(void)
+static void cleanup(void)
 {
 	/*
 	 * print timing stats if that option was specified.
@@ -150,4 +164,4 @@ void cleanup(void)
 	 */
 	TEST_CLEANUP;
 
- }
+}

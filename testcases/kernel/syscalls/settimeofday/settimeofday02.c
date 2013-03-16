@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -69,12 +69,12 @@
 char *TCID = "settimeofday02";
 int TST_TOTAL = 1;
 int exp_enos[] = { EFAULT, EPERM, 0 };
+
 struct timeval tp;
 time_t save_tv_sec, save_tv_usec;
 
 char nobody_uid[] = "nobody";
 struct passwd *ltpuser;
-
 
 void setup(void);
 void cleanup(void);
@@ -84,12 +84,10 @@ void restore_time(void);
 
 int main(int argc, char **argv)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) !=
-	    NULL) {
+	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 	}
 
@@ -157,7 +155,7 @@ void setup(void)
 	if (geteuid() != 0) {
 		tst_brkm(TBROK, NULL, "Must be root for this test!");
 		tst_exit();
-	 }
+	}
 
 	/* Switch to nobody user for correct error code collection */
 	ltpuser = getpwnam(nobody_uid);
@@ -179,7 +177,7 @@ void setup(void)
 	if ((gettimeofday(&tp, (struct timezone *)&tp)) == -1) {
 		tst_brkm(TBROK, cleanup, "gettimeofday failed. "
 			 "errno=%d", errno);
-	 }
+	}
 	save_tv_sec = tp.tv_sec;
 	save_tv_usec = tp.tv_usec;
 }
@@ -197,7 +195,7 @@ void cleanup(void)
 	 */
 	TEST_CLEANUP;
 
- }
+}
 
 void restore_time(void)
 {

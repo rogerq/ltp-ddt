@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -91,18 +91,17 @@ void setup(void);
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	int val, pid, status;
 
 	int flag;
 	int seg[4];
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-	 }
+	}
 
 	setup();		/* global setup */
 
@@ -119,7 +118,7 @@ int main(int ac, char **av)
 		seg[0] = 12345;
 		if (create_segment(seg, sizeof(seg)) == -1) {
 			tst_brkm(TINFO, cleanup, "Creation of segment failed");
-		 }
+		}
 
 		val = read_segment(0);
 
@@ -143,7 +142,7 @@ int main(int ac, char **av)
 
 		if (create_segment(0, 10) == -1) {
 			tst_brkm(TINFO, cleanup, "Creation of segment failed");
-		 }
+		}
 
 		tst_flush();
 		if ((pid = FORK_OR_VFORK()) == 0) {

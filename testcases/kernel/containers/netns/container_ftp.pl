@@ -1,6 +1,6 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
-################################################################################ 
+################################################################################
 ##                                                                            ##
 ## Copyright (c) International Business Machines  Corp., 2008                 ##
 ##                                                                            ##
@@ -16,24 +16,39 @@
 ##                                                                            ##
 ## You should have received a copy of the GNU General Public License          ##
 ## along with this program;  if not, write to the Free Software               ##
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    ##
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    ##
 ##                                                                            ##
 ## Author:      Veerendra <veeren@linux.vnet.ibm.com>                         ##
-################################################################################ 
+################################################################################
 
+use File::Temp 'tempdir';
 use Net::FTP;
+use File::Path;
 
+if ($#ARGV == -1) {
+	print "usage: $0 host\n";
+	exit 1;
+}
 my $host =  $ARGV[0];
 
 my $newname;
 my $i = 0;
 my $kount = 51;
 my $file="junkfile";
-my $dir="/tmp/ftpdir";
 
-mkdir $dir;
-chdir $dir;
-system("dd if=/dev/zero of=$putdir$file bs=512 count=10 > /dev/null 2>&1 ");
+my $tmpdir = "/var/ftp";
+
+my $dir;
+$dir = tempdir("container_ftp.XXXXXXX", DIR => $tmpdir);
+if (!defined($dir)) {
+	push @ERRORS, "Failed to create a temporary directory: $!\n";
+	printerr();
+}
+if (chmod(0777, $dir) == 0) {
+	push @ERRORS, "Failed to change mode for temporary directory: $!\n";
+	printerr();
+}
+system("dd if=/dev/zero of=$dir/$file bs=512 count=10 > /dev/null 2>&1 ");
 
 while ( $i < $kount )
 {
@@ -44,26 +59,30 @@ while ( $i < $kount )
         $ftp->login("anonymous","passwd") or $newerr=1;
         push @ERRORS, "Can't login to $host: $!\n" if $newerr;
         $ftp->quit if $newerr;
-        printerr() if $newerr; 
+        printerr() if $newerr;
 
-        $ftp->cwd($dir) or $newerr=1; 
+        $basedir = `basename "$dir"`;
+        chomp $basedir;
+        $ftp->cwd($basedir) or $newerr=1;
         push @ERRORS, "Can't cd  $!\n" if $newerr;
         $ftp->quit if $newerr;
-        printerr() if $newerr; 
+        printerr() if $newerr;
 
         $newname = $file . "_" . $i ;
-        $ftp->put($file,$newname) or $newerr=1;
+        $ftp->get($file,$newname) or $newerr=1;
         push @ERRORS, "Can't get file $file $!\n" if $newerr;
         printerr() if $newerr;
 
         $i++;
         $ftp->quit;
 }
-system("rm -rf $dir");
-exit 0;
 
 sub printerr {
-  print "Error: ";
-  print @ERRORS;
-  exit -1;
+	print "Error: ";
+	print @ERRORS;
+	exit 1;
+}
+
+END {
+	rmtree("$dir");
 }

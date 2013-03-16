@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -102,8 +102,8 @@ int exp_enos[] = { EACCES, 0 };	/* List must end with 0 */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	int rval;
 	pid_t pid, pid1;
 	int status;
@@ -131,7 +131,7 @@ int main(int ac, char **av)
 
 		if ((pid = FORK_OR_VFORK()) == -1) {
 			tst_brkm(TBROK, cleanup, "fork() #1 failed");
-		 }
+		}
 
 		if (pid == 0) {	/* first child */
 			/* set to nobody */
@@ -143,14 +143,14 @@ int main(int ac, char **av)
 					 nobody->pw_uid, nobody->pw_uid);
 				perror("setreuid");
 				exit(1);
-			 }
+			}
 
 			/* create the a directory with 0700 permits */
 			if (mkdir(fdir, PERMS) == -1) {
 				tst_resm(TWARN, "mkdir(%s, %#o) Failed",
 					 fdir, PERMS);
 				exit(1);
-			 }
+			}
 
 			/* create "old" file under it */
 			do_file_setup(fname);
@@ -167,7 +167,7 @@ int main(int ac, char **av)
 
 		if ((pid1 = FORK_OR_VFORK()) == -1) {
 			tst_brkm(TBROK, cleanup, "fork() #2 failed");
-		 }
+		}
 
 		if (pid1 == 0) {	/* second child */
 			/* set to bin */
@@ -175,14 +175,14 @@ int main(int ac, char **av)
 				tst_resm(TWARN, "seteuid() failed");
 				perror("setreuid");
 				exit(1);
-			 }
+			}
 
 			/* create "new" directory */
 			if (mkdir(mdir, PERMS) == -1) {
 				tst_resm(TWARN, "mkdir(%s, %#o) failed",
 					 mdir, PERMS);
 				exit(1);
-			 }
+			}
 
 			/* create the new file */
 			do_file_setup(mname);
@@ -199,7 +199,7 @@ int main(int ac, char **av)
 			if (TEST_ERRNO != EACCES) {
 				tst_resm(TFAIL, "Expected EACCES got %d",
 					 TEST_ERRNO);
-			 } else {
+			} else {
 				tst_resm(TPASS, "rename() returned EACCES");
 			}
 
@@ -249,7 +249,7 @@ void setup()
 	/* must run as root */
 	if (geteuid() != 0) {
 		tst_brkm(TBROK, NULL, "Must run test as root");
-	 }
+	}
 
 	tst_sig(FORK, DEF_HANDLER, cleanup);
 

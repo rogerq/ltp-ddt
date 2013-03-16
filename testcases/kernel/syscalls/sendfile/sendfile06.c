@@ -15,7 +15,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -92,16 +92,16 @@ void do_sendfile(void)
 
 	if ((in_fd = open(in_file, O_RDONLY)) < 0) {
 		tst_brkm(TBROK, cleanup, "open failed: %d", errno);
-	 }
+	}
 	if (stat(in_file, &sb) < 0) {
 		tst_brkm(TBROK, cleanup, "stat failed: %d", errno);
-	 }
+	}
 
 	TEST(sendfile(out_fd, in_fd, NULL, sb.st_size));
 	if ((after_pos = lseek(in_fd, 0, SEEK_CUR)) < 0) {
 		tst_brkm(TBROK, cleanup,
 			 "lseek after invoking sendfile failed: %d", errno);
-	 }
+	}
 
 	if (STD_FUNCTIONAL_TEST) {
 		/* Close the sockets */
@@ -109,15 +109,15 @@ void do_sendfile(void)
 		shutdown(s, SHUT_RDWR);
 		if (TEST_RETURN != sb.st_size) {
 			tst_resm(TFAIL, "sendfile(2) failed to return "
-				 "expected value, expected: %"PRId64", "
-				 "got: %ld", (int64_t)sb.st_size, TEST_RETURN);
+				 "expected value, expected: %" PRId64 ", "
+				 "got: %ld", (int64_t) sb.st_size, TEST_RETURN);
 			kill(child_pid, SIGKILL);
 		} else if (after_pos != sb.st_size) {
 			tst_resm(TFAIL, "sendfile(2) failed to update "
 				 " the file position of in_fd, "
-				 "expected file position: %"PRId64", "
-				 "actual file position %"PRId64,
-				 (int64_t)sb.st_size, (int64_t)after_pos);
+				 "expected file position: %" PRId64 ", "
+				 "actual file position %" PRId64,
+				 (int64_t) sb.st_size, (int64_t) after_pos);
 			kill(child_pid, SIGKILL);
 		} else {
 			tst_resm(TPASS, "functionality of sendfile() is "
@@ -174,11 +174,11 @@ void setup()
 	if ((fd = creat(in_file, 00700)) < 0) {
 		tst_brkm(TBROK, cleanup, "creat failed in setup, errno: %d",
 			 errno);
-	 }
+	}
 	sprintf(buf, "abcdefghijklmnopqrstuvwxyz");
 	if (write(fd, buf, strlen(buf)) < 0) {
 		tst_brkm(TBROK, cleanup, "write failed, errno: %d", errno);
-	 }
+	}
 	close(fd);
 	sprintf(out_file, "out.%d", getpid());
 }
@@ -255,12 +255,12 @@ int create_server(void)
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
+	int lc;
 	char *msg;		/* parse_opts() return message */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-	 }
+	}
 #ifdef UCLINUX
 	argv0 = av[0];
 	maybe_run_child(&do_child, "");

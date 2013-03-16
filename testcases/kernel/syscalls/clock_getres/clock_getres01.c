@@ -16,7 +16,7 @@
 /*									    */
 /* You should have received a copy of the GNU General Public License	  */
 /* along with this program;  if not, write to the Free Software	       */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*									    */
 /******************************************************************************/
 /******************************************************************************/
@@ -65,9 +65,9 @@
 /* Extern Global Variables */
 
 /* Global Variables */
-char *TCID = "clock_getres01";  /* Test program identifier.*/
-int  testno;
-int  TST_TOTAL = 1;		   /* total number of tests in this file.   */
+char *TCID = "clock_getres01";	/* Test program identifier. */
+int testno;
+int TST_TOTAL = 1;		/* total number of tests in this file.   */
 
 /* Extern Global Functions */
 /******************************************************************************/
@@ -87,7 +87,8 @@ int  TST_TOTAL = 1;		   /* total number of tests in this file.   */
 /*	      On success - Exits calling tst_exit(). With '0' return code.  */
 /*									    */
 /******************************************************************************/
-extern void cleanup() {
+extern void cleanup()
+{
 
 	TEST_CLEANUP;
 	tst_rmdir();
@@ -112,7 +113,8 @@ extern void cleanup() {
 /*	      On success - returns 0.				       */
 /*									    */
 /******************************************************************************/
-void setup() {
+void setup()
+{
 	/* Capture signals if any */
 	/* Create temporary directories */
 	TEST_PAUSE;
@@ -131,8 +133,8 @@ static int opt_debug;
 static char *progname;
 
 enum test_type {
-		NORMAL,
-		NULL_POINTER,
+	NORMAL,
+	NULL_POINTER,
 };
 
 /*
@@ -154,42 +156,42 @@ struct test_case {
 */
 
 static struct test_case tcase[] = {
-	{ // case00
-		.clk_id	 = CLOCK_REALTIME,
-		.ttype	  = NORMAL,
-		.ret	    = 0,
-		.err	    = 0,
-	},
-	{ // case01
-		.clk_id	 = CLOCK_MONOTONIC,
-		.ttype	  = NORMAL,
-		.ret	    = 0,
-		.err	    = 0,
-	},
-	{ // case02
-		.clk_id	 = CLOCK_PROCESS_CPUTIME_ID,
-		.ttype	  = NORMAL,
-		.ret	    = 0,
-		.err	    = 0,
-	},
-	{ // case03
-		.clk_id	 = CLOCK_THREAD_CPUTIME_ID,
-		.ttype	  = NORMAL,
-		.ret	    = 0,
-		.err	    = 0,
-	},
-	{ // case04
-		.clk_id	 = -1,
-		.ttype	  = NORMAL,
-		.ret	    = -1,
-		.err	    = EINVAL,
-	},
-	{ // case05
-		.clk_id	 = CLOCK_REALTIME,
-		.ttype	  = NULL_POINTER,
-		.ret	    = 0,
-		.err	    = 0,
-	},
+	{			// case00
+	 .clk_id = CLOCK_REALTIME,
+	 .ttype = NORMAL,
+	 .ret = 0,
+	 .err = 0,
+	 },
+	{			// case01
+	 .clk_id = CLOCK_MONOTONIC,
+	 .ttype = NORMAL,
+	 .ret = 0,
+	 .err = 0,
+	 },
+	{			// case02
+	 .clk_id = CLOCK_PROCESS_CPUTIME_ID,
+	 .ttype = NORMAL,
+	 .ret = 0,
+	 .err = 0,
+	 },
+	{			// case03
+	 .clk_id = CLOCK_THREAD_CPUTIME_ID,
+	 .ttype = NORMAL,
+	 .ret = 0,
+	 .err = 0,
+	 },
+	{			// case04
+	 .clk_id = -1,
+	 .ttype = NORMAL,
+	 .ret = -1,
+	 .err = EINVAL,
+	 },
+	{			// case05
+	 .clk_id = CLOCK_REALTIME,
+	 .ttype = NULL_POINTER,
+	 .ret = 0,
+	 .err = 0,
+	 },
 };
 
 #define MEM_LENGTH	      (4 * 1024 * 1024)
@@ -233,11 +235,12 @@ static int do_test(struct test_case *tc)
 
 static void usage(const char *progname)
 {
-	tst_resm(TINFO,"usage: %s [options]", progname);
-	tst_resm(TINFO,"This is a regression test program of %s system call.",SYSCALL_NAME);
-	tst_resm(TINFO,"options:");
-	tst_resm(TINFO,"    -d --debug	   Show debug messages");
-	tst_resm(TINFO,"    -h --help	    Show this message");
+	tst_resm(TINFO, "usage: %s [options]", progname);
+	tst_resm(TINFO, "This is a regression test program of %s system call.",
+		 SYSCALL_NAME);
+	tst_resm(TINFO, "options:");
+	tst_resm(TINFO, "    -d --debug	   Show debug messages");
+	tst_resm(TINFO, "    -h --help	    Show this message");
 
 	exit(1);
 }
@@ -246,22 +249,22 @@ static void usage(const char *progname)
  * main()
  */
 
-int main(int ac, char **av) {
+int main(int ac, char **av)
+{
 	int result = RESULT_OK;
 	int c, i;
-	int lc;		/* loop counter */
+	int lc;
 	int ret;
-	char *msg;      /* message returned from parse_opts */
+	char *msg;
 
 	struct option long_options[] = {
-		{ "debug",	no_argument,	0,	'd' },
-		{ "help",	no_argument,	0,	'h' },
-		{ NULL,		0,		NULL,	0 }
+		{"debug", no_argument, 0, 'd'},
+		{"help", no_argument, 0, 'h'},
+		{NULL, 0, NULL, 0}
 	};
 
 	progname = basename(av[0]);
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 		tst_exit();
@@ -272,8 +275,7 @@ int main(int ac, char **av) {
 	for (lc = 0; TEST_LOOPING(lc); ++lc) {
 		Tst_count = 0;
 		for (testno = 0; testno < TST_TOTAL; ++testno) {
-			TEST(c = getopt_long(ac, av, "dh", long_options,
-					     NULL));
+			TEST(c = getopt_long(ac, av, "dh", long_options, NULL));
 			while (TEST_RETURN != -1) {
 				switch (c) {
 				case 'd':
@@ -286,31 +288,33 @@ int main(int ac, char **av) {
 			}
 
 			if (ac != optind) {
-				tst_resm(TINFO,"Options are not match.");
+				tst_resm(TINFO, "Options are not match.");
 				usage(progname);
 
 			}
 
 			/*
 			 * Execute test
-		 	 */
-			for (i = 0; i < (int)(sizeof(tcase) / sizeof(tcase[0])); i++) {
-				tst_resm(TINFO,"(case%02d) START", i);
+			 */
+			for (i = 0; i < (int)(sizeof(tcase) / sizeof(tcase[0]));
+			     i++) {
+				tst_resm(TINFO, "(case%02d) START", i);
 				ret = do_test(&tcase[i]);
-				tst_resm((ret == 0 ? TPASS : TFAIL ), "(case%02d) END", i);
+				tst_resm((ret == 0 ? TPASS : TFAIL),
+					 "(case%02d) END", i);
 				result |= ret;
 			}
 
 			/*
 			 * Check results
-		 	*/
-			switch(result) {
+			 */
+			switch (result) {
 			case RESULT_OK:
 				tst_resm(TPASS, "clock_getres call succeeded");
 				break;
 
 			default:
-		 	   	tst_resm(TFAIL, "%s failed", TCID);
+				tst_resm(TFAIL, "%s failed", TCID);
 				RPRINTF("NG\n");
 				cleanup();
 				tst_exit();

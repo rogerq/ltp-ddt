@@ -15,15 +15,15 @@
 ##                                                                            ##
 ## You should have received a copy of the GNU General Public License          ##
 ## along with this program;  if not, write to the Free Software               ##
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    ##
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    ##
 ##                                                                            ##
 ################################################################################
-#                                                                              
+#
 # File:           file_test.sh
 #
 # Description: This program tests the file command. The tests are aimed at
 #              testing if the file command can recognize some of the commonly
-#              used file formats like, tar, tar.gz, rpm, C, ASCII, ELF etc. 
+#              used file formats like, tar, tar.gz, rpm, C, ASCII, ELF etc.
 #
 # Author:      Manoj Iyer, manjo@mail.utexas.edu
 #
@@ -45,12 +45,12 @@
 #
 # Test01: Test if file command recognizes ASCII text files
 # -------
-# 1) Write text to a known file 
+# 1) Write text to a known file
 # 2) Use 'file' command to get the type of the known file
 #    Ex: file xyz.txt
-# 3) Grep for the keyword "ASCII text" in the output of the 
+# 3) Grep for the keyword "ASCII text" in the output of the
 #    'file' command
-# 4) Declare test as PASS if above step is successful else 
+# 4) Declare test as PASS if above step is successful else
 #    declare test as FAIL
 #
 # Test02: Test if file command can recognize bash shell script
@@ -58,9 +58,9 @@
 # 1) Write a small bash shell script to a known file
 # 2) Use 'file' command to get the type of the known file
 #    Ex: file xyz.sh
-# 3) Grep for the keyword "Bourne-Again shell script" in 
+# 3) Grep for the keyword "Bourne-Again shell script" in
 #    the output of the 'file' command
-# 4) Declare test as PASS if above step is successful else 
+# 4) Declare test as PASS if above step is successful else
 #    declare test as FAIL
 #
 # Test03: Test if file command can recognize bash shell script
@@ -76,17 +76,17 @@
 #   Similar test(as Test02) is performed with C program text
 #
 # Test06: Test if file command can recognize ELF binay executables
-# -------  
-# 1) Grep for 'm68k' or 'sparc' or 'mips' or 'mipseb' or 'sh.eb' 
-#    or 'powerpc' or 'ppc' or 's390' from the output of the command 
+# -------
+# 1) Grep for 'm68k' or 'sparc' or 'mips' or 'mipseb' or 'sh.eb'
+#    or 'powerpc' or 'ppc' or 's390' from the output of the command
 #    'uname -m'
-# 2) If the above step is successful, assign string 'MSB' to variable 
+# 2) If the above step is successful, assign string 'MSB' to variable
 #    TARGET_ARCH else assign string 'LSB'
 # 3) Write small C program to a known '.c' file
 # 4) Compile it using "cc"
 #    Ex: cc xyz xyz.c
 # 5) Use file command to get the type of the object file
-# 6) Grep for the string "ELF .*-bit $TEST_ARCH executable, .*" 
+# 6) Grep for the string "ELF .*-bit $TEST_ARCH executable, .*"
 #    in the output of the 'file' command
 # 7) If the above command is successful, declare test as PASS
 #    else declare test as FAIL
@@ -112,7 +112,7 @@
 #    Ex: gzip -f xyz.tar
 # 4) Use 'file' command to get the type of the archive file
 #    Ex: file xyz.tar.gz
-# 5) Grep for the string "gzip compressed data, .*" from the above 
+# 5) Grep for the string "gzip compressed data, .*" from the above
 #    file commnand
 # 6) Declare test as PASS, if the above step is successfull else
 #    declare test as FAIL
@@ -120,9 +120,9 @@
 
 
 export TST_TOTAL=10                # Number of tests in this testcase
- 
+
 if [ -z "$LTPTMP" -a -z "$TMPBASE" ]
-then 
+then
     LTPTMP=/tmp/
 else
     LTPTMP=$TMPBASE
@@ -137,7 +137,7 @@ else
 	LTPBIN=$LTPROOT/testcases/bin/
 fi
 
-# set return code RC variable to 0, it will be set with a non-zero return code 
+# set return code RC variable to 0, it will be set with a non-zero return code
 # in case of error. Set TFAILCNT to 0, increment if there occures a failure.
 
 TFAILCNT=0
@@ -152,7 +152,7 @@ export TST_COUNT=1
 $LTPBIN/tst_resm TINFO "TEST #1: file command recogizes ASCII text files"
 
 cat > $LTPTMP/test_file.txt <<EOF
-This is a text file 
+This is a text file
 to test file command.
 EOF
 
@@ -163,7 +163,7 @@ file $LTPTMP/test_file.txt > $LTPTMP/file.out 2>&1
 
 if [ $? -eq 0 ]
 then
-    grep "ASCII text" $LTPTMP/file.out > /dev/null 2>&1
+    grep -q "ASCII text" $LTPTMP/file.out
     if [ $? -eq 0 ]
     then
         $LTPBIN/tst_resm TPASS "file: Recognised ASCII file correctly"
@@ -199,7 +199,7 @@ file $LTPTMP/bash_script.sh > $LTPTMP/file.out 2>&1
 
 if [ $? -eq 0 ]
 then
-    grep "Bourne-Again shell script" $LTPTMP/file.out > /dev/null 2>&1
+    grep -q "Bourne-Again shell script" $LTPTMP/file.out
     if [ $? -eq 0 ]
     then
         $LTPBIN/tst_resm TPASS "file: Recognised bash shell script correctly"
@@ -234,7 +234,7 @@ file $LTPTMP/ksh_script.sh > $LTPTMP/file.out 2>&1
 
 if [ $? -eq 0 ]
 then
-    grep "Korn shell script" $LTPTMP/file.out 2>&1 1>/dev/null
+    grep -q "Korn shell script" $LTPTMP/file.out
     if [ $? -eq 0 ]
     then
         $LTPBIN/tst_resm TPASS "file: recognised korn shell script"
@@ -270,7 +270,7 @@ file $LTPTMP/C_script.sh > $LTPTMP/file.out 2>&1
 
 if [ $? -eq 0 ]
 then
-    grep "C shell script" $LTPTMP/file.out > /dev/null 2>&1
+    grep -q "C shell script" $LTPTMP/file.out
     if [ $? -eq 0 ]
     then
         $LTPBIN/tst_resm TPASS "file: Recognised C shell script correctly"
@@ -308,16 +308,22 @@ file $LTPTMP/cprog.c > $LTPTMP/file.out 2>&1
 
 if [ $? -eq 0 ]
 then
-    grep "ASCII C program text" $LTPTMP/file.out > /dev/null 2>&1
+    grep -q "ASCII C program text" $LTPTMP/file.out
     if [ $? -eq 0 ]
     then
         $LTPBIN/tst_resm TPASS "file: Recognised C program text correctly"
         rm -f $LTPTMP/cprog.c
     else
-        $LTPBIN/tst_res TFAIL $LTPTMP/file.out \
-             "file: Failed to Recognize C program text correctly. Reason:"
-        TFAILCNT=$(( $TFAILCNT+1 ))
-        
+        grep -q "C source, ASCII text" $LTPTMP/file.out
+        if [ $? -eq 0 ]
+        then
+            $LTPBIN/tst_resm TPASS "file: Recognised C program text correctly"
+            rm -f $LTPTMP/cprog.c
+        else
+            $LTPBIN/tst_res TFAIL $LTPTMP/file.out \
+                 "file: Failed to Recognize C program text correctly. Reason:"
+            TFAILCNT=$(( $TFAILCNT+1 ))
+        fi
     fi
 else
     $LTPBIN/tst_resm TFAIL "file: Failed to recognize C programi text"
@@ -360,7 +366,7 @@ file $LTPTMP/cprog > $LTPTMP/file.out 2>&1
 
 if [ $? -eq 0 ]
 then
-    grep "ELF .*-bit $TEST_ARCH executable, .*" $LTPTMP/file.out > /dev/null 2>&1
+    grep -q "ELF .*-bit $TEST_ARCH executable, .*" $LTPTMP/file.out
     if [ $? -eq 0 ]
     then
         $LTPBIN/tst_resm TPASS "file: Recognized ELF binary executable"
@@ -402,7 +408,7 @@ file $LTPTMP/files.tar > $LTPTMP/file.out 2>&1
 
 if [ $? -eq 0 ]
 then
-    grep "tar archive" $LTPTMP/file.out > /dev/null 2>&1
+    grep -q "tar archive" $LTPTMP/file.out
     if [ $? -eq 0 ]
     then
         $LTPBIN/tst_resm TPASS "file: Recognised tar files"
@@ -433,14 +439,14 @@ then
     $LTPBIN/tst_brk TBROK $LTPTMP/file.out NULL \
         "file: tar failed unexpectedly. Reason:"
 fi
-    
+
 gzip -f $LTPTMP/files.tar
 if [ $? -ne 0 ]
 then
     $LTPBIN/tst_brk TBROK $LTPTMP/file.out NULL \
         "file: gzip failed unexpectedly. Reason:"
 fi
-    
+
 file $LTPTMP/files.tar.gz > $LTPTMP/file.out 2>&1
 if [ $? -eq 0 ]
 then
@@ -493,7 +499,7 @@ Name: cprog
 Version: 0.0.7
 Release: 3
 $gpl
-Group: LillB test case 
+Group: LillB test case
 Source: ./cprog.c
 BuildRoot: /var/tmp/%{name}-buildroot
 
@@ -556,7 +562,7 @@ file $bDIR/SRPMS/cprog-0.0.7-3.src.rpm > $LTPTMP/file.out 2>&1
 
 if [ $? -eq 0 ]
 then
-    grep -E "RPM v3(\.0)? src" $LTPTMP/file.out > /dev/null 2>&1
+    grep -qE "RPM v3(\.0)? src" $LTPTMP/file.out
     if [ $? -eq 0 ]
     then
         $LTPBIN/tst_resm TPASS "file: Recognised RPM file correctly"
@@ -565,7 +571,7 @@ then
         $LTPBIN/tst_res TFAIL $LTPTMP/file.out \
              "file: Failed to Recognize RPM file. Reason:"
         TFAILCNT=$(( $TFAILCNT+1 ))
-        
+
     fi
 else
     $LTPBIN/tst_resm TFAIL "file: Failed to recognize RPM file"

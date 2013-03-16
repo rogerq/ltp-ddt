@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -77,18 +77,16 @@ char *bad_addr = 0;
 
 int main(int argc, char **argv)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	char pbuf[BUFSIZ];
 	int pipefildes[2];
 	int status, pid;
 
-	/* parse standard options */
-	if ((msg = parse_opts(argc, argv, NULL, NULL)) !=
-	    NULL) {
+	if ((msg = parse_opts(argc, argv, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
-	 }
+	}
 
 	/* global setup */
 	setup();
@@ -118,19 +116,19 @@ int main(int argc, char **argv)
 		if (fd < 0) {
 			tst_resm(TFAIL, "creating a new file failed");
 			cleanup();
-		 }
+		}
 		if (write(fd, bad_addr, 10) != -1) {
 			tst_resm(TFAIL, "write() on an invalid buffer "
 				 "succeeded, but should have failed");
 			cleanup();
-		 } else {
+		} else {
 			TEST_ERROR_LOG(errno);
 			if (errno != EFAULT) {
 				tst_resm(TFAIL, "write() returned illegal "
 					 "errno: expected EFAULT, got %d",
 					 errno);
 				cleanup();
-			 }
+			}
 			tst_resm(TPASS, "received EFAULT as expected.");
 		}
 		tst_resm(TINFO, "Exit Block 2");
@@ -233,4 +231,4 @@ void cleanup(void)
 	unlink(filename);
 	tst_rmdir();
 
- }
+}

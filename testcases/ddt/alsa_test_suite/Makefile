@@ -9,10 +9,10 @@ INSTALL_DIR             := testcases/bin/ddt
 FILTER_OUT_DIRS         :=
 
 #Path to ALSA library headers. Change to the path where alsa include folder is present.
-ALSA_INCPATH ?= /usr/include
+ALSA_INCPATH ?= $(KERNEL_USR_INC)
 
 #Path to ALSA library. Change to the path where libasound library is installed.
-ALSA_LIBPATH ?= /usr/lib
+ALSA_LIBPATH ?= $(KERNEL_USR_INC)/../lib
 
 
 # We don't want to copy over the Makefile
@@ -24,7 +24,7 @@ INSTALL_MODE            := 00755
 
 CFLAGS          += -g -Wall -O1 -fomit-frame-pointer
 LDFLAGS         += -g 
-INCLUDES        = -I $(KERNEL_INC) -I src/interface/common -I ../utils/user -I $(ALSA_INCPATH)
+INCLUDES        = -I $(KERNEL_USR_INC) -I $(KERNEL_INC) -I src/interface/common -I ../utils/user -I $(ALSA_INCPATH)
 
 #List of source files- Update this on adding a new C file
 SOURCES := \

@@ -10,8 +10,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
 /*************************************************************************
@@ -44,16 +44,18 @@ static int dummy_func_test()
 	return 0;
 }
 
-static int __init dummy_init(void) {
-        struct proc_dir_entry *proc_dummy;
+static int __init dummy_init(void)
+{
+	struct proc_dir_entry *proc_dummy;
 
-        proc_dummy = proc_mkdir("dummy", 0);
-      return 0;
+	proc_dummy = proc_mkdir("dummy", 0);
+	return 0;
 }
 
-static void __exit dummy_exit(void) {
+static void __exit dummy_exit(void)
+{
 
-        remove_proc_entry("dummy", 0);
+	remove_proc_entry("dummy", 0);
 }
 
 module_init(dummy_init);

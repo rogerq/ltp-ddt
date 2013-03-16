@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -100,8 +100,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
 	/* Parse standard options given to run the test. */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -123,7 +123,7 @@ int main(int ac, char **av)
 
 		/* Check for the return value of mmap() */
 		if (addr == MAP_FAILED) {
-			tst_resm(TFAIL|TERRNO, "mmap of %s failed", TEMPFILE);
+			tst_resm(TFAIL | TERRNO, "mmap of %s failed", TEMPFILE);
 			continue;
 		}
 
@@ -138,7 +138,7 @@ int main(int ac, char **av)
 			 */
 			if (read(fildes, dummy, page_sz) < 0) {
 				tst_brkm(TFAIL, cleanup, "reading %s failed",
-					TEMPFILE);
+					 TEMPFILE);
 			}
 
 			/*
@@ -147,11 +147,11 @@ int main(int ac, char **av)
 			 */
 			if (memcmp(dummy, addr, page_sz)) {
 				tst_resm(TFAIL,
-					"mapped memory region contains invalid "
-					"data");
+					 "mapped memory region contains invalid "
+					 "data");
 			} else {
 				tst_resm(TPASS,
-					"Functionality of mmap() successful");
+					 "Functionality of mmap() successful");
 			}
 		} else {
 			tst_resm(TPASS, "call succeeded");
@@ -232,7 +232,7 @@ void setup()
 	/* Open the temporary file again for reading */
 	if ((fildes = open(TEMPFILE, O_RDONLY)) < 0) {
 		tst_brkm(TFAIL, cleanup,
-			"opening %s read-only failed", TEMPFILE);
+			 "opening %s read-only failed", TEMPFILE);
 	}
 }
 

@@ -13,7 +13,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /******************************************************************************/
@@ -44,41 +44,32 @@
 #include <stdlib.h>
 #include <errno.h>
 
-/* cacheflush man page states that cacheflush() is only applicable to
- * MIPS architecture -- regardless, it's a good negative test.. */
-
-#ifndef   ICACHE
-#define   ICACHE   (1<<0)		/* flush instruction cache        */
-#endif
-#ifndef   DCACHE
-#define   DCACHE   (1<<1)		/* writeback and flush data cache */
-#endif
-#ifndef   BCACHE
-#define   BCACHE   (ICACHE|DCACHE)	/* flush both caches              */
-#endif
-
-/* Harness Specific Incnude Files. */
+/* Harness Specific Include Files. */
 #include "test.h"
 #include "usctest.h"
 #include "linux_syscall_numbers.h"
 
-/* cacheflush man page states that cacheflush() is only applicable to
- * MIPS architecture -- regardless, it's a good negative test.. */
-#if defined __mips__
+#if defined __NR_cacheflush && __NR_cacheflush > 0
 #include <asm/cachectl.h>
-#ifndef __NR_cacheflush
-#define __NR_cacheflush		0
-#endif
 #else
 /* Fake linux_syscall_numbers.h */
 #define __NR_cacheflush		0
+#ifndef   ICACHE
+#define   ICACHE   (1<<0)	/* flush instruction cache        */
+#endif
+#ifndef   DCACHE
+#define   DCACHE   (1<<1)	/* writeback and flush data cache */
+#endif
+#ifndef   BCACHE
+#define   BCACHE   (ICACHE|DCACHE)	/* flush both caches              */
+#endif
 #endif
 
 /* Extern Global Variables */
 
 /* Global Variables */
-char *TCID = "cacheflush01";	/* Test program identifier.*/
-int  TST_TOTAL = 1;		/* total number of tests in this file.   */
+char *TCID = "cacheflush01";	/* Test program identifier. */
+int TST_TOTAL = 1;		/* total number of tests in this file.   */
 
 /* Extern Global Functions */
 /******************************************************************************/
@@ -98,10 +89,11 @@ int  TST_TOTAL = 1;		/* total number of tests in this file.   */
 /*              On success - Exits calling tst_exit(). With '0' return code.  */
 /*                                                                            */
 /******************************************************************************/
-extern void cleanup() {
+extern void cleanup()
+{
 
-        TEST_CLEANUP;
-        tst_rmdir();
+	TEST_CLEANUP;
+	tst_rmdir();
 }
 
 /* Local  Functions */
@@ -122,26 +114,26 @@ extern void cleanup() {
 /*              On success - returns 0.                                       */
 /*                                                                            */
 /******************************************************************************/
-void setup() {
-        /* Capture signals if any */
-        /* Create temporary directories */
-        TEST_PAUSE;
-        tst_tmpdir();
+void setup()
+{
+	/* Capture signals if any */
+	/* Create temporary directories */
+	TEST_PAUSE;
+	tst_tmpdir();
 }
 
 int main(int ac, char **av)
 {
 
 	char *addr = NULL;
-        char *msg;              /* message returned from parse_opts */
+	char *msg;
 
-        /* parse standard options */
-        if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
+	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 		tst_exit();
-        }
+	}
 
-        setup();
+	setup();
 
 	Tst_count = 0;
 	/* Create some user address range */
@@ -173,5 +165,5 @@ int main(int ac, char **av)
 	}
 
 	cleanup();
-        tst_exit();
+	tst_exit();
 }

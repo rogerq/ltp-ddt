@@ -18,8 +18,8 @@
  * other software, or any other product whatsoever.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write the Free Software Foundation, Inc., 59
- * Temple Place - Suite 330, Boston MA 02111-1307, USA.
+ * with this program; if not, write the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  * Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  * Mountain View, CA  94043, or:
@@ -43,6 +43,11 @@
 #include <stdlib.h>
 
 #include "compiler.h"
+
+#include "safe_file_ops.h"
+#include "tst_checkpoint.h"
+#include "tst_process_state.h"
+#include "tst_resource.h"
 
 /* Use low 6 bits to encode test type */
 #define TTYPE_MASK 0x3f
@@ -201,9 +206,39 @@ extern int Tst_count;
 void tst_sig(int fork_flag, void (*handler)(), void (*cleanup)());
 
 /* lib/tst_tmpdir.c */
+
+/* tst_tmpdir()
+ *
+ * Create a unique temporary directory and chdir() to it. It expects the caller
+ * to have defined/initialized the TCID/TST_TOTAL global variables.
+ * The TESTDIR global variable will be set to the directory that gets used
+ * as the testing directory.
+ *
+ * NOTE: This function must be called BEFORE any activity that would require
+ * CLEANUP.  If tst_tmpdir() fails, it cleans up afer itself and calls
+ * tst_exit() (i.e. does not return).
+ */
 void tst_tmpdir(void);
+/* tst_rmdir()
+ *
+ * Recursively remove the temporary directory created by tst_tmpdir().
+ * This function is intended ONLY as a companion to tst_tmpdir().
+ * If the TDIRECTORY environment variable is set, no cleanup will be
+ * attempted.
+ */
 void tst_rmdir(void);
+/* get_tst_tmpdir()
+ *
+ * Return a copy of the test temp directory as seen by LTP. This is for
+ * path-oriented tests like chroot, etc, that may munge the path a bit.
+ *
+ * FREE VARIABLE AFTER USE IF IT IS REUSED!
+ */
 char *get_tst_tmpdir(void);
+/*
+ * Returns 1 if temp directory was created.
+ */
+int tst_tmpdir_created(void);
 
 /* lib/get_high_address.c */
 char *get_high_address(void);
@@ -240,6 +275,10 @@ char *get_mountpoint(const char *path);
 
 /* Function from lib/get_path.c */
 int tst_get_path(const char *prog_name, char *buf, size_t buf_len);
+
+/* lib/tst_cpu.c */
+long tst_ncpus(void);
+long tst_ncpus_max(void);
 
 #ifdef TST_USE_COMPAT16_SYSCALL
 #define TCID_BIT_SUFFIX "_16"

@@ -13,7 +13,7 @@
 /*                                                                            */
 /* You should have received a copy of the GNU General Public License          */
 /* along with this program;  if not, write to the Free Software               */
-/* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA    */
+/* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA    */
 /*                                                                            */
 /******************************************************************************/
 /******************************************************************************/
@@ -54,9 +54,9 @@
 /* Extern Global Variables */
 
 /* Global Variables */
-char *TCID = "waitid02";  /* Test program identifier.*/
-int  testno;
-int  TST_TOTAL = 4;                   /* total number of tests in this file.  */
+char *TCID = "waitid02";	/* Test program identifier. */
+int testno;
+int TST_TOTAL = 4;		/* total number of tests in this file.  */
 
 /* Extern Global Functions */
 /******************************************************************************/
@@ -76,12 +76,13 @@ int  TST_TOTAL = 4;                   /* total number of tests in this file.  */
 /*              On success - Exits calling tst_exit(). With '0' return code.  */
 /*                                                                            */
 /******************************************************************************/
-extern void cleanup() {
+extern void cleanup()
+{
 
-        TEST_CLEANUP;
-        tst_rmdir();
+	TEST_CLEANUP;
+	tst_rmdir();
 
-        tst_exit();
+	tst_exit();
 }
 
 /* Local  Functions */
@@ -102,23 +103,24 @@ extern void cleanup() {
 /*              On success - returns 0.                                       */
 /*                                                                            */
 /******************************************************************************/
-void setup() {
+void setup()
+{
 	/* Capture signals if any */
 	/* Create temporary directories */
 	TEST_PAUSE;
 	tst_tmpdir();
 }
 
-int main(int ac, char **av) {
+int main(int ac, char **av)
+{
 	id_t pgid;
 	id_t id1, id2, id3;
 	siginfo_t infop;
 	int i = 0;
 
-	int lc;                 /* loop counter */
-	char *msg;              /* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-        /* parse standard options */
 	msg = parse_opts(ac, av, NULL, NULL);
 	if (msg != NULL) {
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
@@ -129,99 +131,122 @@ int main(int ac, char **av) {
 
 	for (lc = 0; TEST_LOOPING(lc); ++lc) {
 		Tst_count = 0;
-		for (testno = 0; testno < TST_TOTAL; ++testno)	{
+		for (testno = 0; testno < TST_TOTAL; ++testno) {
 
-	TEST(waitid(P_ALL, 0, &infop, WNOHANG));
-	if (TEST_RETURN == -1)
-		tst_resm(TPASS, "Success1 ... -1 is returned. error is %d.",
-		TEST_ERRNO);
-	else {
-		tst_resm(TFAIL, "%s Failed1 ...", TCID);
-	}
+			TEST(waitid(P_ALL, 0, &infop, WNOHANG));
+			if (TEST_RETURN == -1)
+				tst_resm(TPASS,
+					 "Success1 ... -1 is returned. error is %d.",
+					 TEST_ERRNO);
+			else {
+				tst_resm(TFAIL, "%s Failed1 ...", TCID);
+			}
 
-	/* option == WEXITED | WCONTINUED | WSTOPPED | WNOHANG | WNOWAIT*/
+			/* option == WEXITED | WCONTINUED | WSTOPPED | WNOHANG | WNOWAIT */
 
-	TEST(id1 = fork());
-	if (TEST_RETURN == 0) {
-		tst_resm(TINFO, "I'm a child 1,my id is %d,gpid is %d",
-		id1 = getpid(), __getpgid(0));
-		sleep(1);
-		exit(5);
-	}
+			TEST(id1 = fork());
+			if (TEST_RETURN == 0) {
+				tst_resm(TINFO,
+					 "I'm a child 1,my id is %d,gpid is %d",
+					 id1 = getpid(), __getpgid(0));
+				sleep(1);
+				exit(5);
+			}
 
-	TEST(id2 = fork());
-	if (TEST_RETURN == 0) {
-		sleep(3);
-		tst_resm(TINFO, "I'm a child 2,my id is %d,gpid is %d",
-		id2 = getpid(), __getpgid(0));
-		exit(7);
-	}
+			TEST(id2 = fork());
+			if (TEST_RETURN == 0) {
+				sleep(3);
+				tst_resm(TINFO,
+					 "I'm a child 2,my id is %d,gpid is %d",
+					 id2 = getpid(), __getpgid(0));
+				exit(7);
+			}
 
-	TEST(id3 = fork());
-	if (TEST_RETURN == 0) {
-		sleep(2);
-		TEST(kill(id2, SIGCONT));
-		tst_resm(TINFO, "I'm a child 3,my id is %d,gpid is %d",
-		id3 = getpid(), __getpgid(0));
-		exit(6);
-	}
+			TEST(id3 = fork());
+			if (TEST_RETURN == 0) {
+				sleep(2);
+				TEST(kill(id2, SIGCONT));
+				tst_resm(TINFO,
+					 "I'm a child 3,my id is %d,gpid is %d",
+					 id3 = getpid(), __getpgid(0));
+				exit(6);
+			}
 
-	TEST(waitid(P_ALL, 0, &infop, WNOHANG | WEXITED));
-	if (TEST_RETURN == 0)
-		tst_resm(TPASS, "Success 2 ...0 is returned.. error is %d.",
-		TEST_ERRNO);
-	else {
-		tst_resm(TFAIL|TTERRNO, "%s Failed 2", TCID);
-		tst_exit();
-	}
+			TEST(waitid(P_ALL, 0, &infop, WNOHANG | WEXITED));
+			if (TEST_RETURN == 0)
+				tst_resm(TPASS,
+					 "Success 2 ...0 is returned.. error is %d.",
+					 TEST_ERRNO);
+			else {
+				tst_resm(TFAIL | TTERRNO, "%s Failed 2", TCID);
+				tst_exit();
+			}
 
-	tst_resm(TINFO, "I'm a Parent,my id is %d,gpid is %d",
-		getpid(), pgid = __getpgid(0));
+			tst_resm(TINFO, "I'm a Parent,my id is %d,gpid is %d",
+				 getpid(), pgid = __getpgid(0));
 
-	TEST(waitid(P_PGID, pgid, &infop, WEXITED));
-	if (TEST_RETURN == 0) {
-		tst_resm(TPASS, "Success3 ... 0 is returned.");
-		tst_resm(TINFO, "si_pid = %d ; si_code = %d ; si_status = %d",
-		infop.si_pid, infop.si_code, infop.si_status);
-	} else {
-		tst_resm(TFAIL|TTERRNO, "Fail3 ...  %ld is returned", TEST_RETURN);
-		tst_exit();
-	}
+			TEST(waitid(P_PGID, pgid, &infop, WEXITED));
+			if (TEST_RETURN == 0) {
+				tst_resm(TPASS, "Success3 ... 0 is returned.");
+				tst_resm(TINFO,
+					 "si_pid = %d ; si_code = %d ; si_status = %d",
+					 infop.si_pid, infop.si_code,
+					 infop.si_status);
+			} else {
+				tst_resm(TFAIL | TTERRNO,
+					 "Fail3 ...  %ld is returned",
+					 TEST_RETURN);
+				tst_exit();
+			}
 
-	TEST(kill(id2, SIGSTOP));
+			TEST(kill(id2, SIGSTOP));
 
-	TEST(i = waitid(P_PID, id2, &infop, WSTOPPED | WNOWAIT));
-	if (TEST_RETURN == 0) {	/*EINVAL*/
-		tst_resm(TINFO, "si_pid = %d, si_code = %d, si_status = %d",
-		infop.si_pid, infop.si_code, infop.si_status);
-		tst_resm(TPASS, "Success4 ... 0 is returned");
-	} else {
-		tst_resm(TFAIL|TTERRNO, "Fail4 ...  %d is returned", i);
-		tst_exit();
-	}
+			TEST(i =
+			     waitid(P_PID, id2, &infop, WSTOPPED | WNOWAIT));
+			if (TEST_RETURN == 0) {
+				/*EINVAL*/
+				    tst_resm(TINFO,
+					     "si_pid = %d, si_code = %d, si_status = %d",
+					     infop.si_pid, infop.si_code,
+					     infop.si_status);
+				tst_resm(TPASS, "Success4 ... 0 is returned");
+			} else {
+				tst_resm(TFAIL | TTERRNO,
+					 "Fail4 ...  %d is returned", i);
+				tst_exit();
+			}
 
-	TEST(waitid(P_PID, id3, &infop, WEXITED));
-	if (TEST_RETURN == 0) {	/*NOCHILD*/
-		tst_resm(TINFO, "si_pid = %d, si_code = %d, si_status = %d",
-		infop.si_pid, infop.si_code, infop.si_status);
-		tst_resm(TPASS, "Success5 ... 0 is returned");
-	} else {
-		tst_resm(TFAIL|TTERRNO, "Fail5 ...  %ld is returned", TEST_RETURN);
-		tst_exit();
-	}
+			TEST(waitid(P_PID, id3, &infop, WEXITED));
+			if (TEST_RETURN == 0) {
+				/*NOCHILD*/
+				    tst_resm(TINFO,
+					     "si_pid = %d, si_code = %d, si_status = %d",
+					     infop.si_pid, infop.si_code,
+					     infop.si_status);
+				tst_resm(TPASS, "Success5 ... 0 is returned");
+			} else {
+				tst_resm(TFAIL | TTERRNO,
+					 "Fail5 ...  %ld is returned",
+					 TEST_RETURN);
+				tst_exit();
+			}
 
-	TEST(i = waitid(P_PID, id2, &infop, WCONTINUED));
-	if (TEST_RETURN == 0) {	/*EINVAL*/
-		tst_resm(TINFO, "si_pid = %d, si_code = %d, si_status = %d",
-		infop.si_pid, infop.si_code, infop.si_status);
-		tst_resm(TPASS, "Success6 ... 0 is returned");
-	} else {
-		tst_resm(TFAIL|TTERRNO, "Fail6 ...  %d is returned", i);
-		tst_exit();
-	}
+			TEST(i = waitid(P_PID, id2, &infop, WCONTINUED));
+			if (TEST_RETURN == 0) {
+				/*EINVAL*/
+				    tst_resm(TINFO,
+					     "si_pid = %d, si_code = %d, si_status = %d",
+					     infop.si_pid, infop.si_code,
+					     infop.si_status);
+				tst_resm(TPASS, "Success6 ... 0 is returned");
+			} else {
+				tst_resm(TFAIL | TTERRNO,
+					 "Fail6 ...  %d is returned", i);
+				tst_exit();
+			}
 
-	sleep(3);
-	}
+			sleep(3);
+		}
 	}
 	cleanup();
 	tst_exit();

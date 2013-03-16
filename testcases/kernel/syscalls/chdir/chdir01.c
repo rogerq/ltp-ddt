@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -76,10 +76,9 @@ int main(int ac, char **av)
 	char *filname = "chdirtest";
 	char *filenames[3];
 
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 
-	/* parse standard options */
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
 		tst_brkm(TBROK, NULL, "OPTION PARSING ERROR - %s", msg);
 
@@ -96,13 +95,13 @@ int main(int ac, char **av)
 		fd = SAFE_CREAT(cleanup, filname, 0000);
 		SAFE_CLOSE(cleanup, fd);
 		if ((ddir = opendir(".")) == NULL)
-			tst_brkm(TBROK|TERRNO, cleanup, "opendir(.) failed");
+			tst_brkm(TBROK | TERRNO, cleanup, "opendir(.) failed");
 
 		filenames[0] = ".";
 		filenames[1] = "..";
 		filenames[2] = filname;
 		checknames(filenames, sizeof(filenames) / sizeof(filenames[0]),
-		    ddir);
+			   ddir);
 		closedir(ddir);
 
 		TEST(chdir(filname));
@@ -110,14 +109,14 @@ int main(int ac, char **av)
 		if (TEST_RETURN != -1)
 			tst_resm(TFAIL, "call succeeded unexpectedly");
 		else if (TEST_ERRNO != ENOTDIR)
-			tst_resm(TFAIL|TTERRNO,
-			    "failed unexpectedly; wanted ENOTDIR");
+			tst_resm(TFAIL | TTERRNO,
+				 "failed unexpectedly; wanted ENOTDIR");
 		else
-			tst_resm(TPASS,
-			    "failed as expected with ENOTDIR");
+			tst_resm(TPASS, "failed as expected with ENOTDIR");
 
 		if (unlink(filname) == -1)
-			tst_brkm(TBROK|TERRNO, cleanup, "Couldn't remove file");
+			tst_brkm(TBROK | TERRNO, cleanup,
+				 "Couldn't remove file");
 
 		SAFE_CHDIR(cleanup, "..");
 
@@ -151,7 +150,7 @@ void cleanup(void)
 	tst_rmdir();
 }
 
-void checknames(char **pfilnames, int fnamecount, DIR *ddir)
+void checknames(char **pfilnames, int fnamecount, DIR * ddir)
 {
 	struct dirent *dir;
 	int i, found;
@@ -159,7 +158,7 @@ void checknames(char **pfilnames, int fnamecount, DIR *ddir)
 	found = 0;
 	while ((dir = readdir(ddir)) != NULL) {
 		for (i = 0; i < fnamecount; i++) {
-			/* 
+			/*
 			 * if dir->d_name is not null terminated it is a bug
 			 * anyway
 			 */

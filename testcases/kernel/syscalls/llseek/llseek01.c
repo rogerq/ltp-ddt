@@ -14,7 +14,7 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with this program;  if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
 /*
@@ -67,7 +67,7 @@
  */
 
 #ifndef _GNU_SOURCE
-# define _GNU_SOURCE
+#define _GNU_SOURCE
 #endif
 
 #include <unistd.h>
@@ -101,8 +101,8 @@ void cleanup();			/* cleanup function for the test */
 
 int main(int ac, char **av)
 {
-	int lc;			/* loop counter */
-	char *msg;		/* message returned from parse_opts */
+	int lc;
+	char *msg;
 	loff_t offset;		/* Ret value from llseek */
 
 	if ((msg = parse_opts(ac, av, NULL, NULL)) != NULL)
@@ -121,7 +121,7 @@ int main(int ac, char **av)
 		 */
 		TEST(lseek64(fildes, (loff_t) (80 * BUFSIZ), SEEK_SET));
 
-		if (TEST_RETURN == (loff_t) -1) {
+		if (TEST_RETURN == (loff_t) - 1) {
 			tst_resm(TFAIL, "llseek on (%s) Failed, errno=%d : %s",
 				 TEMP_FILE, TEST_ERRNO, strerror(TEST_ERRNO));
 			continue;
@@ -130,8 +130,8 @@ int main(int ac, char **av)
 		if (STD_FUNCTIONAL_TEST) {
 			if (TEST_RETURN != (loff_t) (80 * BUFSIZ)) {
 				tst_resm(TFAIL, "llseek() returned incorrect "
-					 "value %"PRId64", expected %d",
-					 (int64_t)offset, BUFSIZ);
+					 "value %" PRId64 ", expected %d",
+					 (int64_t) offset, BUFSIZ);
 				continue;
 			}
 

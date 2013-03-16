@@ -14,7 +14,7 @@
 /*                                                                           */
 /*  You should have received a copy of the GNU General Public License        */
 /*  along with this program;  if not, write to the Free Software             */
-/*  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA  */
+/*  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA  */
 /*                                                                           */
 /*  File:    mem_process.c                                                   */
 /*                                                                           */
@@ -54,7 +54,7 @@ void process_options(int argc, char **argv)
 
 	opterr = 0;
 	while ((c = getopt(argc, argv, "pm:")) != -1) {
-		switch(c) {
+		switch (c) {
 		case 'm':
 			memsize = strtoul(optarg, &end, 10);
 			if (*end != '\0')
@@ -65,8 +65,8 @@ void process_options(int argc, char **argv)
 			exit(0);
 		default:
 			errx(2, "invalid option specifed");
-        	}
-    	}
+		}
+	}
 
 	if (memsize <= 0)
 		errx(3, "invalid usage");
@@ -92,8 +92,8 @@ void mem_map()
 		if (munmap(p, memsize) == -1)
 			err(5, "munmap failed");
 	} else {
-		p = mmap(NULL, memsize, PROT_READ|PROT_WRITE,
-		    MAP_SHARED|MAP_ANONYMOUS, 0, 0);
+		p = mmap(NULL, memsize, PROT_READ | PROT_WRITE,
+			 MAP_SHARED | MAP_ANONYMOUS, 0, 0);
 		if (p == MAP_FAILED)
 			err(4, "mmap failed");
 		touch_memory(p);
