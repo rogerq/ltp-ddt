@@ -1,0 +1,12 @@
+# @name EMMC device w/r stress test with fs:ext2 and size:10M (bs=10M;count=1)
+# @desc Perform mkfs first, then do read write 
+#	The device node is specified in get_blk_device_node.sh
+# @requires mmc_host 
+#  
+
+EMMC_L_STRESS_EXT2_DD_RW_0001 source "common.sh"; install_modules.sh "emmc"; DEV_NODE=`get_blk_device_node.sh "emmc";` || die "error getting devnode for emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "10M" -c "10" -d "emmc" -l "100" 
+
+
+
+
+

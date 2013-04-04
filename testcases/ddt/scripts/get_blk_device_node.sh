@@ -22,9 +22,9 @@ source "blk_device_common.sh"
 
 
 if [ $# -ne 1 ]; then
-        echo "Error: Invalid Argument Count"
-        echo "Syntax: $0 <device_type>"
-        exit 1
+    echo "Error: Invalid Argument Count"
+    echo "Syntax: $0 <device_type>"
+    exit 1
 fi
 DEVICE_TYPE=$1
 
@@ -35,61 +35,63 @@ DEVICE_TYPE=$1
  
 find_scsi_node() {
   SCSI_DEVICE=$1
-	# find the first drive for SATA to test, ignore the second one if any
-	# Assume maximum 2 usb and 2 sata plugged in
   BASE_DRV=`ls /dev/sd* |sed -r s'/\/dev\/sd[a-z]+[0-9]+//g' |sed -r s'/\/dev\///g'`
-	for DRIVE in $BASE_DRV; do
-		if [ -e /sys/block/"$DRIVE"/device/vendor ]; then
-		VENDOR=`cat /sys/block/"$DRIVE"/device/vendor`
-		RESULT=`echo $VENDOR | grep -i "ATA"`
-		case $SCSI_DEVICE in
-			sata)
-				if [ -n "$RESULT" ]; then
-					DEV_NODE="/dev/"$DRIVE"1"
-					echo $DEV_NODE
-					exit 0				
-				fi
-			;;
-			usb)
-				if [ -z "$RESULT" ]; then
+  for DRIVE in $BASE_DRV; do
+    if [ -e /sys/block/"$DRIVE"/device/vendor ]; then
+    VENDOR=`cat /sys/block/"$DRIVE"/device/vendor`
+    RESULT=`echo $VENDOR | grep -i "ATA"`
+    case $SCSI_DEVICE in
+      sata)
+        if [ -n "$RESULT" ]; then
+          DEV_NODE="/dev/"$DRIVE"1"
+          echo $DEV_NODE
+          exit 0        
+        fi
+      ;;
+      usb)
+        if [ -z "$RESULT" ]; then
           RESULT=`echo $VENDOR | grep -i "Generic"`
           if [ -z "$RESULT" ]; then
             DEV_NODE="/dev/"$DRIVE"1"
             echo $DEV_NODE
-            exit 0				
+            exit 0        
           fi
-				fi
-			;;
-		esac
-		fi
-	done
-	# if could not find match, let user know
-	echo "Could not find device node for SCSI device!"
-	exit 1
+        fi
+      ;;
+    esac
+    fi
+  done
+  # if could not find match, let user know
+  echo "Could not find device node for SCSI device!"
+  exit 1
 }
 
 ############################ Default Params ##############################
 DEV_TYPE=`get_device_type_map.sh "$DEVICE_TYPE"` || die "error getting device type: $DEV_TYPE"
 case $DEV_TYPE in
         mtd)
-		PART=`get_mtd_partition_number.sh "$DEVICE_TYPE"` || die "error getting mtd partition number: $PART"
-		DEV_NODE="$MTD_BLK_DEV$PART"
+          PART=`get_mtd_partition_number.sh "$DEVICE_TYPE"` || die "error getting mtd partition number: $PART"
+          DEV_NODE="$MTD_BLK_DEV$PART"
         ;;
+        # TODO: find a way to tell which one is mmc and which one is emmc
+        #       instead of hardcoding mmcblk0 or mmcblk1
         mmc)
           DEV_NODE=`find_part_with_biggest_size "/dev/mmcblk0" "mmc"` || die "error getting partition with biggest size: $DEV_NODE"
         ;;
+        emmc)
+          DEV_NODE=`find_part_with_biggest_size "/dev/mmcblk1" "emmc"` || die "error getting partition with biggest size: $DEV_NODE"
+        ;;
         usb)
-                #DEV_NODE="/dev/sda1"
-		DEV_NODE=`find_scsi_node "usb"` || die "error getting usb node: $DEV_NODE" 
+          DEV_NODE=`find_scsi_node "usb"` || die "error getting usb node: $DEV_NODE" 
         ;;
         ata)
-                DEV_NODE="/dev/hda1"
+          DEV_NODE="/dev/hda1"
         ;;
         sata)
-		DEV_NODE=`find_scsi_node "sata"` || die "error getting sata node: $DEV_NODE"
+          DEV_NODE=`find_scsi_node "sata"` || die "error getting sata node: $DEV_NODE"
         ;;
         *)
-                die "Invalid device type in $0 script"
+          die "Invalid device type in $0 script"
         ;;
 esac
 

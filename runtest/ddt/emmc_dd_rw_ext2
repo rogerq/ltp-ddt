@@ -1,0 +1,30 @@
+# @name EMMC device w/r test with fs:ext2
+# @desc Perform mkfs first, then do read write 
+#	The device node is specified in get_blk_device_node.sh
+# @requires mmc_host 
+#  
+
+EMMC_L_FUNC_EXT2_DD_RW_0001 source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "1" -c "1" -d "emmc" 
+
+EMMC_L_FUNC_EXT2_DD_RW_0002 source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "512" -c "1" -d "emmc"
+
+EMMC_M_FUNC_EXT2_DD_RW_0003 source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "64K" -c "1" -d "emmc"
+
+EMMC_L_FUNC_EXT2_DD_RW_0004 source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "512K" -c "1" -d "emmc"
+
+EMMC_L_FUNC_EXT2_DD_RW_0005 source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "5M" -c "1" -d "emmc"
+
+EMMC_L_FUNC_EXT2_DD_RW_0006 source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "64K" -c "10" -d "emmc"
+
+EMMC_M_FUNC_EXT2_DD_RW_0007 source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "1M" -c "10" -d "emmc"
+
+EMMC_L_FUNC_EXT2_DD_RW_0008 source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "5M" -c "10" -d "emmc"
+
+EMMC_L_FUNC_EXT2_DD_RW_0009 source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "ext2" -b "10M" -c "10" -d "emmc"
+
+
+
+
+
+
+

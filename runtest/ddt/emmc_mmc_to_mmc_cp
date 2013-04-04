@@ -1,0 +1,13 @@
+# @name EMMC to EMMC cp test with fs:vfat
+# @desc Perform mkfs first, then create src file and then copy to dst file 
+#	The device node is specified in get_blk_device_node.sh
+# @requires mmc_host 
+#  
+
+
+#EMMC_M_FUNC_EMMC2EMMC_CP_VFAT_1M source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1M" -c "1" -i "cp" -d "emmc" -l "10"
+
+EMMC_M_FUNC_EMMC2EMMC_CP_VFAT_10M source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "1M" -c "10" -i "cp" -d "emmc" -l "10"
+
+EMMC_L_STRESS_EMMC2EMMC_CP_VFAT_100M source "common.sh"; install_modules.sh "emmc"; do_cmd blk_device_dd_readwrite_test.sh -f "vfat" -b "10M" -c "10" -i "cp" -d "emmc" -l "100"
+

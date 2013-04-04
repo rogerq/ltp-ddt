@@ -1,0 +1,18 @@
+# @name EMMC Write/Read Performance test fs: ext4
+# @desc format emmc device first and then mount it and do read write perf test
+# @requires mmc_host
+#  
+
+EMMC_L_PERF_EXT4_0001 source "common.sh"; install_modules.sh "emmc"; blk_device_filesystem_perf_test.sh -f ext4 -s 100 -B "102400 262144 524288 1048576 5242880" -d "emmc"
+EMMC_L_PERF_EXT4_SYNC source "common.sh"; install_modules.sh "emmc"; blk_device_filesystem_perf_test.sh -f ext4 -s 100 -o 'sync' -B "102400 262144 524288 1048576 5242880" -d "emmc"
+EMMC_M_PERF_EXT4_SYNC source "common.sh"; install_modules.sh "emmc"; blk_device_filesystem_perf_test.sh -f ext4 -s 100 -o 'sync' -B "262144" -d "emmc"
+
+EMMC_M_PERF_EXT4_FILESIZE_2M source "common.sh"; install_modules.sh "emmc"; blk_device_filesystem_perf_test.sh -f ext4 -s 2 -B "262144" -d "emmc" -c 1
+EMMC_M_PERF_EXT4_FILESIZE_4M source "common.sh"; install_modules.sh "emmc"; blk_device_filesystem_perf_test.sh -f ext4 -s 4 -B "262144" -d "emmc" -c 1
+EMMC_M_PERF_EXT4_FILESIZE_8M source "common.sh"; install_modules.sh "emmc"; blk_device_filesystem_perf_test.sh -f ext4 -s 8 -B "262144" -d "emmc" -c 1
+EMMC_M_PERF_EXT4_FILESIZE_10M source "common.sh"; install_modules.sh "emmc"; blk_device_filesystem_perf_test.sh -f ext4 -s 10 -B "262144" -d "emmc" -c 1
+
+EMMC_M_PERF_EXT4_VARIOUS_BUFSIZE source "common.sh"; install_modules.sh "emmc"; blk_device_filesystem_perf_test.sh -f ext4 -s 10 -B "4096 8192 16384 32768 65536" -d "emmc"
+
+
+
