@@ -27,6 +27,21 @@ include $(top_srcdir)/include/mk/env_pre.mk
 # Define directories to exclude from build/installation
 #FILTER_OUT_DIRS		:= kdump
 
+# Disabling EDMA tests until 3.8+ compatible tests are available
+FILTER_OUT_DIRS                 += edma_test_suite
+
+ifeq ($(PLATFORM),dra7xx-evm)
+FILTER_OUT_DIRS                 += mc_test_suite
+endif
+
+ifeq ($(PLATFORM),omap5-evm)
+FILTER_OUT_DIRS                 += v4l2_capture_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_test_suite
+FILTER_OUT_DIRS                 += mc_test_suite
+FILTER_OUT_DIRS                 += v4l2_display_davinci_test_suite
+FILTER_OUT_DIRS                 += edma_test_suite
+endif
+
 ifeq ($(PLATFORM),dm6467-evm)
 FILTER_OUT_DIRS			+= fbdev_display_test_suite
 FILTER_OUT_DIRS                 += v4l2_capture_test_suite

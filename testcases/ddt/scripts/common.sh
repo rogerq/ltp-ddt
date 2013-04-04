@@ -34,15 +34,17 @@ resolve_platform_name() {
 
 if [ "x$SOC" == "x" ]
 then
-  LTPPATH='/opt/ltp'
-  plat=`uname -a | cut -d' ' -f 2`
+   LTPPATH='/opt/ltp'
+   export PATH="${PATH}:${LTPPATH}/testcases/bin:${LTPPATH}/testcases/bin/ddt"
+   plat=`uname -a | cut -d' ' -f 2`
 	local i=0; local DRIVERS=""
 	while read -r file
-  do
+	 do
 		echo $file | grep -e "^#.*" > /dev/null
 		if [ "$?" == "0" ]; then
 			continue
 		fi
+		mkdir -p ${PLATFORMDIR}/${file}
 		case $i in
 			 0) ARCH="$file"
 				 export ARCH ;;

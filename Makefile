@@ -227,7 +227,8 @@ MODULES_TO_BUILD :=
 PLATFORMSwEDMA   := am180x-evm|am181x-evm|am389x-evm|am387x-evm|dm385-evm|dm813x-evm|da830-omapl137-evm|am170x-evm
 
 ifneq (,$(findstring $(PLATFORM),$(PLATFORMSwEDMA)))
-MODULES_TO_BUILD += modules_edma
+# Disable edma modules install until appropriate tests are available
+#MODULES_TO_BUILD += modules_edma
 endif
 
 modules_edma:
