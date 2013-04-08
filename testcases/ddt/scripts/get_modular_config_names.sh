@@ -85,8 +85,8 @@ do
     *clcd)
       clcd="CONFIG_DA850_UI_CLCD:panel";; #not sure if this is the right one
 
-    *soc-audio)
-      sound=':snd-soc-evm';; #covered in below switch case for MACHINE
+    *sound)
+      sound='CONFIG_SND_SOC:snd-soc-core CONFIG_SND_OMAP_SOC:snd-soc-omap';;
 
     *musb_ti81xx)
       usb="CONFIG_USB_MUSB_DSPS:musb_dsps";;
@@ -118,6 +118,8 @@ case $MACHINE in
 		graphics='CONFIG_PANEL_DVI:panel_dvi CONFIG_PANEL_GENERIC_DPI:panel_generic_dpi CONFIG_FB_OMAP2:omapfb';; 
 	am3517-evm)
 		sound='CONFIG_SND_OMAP_SOC_AM3517EVM:snd-soc-am3517evm';;
+        omap5-evm)
+                sound='CONFIG_SND_SOC:snd-soc-core CONFIG_SND_OMAP_SOC:snd-soc-omap';;
 	am335x-evm|am335x-sk|beaglebone)
 	        sound='CONFIG_SND_SOC_TLV320AIC3X:snd-soc-tlv320aic3x CONFIG_SND_AM335X_SOC_EVM:snd-soc-evm CONFIG_SND_DAVINCI_SOC_MCASP:snd-soc-davinci-mcasp CONFIG_SND_AM33XX_SOC:snd-soc-davinci'
 		usb='CONFIG_USB_MUSB_TI81XX_GLUE:ti81xx';;
