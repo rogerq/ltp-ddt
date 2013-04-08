@@ -20,6 +20,9 @@
 
 source "common.sh"  # Import do_cmd(), die() and other functions
 
+# Let udev handle module insertion if present
+udevadm --help > /dev/null && exit 0
+
 ############################# Functions #######################################
 
 ################################ CLI Params ####################################
