@@ -82,7 +82,7 @@ swapping01 swapping01 -i 5
 
 thp01 thp01 -I 120
 thp02 thp02
-thp03 thp03
+thp03 x=`zcat /proc/config.gz | grep CONFIG_HUGETLB_PAGE= &> /dev/null; echo $?`; if [ $x -eq 0 ]; then thp03; else echo 'CONFIG_HUGETLB_PAGE is not supported'; fi
 
 vma01 vma01
 vma02 vma02
