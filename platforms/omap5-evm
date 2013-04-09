@@ -9,9 +9,6 @@ mmc_host/mmc/mmci-omap-hs
 mmc_host/sd/mmci-omap-hs
 mmc_host/sdhc/mmci-omap-hs
 mmc_host/sdxc/mmci-omap-hs
-nand/omap2-nand
-ubifs
-jffs2
 net/eth10M
 net/eth100M
 net/eth1G
@@ -38,3 +35,5 @@ watchdog/omap_wdt
 pwm/ehrpwm
 pwm/ecap
 pwm/backlight
+sata
+
