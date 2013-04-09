@@ -134,13 +134,10 @@ static long count_maps(pid_t pid)
 	if (fp == NULL)
 		tst_brkm(TBROK | TERRNO, cleanup, "fopen %s", buf);
 	while (getline(&line, &len, fp) != -1) {
-		/* exclude vdso and vsyscall */
-		if (sscanf(line, "%*p-%*p %*4s %*p %*2d:%*2d %*d %s", buf) ==
-		    1 && ((strcmp(buf, "[vdso]") == 0) ||
-			  (strcmp(buf, "[vsyscall]") == 0)))
-			continue;
 		map_count++;
 	}
+	/* exclude vdso and vsyscall */
+        map_count -= 2;
 	fclose(fp);
 
 	return map_count;
