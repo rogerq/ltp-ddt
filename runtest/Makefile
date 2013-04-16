@@ -45,7 +45,7 @@ endif
 
 #INSTALL_TARGETS		:= $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
 # Add PROMOTED LTP test scenario files that should be installed with ltp-ddt
-INSTALL_TARGETS   := timers syscalls math sched mm ipc
+INSTALL_TARGETS   := timers syscalls math sched mm ipc nptl pipes
 
 MAKE_TARGETS		:=
 
