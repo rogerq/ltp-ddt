@@ -10,7 +10,7 @@ GST_M_FUNC_VIDEO_MPEG2_WQVGA source 'common.sh'; do_cmd 'gst.sh -d "1513" -c "mp
 GST_M_FUNC_VIDEO_MPEG2_WVGA source 'common.sh'; do_cmd 'gst.sh -d "1495" -c "mpeg2" -r "WVGA"'
 GST_S_FUNC_VIDEO_H264_480P source 'common.sh'; do_cmd 'gst.sh -d "1288" -c "264" -r "480p"'
 GST_M_FUNC_VIDEO_H264_WQVGA source 'common.sh'; do_cmd 'gst.sh -d "1326" -c "264" -r "WQVGA"'
-GST_M_FUNC_VIDEO_H264_WVGA source 'common.sh'; do_cmd 'gst.sh -c "264" -r "WVGA"'
+GST_M_FUNC_VIDEO_H264_WVGA source 'common.sh'; do_cmd 'gst.sh -d "1314" -c "264" -r "WVGA"'
 GST_S_FUNC_AV_MP4_480P source 'common.sh'; do_cmd 'gst.sh -c "mpeg4aac" -r "480p"'
 GST_M_FUNC_AV_MP4_WQVGA source 'common.sh'; do_cmd 'gst.sh -c "mpeg4aac" -r "WQVGA"'
 GST_M_FUNC_AV_MP4_WVGA source 'common.sh'; do_cmd 'gst.sh -c "mpeg4aac" -r "WVGA"'
