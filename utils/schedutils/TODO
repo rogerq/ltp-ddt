@@ -1,0 +1,11 @@
+If you somehow think you can help with any of the items below,
+please let me know <NOS@Utel.no>
+TODO items:
+ - Make sure it compiles on all platforms that have the sched_XXX functions,
+ - Clean the code
+ - Make resched take several pids as arguments
+ - Convert to automake project
+ -Test on various platforms, currently it has only been tested on:
+   Redhat Linux, Debian  and Solaris(using gnu tools/compilers, also see
+   the README file for a note on Solaris.) Version 0.0.2 vas tested on FreeBSD.
+

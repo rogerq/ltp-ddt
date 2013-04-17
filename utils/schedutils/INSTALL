@@ -1,0 +1,24 @@
+schedutils installation
+=======================
+
+To compile:
+
+	$ make
+
+To install:
+
+	$ su
+	% make install
+
+You may want to provide an alternative installation prefix.
+The default is "/usr/local":
+
+	$ make PREFIX="/usr" install
+
+To clean:
+
+	$ make clean
+
+To really clean:
+
+	$ make distclean

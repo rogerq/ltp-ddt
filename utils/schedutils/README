@@ -1,0 +1,45 @@
+schedutils - Linux scheduler utility package
+============================================
+
+schedutils is maintained by Robert Love <rlove@rlove.org>
+
+
+Introduction
+------------
+
+These are the Linux scheduler utilities - schedutils for short.  These programs
+take advantage of the scheduler family of syscalls that Linux implements across
+various kernels.  These system calls implement interfaces for scheduler-related
+parameters such as CPU affinity and real-time attributes.  The standard UNIX
+utilities do not provide support for these interfaces -- thus this package.
+
+The programs that are included in this package are chrt and taskset.  Together
+with nice and renice (not included), they allow full control of process
+scheduling parameters.  Suggestions for related utilities are welcome, although
+it is believed (barring new interfaces) that all scheduling interfaces are
+covered.
+
+
+Included Utilities:
+-------------------
+
+taskset
+set or retrieve task CPU affinity for a given pid or execute a new task under
+a given affinity mask.
+
+ionice:
+set or retrieve the I/O priority for a given pid or execute a new task with
+a given I/O priority.  NOTE: I/O priority is a new feature, available since
+2.6.12.
+
+chrt:
+set or retrieve real-time scheduling parameters for a given pid or execute a
+new task under given scheduling parameters.'
+
+irqset and lsrt were once included but are no longer.
+
+
+Feedback
+--------
+
+Mail suggestions, bug reports, and patches to rlove@rlove.org

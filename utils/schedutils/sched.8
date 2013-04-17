@@ -1,0 +1,67 @@
+.Dt SCHEDUTILS 8
+.Nd alter scheduling priority of processes
+.TH "schedutils" "8" "July 30, 2001" "" " System Manager's Manual"
+.SH "NAME"
+\fBsched,resched,getsched \fP- change a process' scheduler/priority
+.SH SYNOPSIS
+.PP
+\fBsched\fP [\fB-h\fP] [\fB-v\fP] \fB-r\fP|\fB-o\fP|\fB-f\fP \fIpriority\fP \fIprogram\fP [args, ..]
+.PP
+\fBresched\fP [\fB-h\fP] [\fB-v\fP] \fB-r\fP|\fB-o\fP|\fB-f\fP \fIpid\fP [\fIpriority\fP] 
+.PP
+\fBgetsched\fP [\fB-h\fP] \fIpid\fP [\fIpid\fP, ...]
+.SH "DESCRIPTION"
+schedutils are some utilities used to manipulate the scheduling and \fIpriority\fP of processes on *nix  systems. This 
+is realized with the functions found in sched.h, see the manpage for \fBsched_setscheduler\fP(2) for more info about 
+what's going on.
+
+\fBsched\fP runs a new \fIprogram\fP under the specified scheduler and \fIpriority\fP, \fBresched\fP is used to change the scheduler and/or
+\fIpriority\fP of already running processes identified with their \fIpid\fP.
+\fBgetsched\fP is a little utility that prints the scheduler and \fIpriority\fP of running processes identified with their \fIpid\fP, it
+does not alter anything. Usually only the superuser(root) are allowed to change scheduling parameters.
+.SH "OPTIONS"
+\fB-h\fP
+print help
+.PP
+\fB-v\fP
+be verbose, prints out the  scheduler/priority before and after it's changed.
+.PP
+\fB-r\fP
+Round Robin scheduler
+.PP
+\fB-f\fP
+FIFO scheduler
+.PP
+\fB-o\fP
+Other scheduler, this is the 'default' scheduler that normal processes start under.
+.SH "SCHEDULING"
+The scheduler is the part of the kernel that decides which process that will get the CPU next. Posix defines
+three diffrent policies that can be used to decide this.
+See \fBsched_setscheduler\fP for an in-depth explanation for the platform you use.
+.PP
+\fBOther\fP the default timesharing scheduler used by normal processes. The 'Other' scheduler uses the lowest
+\fIpriority\fP 0 , and  it cannot be set higher.
+.PP
+\fBFIFO\fP First In First Out must have a \fIpriority\fP in the range 1-99 and uses a simple fifo queue to hold the processes
+A process that is executed will continue to execute until it's either preempted by a process with higher
+\fIpriority\fP, gives up the CPU (e.g. by calling sched_yield) or performs a call that blocks. Then then next
+process in the queue can run.
+.PP
+\fBRound Robin\fP must have a \fIpriority\fP in the range 1-99 and are very similar to FIFO, except it uses timesharing
+between the processes in the queue, a running process will therefore give up the CPU to another process
+with the same \fIpriority\fP when it has used its time quantum.
+.SH NOTES
+When a process is run under another scheduler than the default (Other) it can never be preempted by a process
+with a lower \fIpriority\fP. So, if a process run under another scheduler uses the CPU heavily, or worse have e.g. a
+bug that causes it to go in an infinite loop, no other process might ever run and the machine might look
+completely locked, unless there is an open shell running somewhere with a even higher \fIpriority\fP, one can 
+execute commands and possibly kill the process.
+.SH BUGS
+None known, report any you find to http://sourceforge.net/tracker/?atid=399898&group_id=30636&func=browse
+.SH AUTHOR
+Nils O. Selåsdal <NOS@Utel.no>
+.SH SEE ALSO
+\fBnice\fP(1),\fBrenice\fP(8),\fBsched_setscheduler\fP(2),\fBsched_getscheduler\fP(2)
+.PP
+.RE
+
