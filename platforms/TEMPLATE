@@ -2,11 +2,11 @@ armv5
 omapl138
 am180x-evm
 can/<drivername>
+clcd/<drivername>
 edma/<drivername>
 gpio/<drivername>
-sdma/<drivername>
 graphics/<drivername>
-clcd/<drivername>
+jffs2
 i2c/non_eeprom/<drivername>
 i2c/eeprom/<drivername>
 mmc_host/sd/<drivername>
@@ -31,6 +31,8 @@ power_mgr/smartreflex
 pru/<drivername>
 rtc/<drivername>
 sata/<drivername>
+sdma/<drivername>
+smp
 sound/capture/alsa/<drivername>
 sound/playback/alsa/<drivername>
 spi_master/mtd/<drivername>
@@ -55,4 +57,3 @@ video/display/1080i/v4l2/<drivername>
 video/display/1080p/v4l2/<drivername>
 watchdog/<drivername>
 ubifs
-jffs2

@@ -19,7 +19,13 @@ power_mgr/cpufreq/ondemand
 power_mgr/cpuidle
 power_mgr/dynamic_ticks
 power_mgr/smartreflex
+pwm/ehrpwm
+pwm/ecap
+pwm/backlight
+rtc/omap_rtc
 rtc/rtc-palmas
+sata/ahci
+smp
 sound/capture/alsa
 sound/playback/alsa
 sound/capture/alsa/hisamplingrate
@@ -32,9 +38,3 @@ usb/otg
 usb/slave/msc
 usb/slave/cdc
 watchdog/omap_wdt
-pwm/ehrpwm
-pwm/ecap
-pwm/backlight
-sata/ahci
-
-
