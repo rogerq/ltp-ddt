@@ -1,0 +1,37 @@
+# @name SPIdev tests 
+# @desc Test spidev with different speed, word length, different length of
+#       transmitted words, etc
+#       Before run those tests, spidev needs to be enabled in kernel including
+#       settting up pinctrl. Also, loopback SOMI and SIMO pin on EVM.
+# @requires spi_master
+
+SPI_S_FUNC_SPIDEV_500K_4_10 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 500000 -b 4 -W 10
+SPI_S_FUNC_SPIDEV_500K_8_10 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 500000 -b 8 -W 10
+SPI_S_FUNC_SPIDEV_500K_9_40 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 500000 -b 9 -W 40
+SPI_S_FUNC_SPIDEV_500K_12_100 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 500000 -b 12 -W 100
+
+SPI_M_FUNC_SPIDEV_3M_16_100 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 3000000 -b 16 -W 100
+SPI_M_FUNC_SPIDEV_3M_32_100 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 3000000 -b 32 -W 100
+SPI_M_FUNC_SPIDEV_3M_4_200 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 3000000 -b 4 -W 200
+SPI_M_FUNC_SPIDEV_3M_8_300 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 3000000 -b 8 -W 300
+SPI_M_FUNC_SPIDEV_3M_9_400 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 3000000 -b 9 -W 400
+SPI_M_FUNC_SPIDEV_3M_12_400 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 3000000 -b 12 -W 400
+SPI_M_FUNC_SPIDEV_3M_16_400 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 3000000 -b 16 -W 400
+SPI_M_FUNC_SPIDEV_3M_30_500 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 3000000 -b 30 -W 500
+SPI_M_FUNC_SPIDEV_3M_32_500 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 3000000 -b 32 -W 500
+
+SPI_M_FUNC_SPIDEV_12M_8_10 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 12000000 -b 8 -W 10
+SPI_M_FUNC_SPIDEV_12M_12_10 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 12000000 -b 12 -W 10
+
+SPI_M_FUNC_SPIDEV_24M_30_500 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 500000 -b 30 -W 500
+SPI_M_FUNC_SPIDEV_24M_32_500 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 500000 -b 32 -W 500
+
+SPI_M_FUNC_SPIDEV_48M_32_100 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 500000 -b 32 -W 100
+SPI_M_FUNC_SPIDEV_48M_32_500 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 500000 -b 32 -W 500
+
+SPI_M_FUNC_SPIDEV_HO_24M_32_500 source "common.sh"; install_modules.sh "spi"; spidev_node=`get_spidev_node.sh` || die "fail to get spidev node: $spidev_node"; spidev_test -D "$spidev_node" -s 24000000 -b 32 -W 500 -H -O
+
+
+
+
+
