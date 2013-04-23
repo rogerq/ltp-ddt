@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh 
 # 
 # Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/
 #  
@@ -12,8 +12,8 @@
 # GNU General Public License for more details.
 # 
 
-# Get devnode for non mtd device like 'mmc', 'usb', 'ata'
-# Input: DEVICE_TYPE like 'mmc', 'usb', 'ata'
+# Get devnode for non mtd device like 'mmc', 'usb', 'usb2', 'sata'
+# Input: DEVICE_TYPE like 'mmc', 'usb', 'usb2', 'sata'
 # Output: DEV_NODE like /dev/mmcblk0p1 
 
 source "common.sh"
@@ -29,37 +29,42 @@ fi
 DEVICE_TYPE=$1
 
 ############################ Functions ################################
-# this function is to get SCSI device usb or sata node based on vendor info
-# assume SATA's vendor always ATA; if not, throw error
-# input is either 'sata' or 'usb'
+# this function is to get SCSI device usb or sata node based on by-id
+# input is either 'sata' or 'usb' or 'usb2'
  
 find_scsi_node() {
   SCSI_DEVICE=$1
   BASE_DRV=`ls /dev/sd* |sed -r s'/\/dev\/sd[a-z]+[0-9]+//g' |sed -r s'/\/dev\///g'`
   for DRIVE in $BASE_DRV; do
-    if [ -e /sys/block/"$DRIVE"/device/vendor ]; then
-    VENDOR=`cat /sys/block/"$DRIVE"/device/vendor`
-    RESULT=`echo $VENDOR | grep -i "ATA"`
     case $SCSI_DEVICE in
       sata)
-        if [ -n "$RESULT" ]; then
+        for drv in `ls /dev/disk/by-id|grep -i sata`;do
+        if [ $(basename $(readlink /dev/disk/by-id/$drv)) == $DRIVE ]; then
           DEV_NODE="/dev/"$DRIVE"1"
           echo $DEV_NODE
           exit 0        
         fi
+        done
       ;;
       usb)
-        if [ -z "$RESULT" ]; then
-          RESULT=`echo $VENDOR | grep -i "Generic"`
-          if [ -z "$RESULT" ]; then
+        for drv in `ls /dev/disk/by-path|grep -i ehci`;do
+        if [ $(basename $(readlink /dev/disk/by-path/$drv)) == $DRIVE ]; then
             DEV_NODE="/dev/"$DRIVE"1"
             echo $DEV_NODE
             exit 0        
-          fi
         fi
+        done
+      ;;
+      usb2)
+        for drv in `ls /dev/disk/by-path|grep -i xhci`;do
+        if [ $(basename $(readlink /dev/disk/by-path/$drv)) == $DRIVE ]; then
+            DEV_NODE="/dev/"$DRIVE"1"
+            echo $DEV_NODE
+            exit 0        
+        fi
+        done
       ;;
     esac
-    fi
   done
   # if could not find match, let user know
   echo "Could not find device node for SCSI device!"
@@ -83,6 +88,9 @@ case $DEV_TYPE in
         ;;
         usb)
           DEV_NODE=`find_scsi_node "usb"` || die "error getting usb node: $DEV_NODE" 
+        ;;
+        usb2)
+          DEV_NODE=`find_scsi_node "usb2"` || die "error getting usb2 node: $DEV_NODE" 
         ;;
         ata)
           DEV_NODE="/dev/hda1"

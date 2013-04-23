@@ -99,6 +99,10 @@ do
       usb="CONFIG_USB_MUSB_OMAP2PLUS_GLUE:omap2430";;
     *musb_am35x)
       usb="CONFIG_USB_MUSB_AM35X_GLUE:am35x";;
+    *ehci-omap)
+      usb="CONFIG_USB_EHCI_HCD_OMAP:ehci-omap";;
+    *xhci-hcd)
+      usb2="CONFIG_USB_XHCI_HCD:xhci-hcd";;
 
   esac
 done
