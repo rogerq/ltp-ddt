@@ -740,7 +740,8 @@ help ()
 }
 # parse the command line arguments
 
-args=`getopt -u -a -o hv  --long version,help,id:,plat: --  "$@"`
+#args=`getopt -u -a -o hv  --long version,help,id:,plat: --  "$@"`
+args=''
 
 # getopt fails, set help option
 if [ $? -ne 0 ] ; then
