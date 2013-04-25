@@ -615,10 +615,10 @@ msgctl04 msgctl04
 msgctl05 msgctl05
 msgctl06 msgctl06
 msgctl07 msgctl07
-msgctl08 msgctl08
-msgctl09 msgctl09
-msgctl10 msgctl10
-msgctl11 msgctl11
+msgctl08 x=`which ipcs > /dev/null;echo $?`; if [ $x -eq 0 ]; then msgctl08; else echo "ipcs is N/A"; fi 
+msgctl09 x=`which ipcs > /dev/null;echo $?`; if [ $x -eq 0 ]; then msgctl09; else echo "ipcs is N/A"; fi 
+msgctl10 x=`which ipcs > /dev/null;echo $?`; if [ $x -eq 0 ]; then msgctl10; else echo "ipcs is N/A"; fi 
+msgctl11 x=`which ipcs > /dev/null;echo $?`; if [ $x -eq 0 ]; then msgctl11; else echo "ipcs is N/A"; fi 
 
 msgget01 msgget01
 msgget02 msgget02
