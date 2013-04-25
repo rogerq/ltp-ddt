@@ -34,38 +34,25 @@ DEVICE_TYPE=$1
  
 find_scsi_node() {
   SCSI_DEVICE=$1
-  BASE_DRV=`ls /dev/sd* |sed -r s'/\/dev\/sd[a-z]+[0-9]+//g' |sed -r s'/\/dev\///g'`
-  for DRIVE in $BASE_DRV; do
     case $SCSI_DEVICE in
       sata)
-        for drv in `ls /dev/disk/by-id|grep -i sata`;do
-        if [ $(basename $(readlink /dev/disk/by-id/$drv)) == $DRIVE ]; then
-          DEV_NODE="/dev/"$DRIVE"1"
-          echo $DEV_NODE
-          exit 0        
+        file=`ls /dev/disk/by-id/*-part1|grep -i sata`
+        if [[ ! -z "$file" ]]; then
+        DEV_NODE="/dev/""$(basename $(readlink $file))"
+         echo $DEV_NODE
+         exit 0
         fi
-        done
       ;;
-      usb)
-        for drv in `ls /dev/disk/by-path|grep -i ehci`;do
-        if [ $(basename $(readlink /dev/disk/by-path/$drv)) == $DRIVE ]; then
-            DEV_NODE="/dev/"$DRIVE"1"
-            echo $DEV_NODE
-            exit 0        
+      usb|usb2)
+        usb_cnt_interface=`get_usb_controller_name.sh "$SCSI_DEVICE"` 
+        file=`ls /dev/disk/by-path/*-part1|grep -i "$usb_cnt_interface"|head -1`
+        if [[ ! -z "$file" ]]; then
+        DEV_NODE="/dev/""$(basename $(readlink $file))"
+         echo $DEV_NODE
+         exit 0
         fi
-        done
-      ;;
-      usb2)
-        for drv in `ls /dev/disk/by-path|grep -i xhci`;do
-        if [ $(basename $(readlink /dev/disk/by-path/$drv)) == $DRIVE ]; then
-            DEV_NODE="/dev/"$DRIVE"1"
-            echo $DEV_NODE
-            exit 0        
-        fi
-        done
       ;;
     esac
-  done
   # if could not find match, let user know
   echo "Could not find device node for SCSI device!"
   exit 1

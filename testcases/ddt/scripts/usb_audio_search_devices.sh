@@ -12,7 +12,9 @@
 # GNU General Public License for more details.
 # 
 
-# search for USB audio devices
+# search for USB audio devices - first parameter is operation such as 
+# play, record and loopback, second parameter is name of driver such as
+# usb, usb2
 
 source "common.sh"
 source "st_log.sh"
@@ -24,8 +26,10 @@ source "st_log.sh"
 
 ############################ DEFAULT Params #######################
 
-############# Do the work ###########################################
 
+
+############# Do the work ###########################################
+usb_interface=$2
 if [ "$1" = "play" ]; then
  cmd="aplay -l"
 fi
@@ -36,6 +40,21 @@ then
 fi
 
 audiodev=`$cmd | egrep "^card\s+[[:digit:]]+.+USB\s+Audio"| head -n 1 | cut -d':' -f 1 | cut -d' ' -f 2`
+# if udev is supported, using output to confirm controller that is to be used
+udev_present=""
+udev_present=`ps|grep -m 1 udevd|grep -v grep`
+if  [ -n "$udev_present" ];
+then
+    udev_tree_search=""
+    usb_cnt_interface=`get_usb_controller_name.sh "$usb_interface"`
+    udev_tree_search=`udevadm info -a -n /\dev/\snd/\controlC$audiodev|grep -m 1 "$usb_cnt_interface"`
+       if [ -z "$udev_tree_search" ]; then
+            test_print_trc " ::"
+            test_print_trc " :: No USB Audio $2 device found. Exiting Audio tests..."
+            test_print_trc " ::"	
+            exit 1 
+       fi
+fi
 if [ "$audiodev" = "" ]; then
 	test_print_trc " ::"
 	test_print_trc " :: No USB Audio $1 device found. Exiting Audio tests..."
@@ -49,4 +68,3 @@ echo $audiodev
 else
   echo $audiodev
 fi
-

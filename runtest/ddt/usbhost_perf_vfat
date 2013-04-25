@@ -4,9 +4,13 @@
 # @setup_requires usbhostmsc
 
 USBHOST_S_PERF_VFAT_0001 source 'common.sh' ; do_cmd install_modules.sh 'usb' ; blk_device_filesystem_perf_test.sh -f vfat -s 10 -B "102400 262144" -d "usb"
+USB2HOST_S_PERF_VFAT_0001 source 'common.sh' ; do_cmd install_modules.sh 'usb2' ; blk_device_filesystem_perf_test.sh -f vfat -s 10 -B "102400 262144" -d "usb2"
+
 USBHOST_L_PERF_VFAT_0001 source 'common.sh' ; do_cmd install_modules.sh 'usb' ; blk_device_filesystem_perf_test.sh -f vfat -s 100 -B "102400 262144 524288 1048576 5242880" -d "usb" -t "60"
+USB2HOST_L_PERF_VFAT_0001 source 'common.sh' ; do_cmd install_modules.sh 'usb2' ; blk_device_filesystem_perf_test.sh -f vfat -s 100 -B "102400 262144 524288 1048576 5242880" -d "usb2" -t "60"
 
 
 USBHOST_L_PERF_VFAT_SYNC source "common.sh"; install_modules.sh "usb"; blk_device_filesystem_perf_test.sh -f vfat -s 100 -o 'sync' -B "102400 262144 524288 1048576 5242880" -d "usb" -t "60"
+USB2HOST_L_PERF_VFAT_SYNC source "common.sh"; install_modules.sh "usb2"; blk_device_filesystem_perf_test.sh -f vfat -s 100 -o 'sync' -B "102400 262144 524288 1048576 5242880" -d "usb2" -t "60"
 
 
