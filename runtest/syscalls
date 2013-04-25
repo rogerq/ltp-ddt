@@ -357,7 +357,7 @@ getgroups03_16 getgroups03_16
 getgroups04 getgroups04
 getgroups04_16 getgroups04_16
 
-gethostid01 gethostid01
+gethostid01 x=`which hostid > /dev/null;echo $?`; if [ $x -eq 0 ]; then hostid; else echo "hostid is N/A"; fi
 
 gethostname01 gethostname01
 
