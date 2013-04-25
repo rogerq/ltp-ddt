@@ -5,3 +5,5 @@ ioctl03
 quotactl01
 sysctl03
 utimensat01
+syslog01
+syslog02
