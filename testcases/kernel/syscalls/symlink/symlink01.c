@@ -1582,6 +1582,7 @@ struct all_test_cases *tc_ptr;
 
 			char *cwd, *getcwd();
 			char expected_location[PATH_MAX];
+			char expected_alt_location[PATH_MAX];
 			/*
 			 *  Build expected current directory position
 			 */
@@ -1590,9 +1591,14 @@ struct all_test_cases *tc_ptr;
 			strcat(expected_location, "/");
 			strcat(expected_location, tc_ptr->fn_arg[2]);
 
+			snprintf(expected_alt_location, PATH_MAX, "%s%s%s%s",
+                                  "/var/volatile", get_tst_tmpdir(), "/", 
+                                  tc_ptr->fn_arg[2]);
+
 			if ((cwd = getcwd(NULL, 0)) == NULL)
 				tst_resm(TFAIL, "getcwd(3) FAILURE");
-			else if (strcmp(cwd, expected_location) == 0)
+			else if (strcmp(cwd, expected_location) == 0 || 
+                                 strcmp(cwd, expected_alt_location) == 0)
 				if (TEST_RESULT != TPASS || STD_FUNCTIONAL_TEST)
 					tst_resm(TEST_RESULT, "%s",
 						 msgs[tc_ptr->pass_msg]);
