@@ -176,6 +176,8 @@ int main(int ac, char **av)
 			if (strncmp(test_desc, "Symlink Pathname is empty", 25) == 0) {
 				if ((tst_kvercmp(2, 6, 39)) >= 0)
 					Test_cases[i].exp_errno = EINVAL;
+				if ((tst_kvercmp(3, 2, 0)) >= 0)
+					Test_cases[i].exp_errno = ENOENT;
 			}
 
 			/*
