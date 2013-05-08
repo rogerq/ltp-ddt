@@ -188,6 +188,23 @@ case $MACHINE in
 			;;
                 esac
 		;;
+	da850-omapl138-evm)
+		case $SLAVE_DEVICE in
+                        eeprom)
+                                SLAVE_ADDR=0x50
+                        ;;
+			pmic)
+				SLAVE_ADDR=0x48
+			;;
+                        default)
+                                SLAVE_ADDR=0x11
+                        ;;
+                        *)
+                                die "Unknown slave device! Can not get slave address."
+                        ;;
+                esac
+                ;;
+
     am335x-evm)
 
           case $SLAVE_DEVICE in
