@@ -23,37 +23,100 @@ source "common.sh"
 #        device_type: like 'mmc', 'usb'
 # It only tested on MMCSD and it should work on other block devices
 #   like usb, ata etc.
+
 find_part_with_biggest_size() {
   if [ $# -ne 2 ]; then
-    die "Usage: $0 <dev_base_node like /dev/mmcblk0, /dev/sda> <device_type like mmc>"
+    die "Usage: $0 <dev_base_node like /dev/mmcblk0, /dev/sda> <device_type like mmc, usb>"
   fi
 
   DEV_BASE_NODE=$1
   DEVICE_TYPE=$2
-  MATCH=`fdisk -l $DEV_BASE_NODE |grep "$DEV_BASE_NODE"p`
-  #ROOT=`get_fs_root` || die "error getting fs root: $ROOT"
+
+  # check if fdisk works for this dev
+  fdisk -l "$DEV_BASE_NODE" > fdisklog 2>&1 
+  cat fdisklog |grep -i "fdisk doesn't support" > /dev/null
+  if [ $? -ne 0 ]; then
+    UTIL_TO_USE='fdisk'
+  else
+    # use parted or gdisk etc
+    parted -v > /dev/null && UTIL_TO_USE='parted' || (gdisk -v > /dev/null && UTIL_TO_USE='gdisk' || die "Do not know which util to check partition")
+  fi
 
   SIZE_BIGGEST=0
   TMP_IFS=$IFS
   IFS=$'\n'
-  for i in $MATCH
-  do
-    LINE=$i
-    FIELD_2ND=`echo "$LINE" | awk -F " " '{print $2}'`
-    DEVNODE=`echo "$LINE" | awk -F " " '{print $1}'`
 
-    # check if this part is holding rootfs or not
-    IS_ROOTFS=`is_part_rootfs "$DEVICE_TYPE" "$DEVNODE"` || die "error when calling is_part_rootfs"
-    # skip boot partition
-    #if [ "$FIELD_2ND" != '*' -a "$DEVNODE" != "$ROOT" ]; then
-    if [ "$FIELD_2ND" != '*' -a "$IS_ROOTFS" == "no" ]; then
-      SIZE=`echo "$LINE" | awk -F " " '{print $4}' | sed s/+$//`
-      if [ $SIZE -gt $SIZE_BIGGEST ]; then
-        SIZE_BIGGEST=$SIZE
-        PART_DEVNODE="$DEVNODE"
+  case "$UTIL_TO_USE" in
+
+  fdisk)
+    MATCH=`fdisk -l $DEV_BASE_NODE |grep "$DEV_BASE_NODE"p`
+    for i in $MATCH
+    do
+      LINE=$i
+      FIELD_2ND=`echo "$LINE" | awk -F " " '{print $2}'`
+      DEVNODE=`echo "$LINE" | awk -F " " '{print $1}'`
+
+      # skip bootable partition and rootfs partition with rootfs in it
+      if [ "$FIELD_2ND" != '*' ]; then
+        IS_ROOTFS=`is_part_rootfs "$DEVICE_TYPE" "$DEVNODE"` || die "error when calling is_part_rootfs: "$IS_ROOTFS" "
+        if [ "$IS_ROOTFS" == "no" ]; then
+          SIZE=`echo "$LINE" | awk -F " " '{print $4}' | sed s/+$//`
+          if [ $SIZE -gt $SIZE_BIGGEST ]; then
+            SIZE_BIGGEST=$SIZE
+            PART_DEVNODE="$DEVNODE"
+          fi
+        fi
       fi
-    fi
-  done
+    done
+  ;;
+
+  parted)
+    case "$DEVICE_TYPE" in
+    usb*|sata)
+      PART_BASE_NODE="${DEV_BASE_NODE}"
+    ;;
+    *mmc)
+      PART_BASE_NODE="${DEV_BASE_NODE}p"
+    ;;
+    *)
+      die "device_type $DEVICE_TYPE is not supported"
+    ;;
+    esac
+   
+    MATCH=`ls ${PART_BASE_NODE}* |grep -Eo [[:digit:]]+$`
+    for i in $MATCH
+    do
+      PART_NUM=$i
+      DEVNODE="${PART_BASE_NODE}${PART_NUM}"
+
+      LINE=`echo -e "print\nquit\n" |parted ${DEV_BASE_NODE} |grep -E "^ ${PART_NUM}"`
+      SIZE=`echo "$LINE" |awk -F " " '{print $4}' |sed s'/[a-zA-Z].$//' `
+      FLAG=`echo "$LINE" |awk -F " " '{print $7}'`
+      PART_NAME=`echo "$LINE" |awk -F " " '{print $5}'`
+
+      # if the partition flag contains 'boot', skip this partition
+      if [[ "$FLAG" != *"boot"* ]] && [[ "$PART_NAME" != *"boot"* ]]; then
+        IS_ROOTFS=`is_part_rootfs "$DEVICE_TYPE" "$DEVNODE"` || die "error when calling is_part_rootfs: "$IS_ROOTFS" "
+        if [ "$IS_ROOTFS" == "no" ]; then
+          if [ $SIZE -gt $SIZE_BIGGEST ]; then
+            SIZE_BIGGEST=$SIZE
+            PART_DEVNODE="${DEVNODE}"
+          fi
+        fi
+      fi
+    done
+  ;;
+
+  gdisk)
+    die "Do not support gdisk yet"
+  ;;
+  
+  *)
+    die "Do not know which util to use"
+  ;;
+
+  esac
+
   IFS=$TMP_IFS
 
   if [ -z "$PART_DEVNODE" ]
