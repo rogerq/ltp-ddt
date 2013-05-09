@@ -58,6 +58,22 @@ find_scsi_node() {
   exit 1
 }
 
+# return: /dev/mmcblk0 etc
+find_emmc_basenode() {
+    emmc_node=`ls /dev/mmcblk* |grep boot |head -1 |sed s'/boot[0-9]*//' `
+    echo $emmc_node
+}
+
+find_mmc_basenode() {
+    emmc_node=`find_emmc_basenode` 
+    if [ -n "$emmc_node" ]; then
+      mmc_node=`ls /dev/mmcblk* |sed s'/$emmc_node.*$//' |grep -E ".*blk[[:digit:]]+$" |head -1`
+    else
+      mmc_node=`ls /dev/mmcblk* |grep -E ".*blk[[:digit:]]+$" |head -1`
+    fi  
+    echo $mmc_node
+}
+
 ############################ Default Params ##############################
 DEV_TYPE=`get_device_type_map.sh "$DEVICE_TYPE"` || die "error getting device type: $DEV_TYPE"
 case $DEV_TYPE in
@@ -65,13 +81,19 @@ case $DEV_TYPE in
           PART=`get_mtd_partition_number.sh "$DEVICE_TYPE"` || die "error getting mtd partition number: $PART"
           DEV_NODE="$MTD_BLK_DEV$PART"
         ;;
-        # TODO: find a way to tell which one is mmc and which one is emmc
-        #       instead of hardcoding mmcblk0 or mmcblk1
         mmc)
-          DEV_NODE=`find_part_with_biggest_size "/dev/mmcblk0" "mmc"` || die "error getting partition with biggest size: $DEV_NODE"
+          mmc_basenode=`find_mmc_basenode`
+          if [ -z "$mmc_basenode" ]; then
+            die "Could not fine mmc basenode"
+          fi
+          DEV_NODE=`find_part_with_biggest_size "$mmc_basenode" "mmc"` || die "error getting partition with biggest size: $DEV_NODE"
         ;;
         emmc)
-          DEV_NODE=`find_part_with_biggest_size "/dev/mmcblk1" "emmc"` || die "error getting partition with biggest size: $DEV_NODE"
+          emmc_basenode=`find_emmc_basenode`
+          if [ -z "$emmc_basenode" ]; then
+            die "Could not fine emmc basenode"
+          fi
+          DEV_NODE=`find_part_with_biggest_size "$emmc_basenode" "emmc"` || die "error getting partition with biggest size: $DEV_NODE"
         ;;
         usb)
           DEV_NODE=`find_scsi_node "usb"` || die "error getting usb node: $DEV_NODE" 
