@@ -1,0 +1,70 @@
+# Description : Tests for realtime kernels only
+
+async_handler $LTPROOT/testcases/realtime/func/async_handler/async_handler -i 10000
+async_handler_jk $LTPROOT/testcases/realtime/func/async_handler/async_handler_jk 
+# This testcase need TSC support.
+# async_handler_tsc $LTPROOT/testcases/realtime/func/async_handler/async_handler_tsc -i 100
+
+gtod_latency $LTPROOT/testcases/realtime/func/gtod_latency/gtod_latency -i 10000
+#gtod_infinite $LTPROOT/testcases/realtime/func/gtod_latency/gtod_infinite -t 0.01
+
+hrtimer-prio $LTPROOT/testcases/realtime/func/hrtimer-prio/hrtimer-prio -i 10000
+
+matrix_mult $LTPROOT/testcases/realtime/func/matrix_mult/matrix_mult -i 10000
+
+# These testcases need TSC support.
+# preempt_timing $LTPROOT/testcases/realtime/func/measurement/preempt_timing
+# rdtsc-latency $LTPROOT/testcases/realtime/func/measurement/rdtsc-latency
+
+periodic_cpu_load $LTPROOT/testcases/realtime/func/periodic_cpu_load/periodic_cpu_load -i 10000
+periodic_cpu_load_single $LTPROOT/testcases/realtime/func/periodic_cpu_load/periodic_cpu_load_single -i 10000
+
+# Need support for pthread robust mutexattr APIs
+# sbrk_mutex $LTPROOT/testcases/realtime/func/pi-tests/sbrk_mutex
+
+testpi-0 $LTPROOT/testcases/realtime/func/pi-tests/testpi-0
+testpi-1 $LTPROOT/testcases/realtime/func/pi-tests/testpi-1
+testpi-2 $LTPROOT/testcases/realtime/func/pi-tests/testpi-2
+# testpi-4 $LTPROOT/testcases/realtime/func/pi-tests/testpi-4
+testpi-5 $LTPROOT/testcases/realtime/func/pi-tests/testpi-5
+# Need support for robust pthread mutex support
+# testpi-6 $LTPROOT/testcases/realtime/func/pi-tests/testpi-6
+testpi-7 $LTPROOT/testcases/realtime/func/pi-tests/testpi-7 -x 1
+
+pi_perf $LTPROOT/testcases/realtime/func/pi_perf/pi_perf -n 1 -i 10000
+
+prio-preempt $LTPROOT/testcases/realtime/func/prio-preempt/prio-preempt
+
+prio-preempt $LTPROOT/testcases/realtime/func/prio-wake/prio-wake
+
+pthread_kill_latency $LTPROOT/testcases/realtime/func/pthread_kill_latency/pthread_kill_latency
+
+rt-migrate $LTPROOT/testcases/realtime/func/rt-migrate/rt-migrate
+
+sched_football $LTPROOT/testcases/realtime/func/sched_football/sched_football
+
+sched_jitter $LTPROOT/testcases/realtime/func/sched_jitter/sched_jitter
+
+sched_latency $LTPROOT/testcases/realtime/func/sched_latency/sched_latency -i 10000
+
+thread_clock $LTPROOT/testcases/realtime/func/thread_clock/tc-2
+
+#Performance tests
+
+#  measure pthread_cond_t latencies
+pthread_cond_latency $LTPROOT/testcases/realtime/perf/latency/pthread_cond_latency 10000
+# pthread_cond_many $LTPROOT/testcases/realtime/perf/latency/pthread_cond_many
+
+# Stress tests
+lookup_pi_state $LTPROOT/testcases/realtime/stress/pi-tests/lookup_pi_state
+# testpi-3 $LTPROOT/testcases/realtime/stress/pi-tests/testpi-3
+
+
+
+
+
+
+
+
+
+
