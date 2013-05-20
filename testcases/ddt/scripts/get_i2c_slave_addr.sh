@@ -197,7 +197,7 @@ case $MACHINE in
 				SLAVE_ADDR=0x48
 			;;
                         default)
-                                SLAVE_ADDR=0x11
+                                SLAVE_ADDR=0x48
                         ;;
                         *)
                                 die "Unknown slave device! Can not get slave address."

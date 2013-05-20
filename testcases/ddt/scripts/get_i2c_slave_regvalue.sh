@@ -41,7 +41,7 @@ esac
 case $SOC in
 esac
 case $MACHINE in
-        am17x-evm)
+        am17x-evm|da850-omapl138-evm)
 
                 case $SLAVE_DEVICE in
                         *)
