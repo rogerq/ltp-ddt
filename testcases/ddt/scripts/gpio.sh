@@ -79,7 +79,7 @@ done
 
 ########################### DYNAMICALLY-DEFINED Params ########################
 : ${TEST_LOOP:='3'}
-: ${TEST_INTERRUPT:='1'}
+: ${TEST_INTERRUPT:='0'}
 
 ########################### REUSABLE TEST LOGIC ###############################
 # DO NOT HARDCODE any value. If you need to use a specific value for your setup
