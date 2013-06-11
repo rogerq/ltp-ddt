@@ -36,7 +36,7 @@ find_scsi_node() {
   SCSI_DEVICE=$1
     case $SCSI_DEVICE in
       sata)
-        file=`ls /dev/disk/by-id/*-part1|grep -i sata`
+        file=`ls /dev/disk/by-id/*-part1|grep -i s*ata`
         if [[ ! -z "$file" ]]; then
         DEV_NODE="/dev/""$(basename $(readlink $file))"
          echo $DEV_NODE
