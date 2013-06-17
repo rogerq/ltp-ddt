@@ -1,0 +1,18 @@
+# @name Thermal Sanity Check
+# @desc Test Scenario to check if thermal entities are present in a target system.
+# @requires
+# @setup_requires
+
+# The test step pass if the commands return zero, it fails otherwise.
+
+# Below you can see a real test scenario example.
+# common.sh defines:
+#  do_cmd(): Use to execute a command and check for return value
+#  die(): Print error message and fails the test (i.e exit e/ non-zero value)
+#  get_return_value(): Use to extract value in cases where a function returns 
+#                      multiple values in a file using key=value pairs.
+# There is a collection of scripts that implement well-defined 'atomic' actions,
+# users are encouraged to check available scripts at 
+# <ltp-ddt-root>testcases/ddt/scripts/ before implementing their own.
+
+THERMAL_S_FUNC_SANITY_0001 source 'thermal_01.sh' || die "error running thermal sanity checks: thermal_01.sh"
