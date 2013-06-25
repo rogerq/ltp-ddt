@@ -128,7 +128,7 @@ check_valid_binding() {
     shift 2
 
     log_begin "checking $descr"
-    if [ $trip_point > $trip_point_max ]; then
+    if [ "$trip_point_val" -gt "$trip_point_max" ]; then
         log_end "fail"
         return 1
     fi
