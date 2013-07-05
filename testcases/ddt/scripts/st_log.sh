@@ -13,8 +13,6 @@
 # 
 # this file contains routines for printing the logs
 
-VERSION_STRING="02.00.00.04"
-
 #
 # prints the trace log.
 #
@@ -93,15 +91,6 @@ test_print_err()
 	error=$3			# warning
 
 	echo "|ERROR|Line:$line File:$file_name - $error|"
-}
-
-#
-# prints the version.
-#
-test_print_version()
-{
-
-	echo "|TRACE LOG|Version : $VERSION_STRING|"
 }
 
 #test_print_start I2C_0_0_001

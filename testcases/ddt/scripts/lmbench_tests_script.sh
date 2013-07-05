@@ -759,8 +759,6 @@ case "$i" in
 
         -h) shift; H="help" ;;
         --help) shift; H="help" ;;
-        --version) shift; V="version" ;;
-        -v) shift; V="version" ;;
 esac
 done
 
@@ -771,8 +769,6 @@ eval set -- $args
 # call appropriate functions
 if [ "$H" = "help" ] ;  then
         $H
-elif [ "$V" =  "version" ] ; then
-        test_print_version
 else
         lmbench_tests
         print_summary

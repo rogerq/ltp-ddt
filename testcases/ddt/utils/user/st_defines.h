@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <errno.h>
 /* Version string for the test suite. Change this for every release */
-#define VERSION_STRING "02.00.00.04"
+#define VERSION_STRING "02.00.00.05"
 
 /* Use these defines to improve readability */
 #define IN
