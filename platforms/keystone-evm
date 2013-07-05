@@ -8,4 +8,4 @@ watchdog
 ubifs
 i2c/eeprom
 nand/davinci_nand
-
+smp
