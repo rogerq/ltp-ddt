@@ -9,3 +9,5 @@ ubifs
 i2c/eeprom
 nand/davinci_nand
 smp
+usb/host/msc/xhci-hcd
+
