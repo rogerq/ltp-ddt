@@ -3,6 +3,7 @@
 # PM-QA validation test suite for the power management on Linux
 #
 # Copyright (C) 2011, Linaro Limited.
+# Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com/
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,13 +22,23 @@
 # Contributors:
 #     Daniel Lezcano <daniel.lezcano@linaro.org> (IBM Corporation)
 #       - initial API and implementation
+#     Carlos Hernandez <ceh@ti.com>
+#       - Add new functions
 #
+
+source "common.sh"     # include ltp-ddt common functions
 
 CPU_PATH="/sys/devices/system/cpu"
 TEST_NAME=$(basename ${0%.sh})
 PREFIX=$TEST_NAME
 INC=0
 CPU=
+
+if [ -f /sys/power/wake_lock ]; then
+    use_wakelock=1
+else
+    use_wakelock=0
+fi
 
 log_begin() {
     printf "%-76s" "$TEST_NAME.$INC$CPU: $@... "
@@ -43,6 +54,33 @@ log_skip() {
     log_end "skip"
 }
 
+check() {
+
+    local descr=$1
+    local func=$2
+    shift 2;
+
+    log_begin "checking $descr"
+
+    $func $@
+    if [ $? != 0 ]; then
+    log_end "fail"
+    return 1
+    fi
+
+    log_end "pass"
+
+    return 0
+}
+
+check_file() {
+    local file=$1
+    local dir=$2
+
+    check "'$file' exists" "test -f" $dir/$file
+}
+
+
 for_each_cpu() {
 
     local func=$1
@@ -57,6 +95,11 @@ for_each_cpu() {
     done
 
     return 0
+}
+
+get_num_cpus() {
+    cpus=$(ls $CPU_PATH | grep "cpu[0-9].*")
+    echo ${#cpus[@]}
 }
 
 for_each_governor() {
@@ -178,15 +221,15 @@ get_min_frequency() {
 set_online() {
     local cpu=$1
     local dirpath=$CPU_PATH/$cpu
-
     echo 1 > $dirpath/online
+    report "$cpu online"
 }
 
 set_offline() {
     local cpu=$1
     local dirpath=$CPU_PATH/$cpu
-
     echo 0 > $dirpath/online
+    report "$cpu offline"
 }
 
 get_online() {
@@ -196,31 +239,164 @@ get_online() {
     cat $dirpath/online
 }
 
-check() {
-
-    local descr=$1
-    local func=$2
-    shift 2;
-
-    log_begin "checking $descr"
-
-    $func $@
-    if [ $? != 0 ]; then
-	log_end "fail"
-	return 1
+# Online/offline CPU1 or higher - mess with governor
+cpu_online_random()
+{
+    local num_cpu=`get_num_cpus`
+    local random_cpu=cpu`random_ne0 $num_cpu`
+    local k=`random 1`
+    if [ -f $CPU_PATH/$random_cpu/online -a $k -eq 1 ]; then
+        set_online $random_cpu
     fi
-
-    log_end "pass"
-
-    return 0
 }
 
-check_file() {
-    local file=$1
-    local dir=$2
-
-    check "'$file' exists" "test -f" $dir/$file
+# IF WE HAVE A BUG CREATION LOGIC, TRIGGER IT
+bug_random()
+{
+    if [ -f $DEBUGFS_LOCATION/pm_debug/bug ]; then
+        k=`random 1`
+        echo -n "$k"> $DEBUGFS_LOCATION/pm_debug/bug
+        report "BUG : $k"
+    fi
 }
+
+# Do off or not
+offmode_random()
+{
+    k=`random 1`
+    echo -n "$k"> $DEBUGFS_LOCATION/pm_debug/enable_off_mode
+    report "enable_off_mode : $k"
+}
+
+# automated waker.. dont want hitting keyboards..
+wakeup_time_random()
+{
+    k=`random_ne0 10`
+    sec=`expr $k % 1000`
+    msec=`expr $k / 1000`
+    echo $sec > $DEBUGFS_LOCATION/pm_debug/wakeup_timer_seconds
+    echo $msec > $DEBUGFS_LOCATION/pm_debug/wakeup_timer_milliseconds
+    report "wakeup - $sec sec $msec msec"
+    report "PLEASE Do something to wakeup the board when it suspends"  #TODO: Delete once wakeup_timer is added
+}
+
+# cleanup cpuloadgen
+remove_cpuloadgen()
+{
+    report "remove cpuloadgen"
+    if [ `which cpuloadgen` ]; then
+        sleep 5
+        killall cpuloadgen 2>/dev/null
+    else
+        report "cpuloadgen is not installed"
+    fi
+}
+
+# start up cpuloadgen
+cpu_load_random()
+{
+    if [ `which cpuloadgen` ]; then
+        local cpus_load=''
+        local num_cpu=`get_num_cpus`
+        i=0
+        while [ $i -lt $num_cpu ]; do
+            cpus_load="$cpus_load "`random_ne0 100`
+        done
+        time=`random_ne0 600`
+        report "cpuloadgen $cpus_load $time"
+        time cpuloadgen $cpus_load $time &
+    else
+        report "cpuloadgen is not installed"
+    fi
+}
+
+#Start memtest
+# $1: use memory percentage
+start_memtest()
+{
+    # Step 1- start up memtest
+    export m1=`free|cut -d ":" -f2|sed -e "s/^\s\s*//g"|head -2|tail -1|cut -d ' ' -f1`
+    export m2=M
+    export m=`expr $m1 \* $1 / 100 / 1024`
+
+    report "Testing memory for $m$m2"
+    memtester $m$m2 &
+
+}
+# pause memtester
+pause_memtest()
+{
+    MEMTESTERPID=`ps | grep memtester | grep -v grep | cut -c 0-5`
+    kill -STOP $MEMTESTERPID
+    report "pause memtest"
+}
+
+# resume memtester
+# $1: use memory percentage
+resume_memtest()
+{
+    MEMTESTERPID=`ps | grep memtester | grep -v grep | cut -c 0-5`
+    if [ -z "$MEMTESTERPID" ]; then
+        start_memtest $1
+    else
+        kill -CONT $MEMTESTERPID
+    fi
+    report "resume memtest"
+}
+
+# kill memtester
+kill_memtest()
+{
+    MEMTESTERPID=`ps | grep memtester | grep -v grep | cut -c 0-5`
+    kill -TERM $MEMTESTERPID
+    killall memtester 2>/dev/null
+    report "killed memtest"
+}
+
+# give me some idle time
+idle_random()
+{
+    time=`random 10`
+    report "smallidle: $time seconds"
+    sleep $time
+}
+
+# give me some idle time
+idlebig_random()
+{
+    time=`random_ne0 300`
+    report "bigidle: $time seconds"
+    report "Processes running:"
+    ps 
+    report "Load running:"
+    top -n1 -b
+    report "cpu1 status:"
+    cat /sys/devices/system/cpu/cpu1/online
+    sleep $time
+}
+
+# dont suspend
+no_suspend()
+{
+    if [ $use_wakelock -ne 0 ]; then
+        echo "$PSID" >/sys/power/wake_lock
+        report "wakelock $PSID"
+    fi
+}
+
+# suspend me
+suspend()
+{
+    if [ $use_wakelock -ne 0 ]; then
+        report "removing wakelock $PSID (sec=$sec msec=$msec off=$off bug=$bug)"
+        echo "$PSID" >/sys/power/wake_unlock
+    else
+        report "suspend(sec=$sec msec=$msec off=$off bug=$bug)"
+        echo -n "mem">/sys/power/state
+    fi
+    no_suspend
+}
+
 
 check_cpufreq_files() {
 
@@ -318,6 +494,68 @@ restore_frequencies() {
     done
 }
 
+# give me detailed report
+report_stats()
+{
+    local num_cpus=`get_num_cpus`
+    report "============================================="
+    report " $*"
+    report "OMAP STATS: "
+    report "$DEBUGFS_LOCATION/pm_debug/count"
+    cat $DEBUGFS_LOCATION/pm_debug/count
+    report "$DEBUGFS_LOCATION/pm_debug/time"
+    cat $DEBUGFS_LOCATION/pm_debug/time
+    report "$DEBUGFS_LOCATION/wakeup_sources"
+    cat $DEBUGFS_LOCATION/wakeup_sources
+    report "Core domain stats:"
+    cat $DEBUGFS_LOCATION/pm_debug/count | grep "^core_pwrdm"
+    if [ -f $DEBUGFS_LOCATION/suspend_time ]; then
+        report "Suspend times:"
+        cat $DEBUGFS_LOCATION/suspend_time
+    fi
+    report "CPUFREQ STATS: "
+    report "/sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state"
+    cat /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state
+    report "/sys/devices/system/cpu/cpu0/cpufreq/stats/total_trans"
+    cat /sys/devices/system/cpu/cpu0/cpufreq/stats/total_trans
+    report "/sys/devices/system/cpu/cpu0/cpufreq/stats/trans_table"
+    cat /sys/devices/system/cpu/cpu0/cpufreq/stats/trans_table
+    report "CPUIDLE STATS: "
+
+    for cpu in `seq 0 $(($num_cpus - 1))`;
+    do
+        cpuidledir=/sys/devices/system/cpu/cpu$cpu/cpuidle
+        if [ -d "$cpuidledir" ]; then
+            report "CPU$cpu IDLE STATS: "
+            k=`pwd`
+            cd $cpuidledir
+            report "NAME | DESCRIPTION | USAGE (number of entry)  | TIME | POWER | LATENCY"
+            for state in *
+            do
+                DESC=`cat $state/desc`
+                NAME=`cat $state/name`
+                POWER=`cat $state/power`
+                TIME=`cat $state/time`
+                USAGE=`cat $state/usage`
+                LATENCY=`cat $state/usage`
+                report "$NAME | $DESC | $USAGE | $TIME | $POWER | $LATENCY"
+            done
+            cd $k
+        fi
+    done
+    report "============================================="
+}
+
 sigtrap() {
     exit 255
 }
+
+# execute on exit - cleanup actions
+on_exit()
+{
+    remove_cpuloadgen
+    kill_memtest
+}
+
+trap on_exit EXIT
+
