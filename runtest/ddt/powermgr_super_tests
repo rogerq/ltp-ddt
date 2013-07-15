@@ -1,0 +1,21 @@
+# @name cpufreq tests
+# @desc Test for power sequences on OMAP inspired by work from Nishanth Menon
+# @requires power_mgr/cpufreq && power_mgr/cpuidle
+
+POWERMGR_M_FUNC_SUPERTEST_ONDEMAND_MEM60 source 'super-pm-tests.sh'; GOVERNOR=ondemand; USE_MEMORY_PERCENTAGE=60; super_pm_test 1
+POWERMGR_L_STRESS_SUPERTEST_ONDEMAND_MEM60_100 source 'super-pm-tests.sh'; GOVERNOR=ondemand; USE_MEMORY_PERCENTAGE=60; super_pm_test 100
+
+POWERMGR_M_FUNC_SUPERTEST_CONSERVATIVE_MEM60 source 'super-pm-tests.sh'; GOVERNOR=conservative; USE_MEMORY_PERCENTAGE=60; super_pm_test 1
+POWERMGR_L_STRESS_SUPERTEST_CONSERVATIVE_MEM60_100 source 'super-pm-tests.sh'; GOVERNOR=conservative; USE_MEMORY_PERCENTAGE=60; super_pm_test 100
+
+POWERMGR_M_FUNC_SUPERTEST_POWERSAVE_MEM60 source 'super-pm-tests.sh'; GOVERNOR=powersave; USE_MEMORY_PERCENTAGE=60; super_pm_test 1
+POWERMGR_L_STRESS_SUPERTEST_POWERSAVE_MEM60_100 source 'super-pm-tests.sh'; GOVERNOR=powersave; USE_MEMORY_PERCENTAGE=60; super_pm_test 100
+
+POWERMGR_M_FUNC_SUPERTEST_PERFORMANCE_MEM60 source 'super-pm-tests.sh'; GOVERNOR=performance; USE_MEMORY_PERCENTAGE=60; super_pm_test 1
+POWERMGR_L_STRESS_SUPERTEST_PERFORMANCE_MEM60_100 source 'super-pm-tests.sh'; GOVERNOR=performance; USE_MEMORY_PERCENTAGE=60; super_pm_test 100
+
+
+
+
+
+
