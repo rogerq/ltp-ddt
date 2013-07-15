@@ -17,6 +17,9 @@ source "st_log.sh"
 KB=1024
 MB=1048576
 GB=$((1024*1024*1024))
+DEBUGFS_LOCATION=/sys/kernel/debug/
+PSID="$0$$"
+START_TIME=`date "+%s"`
 
 ########### DEFINE PLATFORM DATA ############
 # This is done by ltp-ddt's runltp script, but it is optionally done
@@ -180,5 +183,43 @@ compare_md5sum()
   fi
   echo "$2: $b"
   [ "$a" = "$b" ]
+}
+
+# report something with delta time
+report()
+{
+  CUR_TIME=`date "+%s"`
+  delta=`expr $CUR_TIME - $START_TIME`
+  echo "$PSID:$START_TIME->$CUR_TIME($delta):$test_iteration: $*"
+  sync
+}
+
+_random()
+{
+  if [ $1 -gt 32767 ]; then
+    max_mult=`expr $1 / 32767`
+    mult=`expr $RANDOM  % $max_mult`
+  else
+    mult=0;
+  fi
+  v=`echo "$RANDOM + ($RANDOM * $mult)" | bc `
+  echo $v
+}
+# random
+# $1 - max_value
+random()
+{
+  v=`_random $1`
+  #v=`dd if=/dev/urandom count=1 2> /dev/null | cksum | cut -c 0-10`
+  v1=`expr $1 + 1`
+  expr $v % $v1
+}
+
+# random not equal to 0
+random_ne0()
+{
+  v=`_random $1`
+  #v=`dd if=/dev/urandom count=1 2> /dev/null | cksum | cut -c 0-10`
+  expr $v % $1 + 1
 }
 
