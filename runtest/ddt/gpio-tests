@@ -1,0 +1,10 @@
+# @name GPIO set test including set gpio to 'in', 'out' etc
+# @desc Set gpio pin in each bank to 'in' or 'out' through sysfs. Before run this test, kernel may be required to be modified to add entries for pin to test
+# @requires gpio 
+
+GPIO_M_FUNC_DIR_IN_ALL_BANK source "common.sh"; gpio.sh -l "2" -t "in"
+
+GPIO_M_FUNC_DIR_OUT_ALL_BANK source "common.sh"; gpio.sh -l "2" -t "out"
+
+GPIO_M_FUNC_EDGE_ALL_BANK source "common.sh"; gpio.sh -l "2" -t "edge"
+

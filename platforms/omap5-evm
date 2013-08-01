@@ -41,3 +41,5 @@ usb/otg
 usb/slave/msc
 usb/slave/cdc
 watchdog/omap_wdt
+gpio
+
