@@ -231,10 +231,15 @@ ifneq (,$(findstring $(PLATFORM),$(PLATFORMSwEDMA)))
 # Disable edma modules install until appropriate tests are available
 #MODULES_TO_BUILD += modules_edma
 endif
+MODULES_TO_BUILD += modules_gpio
 
 modules_edma:
 	@echo "Going to compile edma test kernel modules for $(PLATFORM)"
 	cd testcases/ddt/edma_test_suite/src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE) KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM)
+
+modules_gpio:
+	@echo "Going to compile gpio test kernel modules for $(PLATFORM)"
+	cd testcases/ddt/gpio_test_suite/src/kernel; make CROSS_COMPILE=$(CROSS_COMPILE) KERNEL_DIR=$(KERNEL_INC)/.. PLATFORM=$(PLATFORM)
 
 modules: $(MODULES_TO_BUILD)
 
