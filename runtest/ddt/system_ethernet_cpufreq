@@ -1,0 +1,7 @@
+# @name Test ethernet driver while changing cpu frequency
+# @desc Test ethernet driver while the OPP is changed to cover all possible vallues
+# @requires net
+
+SYSTEM_S_FUNC_OPP_ETH source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/eth_ping -P $MACHINE -s ETH_S_FUNC_PING # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_M_STRESS_OPP_LOOP_300_ETH_PING_1800S source 'common.sh'; run_processes.sh "/opt/ltp/runltp -P $MACHINE -f ddt/eth_ping -s ETH_M_FUNC_PING_1800S # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_M_FUNC_CPUFREQ_BASIC"
+
