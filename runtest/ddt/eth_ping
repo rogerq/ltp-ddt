@@ -9,3 +9,5 @@ ETH_M_FUNC_PING_MULTI-PKT-SIZES source 'common.sh'; iface=`get_eth_iface_name.sh
 ETH_L_FUNC_PING_LONGTERM source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name"; do_cmd "ifconfig ${iface} up"; host=`get_eth_gateway.sh "-i ${iface}"` || die "error getting eth gateway address"; do_cmd "ping ${host} -c 84500 -w 86400"
 
 ETH_M_FUNC_PING_300S source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name"; do_cmd "ifconfig ${iface} up"; host=`get_eth_gateway.sh "-i ${iface}"` || die "error getting eth gateway address"; do_cmd "ping ${host} -w 300"
+
+ETH_M_FUNC_PING_1800S source 'common.sh'; iface=`get_eth_iface_name.sh` || die "error getting eth interface name"; do_cmd "ifconfig ${iface} up"; host=`get_eth_gateway.sh "-i ${iface}"` || die "error getting eth gateway address"; do_cmd "ping ${host} -w 1800"
