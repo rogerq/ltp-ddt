@@ -1,0 +1,10 @@
+# @name Memtester
+# @desc Test memory using memtester application
+# @requires 
+# @setup_requires 
+
+MEMORY_S_FUNC_MEMTESTER_1pct_1time source 'functions.sh'; run_memtest 1 1
+MEMORY_M_FUNC_MEMTESTER_10pct_1time source 'functions.sh'; run_memtest 10 1
+MEMORY_L_STRESS_MEMTESTER_90pct_1time source 'functions.sh'; run_memtest 90 1
+MEMORY_L_STRESS_MEMTESTER_50pct_10times source 'functions.sh'; run_memtest 50 10
+

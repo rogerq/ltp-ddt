@@ -310,6 +310,19 @@ cpu_load_random()
     fi
 }
 
+#Run memtest
+# $1: use memory percentage
+# $2: number of iterations
+run_memtest()
+{
+    export m1=`free|cut -d ":" -f2|sed -e "s/^\s\s*//g"|head -2|tail -1|cut -d ' ' -f1`
+    export m2=M
+    export m=`expr $m1 \* $1 / 100 / 1024`
+
+    report "Testing $m$m2 of memory $2 times"
+    memtester $m$m2 $2
+}
+
 #Start memtest
 # $1: use memory percentage
 start_memtest()
