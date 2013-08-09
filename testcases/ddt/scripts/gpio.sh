@@ -68,7 +68,7 @@ esac
 done
 
 ########################### DYNAMICALLY-DEFINED Params ########################
-: ${TEST_LOOP:='3'}
+: ${TEST_LOOP:='1'}
 : ${TEST_INTERRUPT:='0'}
 
 ########################### REUSABLE TEST LOGIC ###############################
@@ -163,30 +163,42 @@ for GPIO_NUM_IN_BANK in $GPIO_NUM_IN_BANKS; do
   if [ -n "$SYSFS_TESTCASE" ]; then
     test_print_trc "Running sysfs test..."
     
-    do_cmd "echo ${GPIO_NUM} > /sys/class/gpio/export"
-    do_cmd ls /sys/class/gpio
-    if [ -e /sys/class/gpio/gpio"$GPIO_NUM" ]; then
-      case "$SYSFS_TESTCASE" in
-      out)
-        gpio_sysentry_set_item "$GPIO_NUM" "direction" "out"
-        if [ $? -ne 0 ]; then
-          die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to out"
-        fi
-        gpio_sysentry_set_item "$GPIO_NUM" "value" "0"
-        if [ $? -ne 0 ]; then
-          die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to 0"
-        fi
-        gpio_sysentry_set_item "$GPIO_NUM" "value" "1"
-        if [ $? -ne 0 ]; then
-          die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to 1"
-        fi
-        ;;
+    # test loop
+    i=0
+    while [ $i -le $TEST_LOOP ]; do 
+      test_print_trc "===LOOP: $i==="
+      do_cmd "echo ${GPIO_NUM} > /sys/class/gpio/export"
+      do_cmd ls /sys/class/gpio
+      if [ -e /sys/class/gpio/gpio"$GPIO_NUM" ]; then
+        case "$SYSFS_TESTCASE" in
+        neg_reserve)
+          test_print_trc "Try to reserve the same gpio again"
+          test_print_trc "echo ${GPIO_NUM} > /sys/class/gpio/export"
+          echo ${GPIO_NUM} > /sys/class/gpio/export
+          if [ $? -eq 0 ]; then
+            die "gpio should not be able to reserve gpio ${GPIO_NUM} which is already being reserved"
+          fi
+          ;;
+        out)
+          gpio_sysentry_set_item "$GPIO_NUM" "direction" "out"
+          if [ $? -ne 0 ]; then
+            die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to out"
+          fi
+          gpio_sysentry_set_item "$GPIO_NUM" "value" "0"
+          if [ $? -ne 0 ]; then
+            die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to 0"
+          fi
+          gpio_sysentry_set_item "$GPIO_NUM" "value" "1"
+          if [ $? -ne 0 ]; then
+            die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to 1"
+          fi
+          ;;
         in)
           gpio_sysentry_set_item "$GPIO_NUM" "direction" "in"
           if [ $? -ne 0 ]; then
             die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to in"
           fi
-        ;;
+          ;;
         edge)
           gpio_sysentry_set_item "$GPIO_NUM" "edge" "falling"
           if [ $? -ne 0 ]; then
@@ -200,14 +212,17 @@ for GPIO_NUM_IN_BANK in $GPIO_NUM_IN_BANKS; do
           if [ $? -ne 0 ]; then
             die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to both"
           fi
-        ;;
-      esac
-    else
-      die "/sys/class/gpio/gpio${GPIO_NUM} does not exist!"
-    fi
-    # remove gpio sys entry
-    do_cmd "echo ${GPIO_NUM} > /sys/class/gpio/unexport" 
-    do_cmd "ls /sys/class/gpio/"
+          ;;
+        esac
+      else
+        die "/sys/class/gpio/gpio${GPIO_NUM} does not exist!"
+      fi
+      # remove gpio sys entry
+      do_cmd "echo ${GPIO_NUM} > /sys/class/gpio/unexport" 
+      do_cmd "ls /sys/class/gpio/"
+
+      i=`expr $i + 1`
+    done  # while loop
   fi
 
   BANK_NUM=`expr $BANK_NUM + 1`
