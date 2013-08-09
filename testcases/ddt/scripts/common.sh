@@ -40,27 +40,27 @@ then
    LTPPATH='/opt/ltp'
    export PATH="${PATH}:${LTPPATH}/testcases/bin:${LTPPATH}/testcases/bin/ddt"
    plat=`uname -a | cut -d' ' -f 2`
-	local i=0; local DRIVERS=""
-	while read -r file
-	 do
-		echo $file | grep -e "^#.*" > /dev/null
-		if [ "$?" == "0" ]; then
-			continue
-		fi
-		mkdir -p ${PLATFORMDIR}/${file}
-		case $i in
-			 0) ARCH="$file"
-				 export ARCH ;;
-			 1) SOC="$file"
-				 export SOC ;;
-			 2) MACHINE="$file"
-				 export MACHINE ;;
-			 3) DRIVERS="$file" ;;
-			 *) DRIVERS="${DRIVERS},${file}" ;;
-		esac
-	  i=`expr $i + 1`
-	done < ${LTPPATH}/platforms/`resolve_platform_name $plat`
-	export DRIVERS
+  local i=0; local DRIVERS=""
+  while read -r file
+   do
+    echo $file | grep -e "^#.*" > /dev/null
+    if [ "$?" == "0" ]; then
+      continue
+    fi
+    mkdir -p ${PLATFORMDIR}/${file}
+    case $i in
+       0) ARCH="$file"
+         export ARCH ;;
+       1) SOC="$file"
+         export SOC ;;
+       2) MACHINE="$file"
+         export MACHINE ;;
+       3) DRIVERS="$file" ;;
+       *) DRIVERS="${DRIVERS},${file}" ;;
+    esac
+    i=`expr $i + 1`
+  done < ${LTPPATH}/platforms/`resolve_platform_name $plat`
+  export DRIVERS
 
 fi
 
@@ -70,22 +70,22 @@ fi
 inverted_return="false"
 
 do_cmd() {
-	CMD=$*
-	test_print_trc "Inside do_cmd:CMD=$CMD"
-	eval $CMD
-	RESULT=$?
+  CMD=$*
+  test_print_trc "Inside do_cmd:CMD=$CMD"
+  eval $CMD
+  RESULT=$?
     if [ "$inverted_return" == "false" ]
     then
-	    if [ $RESULT -ne 0 ]
-	    then
-		    test_print_err "$CMD failed. Return code is $RESULT"
-		    exit $RESULT
-	    fi
+      if [ $RESULT -ne 0 ]
+      then
+        test_print_err "$CMD failed. Return code is $RESULT"
+        exit $RESULT
+      fi
     else
         if [ $RESULT -eq 0 ]
         then
-		    test_print_err "$CMD failed. Return code is $RESULT"
-		    exit 1
+        test_print_err "$CMD failed. Return code is $RESULT"
+        exit 1
         fi
     fi
 }
@@ -105,8 +105,8 @@ check_mandatory_inputs() {
 }
 
 die() {
-	test_print_err "FATAL: $*"
-	exit 1
+  test_print_err "FATAL: $*"
+  exit 1
 }
 
 
@@ -115,11 +115,11 @@ die() {
 # First argument is the file with name=value list
 # Second argument is the name of the value to return
 get_return_value() {
-	if [ $# -ne 2 ]; then
-		die "Wrong number of arguments. \
+  if [ $# -ne 2 ]; then
+    die "Wrong number of arguments. \
                      Usage: get_return_value <file> <value name>"
-	fi
-	tmp_ifs=$IFS
+  fi
+  tmp_ifs=$IFS
         IFS=$'\n'
         file=$1
         name=$2
@@ -139,10 +139,10 @@ get_return_value() {
 #   $3 key-value delimiter
 
 get_value_for_key() {
-	if [ $# -ne 3 ]; then
-		die "Wrong number of arguments. \
+  if [ $# -ne 3 ]; then
+    die "Wrong number of arguments. \
     Usage: get_value_for_key <key> <key-value pairs> <key-value delimiter>"
-	fi
+  fi
 
   key=$1
   key_value_pairs=$2
@@ -223,3 +223,37 @@ random_ne0()
   expr $v % $1 + 1
 }
 
+# check different kernel errors
+check_kernel_errors()
+{
+  type=$1
+  case $type in
+    kmemleak)
+      kmemleaks="/sys/kernel/debug/kmemleak"
+      if [ ! -e ${kmemleaks} ]; then
+        die "kmemleak sys entry doesn't exist; Please enable DEBUG_KMEMLEAK"
+      fi
+
+      # trigger memory scan
+      do_cmd "echo scan > ${kmemleaks}"
+      # give kernel some time to scan
+      do_cmd sleep 30
+      kmemleak_detail=`cat ${kmemleaks}`
+      if [ -n "${kmemleak_detail}" ]; then
+        die "There are memory leaks being detected. The details are displayed as below: ${kmemleak_detail}"
+      else
+        test_print_trc "No memory leaks being detected."
+      fi 
+       
+    ;;
+    spinlock)
+      zcat /proc/config.gz | grep "DEBUG_SPINLOCK=y" || die "Please enable DEBUG_SPINLOCK"
+      # Check dmesg to catch the error
+      spinlock_errors="BUG: spinlock"
+      dmesg |grep -i "${spinlock_errors}" && die "There is spinlock errors showing in dmesg" || test_print_trc "No spinlock related error found in dmesg"
+    ;;
+    *)
+      die "check_kernel_errors: No logic for type $type yet."
+    ;;
+  esac
+}
