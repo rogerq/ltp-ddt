@@ -301,6 +301,56 @@ usbdev_ioctl (int fd, int ifno, unsigned request, void *param)
 	return ioctl (fd, USBDEVFS_IOCTL, &wrapper);
 }
 
+static int do_test(struct testdev *dev)
+{
+	int ret = 0;
+	int fd, i;
+	int status;
+
+	if ((fd = open(dev->name, O_RDWR)) < 0) {
+		perror("can't open dev file r/w");
+		return -1;
+	}
+
+restart:
+	for (i = 0; i < TEST_CASES; i++) {
+		if (dev->test != -1 && dev->test != i)
+			continue;
+		dev->param.test_num = i;
+
+		status = usbdev_ioctl (fd, dev->ifnum,
+				USBTEST_REQUEST, &dev->param);
+		if (status < 0 && errno == EOPNOTSUPP)
+			continue;
+
+		/* NOTE: each thread emits complete lines; no fragments! */
+		if (status < 0) {
+			char	buf [80];
+			int	err = errno;
+
+			if (strerror_r (errno, buf, sizeof buf)) {
+				snprintf (buf, sizeof buf, "error %d", err);
+				errno = err;
+			}
+			printf ("%s test %d --> %d (%s)\n",
+				dev->name, i, errno, buf);
+			ret = errno;
+			goto exit;
+		} else
+			printf ("%s test %d, %4d.%.06d secs\n", dev->name, i,
+				(int) dev->param.duration.tv_sec,
+				(int) dev->param.duration.tv_usec);
+
+		fflush (stdout);
+	}
+	if (dev->forever)
+		goto restart;
+
+exit:
+	close(fd);
+	return ret;
+}
+
 static void *handle_testdev (void *arg)
 {
 	struct testdev		*dev = arg;
@@ -503,7 +553,7 @@ usage:
 		if (device) {
 			if (strcmp (entry->name, device))
 				continue;
-			return handle_testdev (entry) != entry;
+			return do_test(entry);
 		}
 		status = pthread_create (&entry->thread, 0, handle_testdev, entry);
 		if (status)
@@ -521,7 +571,7 @@ usage:
 		dev.param = param;
 		dev.forever = forever;
 		dev.test = test;
-		return handle_testdev (&dev) != &dev;
+		return do_test(&dev);
 	}
 
 	/* wait for tests to complete */
