@@ -415,11 +415,12 @@ suspend()
 
     wakeup_time_random
     suspend_time=$sec
-    dmesg -c > /dev/null
     if [ $use_wakelock -ne 0 ]; then
         report "removing wakelock $PSID (sec=$sec msec=$msec off=$off bug=$bug)"
         echo "$PSID" >/sys/power/wake_unlock
     fi
+    # clear dmesg before suspend
+    dmesg -c > /dev/null
     if [ -e $DEBUGFS_LOCATION/pm_debug/wakeup_timer_seconds ]; then
         report "Use wakeup_timer"
         report "suspend(sec=$sec msec=$msec off=$off bug=$bug)"
@@ -597,6 +598,92 @@ report_stats()
         fi
     done
     report "============================================="
+}
+
+# write pm counters into log file. The log will have something like "RET:0 \n RET-LOGIC-OFF:6"
+# $1: power domain
+# $2: power states seperated by delimiter Ex, "OFF:RET:INA","RET:RET-LOGIC-OFF" etc showing in pm count stat
+# $3: power states delimiter
+# $4: log name to save the counter
+log_pm_count()
+{
+  pwrdm=$1
+  pwr_states=$2
+  states_delimiter=$3
+  log_name=$4
+  pwr_state_place=0
+
+  tmp_ifs="$IFS"
+  IFS=$states_delimiter
+  for pwr_state in $pwr_states; do
+    if [ "$pwr_state" = "DEVICE-OFF" ]; then
+      pwr_state_place=1
+    elif [ "$pwr_state" = "OFF" ]; then
+      pwr_state_place=2
+    elif [ "$pwr_state" = "RET" ]; then
+      pwr_state_place=3
+    elif [ "$pwr_state" = "INA" ]; then
+      pwr_state_place=4
+    elif [ "$pwr_state" = "ON" ]; then
+      pwr_state_place=5
+    elif [ "$pwr_state" = "RET-LOGIC-OFF" ]; then
+      pwr_state_place=6
+    fi
+
+    pwrdm_stat=`cat $DEBUGFS_LOCATION/pm_debug/count | grep ^$pwrdm | \
+                cut -d "," -f $pwr_state_place`
+    report "Power domain stats requested: ${pwrdm}: $pwrdm_stat==========="
+    echo "$pwrdm_stat" >> ${TMPDIR}/"$log_name"
+  done
+  IFS="$tmp_ifs"
+}
+
+# Compare two counters from two logs for pwrdm and pwr-state
+#  The log contains something like "RET:0 \n RET-LOGIC-OFF:6 \n"
+#  $1: pwrdm
+#  $2: power states 
+#  $3: power states delimiter; 
+#  $4: log name before
+#  $5: log name after  
+compare_pm_count()
+{
+  pwrdm=$1
+  pwr_state=$2
+  state_delimiter=$3
+  log_name_before=$4
+  log_name_after=$5
+
+  log_before=${TMPDIR}/"$log_name_before"
+  log_after=${TMPDIR}/"$log_name_after"
+
+  num_lines_1=`cat "$log_before" | wc -l`
+  num_lines_2=`cat "$log_after" | wc -l`
+  if [ $num_lines_1 -ne $num_lines_2 ]; then
+    die "There is differnt number of pairs between log file $log_name_before and log file $log_name_after; can not compare these two logs" 
+  fi
+
+  tmp_ifs="$IFS"
+  IFS=$state_delimiter
+  for pwr_state in $pwr_states; do
+    val_before=`get_value_for_key_from_file "$log_before" "$pwr_state" ":"` || die "Error getting value from $log_before for ${pwr_state}: $val_before"
+    val_after=`get_value_for_key_from_file "$log_after" "$pwr_state" ":"` || die "Error getting value from $log_after for ${pwr_state}: $val_after"
+
+    report "$pwrdm: Initial Value -> $pwr_state: $val_before"
+    report "$pwrdm: Final Value -> $pwr_state: $val_after"
+
+    # Verify the power domain counter increases
+    report "Verifying $pwrdm: $pwr_state counter increases ..."
+    sleep 1
+
+    if [ "$val_after" -gt "$val_before" ]; then
+      report "SUCCESS: $pwrdm: $pwr_state counters increased"
+    else
+      die "ERROR: $pwrdm: $pwr_state counters did not increase. Please review power states counters"
+    fi
+
+  done
+  IFS="$tmp_ifs"
+
 }
 
 sigtrap() {

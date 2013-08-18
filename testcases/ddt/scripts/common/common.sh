@@ -109,27 +109,21 @@ die() {
   exit 1
 }
 
-
-
-# Extract one return value from name=value list file
-# First argument is the file with name=value list
-# Second argument is the name of the value to return
-get_return_value() {
-  if [ $# -ne 2 ]; then
+# Extract value from key value pair list file
+#  $1: the file with key value list
+#  $2: the key of the value to return
+#  $3: the delimitor to seperate key value pair
+get_value_for_key_from_file() {
+  if [ $# -ne 3 ]; then
     die "Wrong number of arguments. \
-                     Usage: get_return_value <file> <value name>"
+                     Usage: get_value_for_key_from_file <file> <key name> <delimiter>"
   fi
-  tmp_ifs=$IFS
-        IFS=$'\n'
-        file=$1
-        name=$2
-        for line in $(cat "$file") ; do
-                TMPNAME=`echo $line | cut -d"=" -f1 | sed 's/^ *//g' | sed 's/ *$//g'`
-                [ "$TMPNAME" == "$name" ] && TMPVAL=`echo $line | cut -d"=" -f2 | \
-                sed 's/^ *//g' | sed 's/ *$//g'` && echo $TMPVAL && IFS=$tmp_ifs && exit 0
-        done
-        IFS=$tmp_ifs
-        die "Value $name not found in $file"
+  file=$1
+  key=$2
+  delimiter=$3
+
+  val=`cat $file | grep "^\s*${key}\s*${delimiter}\s*" | cut -d "$delimiter" -f2 | sed 's/^ *//g'`
+  echo "$val"
 }
 
 # Get value for key in "key1=value2 key2=value2" space seperated pairs

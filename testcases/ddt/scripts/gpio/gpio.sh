@@ -13,7 +13,8 @@
 # 
 # @desc Script to run gpio test 
 
-source "common.sh"
+#source "common.sh"
+source "super-pm-tests.sh"
 
 ############################# Functions #######################################
 usage()
@@ -28,6 +29,14 @@ EOF
 exit 0
 }
 
+gpio_sysentry_get_item()  {
+  GPIO_NUM=$1
+  ITEM=$2
+
+  VAL=`cat /sys/class/gpio/gpio${GPIO_NUM}/${ITEM}`
+  echo "$VAL"
+}
+
 gpio_sysentry_set_item() {
   if [ $# -lt 3 ]; then
     echo "Error: Invalid Argument Count"
@@ -39,14 +48,18 @@ gpio_sysentry_set_item() {
   ITEM=$2
   ITEM_VALUE=$3
 
+  ORIG_VAL=`gpio_sysentry_get_item ${GPIO_NUM} ${ITEM}`
+  test_print_trc "The value was ${ORIG_VAL} before setting ${ITEM}" 
+
   do_cmd "echo "$ITEM_VALUE" > /sys/class/gpio/gpio${GPIO_NUM}/${ITEM}"
-  VAL_SET=`cat /sys/class/gpio/gpio${GPIO_NUM}/${ITEM}`
-  if [ "$VAL_SET" != "$ITEM_VALUE" ]; then
+  VAL_SET=`gpio_sysentry_get_item ${GPIO_NUM} ${ITEM}`
+  if [ "${VAL_SET}" != "${ITEM_VALUE}" ]; then
     die "Value for GPIO ${GPIO_NUM} was not set to ${ITEM_VALUE}"
   else
     test_print_trc "GPIO ${GPIO_NUM} was set to ${ITEM_VALUE}"
   fi
 }
+
 
 
 ############################### CLI Params ###################################
@@ -165,7 +178,7 @@ for GPIO_NUM_IN_BANK in $GPIO_NUM_IN_BANKS; do
     
     # test loop
     i=0
-    while [ $i -le $TEST_LOOP ]; do 
+    while [ $i -lt $TEST_LOOP ]; do 
       test_print_trc "===LOOP: $i==="
       do_cmd "echo ${GPIO_NUM} > /sys/class/gpio/export"
       do_cmd ls /sys/class/gpio
@@ -180,7 +193,7 @@ for GPIO_NUM_IN_BANK in $GPIO_NUM_IN_BANKS; do
           fi
           ;;
         out)
-          gpio_sysentry_set_item "$GPIO_NUM" "direction" "out"
+          gpio_sysentry_set_item "$GPIO_NUM" "direction" "out"  
           if [ $? -ne 0 ]; then
             die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to out"
           fi
@@ -194,10 +207,9 @@ for GPIO_NUM_IN_BANK in $GPIO_NUM_IN_BANKS; do
           fi
           ;;
         in)
-          gpio_sysentry_set_item "$GPIO_NUM" "direction" "in"
-          if [ $? -ne 0 ]; then
-            die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to in"
-          fi
+          gpio_sysentry_set_item "$GPIO_NUM" "direction" "in" || die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to in"
+          VAL=`gpio_sysentry_get_item "$GPIO_NUM" "value"` || die "gpio_sysentry_set_item failed to get the value of ${GPIO_NUM} " 
+          test_print_trc "The value is ${VAL} for $GPIO_NUM" 
           ;;
         edge)
           gpio_sysentry_set_item "$GPIO_NUM" "edge" "falling"
@@ -213,10 +225,30 @@ for GPIO_NUM_IN_BANK in $GPIO_NUM_IN_BANKS; do
             die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to both"
           fi
           ;;
+        pm_context_restore)
+          gpio_sysentry_set_item "$GPIO_NUM" "direction" "out" || die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to out"
+          gpio_sysentry_set_item "$GPIO_NUM" "value" "1" || die "gpio_sysentry_set_item failed to set ${GPIO_NUM} to 1"
+          VAL_BEFORE=`gpio_sysentry_get_item "$GPIO_NUM" "value"` || die "gpio_sysentry_set_item failed to get the value of ${GPIO_NUM} " 
+          test_print_trc "The value was ${VAL_BEFORE} for $GPIO_NUM before suspend" 
+  
+          simple_suspend 1
+          
+          # check if the value is still the same as the one before suspend
+          VAL_AFTER=`gpio_sysentry_get_item "$GPIO_NUM" "value"` || die "gpio_sysentry_set_item failed to get the value of ${GPIO_NUM} " 
+          test_print_trc "The value was ${VAL_AFTER} for $GPIO_NUM after suspend" 
+
+          # compare 
+          if [ $VAL_BEFORE -ne $VAL_AFTER ]; then
+            die "The value for gpio $GPIO_NUM is different before and after suspend"
+          else
+            test_print_trc "The values are the same before and after"
+          fi
+          ;;
         esac
       else
         die "/sys/class/gpio/gpio${GPIO_NUM} does not exist!"
       fi
+
       # remove gpio sys entry
       do_cmd "echo ${GPIO_NUM} > /sys/class/gpio/unexport" 
       do_cmd "ls /sys/class/gpio/"
