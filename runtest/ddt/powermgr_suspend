@@ -1,0 +1,22 @@
+# @name suspend resume tests
+# @desc Test suspend resume 
+# @requires power_mgr 
+
+POWERMGR_S_FUNC_SIMPLE_SUSPEND source 'super-pm-tests.sh'; simple_suspend 2 "mem"
+
+POWERMGR_M_FUNC_SIMPLE_SUSPEND source 'super-pm-tests.sh'; simple_suspend 10 "mem"
+
+POWERMGR_L_STRESS_SIMPLE_SUSPEND source 'super-pm-tests.sh'; simple_suspend 100 "mem"
+
+POWERMGR_S_FUNC_SIMPLE_STANDBY source 'super-pm-tests.sh'; simple_suspend 2 "standby"
+
+POWERMGR_M_FUNC_SIMPLE_STANDBY source 'super-pm-tests.sh'; simple_suspend 10 "standby"
+
+POWERMGR_L_STRESS_SIMPLE_STANDBY source 'super-pm-tests.sh'; simple_suspend 100 "standby"
+
+
+
+
+
+
+

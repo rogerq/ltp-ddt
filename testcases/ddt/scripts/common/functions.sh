@@ -271,13 +271,19 @@ offmode_random()
 # automated waker.. dont want hitting keyboards..
 wakeup_time_random()
 {
-    k=`random_ne0 10`
+    # add this variable to have bigger wakeup time
+    max_wtime=$1
+    if [ -z $max_wtime ]; then
+      max_wtime=10
+    fi
+    k=`random_ne0 $max_wtime`
     sec=`expr $k % 1000`
     msec=`expr $k / 1000`
-    echo $sec > $DEBUGFS_LOCATION/pm_debug/wakeup_timer_seconds
-    echo $msec > $DEBUGFS_LOCATION/pm_debug/wakeup_timer_milliseconds
+    if [ -e $DEBUGFS_LOCATION/pm_debug/wakeup_timer_seconds ]; then
+      echo $sec > $DEBUGFS_LOCATION/pm_debug/wakeup_timer_seconds
+      echo $msec > $DEBUGFS_LOCATION/pm_debug/wakeup_timer_milliseconds
+    fi
     report "wakeup - $sec sec $msec msec"
-    report "PLEASE Do something to wakeup the board when it suspends"  #TODO: Delete once wakeup_timer is added
 }
 
 # cleanup cpuloadgen
@@ -397,19 +403,53 @@ no_suspend()
     fi
 }
 
-# suspend me
+# suspend / standby me
+# $1: powerstate like 'mem' or 'standby'
 suspend()
 {
+    power_state=$1
+    # for backward compatible
+    if [ -z "$power_state" ]; then
+        power_state="mem"
+    fi
+
+    wakeup_time_random
+    suspend_time=$sec
+    dmesg -c > /dev/null
     if [ $use_wakelock -ne 0 ]; then
         report "removing wakelock $PSID (sec=$sec msec=$msec off=$off bug=$bug)"
         echo "$PSID" >/sys/power/wake_unlock
-    else
-        report "suspend(sec=$sec msec=$msec off=$off bug=$bug)"
-        echo -n "mem">/sys/power/state
     fi
+    if [ -e $DEBUGFS_LOCATION/pm_debug/wakeup_timer_seconds ]; then
+        report "Use wakeup_timer"
+        report "suspend(sec=$sec msec=$msec off=$off bug=$bug)"
+        echo -n "$power_state" > /sys/power/state
+    elif [ -e /dev/rtc0 ]; then
+        report "Use rtc to suspend resume"
+        do_cmd rtcwake -d /dev/rtc0 -m ${power_state} -s ${suspend_time}
+    else
+        # Stop the test if there is no rtcwake or wakeup_timer support 
+        die "There is no automated way (wakeup_timer or /dev/rtc0) to wakeup the board. No suspend!"
+    fi
+
+    check_suspend
+    check_resume
     no_suspend
 }
 
+# check if suspend/standby is ok by checking the kernel messages
+check_suspend()
+{
+    expect="PM: suspend of devices complete"
+    dmesg | grep -i "$expect" && report "suspend successfully" || die "suspend failed"
+}
+
+# check if resume is ok by checking the kernel messages
+check_resume()
+{
+    expect="PM: resume of devices complete"
+    dmesg | grep -i "$expect" && report "resume successfully" || die "resume failed"
+}
 
 check_cpufreq_files() {
 

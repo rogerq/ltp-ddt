@@ -62,6 +62,33 @@ test_suspend()
 	report_stats "AFTER SUSPEND TEST"
 }
 
+# simple suspend resume test
+#  $1: suspend iterations
+#  $2: power state like 'mem' or 'standby'
+simple_suspend()
+{
+  iterations=$1
+  power_state=$2
+  i=0
+  while [ $i -lt $iterations ]; do
+    report "======iteration $i======"
+    suspend $power_state
+    i=`expr $i + 1`
+  done
+}
+
+# simple suspend resume test with reporting stats before and after
+#  $1: suspend iterations
+#  $2: power state like 'mem' or 'standby'
+simple_suspend_w_stats()
+{
+  iterations=$1
+  power_state=$2
+  report_stats "BEFORE SIMPLE SUSPEND TEST"
+  simple_suspend $iterations $power_state
+  report_stats "AFTER SIMPLE SUSPEND TEST"
+}
+
 # Test to exercise suspend, cpuidle and cpufreq
 #  $1: Number of test iterations
 super_pm_test()
