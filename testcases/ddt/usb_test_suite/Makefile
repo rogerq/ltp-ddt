@@ -1,4 +1,4 @@
-# MakeFile function     :: MakeFile for compiling USB_Video test suite 
+# MakeFile function     :: MakeFile for compiling USB test suite
 
 top_srcdir              ?= ../../..
 
@@ -16,16 +16,19 @@ INSTALL_MODE            := 00755
 #INSTALL_TARGETS         := $(filter-out $(UNWANTED_FILES),$(notdir $(patsubst $(abs_srcdir)/%,%,$(wildcard $(abs_srcdir)/*))))
 
 CFLAGS          += -g -Wall
-LDFLAGS         += -g 
+LDFLAGS         += -g -lpthread
 
 #List of source files- Update this on adding a new C file
-SOURCES := \
-        src/testcases/usb_video_capture.c \
+TESTUSB_SOURCES	:= src/testcases/testusb.c
 
-MAKE_TARGETS            := usb_video_capture
+UVC_SOURCES	:= src/testcases/usb_video_capture.c
 
-all:
-	 $(CC) $(CFLAGS) $(LDFLAGS) -o usb_video_capture  ${SOURCES}
+MAKE_TARGETS            := testusb usb_video_capture
 
+testusb: ${TESTUSB_SOURCES}
+	 $(CC) $(CFLAGS) $(LDFLAGS) -o testusb  ${TESTUSB_SOURCES}
+
+usb_video_capture: ${UVC_SOURCES}
+	 $(CC) $(CFLAGS) $(LDFLAGS) -o usb_video_capture  ${UVC_SOURCES}
 
 include $(top_srcdir)/include/mk/generic_leaf_target.mk
