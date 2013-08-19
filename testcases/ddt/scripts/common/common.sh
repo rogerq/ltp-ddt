@@ -254,3 +254,15 @@ check_kernel_errors()
     ;;
   esac
 }
+
+# Function to check if environment variable is set
+# Input: $1 - environment variable to be checked
+# returns true if set
+# returns with error if not set
+check_env_var() {                                               
+  output_str=`env|grep $1`                            
+  if [ ${#output_str} == 0 ]
+  then                                                           
+    die "$1 not defined"                                             
+  fi                                                              
+} 

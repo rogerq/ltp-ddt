@@ -1,0 +1,7 @@
+# @name ETH Parallel Processing with SMP CPU Affinity
+# @desc Check that parallel processes can run on ethernet device and 
+# cpu affinity for those processes can be set
+# @requires smp && net
+# @setup_requires 
+SMP_S_FUNC_ETH_PARALLEL_PROCESSING_NO-LB_CORE1 source 'common.sh';prepare_nfs_mount.sh "/mnt/nfs_mount"||die "NFS Mounting Failed";num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && multi_run_processes.sh "/opt/ltp/runltp -f ddt/eth_ping -P $MACHINE -s ETH_S_FUNC_PING # dd if=/dev/urandom of=/mnt/nfs_mount/dd_test bs=1M count=100" 10 0x1 1;unmount_nfs.sh "/mnt/nfs_mount"
+SMP_S_FUNC_ETH_PARALLEL_PROCESSING_NO-LB_CORE2 source 'common.sh';prepare_nfs_mount.sh "/mnt/nfs_mount"||die "NFS Mounting Failed";num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && multi_run_processes.sh "/opt/ltp/runltp -f ddt/eth_ping -P $MACHINE -s ETH_S_FUNC_PING # dd if=/dev/urandom of=/mnt/nfs_mount/dd_test bs=1M count=100" 10 0x2 1;unmount_nfs.sh "/mnt/nfs_mount"
