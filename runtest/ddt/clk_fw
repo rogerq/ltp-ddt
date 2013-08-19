@@ -1,0 +1,6 @@
+# @name Common Clk Framework Test 
+# @desc Verifies the sysfs clk framework tree against reference and registers
+# @requires am335x || dra7xx || omap5
+
+CLKFW_S_FUNC source 'clk_framework_test.sh'
+
