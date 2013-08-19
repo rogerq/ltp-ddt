@@ -1,0 +1,243 @@
+#!/bin/bash
+
+source omap5_clk_framework_utils.sh
+SYS_CLK=19200000
+
+#PER DPLL settings
+case $SYS_CLK in
+   38400000) PER_PLL_M=10
+             PER_PLL_N=0;;
+   26000000) PER_PLL_M=192
+             PER_PLL_N=12;;
+   19200000) PER_PLL_M=20
+             PER_PLL_N=0;;
+   16800000) PER_PLL_M=260
+             PER_PLL_N=6;;
+   12000000) PER_PLL_M=32
+             PER_PLL_N=0;;
+esac
+PER_PLL_M2=4
+PER_PLL_H11=2
+PER_PLL_H12=3
+#OPP_NOM Settings
+PER_PLL_H14=1
+PER_PLL_M3=3
+#OPP_LOW Settings
+#PER_PLL_H14=3
+#PER_PLL_M3=4
+
+#Core DPLL Settings
+case $SYS_CLK in
+   38400000) CORE_PLL_M=665
+             CORE_PLL_N=23;;
+   26000000) CORE_PLL_M=532
+             CORE_PLL_N=12;;
+   19200000) CORE_PLL_M=665
+             CORE_PLL_N=11;;
+   16800000) CORE_PLL_M=570
+             CORE_PLL_N=8;;
+   12000000) CORE_PLL_M=266
+             CORE_PLL_N=2;;
+esac
+CORE_PLL_M3=8
+CORE_PLL_H11=7
+CORE_PLL_H13=61
+CORE_PLL_H24=11
+#OPP_NOM Settings
+CORE_PLL_M2=2 #DDR3 used can do DDR1600, but it is set to work as DDR1066
+CORE_PLL_H12=3
+CORE_PLL_H14=4
+CORE_PLL_H22=4
+CORE_PLL_H23=6
+#OPP_LOW Settings
+#CORE_PLL_M2=4 #DDR3 used can do DDR1600, but it is set to work as DDR1066
+#CORE_PLL_H12=7
+#CORE_PLL_H14=9
+#CORE_PLL_H22=9
+#CORE_PLL_H23=13
+#OPP_OD Settings
+#CORE_PLL_H14=3
+
+#ABE DPLL Settings
+case $SYS_CLK in
+   38400000) ABE_PLL_M=64
+             ABE_PLL_N=24
+             ABE_PLL_M2=1
+             ABE_PLL_M3=1;;
+   26000000) ABE_PLL_M=64 #Not exactly 196.608, actually 195.764705
+             ABE_PLL_N=16
+             ABE_PLL_M2=1
+             ABE_PLL_M3=1;;
+   19200000) ABE_PLL_M=128
+             ABE_PLL_N=24
+             ABE_PLL_M2=1
+             ABE_PLL_M3=1;;
+   16800000) ABE_PLL_M=1024
+             ABE_PLL_N=34
+             ABE_PLL_M2=5
+             ABE_PLL_M3=5;;
+   12000000) ABE_PLL_M=1024
+             ABE_PLL_N=124
+             ABE_PLL_M2=1
+             ABE_PLL_M3=1;;
+esac
+ABE_PLL_REGM4=0
+
+#MPU DPLL Settings
+#OPP_LOW and OPP_NOM Settings
+case $SYS_CLK in
+   38400000) MPU_PLL_M=125
+             MPU_PLL_N=3;;
+   26000000) MPU_PLL_M=600
+             MPU_PLL_N=12;;
+   19200000) MPU_PLL_M=625
+             MPU_PLL_N=9;;
+   16800000) MPU_PLL_M=1500
+             MPU_PLL_N=20;;
+   12000000) MPU_PLL_M=100 
+             MPU_PLL_N=0;;
+esac
+#OPP_HIGH Settings
+#case $SYS_CLK in
+#   38400000) MPU_PLL_M=2125 
+#             MPU_PLL_N=95;;
+#   26000000) MPU_PLL_M=425 
+#             MPU_PLL_N=12;;
+#   19200000) MPU_PLL_M=2125 
+#             MPU_PLL_N=47;;
+#   16800000) MPU_PLL_M=2125
+#             MPU_PLL_N=41;;
+#   12000000) MPU_PLL_M=425
+#             MPU_PLL_N=5;;
+#esac
+#OPP_SPEEDBIN Settings
+#case $SYS_CLK in
+#   38400000) MPU_PLL_M=625 
+#             MPU_PLL_N=23;;
+#   26000000) MPU_PLL_M=500 
+#             MPU_PLL_N=12;;
+#   19200000) MPU_PLL_M=625
+#             MPU_PLL_N=11
+#   16800000) MPU_PLL_M=1250
+#             MPU_PLL_N=20;;
+#   12000000) MPU_PLL_M=250
+#             MPU_PLL_N=2;;
+#esac
+#OPP_LOW M2
+#MPU_PLL_M2=2
+#OPP_NOM, OPP_HIGH, OPP_SPEEDBIN M2
+MPU_PLL_M2=1
+
+#IVA DPLL Settings
+#OPP_LOW and OPP_NOM Settings
+case $SYS_CLK in
+   38400000) IVA_PLL_M=1456 #Not exactly 2330MHz actually 2329.6
+             IVA_PLL_N=47;;
+   26000000) IVA_PLL_M=1165
+             IVA_PLL_N=25;;
+   19200000) IVA_PLL_M=1456 #Not exactly 2330MHz actually 2329.6
+             IVA_PLL_N=23;;
+   16800000) IVA_PLL_M=971 #Not exactly 2330MHz actually 2330.4
+             IVA_PLL_N=13;;
+   12000000) IVA_PLL_M=1165
+             IVA_PLL_N=11;;
+esac
+#OPP_OD Settings
+#case $SYS_CLK in
+#   38400000) IVA_PLL_M=665
+#             IVA_PLL_N=47;;
+#   26000000) IVA_PLL_M=266
+#             IVA_PLL_N=12;;
+#   19200000) IVA_PLL_M=665
+#             IVA_PLL_N=23;;
+#   16800000) IVA_PLL_M=285
+#             IVA_PLL_N=8;;
+#   12000000) IVA_PLL_M=133
+#             IVA_PLL_N=2;;
+#esac
+#OPP_LOW H1x Settings
+#IVA_PLL_H11=9
+#IVA_PLL_H12=11
+#OPP_NOM H1x Settings
+IVA_PLL_H11=4
+IVA_PLL_H12=5
+#OPP_OD H1x Settings
+#IVA_PLL_H11=1
+#IVA_PLL_H12=1
+
+#USB DPLL Settings
+case $SYS_CLK in
+   38400000) USB_PLL_M=25
+             USB_PLL_N=1;;
+   26000000) USB_PLL_M=240
+             USB_PLL_N=12;;
+   19200000) USB_PLL_M=25
+             USB_PLL_N=0;;
+   16800000) USB_PLL_M=200
+             USB_PLL_N=6;;
+   12000000) USB_PLL_M=40
+             USB_PLL_N=0;;
+esac
+USB_PLL_M2=1
+
+#PRM Settings
+PRM_ABE_DPLL_CLK_MUX=0
+PRM_WKUPAON_ICLK_MUX=0
+PRM_ABE_DPLL_BYPASS_CLK_MUX=0
+PRM_ABE_SYS_CLK_DIV=0
+PRM_MPU_DPLL_CLK_ABE_DIV=0
+PRM_MPU_DPLL_CLK_EMIF_DIV=0 # 0 or 1 (div 4); 2 or 3 (div 8)
+PRM_L3INSTR_TS_GCLK_AND_DLL_AGING_CLK_DIV=2 # 0 (div 8); 1 (div 16); 2 (div 32)
+
+#CM_CORE_AON Settings
+CM_CORE_AON_L3_ICLK_DIV=1 # 0 or 1 maps to 2^n
+CM_CORE_AON_L4_ROOT_CLK_DIV=1 # 0 or 1 maps to 2^n
+CM_CORE_AON_MPU_DPLL_HS_CLK_DIV=0 # 0, 1, 2, or 3 maps to 2^n
+CM_CORE_AON_IVA_DPLL_HS_CLK_DIV=0 # 0, 1, 2, or 3 maps to 2^n
+
+#CKGEN_USB Settings
+CKGEN_USB_L3_INIT_60M_FCLK_DIV=1
+CKGEN_USB_UTMI_P1_GFCLK_MUX=0
+CKGEN_USB_UTMI_P2_GFCLK_MUX=0
+
+#CKGEN_ABE Settings
+CKGEN_ABE_CLK_DIV=0 #0 (OPP_NOM), 1 (OPP_LOW), or 2 maps to 2^n 
+CKGEN_AESS_FCLK_ABE_GICLK_DIV=0 #0 or 1 maps to 2^n
+CKGEN_ABE_TIMER5_GFCLK_MUX=0
+CKGEN_ABE_TIMER6_GFCLK_MUX=0
+CKGEN_ABE_TIMER7_GFCLK_MUX=0
+CKGEN_ABE_TIMER8_GFCLK_MUX=0
+CKGEN_ABE_DMIC_GFCLK_MUX=0
+CKGEN_ABE_DMIC_INT_MUX=0
+CKGEN_ABE_MCASP_INT_MUX=0
+CKGEN_ABE_MCASP_GFCLK_MUX=0
+CKGEN_ABE_MCBSP1_GFCLK_MUX=0
+CKGEN_ABE_MCBSP1_INT_MUX=0
+CKGEN_ABE_MCBSP2_GFCLK_MUX=0
+CKGEN_ABE_MCBSP2_INT_MUX=0
+CKGEN_ABE_MCBSP3_GFCLK_MUX=0
+CKGEN_ABE_MCBSP3_INT_MUX=0
+
+#CM_CORE Settings
+CM_CORE_MMC1_GFCLK_MUX=1
+CM_CORE_MMC1_GFCLK_DIV=0 # 0 (OPP_NOM) or 1 map to 2^n
+CM_CORE_MMC2_GFCLK_MUX=1
+CM_CORE_MMC2_GFCLK_DIV=0 # 0 (OPP_NOM) or 1 map to 2^n
+CM_CORE_GPU_HYD_GCLK_MUX=0
+CM_CORE_GPU_CORE_GCLK_MUX=0
+CM_CORE_FDIF_GFCLK_DIV=0 # 0 (OPP_NOM), 1 (OPP_LOW) maps to 2^n
+CM_CORE_HSI_GFCLK_DIV=0 # 0 (OPP_NOM), 1 maps to 2^n
+CM_CORE_GPU_L3_DIV=0 # 0, 1 maps to 2^n
+
+#TIMERs Settings
+TIMER1_GFCLK_MUX=1
+TIMER2_GFCLK_MUX=0
+TIMER3_GFCLK_MUX=0
+TIMER4_GFCLK_MUX=0
+TIMER9_GFCLK_MUX=0
+TIMER10_GFCLK_MUX=0
+TIMER11_GFCLK_MUX=0
+
+
+source omap5_clk_framework_tree.sh
+
