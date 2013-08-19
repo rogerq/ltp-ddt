@@ -1,0 +1,15 @@
+# @name USB I/O stress test
+# @desc Perform all kinds of I/O transfers with varying sizes
+# @requires usb/host
+
+# Needs a specific test USB gadget connected to the host controller (e.g. Gadget zero)
+# For a complete list of compatible devices, see
+# http://lxr.free-electrons.com/source/drivers/usb/misc/usbtest.c#L2440
+
+USB_L_STRESS_OUT source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_test.sh -t out
+USB_L_STRESS_ISO_OUT source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_test.sh -t iso-out
+USB_L_STRESS_IN source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_test.sh -t in
+USB_L_STRESS_ISO_IN source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_test.sh -t iso-in
+USB_L_STRESS_HALT source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_test.sh -t halt
+USB_L_STRESS_UNLINK source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_test.sh -t unlink
+
