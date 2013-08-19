@@ -74,7 +74,9 @@
 #		Aug 15 2011 - Modified - Franklin Cooper
 #		- Included the ability for platform capabilities file to allow 
 #		  for shell script style comments (#)
-#
+#		Aug 13 2013 - Modified - Alejandro Hernandez
+#		- Changed PATH setting to include a recursive loop of 
+#		${LTPROOT}/testcases/bin/ddt
 #################################################################################
 
 
@@ -88,7 +90,7 @@ setup()
     }
     export LTPROOT=${PWD}
     export TMPBASE="/tmp"
-    export PATH="${PATH}:${LTPROOT}/testcases/bin:${LTPROOT}/testcases/bin/ddt"
+    export PATH="${PATH}:${LTPROOT}/testcases/bin"$( find ${LTPROOT}/testcases/bin/ddt -type d -exec printf ":"{} \; )
 
     [ -d "$LTPROOT/testcases/bin" ] ||
     {

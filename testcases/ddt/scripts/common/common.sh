@@ -38,7 +38,7 @@ resolve_platform_name() {
 if [ "x$SOC" == "x" ]
 then
    LTPPATH='/opt/ltp'
-   export PATH="${PATH}:${LTPPATH}/testcases/bin:${LTPPATH}/testcases/bin/ddt"
+   export PATH="${PATH}:${LTPPATH}/testcases/bin"$( find ${LTPROOT}/testcases/bin/ddt -type d -exec printf ":"{} \; )
    plat=`uname -a | cut -d' ' -f 2`
   local i=0; local DRIVERS=""
   while read -r file
