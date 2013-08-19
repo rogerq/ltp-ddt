@@ -447,7 +447,7 @@ main()
 
     ## It would be nice to create a default log file even if the user has not mentioned
     if [ ! "$LOGFILE" ]; then                                ## User has not mentioned about Log File name
-       LOGFILE_NAME=$DEFAULT_FILE_NAME_GENERATION_TIME
+       LOGFILE_NAME="${DEFAULT_FILE_NAME_GENERATION_TIME}_$$"
        LOGFILE="-l $LTPROOT/results/LTP_RUN_ON-$LOGFILE_NAME.log"
        ALT_DIR_RES=1
        PRETTY_PRT=" -p "
