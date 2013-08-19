@@ -307,6 +307,12 @@ static int do_test(struct testdev *dev)
 	int fd, i;
 	int status;
 
+	if (dev->test > TEST_CASES) {
+		fprintf(stderr, "unsupported test case %d\n", dev->test);
+		return -1;
+	}
+
+
 	if ((fd = open(dev->name, O_RDWR)) < 0) {
 		perror("can't open dev file r/w");
 		return -1;
