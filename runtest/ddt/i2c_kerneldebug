@@ -1,0 +1,8 @@
+# @name I2C test with kernel debug option enabled
+# @desc Run I2C test and then check if there is memleak or spinlock errors
+# @requires i2c 
+
+I2C_L_FUNC_I2CDETECT_MEMLEAK source "common.sh"; do_cmd /opt/ltp/runltp -f ddt/i2c_detect -P $MACHINE -s "I2C_S_FUNC_I2CDETECT" && check_kernel_errors "kmemleak" 
+
+I2C_L_FUNC_I2CDETECT_SPINLOCK source "common.sh"; do_cmd /opt/ltp/runltp -f ddt/i2c_detect -P $MACHINE -s "I2C_S_FUNC_I2CDETECT" && check_kernel_errors "spinlock" 
+

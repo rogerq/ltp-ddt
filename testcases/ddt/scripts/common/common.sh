@@ -228,6 +228,9 @@ check_kernel_errors()
         die "kmemleak sys entry doesn't exist; Please enable DEBUG_KMEMLEAK"
       fi
 
+      # clear the list of all current possible memory leaks before scan
+      do_cmd "echo clear > ${kmemleaks}"
+
       # trigger memory scan
       do_cmd "echo scan > ${kmemleaks}"
       # give kernel some time to scan
