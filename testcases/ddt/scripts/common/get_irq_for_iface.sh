@@ -27,7 +27,7 @@ usage()
 
 find_irq()
 {
-	NAME=`cat /proc/interrupts  | grep $NAME | cut -d':' -f 1`
+	NAME=`cat /proc/interrupts  | grep $NAME | head -1 | cut -d':' -f 1`
 }
 ############################ Script Variables ##################################
 # Define default valus if possible
