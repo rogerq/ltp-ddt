@@ -166,8 +166,10 @@
 6.1) Environment Setup for LTP-DDT build
 ================================================================================
  In order to cross compile LTP-DDT, a cross-compiler tool-chain is required.
- Download and install toolchain from following location:
- http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2
+ We typically use either Linaro Toolchain or Arago Toolchain.
+ To Install Linaro toolchain, please see http://arago-project.org/wiki/index.php/Setting_Up_Build_Environment#Cross-compile_toolchain
+ To Install Arago toolchain:
+ wget and untar http://software-dl.ti.com/sdoemb/sdoemb_public_sw/arago_toolchain/2011_09/exports/arago-2011.09-armv7a-linux-gnueabi-sdk.tar.bz2 
  Set the environment variable PATH to contain the binaries of the toolchain cross-compiler tool-chain.
      For example, in bash: 
 	     $ export PATH=/opt/arago-2011.09/armv7a/bin:$PATH 
@@ -208,6 +210,13 @@
  * $ sudo make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install
    For example:
    $sudo make DESTDIR=/opt/filesystem/home/root/ltp-ddt-install SKIP_IDCHECK=1 PLATFORM=am180x-evm install
+
+ * run the below commands to build and install kernel test module like edma, gpio
+   $ make CROSS_COMPILE=<CC PREFIX> SKIP_IDCHECK=1 KERNEL_INC=<Kernel
+     include directory> KERNEL_USR_INC=<Kernel usr include directory>
+     PLATFORM=<Platform name> modules
+   $ sudo make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install 
+
 
 7) HOW TO INSTALL ALSA INCLUDES AND LIBS
    Install following packages on to your filesystem
