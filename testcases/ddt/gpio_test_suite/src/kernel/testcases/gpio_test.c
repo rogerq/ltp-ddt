@@ -22,7 +22,6 @@
 #include <linux/irq.h>
 #include <linux/interrupt.h>
 #include <linux/completion.h>
-#include <mach/hardware.h>
 #include <asm/gpio.h>
 
 #define TEST_OUTPUT
