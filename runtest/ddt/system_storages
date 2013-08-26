@@ -3,6 +3,6 @@
 # @requires net && usb/host && nand && ubifs && mmc_host/sdhc 
 # @setup_requires usbhostmsc && sdhc
 
-SYSTEM_L_FUNC_NET-MMC-USB-NAND-0001 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/eth_iperf_tcp -P $MACHINE -s "ETH_M_PERF_IPERF_TCP_128K_1448B" # /opt/ltp/runltp -f ddt/mmc_sdhccard_perf_ext2 -P $MACHINE -s "MMC_L_PERF_SDHC_EXT2_0001" # /opt/ltp/runltp -f ddt/usbhost_perf_vfat -P $MACHINE -s "USBHOST_S_PERF_VFAT_0001" # /opt/ltp/runltp -f ddt/nand_perf_ubifs -P $MACHINE -s "NAND_L_PERF_UBIFS " "
-SYSTEM_L_FUNC_NET-MMC-USB-NAND-SHORT-0001 source 'common.sh'; run_processes.sh "/opt/ltp/runltp -f ddt/mmc_sdhccard_dd_rw_ext2 -P $MACHINE -s "MMC_M_FUNC_SDHC_EXT2_DD_RW_0007" # /opt/ltp/runltp -f ddt/usbhost_perf_vfat -P $MACHINE -s "USBHOST_S_PERF_VFAT_0001" # /opt/ltp/runltp -f ddt/nand_mtd_dd_rw_ubifs -P $MACHINE -s "_S_" # /opt/ltp/runltp -f ddt/eth_ping -P $MACHINE -s "ETH_M_FUNC_PING_MULTI-PKT-SIZES" "
+SYSTEM_L_FUNC_NET-MMC-USB-NAND-0001 source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -f ddt/eth_iperf_tcp -P $MACHINE -s "ETH_M_PERF_IPERF_TCP_128K_1448B" # /opt/ltp/runltp -f ddt/mmc_sdhccard_perf_ext2 -P $MACHINE -s "MMC_L_PERF_SDHC_EXT2_0001" # /opt/ltp/runltp -f ddt/usbhost_perf_vfat -P $MACHINE -s "USBHOST_S_PERF_VFAT_0001" # /opt/ltp/runltp -f ddt/nand_perf_ubifs -P $MACHINE -s "NAND_L_PERF_UBIFS " "
+SYSTEM_L_FUNC_NET-MMC-USB-NAND-SHORT-0001 source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -f ddt/mmc_sdhccard_dd_rw_ext2 -P $MACHINE -s "MMC_M_FUNC_SDHC_EXT2_DD_RW_0007" # /opt/ltp/runltp -f ddt/usbhost_perf_vfat -P $MACHINE -s "USBHOST_S_PERF_VFAT_0001" # /opt/ltp/runltp -f ddt/nand_mtd_dd_rw_ubifs -P $MACHINE -s "_S_" # /opt/ltp/runltp -f ddt/eth_ping -P $MACHINE -s "ETH_M_FUNC_PING_MULTI-PKT-SIZES" "
 

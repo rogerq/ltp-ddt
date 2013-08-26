@@ -3,6 +3,6 @@
 #       Also check gpio context save/restore after suspend test 
 # @requires gpio && power_mgr
 
-GPIO_L_FUNC_PWR_PER_PWRDM_COUNTERS source "super-pm-tests.sh"; do_cmd log_pm_count "per_pwrdm" "RET,RET-LOGIC-OFF,OFF" "," "per_pwrdm_before.log" && run_processes.sh " /opt/ltp/runltp -f ddt/gpio-tests -P $MACHINE -s "GPIO_M_FUNC_DIR_OUT_ALL_BANK" # /opt/ltp/runltp -f ddt/powermgr_suspend -P $MACHINE -s "POWERMGR_S_FUNC_SIMPLE_SUSPEND" " && do_cmd log_pm_count "per_pwrdm" "RET,RET-LOGIC-OFF,OFF" "," "per_pwrdm_after.log" && do_cmd compare_pm_count "per_pwrdm" "RET,RET-LOGIC-OFF,OFF" "," "per_pwrdm_before.log" "per_pwrdm_after.log"
+GPIO_L_FUNC_PWR_PER_PWRDM_COUNTERS source "super-pm-tests.sh"; do_cmd log_pm_count "per_pwrdm" "RET,RET-LOGIC-OFF,OFF" "," "per_pwrdm_before.log" && run_processes.sh -c " /opt/ltp/runltp -f ddt/gpio-tests -P $MACHINE -s "GPIO_M_FUNC_DIR_OUT_ALL_BANK" # /opt/ltp/runltp -f ddt/powermgr_suspend -P $MACHINE -s "POWERMGR_S_FUNC_SIMPLE_SUSPEND" " && do_cmd log_pm_count "per_pwrdm" "RET,RET-LOGIC-OFF,OFF" "," "per_pwrdm_after.log" && do_cmd compare_pm_count "per_pwrdm" "RET,RET-LOGIC-OFF,OFF" "," "per_pwrdm_before.log" "per_pwrdm_after.log"
 
 GPIO_L_FUNC_PWR_CONTEXT_RESTORE_ALL_BANK source "common.sh"; do_cmd gpio.sh -l "1" -t "pm_context_restore"
