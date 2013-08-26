@@ -3,5 +3,5 @@
 # cpu affinity for those processes can be set
 # @requires smp && net
 # @setup_requires
-ETH_S_FUNC_PRIORITY_PROCESSING_SMP_NO-LB_CORE1 source 'common.sh';  prepare_nfs_mount.sh "/mnt/nfs_mount"|| die "Mounting NFS Failed"; num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && multi_run_process_by_priority.sh -s "time -p dd if=/dev/urandom of=/mnt/nfs_mount/dd1_test bs=1M count=100" -l "-n 1 -a 0x1 -d 0 -p -20" -s "time -p dd if=/dev/urandom of=/mnt/nfs_mount/dd2_test bs=1M count=100" -l "-n 1 -a 0x1 -d 0 -p 20" -v || die "Priority Test failed"; unmount_nfs.sh "/mnt/nfs_mount"
+ETH_S_FUNC_PRIORITY_PROCESSING_SMP_NO-LB_CORE1 source 'common.sh';  prepare_nfs_mount.sh "/mnt/nfs_mount"|| die "Mounting NFS Failed"; num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && multi_run_processes.sh -s "time -p dd if=/dev/urandom of=/mnt/nfs_mount/dd1_test bs=1M count=100" -l "-n 1 -a 0x1 -d 0 -p -20" -s "time -p dd if=/dev/urandom of=/mnt/nfs_mount/dd2_test bs=1M count=100" -l "-n 1 -a 0x1 -d 0 -p 20" -v || die "Priority Test failed"; unmount_nfs.sh "/mnt/nfs_mount"
 
