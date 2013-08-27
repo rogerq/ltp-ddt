@@ -6,6 +6,7 @@
 #                                                  -a <cpu_affinity_mask>
 #                                                  -d <delay_in_sec> 
 #                                                  -p <priority> 
+# if cpu affinity is set, then taskset is used to spawn the processes
 pids=''
 RET=0
 OFS=$IFS
@@ -89,17 +90,27 @@ for w in $p_commands
 do
   for (( j=0 ; j < $p_instances ; j++ ))
   do 
+    echo "INSTANCE is $j COMMAND is $w"
     sleep $p_delay
-    c="taskset $p_mask $w"
-    eval "$c" > $tmp_dir/log$i.$j.tmp 2>&1 &
+    # if cpu affinity is set, use taskset
+    if [[ $AFFINITY_SET = 1 ]]
+    then
+      c="taskset $p_mask $w"
+      eval "$c" > $tmp_dir/log$i.$j.tmp 2>&1 &
+    else
+      eval "$w" > $tmp_dir/log$i.$j.tmp 2>&1 &
+    fi
     process_id=$!
     typeset hash_${process_id}=$p_priority
-    #echo "$(eval echo \$hash_${process_id})"
+    echo "$(eval echo \$hash_${process_id})"
 #    eval "$c" > $tmp_dir/log$process_id.tmp 2>&1 &
-    #echo "PROCESS ID is $process_id"
+    echo "PROCESS ID is $process_id"
     #echo "PRIORITY for $process_id before "`awk '{print $18}' /proc/$process_id/stat`  
-    d="renice $p_priority -p $process_id"
-    output_str=`eval "$d"` 
+    if [[ $PRIORITY_SET = 1 ]]
+    then
+      d="renice $p_priority -p $process_id"
+      output_str=`eval "$d"` 
+    fi
     #echo "RENICE DONE PPPPPPPPPPPPPPPPPPPPPROCESS ID" $process_id
     #echo "PRIORITY for $process_id after "`awk '{print $18}' /proc/$process_id/stat`  
     pids="$pids:$!"
