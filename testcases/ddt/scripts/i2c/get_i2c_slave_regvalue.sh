@@ -27,7 +27,7 @@ source "common.sh"
 #        echo "Syntax: $0 [slave_device] "
 #        exit 1
 #fi
-if [ $# -ge 1 -a -n $1 ]; then
+if [ "$#" -ge 1 -a -n "$1" ]; then
 	SLAVE_DEVICE=$1
 fi
 

@@ -29,8 +29,8 @@ source "common.sh"
 #        echo "Syntax: $0 [slave_device] "
 #        exit 1
 #fi
-if [ $# -ge 1 -a -n $1 ]; then
-	SLAVE_DEVICE=$1
+if [ "$#" -ge 1 -a -n "$1" ]; then
+  SLAVE_DEVICE=$1
 fi
 : ${SLAVE_DEVICE:='default'}
 
@@ -44,20 +44,19 @@ esac
 case $SOC in
 esac
 case $MACHINE in
-        am17x-evm)
-
-                case $SLAVE_DEVICE in
-                        eeprom)
-                                SLAVE_ADDR=0x50
-                        ;;
-			default)
-                                SLAVE_ADDR=0x50
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
-                esac
+      am17x-evm)
+          case $SLAVE_DEVICE in
+                eeprom)
+                    SLAVE_ADDR=0x50
+                    ;;
+                default)
+                    SLAVE_ADDR=0x50
                 ;;
+                *)
+                  die "Unknown slave device! Can not get slave address."
+                ;;
+          esac
+          ;;
 
         dm365-evm)
 
@@ -65,12 +64,12 @@ case $MACHINE in
                         eeprom)
                                 SLAVE_ADDR=0x50
                         ;;
-			default)
+                        default)
                                 SLAVE_ADDR=0x50
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
+      ;;
+      *)
+        die "Unknown slave device! Can not get slave address."
+      ;;
                 esac
                 ;;
 
@@ -80,12 +79,12 @@ case $MACHINE in
                         eeprom)
                                 SLAVE_ADDR=0x50
                         ;;
-			default)
+                        default)
                                 SLAVE_ADDR=0x50
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
+      ;;
+      *)
+        die "Unknown slave device! Can not get slave address."
+      ;;
                 esac
                 ;;
 
@@ -95,12 +94,12 @@ case $MACHINE in
                         eeprom)
                                 SLAVE_ADDR=0x50
                         ;;
-			default)
+                        default)
                                 SLAVE_ADDR=0x50
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
+      ;;
+      *)
+        die "Unknown slave device! Can not get slave address."
+      ;;
                 esac
                 ;;
 
@@ -109,12 +108,12 @@ case $MACHINE in
                         eeprom)
                                 SLAVE_ADDR=0x50
                         ;;
-			default)
+                        default)
                                 SLAVE_ADDR=0x50
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
+      ;;
+      *)
+        die "Unknown slave device! Can not get slave address."
+      ;;
                 esac
                 ;;
 
@@ -123,12 +122,12 @@ case $MACHINE in
                         eeprom)
                                 SLAVE_ADDR=0x50
                         ;;
-			default)
+                        default)
                                 SLAVE_ADDR=0x50
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
+      ;;
+      *)
+        die "Unknown slave device! Can not get slave address."
+      ;;
                 esac
                 ;;
 
@@ -137,42 +136,42 @@ case $MACHINE in
                         eeprom)
                                 SLAVE_ADDR=0x50
                         ;;
-			default)
+                        default)
                                 SLAVE_ADDR=0x50
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
+      ;;
+      *)
+        die "Unknown slave device! Can not get slave address."
+      ;;
                 esac
                 ;;
 
         am3517-evm)
 
                 case $SLAVE_DEVICE in
-			pmic)
+                          pmic)
                                 SLAVE_ADDR=0x48  
-			;;
-			default)
+                            ;;
+                          default)
                                 SLAVE_ADDR=0x48  
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
+      ;;
+      *)
+        die "Unknown slave device! Can not get slave address."
+      ;;
                 esac
-		;;
+    ;;
 
 
         am37x-evm)
 
                 case $SLAVE_DEVICE in
-			default)
+                          default)
                                 SLAVE_ADDR=0x5d 
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
+      ;;
+      *)
+        die "Unknown slave device! Can not get slave address."
+      ;;
                 esac
-		;;
+    ;;
 
         am180x-evm)
 
@@ -180,22 +179,22 @@ case $MACHINE in
                         io_expander)
                                 SLAVE_ADDR=0x21
                         ;;
-			default)
+                        default)
                                 SLAVE_ADDR=0x21
-			;;
-			*)
-				die "Unknown slave device! Can not get slave address."
-			;;
+      ;;
+      *)
+        die "Unknown slave device! Can not get slave address."
+      ;;
                 esac
-		;;
-	da850-omapl138-evm)
-		case $SLAVE_DEVICE in
+      ;;
+      da850-omapl138-evm)
+                case $SLAVE_DEVICE in
                         eeprom)
                                 SLAVE_ADDR=0x50
                         ;;
-			pmic)
-				SLAVE_ADDR=0x48
-			;;
+                        pmic)
+                                SLAVE_ADDR=0x48
+      ;;
                         default)
                                 SLAVE_ADDR=0x48
                         ;;
@@ -204,7 +203,7 @@ case $MACHINE in
                         ;;
                 esac
                 ;;
-	da830-omapl137-evm)
+      da830-omapl137-evm)
                 case $SLAVE_DEVICE in
                         default)
                                 SLAVE_ADDR=0x5f
@@ -214,7 +213,7 @@ case $MACHINE in
                         ;;
                 esac
                 ;;
-	omapl138-lcdk)
+      omapl138-lcdk)
                 case $SLAVE_DEVICE in
                         default)
                                 SLAVE_ADDR=0x5d
@@ -225,7 +224,7 @@ case $MACHINE in
                 esac
                 ;;
 
-    am335x-evm)
+      am335x-evm)
 
           case $SLAVE_DEVICE in
               temp_sensor)
@@ -234,18 +233,30 @@ case $MACHINE in
               eeprom)
                   SLAVE_ADDR=0x52 # LCD eeprom
               ;;
-			        default)
+              default)
                   SLAVE_ADDR=0x48
-			        ;;
-			        *)
-				          die "Unknown slave device! Can not get slave address."
-			        ;;
+              ;;
+              *)
+                  die "Unknown slave device! Can not get slave address."
+              ;;
           esac
-		;;
+      ;;
 
-
-	*)
-		die "Invalid Machine name! No I2C slave addr found"
+      omap5-evm)
+          case $SLAVE_DEVICE in
+              eeprom)
+                  SLAVE_ADDR=0x50
+              ;;
+              default)
+                  SLAVE_ADDR=0x50
+              ;;
+              *)
+                  die "Unknown slave device! Can not get slave address."
+              ;;
+          esac
+      ;;
+  *)
+    die "Invalid Machine name! No I2C slave addr found"
                 ;;
 esac
 
