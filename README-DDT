@@ -174,10 +174,17 @@
      For example, in bash: 
 	     $ export PATH=/opt/arago-2011.09/armv7a/bin:$PATH 
  Test if PATH is set properly by running following command 
- 	$arm-arago-linux-gnueabi-gcc -v
+  * For Arago Toolchain
+    $ arm-arago-linux-gnueabi-gcc -v
+  * For Linaro Toolchain
+    $ arm-linux-gnueabihf-gcc -v
 
 6.2) HOW TO CROSS-COMPILE AND INSTALL
 ================================================================================
+ Note: CROSS_COMPILE may be set differently than the examples showing in this section.
+   for Arago Toolchain: CROSS_COMPILE=arm-none-linux-gnueabi-;
+   for Linaro Toolchain: CROSS_COMPILE=arm-linux-gnueabihf-
+
  * cd to project root directory
  * $ cp include/config.h.default include/config.h
  * $ cp include/mk/config.mk.default include/mk/config.mk
@@ -206,17 +213,14 @@
      PLATFORM=<Platform name>
    For Example:
    $ make CROSS_COMPILE=arm-none-linux-gnueabi- SKIP_IDCHECK=1 KERNEL_USR_INC=/home/
-   a0850405local/oe/arago-tmp/sysroots/armv5te-none-linux-gnueabi/kernel/usr/include KERNEL_INC=/home/a0850405local/oe/arago-tmp/sysroots/armv5te-none-linux-gnueabi/kernel/include PLATFORM=am180x-evm
- * $ sudo make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install
-   For example:
-   $sudo make DESTDIR=/opt/filesystem/home/root/ltp-ddt-install SKIP_IDCHECK=1 PLATFORM=am180x-evm install
-
- * run the below commands to build and install kernel test module like edma, gpio
+   a0850405local/oe/arago-tmp/sysroots/armv7te-none-linux-gnueabi/kernel/usr/include KERNEL_INC=/home/a0850405local/oe/arago-tmp/sysroots/armv5te-none-linux-gnueabi/kernel/include PLATFORM=am335x-evm
+   Also build ltp-ddt test modules like edma and gpio
    $ make CROSS_COMPILE=<CC PREFIX> SKIP_IDCHECK=1 KERNEL_INC=<Kernel
      include directory> KERNEL_USR_INC=<Kernel usr include directory>
      PLATFORM=<Platform name> modules
-   $ sudo make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install 
-
+   $ sudo make DESTDIR=<destination directory> SKIP_IDCHECK=1 PLATFORM=<Platform name> install
+   For example:
+   $sudo make DESTDIR=/opt/filesystem/home/root/ltp-ddt-install SKIP_IDCHECK=1 PLATFORM=am335x-evm install
 
 7) HOW TO INSTALL ALSA INCLUDES AND LIBS
    Install following packages on to your filesystem
@@ -234,7 +238,7 @@
  * Run DDT tests the same way you run LTP tests. Use ltprun program and pass to
    it the test scenario file in the runtest directory (option -f) to run and the
    platform (option -P) to use. For example:
-     ./runltp -P am180x-evm -f ddt/lmbench
+     ./runltp -P am335x-evm -f ddt/lmbench
    The platform name specified with -P option must exist in the platforms/ dir.
    It is also possible to run tests without -P option, in such case the ltprun
    script won't filter test cases and it is possible that tests cases not 
