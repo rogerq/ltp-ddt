@@ -3,9 +3,11 @@
 # @notes There is a default slave device for each platform. Its address can be
 #	found in 'get_i2c_slave_addr'. If you pass slave device name, this 
 # 	script can return the addr for that slave device
-# @requires i2c/non_eeprom 
+# @requires i2c 
 
-I2C_S_FUNC_RW_SETGET source 'common.sh'; do_cmd i2c_setget.sh 
+I2C_M_FUNC_RW_SETGET source 'common.sh'; do_cmd i2c_setget.sh 
+
+I2C_M_FUNC_NEG_INVALID_ADDR source 'common.sh'; invalid_addr=`get_i2c_invalid_addr.sh` && i2cbus_num=`get_i2cbus_number.sh` && i2c_reg=`get_i2c_slave_regoffset.sh` && inverted_return="true"; do_cmd i2cget -y $i2cbus_num $invalid_addr $i2c_reg 
 
 
 
