@@ -1,0 +1,11 @@
+# @name I2C multiple instances on multiple busses
+# @desc Open multiple I2C read write thread to ensure thread safety. And also check I2C simultanously operation on multiple busses
+# @requires i2c
+# @setup_requires 
+
+I2C_M_FUNC_MULTI_THREAD_I2CDETECT source 'common.sh'; multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/i2c_detect -P $MACHINE -s "_S_" " -l " -n 3 -a 0xFFFFFFFF -d 0 "
+
+I2C_L_FUNC_MULTI_THREAD_READWRITE source 'common.sh'; multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/i2c_readwrite -P $MACHINE -s "I2C_M_FUNC_RW_SETGET" " -l " -n 3 -a 0xFFFFFFFF -d 0 "
+
+I2C_M_FUNC_MULTI_BUSES_I2CDETECT source 'common.sh'; i2c_bus_nums=`get_i2c_test_busses.sh` && echo "i2c_bus_numbers: $i2c_bus_nums" && for i2c_bus_num in $i2c_bus_nums; do do_cmd "i2cdetect -y -r $i2c_bus_num &" ; done;
+
