@@ -84,7 +84,7 @@ do_cmd() {
     else
         if [ $RESULT -eq 0 ]
         then
-        test_print_err "$CMD failed. Return code is $RESULT"
+        test_print_err "$CMD passed. It should fail."
         exit 1
         fi
     fi
