@@ -1,0 +1,6 @@
+# @name I2C PM related tests 
+# @desc Check the pm counters after i2c test and suspend resume test and check if the counter increases 
+# @requires i2c && power_mgr
+
+I2C_L_FUNC_PWR_PER_PWRDM_COUNTERS source "super-pm-tests.sh"; do_cmd log_pm_count "per_pwrdm" "RET,RET-LOGIC-OFF,OFF" "," "per_pwrdm_before.log" && run_processes.sh -c " /opt/ltp/runltp -f ddt/i2c_detect -P $MACHINE -s "_S_" # /opt/ltp/runltp -f ddt/powermgr_suspend -P $MACHINE -s "POWERMGR_S_FUNC_SIMPLE_SUSPEND" " && do_cmd log_pm_count "per_pwrdm" "RET,RET-LOGIC-OFF,OFF" "," "per_pwrdm_after.log" && do_cmd compare_pm_count "per_pwrdm" "RET,RET-LOGIC-OFF,OFF" "," "per_pwrdm_before.log" "per_pwrdm_after.log"
+
