@@ -3,6 +3,8 @@
 # @requires i2c 
 
 I2C_S_FUNC_I2CDETECT source 'common.sh'; i2cbus=`ls /dev/i2c* |head -1 |cut -d'-' -f2`; do_cmd i2cdetect -y -r "$i2cbus" 
+
+I2C_M_FUNC_I2CDETECT source 'common.sh'; i2cbus=`ls /dev/i2c* |head -1 |cut -d'-' -f2`; loop=20; i=0; while [ $i -lt $loop ]; do echo "===i2cdetect loop $i"; do_cmd i2cdetect -y -r "$i2cbus"; i=`expr $i + 1`; done 
  
 
 
