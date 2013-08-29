@@ -1,0 +1,10 @@
+# @name Test usb driver while changing cpu frequency
+# @desc Test usb driver while the OPP is changed to cover all possible vallues
+# @requires usb || usbxhci
+
+SYSTEM_S_FUNC_OPP_USB_MSC source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -f ddt/usbhost_dd_rw_ext2 -P $MACHINE -s USBHOST_L_FUNC_EXT2_DD_RW_0001 # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_M_STRESS_OPP_USB_MSC source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -P $MACHINE -f ddt/usbhost_dd_rw_ext2 -s USBHOST_M_FUNC_EXT2_DD_RW_0007 # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_M_FUNC_CPUFREQ_BASIC"
+SYSTEM_S_FUNC_OPP_USB_ISO source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -f ddt/usbhost_iso -P $MACHINE -s USBHOST_S_FUNC_AUDIO_LOOPBACK_WITH_VIDEO_CAPTURE # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_S_FUNC_OPP_USBXHCI_MSC source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -f ddt/usbhost_dd_rw_ext2 -P $MACHINE -s USBXHCIHOST_L_FUNC_EXT2_DD_RW_0001 # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_M_STRESS_OPP_USBXHCI_MSC source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -P $MACHINE -f ddt/usbhost_dd_rw_ext2 -s USBXHCIHOST_M_FUNC_EXT2_DD_RW_0007 # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_M_FUNC_CPUFREQ_BASIC"
+SYSTEM_S_FUNC_OPP_USBXHCI_ISO source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -f ddt/usbhost_iso -P $MACHINE -s USBXHCIHOST_S_FUNC_AUDIO_LOOPBACK_WITH_VIDEO_CAPTURE # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
