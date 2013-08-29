@@ -2,10 +2,10 @@
 #	USBHOST modular read write test 
 # @desc 
 #       modprobe musb module first and then do RW and then rmmod it
-# @requires  usb/host 
+# @requires  usb/host || usbxhci/host
 # @setup_requires usbhostmsc
 
 # The test step pass if the commands return zero, it fails otherwise.
 # For more information please refer to <root>/README-DDT file.
 USBHOST_M_MODULAR_RW_0001 source "common.sh"; do_cmd install_modules.sh 'usb'; do_cmd blk_device_modular_dd_rw.sh -f "ext2" -b "1M" -c "10" -l "1" -d "usb"
-USB2HOST_M_MODULAR_RW_0001 source "common.sh"; do_cmd install_modules.sh 'usb2'; do_cmd blk_device_modular_dd_rw.sh -f "ext2" -b "1M" -c "10" -l "1" -d "usb2"
+USBXHCIHOST_M_MODULAR_RW_0001 source "common.sh"; do_cmd install_modules.sh 'usbxhci'; do_cmd blk_device_modular_dd_rw.sh -f "ext2" -b "1M" -c "10" -l "1" -d "usbxhci"

@@ -12,8 +12,8 @@
 # GNU General Public License for more details.
 # 
 
-# Get devnode for non mtd device like 'mmc', 'usb', 'usb2', 'sata'
-# Input: DEVICE_TYPE like 'mmc', 'usb', 'usb2', 'sata'
+# Get devnode for non mtd device like 'mmc', 'usb', 'usbxhci', 'sata'
+# Input: DEVICE_TYPE like 'mmc', 'usb', 'usbxhci', 'sata'
 # Output: DEV_NODE like /dev/mmcblk0p1 
 
 source "common.sh"
@@ -30,7 +30,7 @@ DEVICE_TYPE=$1
 
 ############################ Functions ################################
 # this function is to get SCSI device usb or sata node based on by-id
-# input is either 'sata' or 'usb' or 'usb2'
+# input is either 'sata' or 'usb' or 'usbxhci'
  
 find_scsi_node() {
   SCSI_DEVICE=$1
@@ -43,7 +43,7 @@ find_scsi_node() {
          exit 0
         fi
       ;;
-      usb|usb2)
+      usb|usbxhci)
         usb_cnt_interface=`get_usb_controller_name.sh "$SCSI_DEVICE"` 
         file=`ls /dev/disk/by-path/*-part1|grep -i "$usb_cnt_interface"|head -1`
         if [[ ! -z "$file" ]]; then
@@ -98,8 +98,8 @@ case $DEV_TYPE in
         usb)
           DEV_NODE=`find_scsi_node "usb"` || die "error getting usb node: $DEV_NODE" 
         ;;
-        usb2)
-          DEV_NODE=`find_scsi_node "usb2"` || die "error getting usb2 node: $DEV_NODE" 
+        usbxhci)
+          DEV_NODE=`find_scsi_node "usbxhci"` || die "error getting usbxhci node: $DEV_NODE" 
         ;;
         ata)
           DEV_NODE="/dev/hda1"

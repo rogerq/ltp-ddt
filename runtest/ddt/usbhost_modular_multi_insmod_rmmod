@@ -2,10 +2,10 @@
 #	USBHOST modular multiple insmod rmmod test 
 # @desc 
 #       modprobe usb module multiple times 
-# @requires  usb/host 
+# @requires  usb/host || usbxhci/host
 # @setup_requires usbhostmsc
 
 # The test step pass if the commands return zero, it fails otherwise.
 # For more information please refer to <root>/README-DDT file.
 USBHOST_L_MODULAR_MULTI_0001 source 'common.sh' ; do_cmd install_modules.sh 'usb' ; do_cmd do_modular_common.sh -l "10" -d "usb"
-USB2HOST_L_MODULAR_MULTI_0001 source 'common.sh' ; do_cmd install_modules.sh 'usb2' ; do_cmd do_modular_common.sh -l "10" -d "usb2"
+USBXHCIHOST_L_MODULAR_MULTI_0001 source 'common.sh' ; do_cmd install_modules.sh 'usbxhci' ; do_cmd do_modular_common.sh -l "10" -d "usbxhci"

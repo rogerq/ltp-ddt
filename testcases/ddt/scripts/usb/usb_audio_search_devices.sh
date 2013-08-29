@@ -14,7 +14,7 @@
 
 # search for USB audio devices - first parameter is operation such as 
 # play, record and loopback, second parameter is name of driver such as
-# usb, usb2
+# usb, usbxhci
 
 source "common.sh"
 source "st_log.sh"

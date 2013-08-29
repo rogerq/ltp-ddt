@@ -13,7 +13,7 @@
 # 
 # @desc Get usb controller name for a driver.
 # @params 
-#        Input: usb device type like "usb", "usb2" 
+#        Input: usb device type like "usb", "usbxhci" 
 # @returns name of usb controller by splitting driver name. Return value would be name of
 # ip or controller such as xhci, ehci, musb, davinci, ...
 # @history 2013-04-26: First version
@@ -25,7 +25,7 @@ source "common.sh"  # Import do_cmd(), die() and other functions
 ################################ CLI Params ####################################
 if [ $# -ne 1 ]; then
   echo "Error: Invalid Argument Count"
-  echo "Syntax: $0 <device_type like 'usb' and 'usb2'>"
+  echo "Syntax: $0 <device_type like 'usb' and 'usbxhci'>"
   exit 1
 fi
 DEVICE_TYPE=$1

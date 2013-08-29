@@ -1,13 +1,13 @@
 # @name USB Host Video class. 
 # @desc Test cases corresponding to USB Host Video  class. 
-# @requires usb/host/iso
+# @requires usb/host/iso || usbxhci/host/iso
 # @setup_requires usbhostvideo
 
 
 USBHOST_M_FUNC_VIDEO_176_144  source 'common.sh' ; do_cmd install_modules.sh 'usb';  DEV_NAME=`usb_video_search_devices.sh usb; do_cmd usb_host_video.sh -w 176 -l 144 -i /home/root/176_144_M_usb.YUV -d $DEV_NAME
-USB2HOST_M_FUNC_VIDEO_176_144  source 'common.sh' ; do_cmd install_modules.sh 'usb2';  DEV_NAME=`usb_video_search_devices.sh usb2`; do_cmd usb_host_video.sh -w 176 -l 144 -i /home/root/176_144_M_usb2.YUV -d $DEV_NAME
+USBXHCIHOST_M_FUNC_VIDEO_176_144  source 'common.sh' ; do_cmd install_modules.sh 'usbxhci';  DEV_NAME=`usb_video_search_devices.sh usbxhci`; do_cmd usb_host_video.sh -w 176 -l 144 -i /home/root/176_144_M_usbxhci.YUV -d $DEV_NAME
 USBHOST_S_FUNC_VIDEO_320_240  source 'common.sh' ; do_cmd install_modules.sh 'usb';  DEV_NAME=`usb_video_search_devices.sh usb`; do_cmd usb_host_video.sh -w 320 -l 240 -i /home/root/320_240_S_usb.YUV -d $DEV_NAME
-USB2HOST_S_FUNC_VIDEO_320_240  source 'common.sh' ; do_cmd install_modules.sh 'usb2';  DEV_NAME=`usb_video_search_devices.sh usb2`; do_cmd usb_host_video.sh -w 320 -l 240 -i /home/root/320_240_S_usb2.YUV -d $DEV_NAME
+USBXHCIHOST_S_FUNC_VIDEO_320_240  source 'common.sh' ; do_cmd install_modules.sh 'usbxhci';  DEV_NAME=`usb_video_search_devices.sh usbxhci`; do_cmd usb_host_video.sh -w 320 -l 240 -i /home/root/320_240_S_usbxhci.YUV -d $DEV_NAME
 USBHOST_M_FUNC_VIDEO_640_480  source 'common.sh' ; do_cmd install_modules.sh 'usb';  DEV_NAME=`usb_video_search_devices.sh usb`; do_cmd usb_host_video.sh -w 640 -l 480 -i /home/root/640_480_M_usb.YUV -d $DEV_NAME
-USBHOST_M_FUNC_VIDEO_640_480  source 'common.sh' ; do_cmd install_modules.sh 'usb2';  DEV_NAME=`usb_video_search_devices.sh usb2`; do_cmd usb_host_video.sh -w 640 -l 480 -i /home/root/640_480_M_usb2.YUV -d $DEV_NAME
+USBHOST_M_FUNC_VIDEO_640_480  source 'common.sh' ; do_cmd install_modules.sh 'usbxhci';  DEV_NAME=`usb_video_search_devices.sh usbxhci`; do_cmd usb_host_video.sh -w 640 -l 480 -i /home/root/640_480_M_usbxhci.YUV -d $DEV_NAME
 

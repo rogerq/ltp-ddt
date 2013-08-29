@@ -102,7 +102,7 @@ do
     *ehci-omap)
       usb="CONFIG_USB_EHCI_HCD_OMAP:ehci-omap";;
     *xhci-hcd)
-      usb2="CONFIG_USB_XHCI_HCD:xhci-hcd";;
+      usbxhci="CONFIG_USB_XHCI_HCD:xhci-hcd";;
 
   esac
 done
