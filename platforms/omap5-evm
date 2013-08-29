@@ -34,12 +34,14 @@ spi_master/mtd/spi-omap2-mcspi
 usb/host/msc/ehci-omap
 usb/host/hid/ehci-omap
 usb/host/iso/ehci-omap
-usb2/host/msc/xhci-hcd
-usb2/host/hid/xhci-hcd
-usb2/host/iso/xhci-hcd
+usbxhci/host/msc/xhci-hcd
+usbxhci/host/hid/xhci-hcd
+usbxhci/host/iso/xhci-hcd
 usb/otg
 usb/slave/msc
 usb/slave/cdc
+usbxhci/slave/msc
+usbxhci/slave/cdc
 watchdog/omap_wdt
 gpio
 
