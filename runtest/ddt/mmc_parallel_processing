@@ -1,0 +1,10 @@
+# @name MMC Parallel Processing
+# @desc Check that multiple parallel mmc processes can be run without problems
+# @requires mmc_host
+# @setup_requires 
+
+MMC_S_FUNC_MULTI_THREAD_READWRITE source 'common.sh'; multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/mmc_dd_rw -P $MACHINE -s "MMC_S_FUNC_DD_RW_QUICK" " -l " -n 3 -a 0xFFFFFFFF -d 0 "
+
+MMC_L_STRESS_MULTI_THREAD_READWRITE source 'common.sh'; multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/mmc_dd_rw -P $MACHINE -s "MMC_S_FUNC_DD_RW_QUICK" " -l " -n 20 -a 0xFFFFFFFF -d 0 "
+
+

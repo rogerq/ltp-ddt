@@ -60,7 +60,7 @@ do case $arg in
                 DEV_NODE="$OPTARG";;
         d)      DEVICE_TYPE="$OPTARG";;
         f)      FS_TYPE="$OPTARG";;
-        m)      MNT_POINT="$OPTARG";;
+        m)      MNT_POINT="$OPTARG"; MNT_POINT="${MNT_POINT}_$$";;
         b)      DD_BUFSIZE="$OPTARG";;
         c)      DD_CNT="$OPTARG";;
         i) 	    IO_OPERATION="$OPTARG";;
@@ -84,7 +84,7 @@ if [ -z $DEV_NODE ]; then
 	DEV_NODE=`get_blk_device_node.sh "$DEVICE_TYPE"` || die "error getting device node for $DEVICE_TYPE: $DEV_NODE"
   test_print_trc "DEV_NODE returned from get_blk_device_node is: $DEV_NODE"
 fi
-: ${MNT_POINT:=/mnt/partition_$DEVICE_TYPE}
+: ${MNT_POINT:=/mnt/partition_${DEVICE_TYPE}_$$}
 : ${IO_OPERATION:='wr'}
 : ${TEST_LOOP:='1'}
 test_print_trc "DEV_NODE: $DEV_NODE"
@@ -105,7 +105,7 @@ fi
 
 # find out what is FS in the device
 if [ -z "$FS_TYPE" ]; then
-  FS_TYPE=`mount | grep $DEV_NODE | cut -d' ' -f5`
+  FS_TYPE=`mount | grep $DEV_NODE | cut -d' ' -f5 | head -1`
   test_print_trc "Current FS_TYPE: ${FS_TYPE}"
 fi
 

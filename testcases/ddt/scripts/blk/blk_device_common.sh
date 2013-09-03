@@ -161,7 +161,7 @@ is_part_rootfs(){
   if [ "$IS_MOUNTED" == "yes" ];then
     MNT_POINT=`mount |grep "$DEV_NODE" |cut -d" " -f3` 
   else
-    MNT_POINT="/mnt/partition_$DEVICE_TYPE"
+    MNT_POINT="/mnt/partition_${DEVICE_TYPE}_$$"
     do_cmd blk_device_do_mount.sh -n "$DEV_NODE" -d "$DEVICE_TYPE" -m "$MNT_POINT" > /dev/null 2>$1 
     NEED_UMOUNT="yes"
   fi

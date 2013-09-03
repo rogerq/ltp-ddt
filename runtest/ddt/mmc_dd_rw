@@ -1,0 +1,20 @@
+# @name MMC device w/r test with whatever fs in card 
+# @desc MMC read write test with whatever fs in card 
+#	The device node is specified in get_blk_device_node.sh
+# @requires mmc_host 
+# @setup_requires mmc || sd || sdhc || sdxc 
+
+
+MMC_S_FUNC_DD_RW_QUICK source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -b "1M" -c "10" -d "mmc"
+
+MMC_M_FUNC_DD_RW_20TIMES source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -b "1M" -c "10" -l "20" -d "mmc"
+
+MMC_L_STRESS_DD_RW_100TIMES source "common.sh"; install_modules.sh "mmc"; do_cmd blk_device_dd_readwrite_test.sh -b "10M" -c "10" -l "100" -d "mmc"
+
+
+
+
+
+
+
+

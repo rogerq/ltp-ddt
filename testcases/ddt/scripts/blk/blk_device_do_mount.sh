@@ -73,18 +73,14 @@ fi
 
 # DEVNODE_ENTRY is something like /dev/mmcblk0, /dev/sda etc
 DEVNODE_ENTRY=`get_devnode_entry.sh "$DEV_NODE" "$DEVICE_TYPE"` || die "error getting devnode entry for $DEV_NODE"
-test_print_trc "Umount $MNT_DEV_NODE or $DEVNODE_ENTRY if it is mounted"
-do_cmd "mount" | grep $MNT_DEV_NODE && do_cmd "umount $MNT_DEV_NODE"
-do_cmd "mount" | grep $DEVNODE_ENTRY' ' && do_cmd "umount $DEVNODE_ENTRY"
+test_print_trc "Umount $MNT_POINT if it is mounted"
+do_cmd "mount" | grep $MNT_POINT && do_cmd "umount $MNT_POINT"
 sleep 2
-#do_cmd "mount" | grep $DEV_NODE && do_cmd "umount $DEV_NODE"
-#test_print_trc "Erasing this partition completely"
-#do_cmd erase_partition.sh -d $DEVICE_TYPE -n $DEV_NODE
 [ -d $MNT_POINT ] || do_cmd mkdir -p $MNT_POINT
 test_print_trc "Mounting the partition"
 if [ -n "$FS_TYPE" ]; then
   do_cmd "mount -t $FS_TYPE -o $MNT_MODE $MNT_DEV_NODE $MNT_POINT"
-  do_cmd "mount | grep $MNT_DEV_NODE"
+  do_cmd "mount | grep $MNT_POINT"
 else
   DEV_TYPE=`get_device_type_map.sh "$DEVICE_TYPE"` || die "error getting device type: $DEV_TYPE"
 	case $DEV_TYPE in
@@ -92,7 +88,7 @@ else
 			fs_to_try="jffs2:ubifs"
 		;;
 		*)
-			fs_to_try="vfat:ext3:ext2"
+			fs_to_try="vfat:ext3:ext4:ext2"
 		;;
 	esac	
 	# try all fs to mount
@@ -102,7 +98,7 @@ else
   	echo "---$FS---"
 		test_print_trc "Try to mount $FS"	
 		mount -t $FS -o $MNT_MODE $MNT_DEV_NODE $MNT_POINT
-		mount | grep $MNT_DEV_NODE
+		mount | grep $MNT_POINT
 		if [ $? -eq 0 ]; then
 			break
 		fi
