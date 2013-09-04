@@ -190,6 +190,36 @@ case "$TYPE" in
 	    do_test -t 12
 	    ;;
 
+	out-perf)
+	    test_print_trc "** Host Write (OUT) performance test case:"
+
+	    # 100MB transfer
+	    COUNT=32
+	    BUFLEN=8192
+	    SGLEN=400
+	    T1=`date +%s%N`
+	    do_test -t 5 -g $SGLEN
+	    T2=`date +%s%N`
+	    B1=$((T2-T1))
+	    B1=`echo "scale=3; 100*1000000000/$B1" | bc`
+	    test_print_trc "|PERFDATA|100MB|write(OUT)|throughput:"`printf '%.2f' $B1`"MB/s|"
+	    ;;
+
+	in-perf)
+	    test_print_trc "** Host Read (IN) performance test case:"
+
+	    # 100MB transfer
+	    COUNT=32
+	    BUFLEN=8192
+	    SGLEN=400
+	    T1=`date +%s%N`
+	    do_test -t 6 -g $SGLEN
+	    T2=`date +%s%N`
+	    B1=$((T2-T1))
+	    B1=`echo "scale=3; 100*1000000000/$B1" | bc`
+	    test_print_trc "|PERFDATA|100MB|read(IN)|throughput:"`printf '%.2f' $B1`"MB/s|"
+	    ;;
+
 	*)
 	    test_print_trc "Don't understand test type $TYPE"
 	    usage
