@@ -1,0 +1,10 @@
+# @name USB I/O Controller throughput performance test
+# @desc Perform Bulk OUT and IN throughput tests
+# @requires usb/host
+
+# Needs a specific test USB gadget connected to the host controller (e.g. Gadget zero)
+# For a complete list of compatible devices, see
+# http://lxr.free-electrons.com/source/drivers/usb/misc/usbtest.c#L2440
+
+USB_L_PERF_BULK_OUT source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_test.sh -t out-perf
+USB_L_PERF_BULK_IN source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd usb_test.sh -t in-perf
