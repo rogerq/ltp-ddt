@@ -103,16 +103,11 @@ do
     process_id=$!
     typeset hash_${process_id}=$p_priority
     echo "$(eval echo \$hash_${process_id})"
-#    eval "$c" > $tmp_dir/log$process_id.tmp 2>&1 &
     echo "PROCESS ID is $process_id"
-    #echo "PRIORITY for $process_id before "`awk '{print $18}' /proc/$process_id/stat`  
     if [[ $PRIORITY_SET = 1 ]]
     then
-      d="renice $p_priority -p $process_id"
-      output_str=`eval "$d"` 
+      renice $p_priority -p $process_id
     fi
-    #echo "RENICE DONE PPPPPPPPPPPPPPPPPPPPPROCESS ID" $process_id
-    #echo "PRIORITY for $process_id after "`awk '{print $18}' /proc/$process_id/stat`  
     pids="$pids:$!"
     pid_table+=( "$process_id" )
   done
@@ -132,7 +127,7 @@ do
     if [ "$rc" -ne "0" ]
     then
       RET=1
-         echo "*****************From run_processes.sh***********************"
+      echo "*****************From run_processes.sh***********************"
       echo "Process $p exit with non-zero value at time " `date`                    
       echo ""
       break
@@ -149,18 +144,10 @@ do
   for (( j=0 ; j < $p_instances ;  j++ ))
   do
     process_id=${pid_table[$j]}
-    #echo $process_id
-    #echo "*************  $tmp_dir/log$i.$j.tmp    ***************"
-    #echo "$(eval echo \$hash_${process_id})"
-    match_string=`cat $tmp_dir/log$i.$j.tmp|grep "sys*m*s"` 
-    if [ ${#match_string} != 0 ]
-    # this command has system time being printed in output, so collect it for calling script
-    then
-    new_string=`echo $match_string | cut -c5-`
-    ret_val[0]="$(eval echo \$hash_${process_id})"
-    ret_val[1]="$new_string"
-    echo ${ret_val[@]}
-    fi
+    echo $process_id
+    echo "*************  $tmp_dir/log$i.$j.tmp    ***************"
+    echo "$(eval echo \$hash_${process_id})"
+    cat $tmp_dir/log$i.$j.tmp
   done
   i=`expr $i + 1`
 done
