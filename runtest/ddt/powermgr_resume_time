@@ -1,0 +1,27 @@
+# @name suspend/standby resume time tests
+# @desc Test suspend/standby resume time is consistent 
+# @requires power_mgr 
+
+POWERMGR_S_FUNC_SUSPEND_RESUME_TIME_TEST source 'common.sh'; test_resume_time.sh -p "mem" -t "10" -i "2"
+
+POWERMGR_M_FUNC_SUSPEND_RESUME_TIME_TEST source 'common.sh'; test_resume_time.sh -p "mem" -t "60" -i "5"
+
+POWERMGR_L_STRESS_SUSPEND_RESUME_TIME_TEST source 'common.sh'; test_resume_time.sh -p "mem" -t "3600" -i "20"
+
+POWERMGR_S_FUNC_STANDBY_RESUME_TIME_TEST source 'common.sh'; test_resume_time.sh -p "standby" -t "10" -i "2"
+
+POWERMGR_M_FUNC_STANDBY_RESUME_TIME_TEST source 'common.sh'; test_resume_time.sh -p "standby" -t "60" -i "5"
+
+POWERMGR_L_STRESS_STANDBY_RESUME_TIME_TEST source 'common.sh'; test_resume_time.sh -p "standby" -t "3600" -i "20"
+
+
+
+
+
+
+
+
+
+
+
+
