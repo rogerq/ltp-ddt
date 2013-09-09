@@ -404,37 +404,63 @@ no_suspend()
 }
 
 # suspend / standby me
-# $1: powerstate like 'mem' or 'standby'
+# input
+#   -p power_state  optional; power state like 'mem' or 'standby'; default to 'mem'
+#   -t max_stime    optional; maximum suspend or standby time; default to 10s; the suspend time will be a random number
+#   -i iterations   optional; iterations to suspend/resume; default to 1
 suspend()
 {
-    power_state=$1
-    # for backward compatible
-    if [ -z "$power_state" ]; then
-        power_state="mem"
-    fi
+    while getopts :p:t:i: arg
+    do case $arg in
+      p)  power_state="$OPTARG";;
+      t)  max_stime="$OPTARG";;
+      i)  iterations="$OPTARG";;
+      \?)  test_print_trc "Invalid Option -$OPTARG ignored." >&2
+      exit 1
+      ;;
+    esac
+    done
 
-    wakeup_time_random
-    suspend_time=$sec
+    # for backward compatible
+    : ${power_state:='mem'}
+    : ${max_stime:='10'}
+    : ${iterations:='1'}
+
+    test_print_trc "suspend function: power_state: $power_state"
+    test_print_trc "suspend function: max_stime: $max_stime"
+    test_print_trc "suspend function: iterations: $iterations"
+
     if [ $use_wakelock -ne 0 ]; then
         report "removing wakelock $PSID (sec=$sec msec=$msec off=$off bug=$bug)"
         echo "$PSID" >/sys/power/wake_unlock
     fi
-    # clear dmesg before suspend
-    dmesg -c > /dev/null
-    if [ -e $DEBUGFS_LOCATION/pm_debug/wakeup_timer_seconds ]; then
-        report "Use wakeup_timer"
-        report "suspend(sec=$sec msec=$msec off=$off bug=$bug)"
-        echo -n "$power_state" > /sys/power/state
-    elif [ -e /dev/rtc0 ]; then
-        report "Use rtc to suspend resume"
-        do_cmd rtcwake -d /dev/rtc0 -m ${power_state} -s ${suspend_time}
-    else
-        # Stop the test if there is no rtcwake or wakeup_timer support 
-        die "There is no automated way (wakeup_timer or /dev/rtc0) to wakeup the board. No suspend!"
-    fi
 
-    check_suspend
-    check_resume
+    local i=0
+    while [ $i -lt $iterations ]; do
+      test_print_trc "===suspend iteration $i==="
+
+      wakeup_time_random $max_stime
+      suspend_time=$sec
+      # clear dmesg before suspend
+      dmesg -c > /dev/null
+      if [ -e $DEBUGFS_LOCATION/pm_debug/wakeup_timer_seconds ]; then
+          report "Use wakeup_timer"
+          report "suspend(sec=$sec msec=$msec off=$off bug=$bug)"
+          echo -n "$power_state" > /sys/power/state
+      elif [ -e /dev/rtc0 ]; then
+          report "Use rtc to suspend resume"
+          do_cmd rtcwake -d /dev/rtc0 -m ${power_state} -s ${suspend_time}
+      else
+          # Stop the test if there is no rtcwake or wakeup_timer support 
+          die "There is no automated way (wakeup_timer or /dev/rtc0) to wakeup the board. No suspend!"
+      fi
+
+      check_suspend
+      check_resume
+
+      i=`expr $i + 1`
+    done
+
     no_suspend
 }
 
