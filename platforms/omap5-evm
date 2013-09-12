@@ -3,6 +3,8 @@ omap5
 omap5-evm
 crypto/crypto-omap
 edma
+emmc
+gpio
 graphics/fb0/DA8xx_FB_Drv
 i2c/non_eeprom
 i2c/eeprom
@@ -44,5 +46,4 @@ usb/slave/cdc
 usbxhci/slave/msc
 usbxhci/slave/cdc
 watchdog/omap_wdt
-gpio
 
