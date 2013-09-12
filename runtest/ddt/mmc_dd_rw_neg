@@ -1,0 +1,8 @@
+# @name MMC device negative w/r test with size bigger than partition size 
+# @desc Write file bigger than partition size to the mmc device and check if the driver throw right error; also check if read write operation is ok after this test. 
+#	The device node is specified in get_blk_device_node.sh
+# @requires mmc_host 
+# @setup_requires mmc || sd || sdhc || sdxc
+
+MMC_L_STRESS_NEG_WRITE_BIGGER_THAN_PARTSIZE source "blk_device_common.sh"; install_modules.sh "mmc"; mmcblk_devnode=`get_blk_device_node.sh 'mmc'` && echo "mmcblk_devnode: $mmcblk_devnode" && part_size=`get_part_size_of_devnode "$mmcblk_devnode"` && echo "part_size in MB: $part_size" && oversize_write_loop=`expr $part_size + 10` && echo "oversize_write_loop: $oversize_write_loop" && do_cmd blk_device_dd_readwrite_test.sh -b "1M" -c "1" -d "mmc" -l "$oversize_write_loop" -w -i "oversize_write"
+
