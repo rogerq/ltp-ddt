@@ -1,0 +1,5 @@
+# @name Watchdog Timer with cpufreq
+# @desc Watchdog Timer test in parallel with cpufreq test
+# @requires watchdog && power_mgr/cpufreq/userspace
+
+SYSTEM_S_FUNC_WDT_SETTIMEOUT_CPUFREQ source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -f ddt/wdt_test -s WDT_S_FUNC_SETTIMEOUT#/opt/ltp/runltp -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"

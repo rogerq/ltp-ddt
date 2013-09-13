@@ -1,0 +1,7 @@
+# Watchdog timer with cpu affinity
+# @desc Check that watchdog timer works fine when assigned to any cpu instance
+# @setup_requires 
+@requires smp && watchdog
+
+SMP_S_FUNC_WATCHDOG_NO-LB_CORE1 source 'common.sh'; num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && run_processes.sh -c "/opt/ltp/runltp -f ddt/wdt_test -s WDT_S_FUNC_SETTIMEOUT" -n 1 -a 0x1 -d 1
+SMP_S_FUNC_WATCHDOG_NO-LB_CORE2 source 'common.sh'; num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && run_processes.sh -c "/opt/ltp/runltp -f ddt/wdt_test -s WDT_S_FUNC_SETTIMEOUT" -n 1 -a 0x2 -d 1
