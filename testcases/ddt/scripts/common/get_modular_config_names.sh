@@ -17,8 +17,9 @@
 # @returns Config Option and Top-level .ko file (Module) name to modprobe for
 #          this driver separated by colon ':'. If one device requires multiple 
 #          top-level .ko files then separate the CONFIG_OPTION:KO_FILE_NAME pairs
-#          by space. 
-#          Ex: "CONFIG_JFFS2_FS:jffs2 CONFIG_MTD_NAND_OMAP2:omap2_nand"
+#          by space. If one device requires multiple CONFIG_OPTIONs then
+#          separate them by ^ 
+#          Ex: "CONFIG_JFFS2_FS^CONFIG_JFFS2_FS2:jffs2 CONFIG_MTD_NAND_OMAP2:omap2_nand"
 # @history 2011-03-22: First version
 
 source "common.sh"  # Import do_cmd(), die() and other functions
@@ -103,6 +104,9 @@ do
       usb="CONFIG_USB_EHCI_HCD_OMAP:ehci-omap";;
     *xhci-hcd)
       usbxhci="CONFIG_USB_XHCI_HCD:xhci-hcd";;
+
+    *crypto-omap)
+      crypto="CONFIG_CRYPTO_DEV_OMAP_AES:omap-aes CONFIG_CRYPTO_DEV_OMAP_SHAM:omap-sham";;
 
   esac
 done
