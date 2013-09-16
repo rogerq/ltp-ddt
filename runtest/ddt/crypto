@@ -3,8 +3,18 @@
 # @requires crypto
 # @setup_requires 
 
-CRYPTO_S_PERF_TCRYPT_MODE500_SEC1 source 'functions.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; modprobe tcrypt mode=500 sec=1
+CRYPTO_S_PERF_AES source 'functions.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; modprobe tcrypt mode=500 sec=1
 
-CRYPTO_L_PERF_TCRYPT_MODE500_SEC30 source 'functions.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; modprobe tcrypt mode=500 sec=30
+CRYPTO_L_PERF_AES source 'functions.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; modprobe tcrypt mode=500 sec=30
+
+CRYPTO_S_PERF_3DES source 'functions.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; modprobe tcrypt mode=501 sec=1
+
+CRYPTO_S_PERF_MD5 source 'functions.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; modprobe tcrypt mode=302 sec=1
+
+CRYPTO_S_PERF_SHA1 source 'functions.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; modprobe tcrypt mode=303 sec=1
+
+CRYPTO_S_PERF_SHA256 source 'functions.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; modprobe tcrypt mode=304 sec=1
+
+CRYPTO_S_PERF_SHA512 source 'functions.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; modprobe tcrypt mode=306 sec=1
 
 
