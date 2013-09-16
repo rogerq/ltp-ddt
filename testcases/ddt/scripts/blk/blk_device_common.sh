@@ -33,8 +33,8 @@ find_part_with_biggest_size() {
   DEVICE_TYPE=$2
 
   # check if fdisk works for this dev
-  fdisk -l "$DEV_BASE_NODE" > fdisklog 2>&1 
-  cat fdisklog |grep -i "fdisk doesn't support" > /dev/null
+  fdisk -l "$DEV_BASE_NODE" > fdisklog_$$ 2>&1 
+  cat fdisklog_$$ |grep -i "fdisk doesn't support" > /dev/null
   if [ $? -ne 0 ]; then
     UTIL_TO_USE='fdisk'
   else

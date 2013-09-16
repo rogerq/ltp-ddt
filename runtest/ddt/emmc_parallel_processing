@@ -1,0 +1,10 @@
+# @name EMMC Parallel Processing
+# @desc Check that multiple parallel emmc processes can be run without problems
+# @requires emmc
+# @setup_requires 
+
+EMMC_S_FUNC_MULTI_THREAD_READWRITE source 'common.sh'; multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s "EMMC_S_FUNC_DD_RW_QUICK" " -l " -n 3 -a 0xFFFFFFFF -d 0 "
+
+EMMC_L_STRESS_MULTI_THREAD_READWRITE source 'common.sh'; multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s "EMMC_S_FUNC_DD_RW_QUICK" " -l " -n 20 -a 0xFFFFFFFF -d 0 "
+
+
