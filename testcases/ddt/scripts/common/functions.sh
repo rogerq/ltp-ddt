@@ -712,37 +712,6 @@ compare_pm_count()
 
 }
 
-# $1: check type, either 'y', 'm', 'ym' or 'n'
-# $2: Options to check. Uses same syntax returned by get_modular_config.names.sh
-#     which is CONFIG1^CONFIG2:module1 CONFIG3:module2 
-check_config_options()
-{
-  case $1 in
-  	y) check='=y';;
-  	m) check='=m';;
-    ym) check='(=y|=m)';;
-  	n) check=' is not set';;
-  	*) die "$1 is not a valid check_config_options() option"
-  esac
-  OIFS=$IFS
-  IFS=' '
-  shift
-  x=$*
-  x=${x[@]}
-  y=()
-  for i in $x
-  do
-    newval=`echo $i | cut -d':' -f 1`
-    y+=($newval)
-  done
-  IFS='^';y=${y[@]}
-  IFS=' '
-  for option in $y; do
-  	zcat /proc/config.gz | egrep "$option$check" || die "$option is not $check"
-  done
-  IFS=$OIFS
-}
-
 sigtrap() {
     exit 255
 }
