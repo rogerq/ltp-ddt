@@ -1,0 +1,14 @@
+# @name SMP CPU Affinity with EMMC
+# @desc Check that EMMC processes assigned to multiple CPUs complete without errors
+# @requires smp && emmc
+# @setup_requires 
+
+SMP_S_FUNC_EMMC_RW_CPUAFFINITY_NO-LB_CORE1 source 'common.sh';  num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s EMMC_S_FUNC_DD_RW_QUICK" -l "-n 10 -a 0x1 -d 0" 
+
+SMP_S_FUNC_EMMC_RW_CPUAFFINITY_NO-LB_CORE2 source 'common.sh';  num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s EMMC_S_FUNC_DD_RW_QUICK" -l "-n 10 -a 0x2 -d 0"
+
+SMP_S_FUNC_EMMC_RW_CPUAFFINITY_NO-LB_CORE1_CORE2 source 'common.sh';  num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s EMMC_S_FUNC_DD_RW_QUICK" -l "-n 10 -a 0x1 -d 0" -s "/opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s EMMC_S_FUNC_DD_RW_QUICK" -l "-n 10 -a 0x2 -d 0"
+
+SMP_L_STRESS_EMMC_RW_CPUAFFINITY_NO-LB_CORE1_CORE2 source 'common.sh';  num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s EMMC_M_FUNC_DD_RW_20TIMES" -l "-n 100 -a 0x1 -d 0" -s "/opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s EMMC_M_FUNC_DD_RW_20TIMES" -l "-n 100 -a 0x2 -d 0"
+
+SMP_S_FUNC_EMMC_RW_CPUAFFINITY_LB source 'common.sh';  num_cores=`cat /sys/devices/system/cpu/online`; echo $num_cores | grep -E '[[:digit:]]+\-' > /dev/null && multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s EMMC_S_FUNC_DD_RW_QUICK" -l "-n 20 -a 0xFFFFFFFF -d 0"

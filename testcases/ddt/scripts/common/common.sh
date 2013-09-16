@@ -297,3 +297,15 @@ check_config_options()
   done
   IFS=$OIFS
 }
+
+# To get instance number from dev node
+# Input: 
+#   $1: dev node like /dev/rtc0, /dev/mmcblk0, /dev/sda1, /dev/mtdblk12 etc 
+# Output:
+#   instance number like '0', '1' etc
+get_devnode_instance_num()
+{
+  devnode_entry=$1
+  inst_num=`echo $devnode_entry |grep -oE "[[:digit:]]+$" ` || die "Failed to get instance number for dev node entry "$devnode_entry" " 
+  echo $inst_num 
+}

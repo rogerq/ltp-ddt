@@ -31,7 +31,7 @@ fi
 DEV_NODE=$1
 DEVICE_TYPE=$2
 case $DEVICE_TYPE in
-	mmc)
+	mmc | emmc)
 		DEVNODE_ENTRY=`echo $DEV_NODE | sed 's/p[0-9]*$//' `
 	;;
 	*)
