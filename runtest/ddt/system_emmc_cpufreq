@@ -1,0 +1,8 @@
+# @name Test emmc driver while changing cpu frequency
+# @desc Test emmc driver while the OPP is changed to cover all possible vallues
+# @requires emmc 
+
+SYSTEM_S_FUNC_OPP_EMMC source 'common.sh'; run_processes.sh -c " /opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s 'EMMC_S_FUNC_DD_RW_QUICK '  # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC "
+
+SYSTEM_M_FUNC_OPP_EMMC source 'common.sh'; run_processes.sh -c " /opt/ltp/runltp -f ddt/emmc_dd_rw -P $MACHINE -s 'EMMC_M_FUNC_DD_RW_20TIMES ' # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_M_FUNC_CPUFREQ_BASIC "
+
