@@ -7,6 +7,7 @@
 #                                                  -d <delay_in_sec> 
 #                                                  -p <priority> 
 # if cpu affinity is set, then taskset is used to spawn the processes
+source "common.sh"  # Import do_cmd(), die() and other functions
 pids=''
 RET=0
 OFS=$IFS
@@ -72,7 +73,12 @@ while getopts ":c:n:a:d:p:" opt; do
     if [[ $PRIORITY_SET = 0 ]]; then
       #echo "-task_priority was triggered, Parameter: $OPTARG" >&2
       PRIORITY_SET=1
-      p_priority=$OPTARG
+      if [[ $OPTARG -ge 20 ]] && [[ $OPTARG -le -20 ]]         
+       then                                                          
+         p_priority=$OPTARG                                     
+      else
+         die "Valid priority values are between -20 and +20, $OPTARG is not in v
+      fi
     else
       echo "Option -task_priority was already used."
       exit 1
@@ -145,9 +151,10 @@ do
   do
     process_id=${pid_table[$j]}
     echo $process_id
-    echo "*************  $tmp_dir/log$i.$j.tmp    ***************"
-    echo "$(eval echo \$hash_${process_id})"
+    echo "*************  start of $tmp_dir/log$i.$j.tmp    ***************"
+    echo "Task priority is $(eval echo \$hash_${process_id})"
     cat $tmp_dir/log$i.$j.tmp
+    echo "*************  end of $tmp_dir/log$i.$j.tmp    ***************"
   done
   i=`expr $i + 1`
 done
