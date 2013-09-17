@@ -2,7 +2,7 @@
 # @desc Test i2c driver while the OPP is changed to cover all possible vallues
 # @requires i2c 
 
-SYSTEM_S_FUNC_OPP_I2C source 'common.sh'; run_processes.sh -c " /opt/ltp/runltp -f ddt/i2c_detect -P $MACHINE -s "I2C_S_FUNC_I2CDETECT" # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC "
+SYSTEM_S_FUNC_OPP_I2C source 'common.sh'; run_processes.sh -c " /opt/ltp/runltp -f ddt/i2c_detect -P $MACHINE -s 'I2C_S_FUNC_I2CDETECT' # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC "
 
-SYSTEM_M_FUNC_OPP_I2C source 'common.sh'; run_processes.sh -c " /opt/ltp/runltp -f ddt/i2c_detect -P $MACHINE -s "I2C_M_FUNC_I2CDETECT" # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_M_FUNC_CPUFREQ_BASIC "
+SYSTEM_M_FUNC_OPP_I2C source 'common.sh'; run_processes.sh -c " /opt/ltp/runltp -f ddt/i2c_detect -P $MACHINE -s 'I2C_M_FUNC_I2CDETECT' # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_M_FUNC_CPUFREQ_BASIC "
 

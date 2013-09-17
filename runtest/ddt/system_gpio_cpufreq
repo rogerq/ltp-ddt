@@ -2,5 +2,5 @@
 # @desc Test gpio driver while the OPP is changed to cover all possible vallues
 # @requires gpio 
 
-SYSTEM_M_FUNC_OPP_GPIO source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -f ddt/gpio-tests -P $MACHINE -s "GPIO_L_STRESS_DIR_OUT_ALL_BANK " # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
+SYSTEM_M_FUNC_OPP_GPIO source 'common.sh'; run_processes.sh -c "/opt/ltp/runltp -f ddt/gpio-tests -P $MACHINE -s 'GPIO_L_STRESS_DIR_OUT_ALL_BANK ' # /opt/ltp/runltp -P $MACHINE -f ddt/powermgr_cpufreq -s POWERMGR_S_FUNC_CPUFREQ_BASIC"
 
