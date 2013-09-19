@@ -227,7 +227,7 @@ endif
 ## Compile Modules
 MODULES_TO_BUILD :=
 PLATFORMSwEDMA   := am180x-evm|am181x-evm|am389x-evm|am387x-evm|dm385-evm|dm813x-evm|da830-omapl137-evm|am170x-evm
-PLATFORMSwGPIO   := am335x-evm|omap5-evm|beaglebone
+PLATFORMSwGPIO   := am335x-evm|omap5-evm|beaglebone|am437x-evm|dra7xx-evm
 
 ifneq (,$(findstring $(PLATFORM),$(PLATFORMSwEDMA)))
 # Disable edma modules install until appropriate tests are available
