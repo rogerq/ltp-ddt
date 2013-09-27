@@ -45,9 +45,9 @@ for DRIVER in $DRIVERS
 do
   case $DRIVER in
     *omap2-nand)
-      nand="CONFIG_JFFS2_FS:jffs2 CONFIG_MTD_NAND_OMAP2:omap2";; 
+      nand="CONFIG_MTD_NAND_OMAP2:omap2";; 
     *davinci_nand)
-      nand="CONFIG_JFFS2_FS:jffs2 CONFIG_MTD_NAND_DAVINCI:davinci_nand";;
+      nand="CONFIG_MTD_NAND_DAVINCI:davinci_nand";;
 
     *physmap-flash)
       nor="CONFIG_JFFS2_FS:jffs2 CONFIG_MTD_PHYSMAP:physmap";;
