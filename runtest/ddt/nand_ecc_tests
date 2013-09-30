@@ -1,0 +1,30 @@
+# @name NAND ECC tests
+# @desc Introduce error bits to Nand page to see if those errors can be corrected
+# @requires nand
+
+# Examples
+#NAND_M_FUNC_ECC_BCH8_8ERRS source "common.sh"; nandecc_tests.sh -n "/dev/mtd6" -r "0:0:0x01"~"1:0:0xFE"~"OOB:4:0x01"
+#NAND_M_FUNC_ECC_BCH8_8ERRS source "common.sh"; nandecc_tests.sh -n "/dev/mtd6" -r "0:0:0x01"~"0:16:0x01"~"0:32:0xCC"~"1:0:0xFF"~"OOB:4:0xCC"
+
+# BCH8
+NAND_S_FUNC_ECC_2K_BCH8_8ERRS_NO_OOB_ERR source "common.sh"; nandecc_tests.sh -r "0:0:0xFF"~"1:1:0xFF"~"2:2:0xFF"~"3:3:0xFF"
+NAND_M_FUNC_ECC_2K_BCH8_4ERRS_NO_OOB_ERR source "common.sh"; nandecc_tests.sh -r "0:0:0x0F"~"1:1:0x0F"~"2:2:0x0F"~"3:3:0x0F"
+NAND_M_FUNC_ECC_2K_BCH8_8ERRS_W_OOB_ERR source "common.sh"; nandecc_tests.sh -r "0:0:0x0F"~"1:1:0x0F"~"2:2:0x0F"~"3:3:0x0F"~"oob:3:0x0F"~"oob:17:0x0F"~"oob:31:0x0F"~"oob:45:0x0F"
+NAND_M_FUNC_ECC_2K_BCH8_8ERRS_ALL_OOB_ERR source "common.sh"; nandecc_tests.sh -r "oob:3:0xFF"~"oob:17:0xFF"~"oob:31:0xFF"~"oob:45:0xFF"
+
+# BCH16
+NAND_S_FUNC_ECC_2K_BCH16_16ERRS_NO_OOB_ERR source "common.sh"; nandecc_tests.sh -r "0:0:0xFF"~"0:10:0xFF"~"1:1:0xFF"~"1:10:0xFF"~"2:2:0xFF"~"2:10:0xFF"~"3:3:0xFF"~"3:10:0xFF"
+NAND_M_FUNC_ECC_2K_BCH16_8ERRS_NO_OOB_ERR source "common.sh"; nandecc_tests.sh -r "0:0:0x0F"~"1:1:0x0F"~"2:2:0x0F"~"3:3:0x0F"~"0:10:0x0F"~"1:10:0x0F"~"2:10:0x0F"~"3:10:0x0F"
+NAND_M_FUNC_ECC_2K_BCH16_16ERRS_W_OOB_ERR source "common.sh"; nandecc_tests.sh -r "0:0:0xFF"~"1:1:0xFF"~"2:2:0xFF"~"3:3:0xFF"~"oob:3:0xFF"~"oob:28:0xFF"~"oob:54:0xFF"~"oob:80:0xFF"
+NAND_M_FUNC_ECC_2K_BCH16_16ERRS_ALL_OOB_ERR source "common.sh"; nandecc_tests.sh -r "oob:3:0xFF"~"oob:28:0xFF"~"oob:54:0xFF"~"oob:80:0xFF"~"oob:4:0xFF"~"oob:29:0xFF"~"oob:55:0xFF"~"oob:81:0xFF"
+
+# HAM1
+NAND_S_FUNC_ECC_2K_HAM1_1ERRS_NO_OOB_ERR source "common.sh"; nandecc_tests.sh -r "0:0:0x01"~"1:1:0x01"~"2:2:0x01"~"3:3:0x01"
+NAND_M_FUNC_ECC_2K_HAM1_1ERRS_W_OOB_ERR source "common.sh"; nandecc_tests.sh -r "0:0:0x00"~"1:1:0x00"~"2:2:0x01"~"3:3:0x01"~"oob:3:0x01"~"oob:6:0x01"~"oob:9:0x00"~"oob:12:0x00"
+NAND_M_FUNC_ECC_2K_HAM1_1ERRS_ALL_OOB_ERR source "common.sh"; nandecc_tests.sh -r "oob:3:0x01"~"oob:6:0x01"~"oob:9:0x01"~"oob:12:0x01"
+
+# 4k page nand test cases
+#NAND_S_FUNC_ECC_4K_BCH8_8ERRS_NO_OOB_ERR source "common.sh"; nandecc_tests.sh -r "0:0:0xFF"~"1:1:0xFF"~"2:2:0xFF"~"3:3:0xFF"~"4:0:0xFF"~"5:1:0xFF"~"6:2:0xFF"~"7:3:0xFF"
+
+
+

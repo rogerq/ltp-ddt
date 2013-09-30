@@ -28,7 +28,7 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 DEVICE_TYPE=$1
-if [ $# -ge 2 -a -n $2 ]; then
+if [ "$#" -ge 2 -a -n "$2" ]; then
 	PARTITION=$2
   echo "$PARTITION"
   exit 0

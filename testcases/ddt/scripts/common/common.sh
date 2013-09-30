@@ -38,10 +38,10 @@ resolve_platform_name() {
 if [ "x$SOC" == "x" ]
 then
    LTPPATH='/opt/ltp'
-   export PATH="${PATH}:${LTPPATH}/testcases/bin"$( find ${LTPROOT}/testcases/bin/ddt -type d -exec printf ":"{} \; )
+   export PATH="${PATH}:${LTPPATH}/testcases/bin"$( find ${LTPPATH}/testcases/bin/ddt -type d -exec printf ":"{} \; )
    plat=`uname -a | cut -d' ' -f 2`
-  local i=0; local DRIVERS=""
-  while read -r file
+   i=0; DRIVERS=""
+   while read -r file
    do
     echo $file | grep -e "^#.*" > /dev/null
     if [ "$?" == "0" ]; then
@@ -309,3 +309,48 @@ get_devnode_instance_num()
   inst_num=`echo $devnode_entry |grep -oE "[[:digit:]]+$" ` || die "Failed to get instance number for dev node entry "$devnode_entry" " 
   echo $inst_num 
 }
+
+# Get filesize
+#   $1: filename
+#   return: file size in byte
+get_filesize()
+{
+  inputfile=$1
+  fs=`wc -c < $inputfile`
+  echo $fs
+}
+
+# hexdump one byte at offset $oset from $filename
+#   $1: filename
+#   $2: offset
+hexdump_onebyte()
+{
+  local filename=$1
+  local offset=$2
+  local byte=`hexdump -n 1 -s $offset -C $filename | head -1 | awk -F " " '{print $2}'`
+  echo $byte
+}
+
+# replace one byte of inputfile 
+# Input
+#   $1: inputfile
+#   $2: offset - decimal number and starting from 0
+#   $3: new_byte - need to be hex
+replace_onebyte()
+{
+  local inputfile=$1
+  local offset=$2
+  local new_byte=$3
+
+  #local fs=`wc -c < $inputfile`
+  local fs=`get_filesize $inputfile`
+  echo "$inputfile size is: $fs"
+  tempfile="$TMPDIR/tempfile_to_replace_$$"
+  do_cmd "dd if=$inputfile of=$tempfile bs=1 count=$offset"
+  test_print_trc "echo -ne "\x$new_byte" >> $tempfile"
+  echo -ne "\x$new_byte" >> $tempfile 
+  do_cmd "dd if=$inputfile of=$tempfile bs=1 count=$(( $fs - $offset - 1 )) skip=$(( $offset + 1 )) seek=$(( $offset + 1 ))"
+
+  do_cmd "cp $tempfile $inputfile"
+}
+
