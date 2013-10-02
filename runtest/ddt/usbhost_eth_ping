@@ -1,0 +1,13 @@
+# @name USBHOST Ethernet ping test 
+# @desc Brings net iface up and pings gw
+# @requires usb/host
+# @setup_requires usbhosteth || usbxhcihosteth
+
+USBHOST_ETH_S_FUNC_PING source 'common.sh'; iface_list=`get_active_eth_interfaces.sh`; echo "${iface_list[@]}"; iface=`usb_eth_search_device.sh 'usb'` || die "error getting usb eth interface name";  for interface in ${iface_list[@]}; do do_cmd "ifdown $interface"; done; do_cmd "ifup ${iface}"; host=`get_eth_gateway.sh "-i ${iface}"` || die "error getting eth gateway address"; do_cmd "ping ${host} -c 3"; do_cmd "ifdown $iface"; for interface in ${iface_list[@]}; do do_cmd "ifup $interface"; done
+
+USBHOST_ETH_M_FUNC_PING_MULTI-PKT-SIZES source 'common.sh'; iface_list=`get_active_eth_interfaces.sh`; iface=`usb_eth_search_device.sh 'usb'` || die "error getting usb eth interface name"; for interface in ${iface_list[@]}; do do_cmd "ifdown $interface"; done; do_cmd "ifup ${iface}"; host=`get_eth_gateway.sh "-i ${iface}"` || die "error getting eth gateway address"; for size in 64 128 512 1024 4096 8192 16384; do do_cmd "ping ${host} -c 3 -s ${size}";done; do_cmd "ifdown $iface"; for interface in ${iface_list[@]}; do do_cmd "ifup $interface"; done
+
+USBXHCIHOST_ETH_S_FUNC_PING source 'common.sh'; iface_list=`get_active_eth_interfaces.sh`; iface=`usb_eth_search_device.sh 'usbxhci'` || die "error getting usb eth interface name"; for interface in ${iface_list[@]}; do do_cmd "ifdown $interface"; done; do_cmd "ifup ${iface}"; host=`get_eth_gateway.sh "-i ${iface}"` || die "error getting eth gateway address"; do_cmd "ping ${host} -c 3"; do_cmd "ifdown $iface"; for interface in ${iface_list[@]}; do do_cmd "ifup $interface"; done 
+
+USBXHCIHOST_ETH_M_FUNC_PING_MULTI-PKT-SIZES source 'common.sh'; iface_list=`get_active_eth_interfaces.sh`; iface=`usb_eth_search_device.sh 'usbxhci'` || die "error getting usb eth interface name"; for interface in ${iface_list[@]}; do do_cmd "ifdown $interface"; done; do_cmd "ifup ${iface}"; host=`get_eth_gateway.sh "-i ${iface}"` || die "error getting eth gateway address"; for size in 64 128 512 1024 4096 8192 16384; do do_cmd "ping ${host} -c 3 -s ${size}";done; do_cmd "ifdown $iface"; for interface in ${iface_list[@]}; do do_cmd "ifup $interface"; done
+
