@@ -67,7 +67,7 @@ find_emmc_basenode() {
 find_mmc_basenode() {
     emmc_node=`find_emmc_basenode` 
     if [ -n "$emmc_node" ]; then
-      mmc_node=`ls /dev/mmcblk* |sed s'/$emmc_node.*$//' |grep -E ".*blk[[:digit:]]+$" |head -1`
+      mmc_node=`ls /dev/mmcblk* |sed s",$emmc_node.*$,,g" |grep -E ".*blk[[:digit:]]+$" |head -1`
     else
       mmc_node=`ls /dev/mmcblk* |grep -E ".*blk[[:digit:]]+$" |head -1`
     fi  
