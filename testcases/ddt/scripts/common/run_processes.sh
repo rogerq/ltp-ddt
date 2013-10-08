@@ -77,7 +77,7 @@ while getopts ":c:n:a:d:p:" opt; do
        then                                                          
          p_priority=$OPTARG                                     
       else
-         die "Valid priority values are between -20 and +20, $OPTARG is not in v
+         die "Valid priority values are between -20 and +20, $OPTARG is not in valid range"
       fi
     else
       echo "Option -task_priority was already used."
