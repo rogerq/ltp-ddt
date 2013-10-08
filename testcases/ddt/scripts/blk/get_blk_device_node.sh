@@ -125,4 +125,8 @@ case $MACHINE in
 esac
 
 ######################### Logic here ###########################################
-echo $DEV_NODE
+if [ -n "$DEV_NODE" ]; then
+  echo $DEV_NODE
+else
+  die "Was not able to get devnode to test. Backtrace:: $DEV_NODE ::"
+fi

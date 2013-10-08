@@ -36,7 +36,7 @@ fi
 
 ############################# Functions #######################################
 
-PARTITION=`get_mtd_biggest_part $DEVICE_TYPE`
+PARTITION=`get_mtd_biggest_part $DEVICE_TYPE` || die "get_mtd_biggest_part for $DEVICE_TYPE: Backtrace :: $PARTITION :: "
 
 ############################ USER-DEFINED Params ##############################
 # Try to avoid defining values here, instead see if possible

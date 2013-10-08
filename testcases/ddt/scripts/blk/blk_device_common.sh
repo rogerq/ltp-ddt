@@ -121,7 +121,7 @@ find_part_with_biggest_size() {
 
   if [ -z "$PART_DEVNODE" ]
   then
-    die "Could not find the partition to test! All partitions on device either boot or rootfs"
+    die "Could not find the partition to test! Maybe all the existing partitions are either boot or rootfs partitions. Or may be there is no any partition on the card. Please create at least one test partition on $DEVICE_TYPE and make initial filesystem on it."
   fi  
   echo $PART_DEVNODE
 }

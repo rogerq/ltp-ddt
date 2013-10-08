@@ -78,7 +78,11 @@ find_mtd_part_range() {
     fi
     PART=`expr $PART + 1`
   done
-  echo $PART_RANGE
+  if [ -z $PART_RANGE ]; then
+    die "$0: none of mtd partitions are for $DEVICE_TYPE "
+  else
+    echo $PART_RANGE
+  fi
 }
 
 get_fs_part() {
