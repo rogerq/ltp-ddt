@@ -1060,7 +1060,7 @@ cleanup()
 check_feature_support()
 {
     cd ${PLATFORMDIR}
-    x=$(awk '/^# +@requires +/' $1)
+    x=$(awk '/^# +@requires +\w+/' $1)
     if [ -n "$x" ]; then
 	echo "$x" | awk '{gsub(/^# +@requires/,""); gsub(/\(/,"\\( ");gsub(/\)/," \\)");gsub(/ +\w+/," -e&");gsub(/\|\|/,"-o");gsub(/\&\&/,"-a");print}' | awk '{print "test", $0}' | sh
     else
