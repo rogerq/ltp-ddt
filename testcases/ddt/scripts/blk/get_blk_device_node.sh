@@ -74,6 +74,18 @@ find_mmc_basenode() {
     echo $mmc_node
 }
 
+# create one test partition if mmc or emmc doesn't have any partition on it
+# and create initial file system on it. Choose mkfs.vfat since this operation is fast
+#   $1: basenode like /dev/mmcblk0, /dev/mmcblk1
+create_one_partition() {
+    basenode=$1
+    ls ${basenode}p*
+    if [ $? -ne 0 ]; then
+      echo -e "p\np\nn\np\n1\n\n\np\nw\n" | fdisk $basenode
+      mkfs.vfat ${basenode}p1
+    fi
+}
+
 ############################ Default Params ##############################
 DEV_TYPE=`get_device_type_map.sh "$DEVICE_TYPE"` || die "error getting device type: $DEV_TYPE"
 case $DEV_TYPE in
@@ -93,6 +105,8 @@ case $DEV_TYPE in
           if [ -z "$emmc_basenode" ]; then
             die "Could not fine emmc basenode"
           fi
+          # create one test partition if emmc doesn't have any partition on it
+          create_one_partition $emmc_basenode > /dev/null
           DEV_NODE=`find_part_with_biggest_size "$emmc_basenode" "emmc"` || die "error getting partition with biggest size: $DEV_NODE"
         ;;
         usb)
