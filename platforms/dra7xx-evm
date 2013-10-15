@@ -26,6 +26,7 @@ power_mgr/cpuidle
 power_mgr/dynamic_ticks
 power_mgr/smartreflex
 rtc/omap_rtc
+sata
 rtc/rtc-palmas
 smp
 sound/capture/alsa
