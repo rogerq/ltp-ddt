@@ -112,7 +112,7 @@ case $MACHINE in
     GPIO_NUM_IN_BANKS="26 6 6 19 0 1"
   ;;
   keystone-evm)
-    GPIO_NUM_IN_BANKS="3 8"
+    GPIO_NUM_IN_BANKS="6 8"
   ;;
   *)
     die "The gpio numbers are not available for this platform $MACHINE"
