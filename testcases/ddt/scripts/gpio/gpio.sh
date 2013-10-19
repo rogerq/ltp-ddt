@@ -99,7 +99,7 @@ case $MACHINE in
   am180x-evm) 
     GPIO_NUM_IN_BANKS="0 15 10 8 8 8 8 4 12"
   ;;
-  am335x-evm)
+  am335x-evm|beaglebone|beaglebone-black)
     GPIO_NUM_IN_BANKS="31 8 0 2"
   ;;
   am335x-sk)
