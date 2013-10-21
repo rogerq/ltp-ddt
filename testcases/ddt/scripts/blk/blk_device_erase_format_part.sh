@@ -125,6 +125,7 @@ case $DEV_TYPE in
       ls /dev/ub*
       # For now, temp hard code -s and -O.
       #do_cmd "ubiformat "$CHAR_DEV_NODE" -s 512 -O 2048 -e $MTD_ERASEBLOCKS -y -q"
+      do_cmd "$FLASH_ERASEALL $CHAR_DEV_NODE"
       do_cmd "ubiformat "$CHAR_DEV_NODE" -s "$SUBPAGE_SIZE" -O "$PAGE_SIZE" -e $MTD_ERASEBLOCKS -y -q"
       do_cmd "ubiattach /dev/ubi_ctrl -m "$PART" -O "$PAGE_SIZE" "
       do_cmd "ls /dev/ub*"
