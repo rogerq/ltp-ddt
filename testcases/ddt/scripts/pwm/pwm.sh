@@ -70,7 +70,7 @@ done
 : ${period_type='frequency'}
 : ${duty_type='percentage'}
 : ${time_delay='3'}
-: ${bright_val='50'}
+: ${bright_val='5'}
 
 ############################ USER-DEFINED Params ###############################
 # Try to avoid defining values here, instead see if possible
