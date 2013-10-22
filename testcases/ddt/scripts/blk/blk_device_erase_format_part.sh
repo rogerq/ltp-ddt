@@ -64,7 +64,7 @@ if [ "$FS_TYPE" = "vfat" ]; then
 else
   MKFS="mkfs.${FS_TYPE}"
 fi
-FLASH_ERASEALL="flash_eraseall"
+FLASH_ERASEALL="flash_eraseall -p"
 
 
 ############################ USER-DEFINED Params ##############################

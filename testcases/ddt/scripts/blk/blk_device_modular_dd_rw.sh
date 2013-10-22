@@ -73,9 +73,10 @@ test_print_trc "FS_TYPE: $FS_TYPE"
 ############# Do the work ###########################################
 test_print_trc "Doing insmod;read/write;rmmod test for $TEST_LOOP times"
 if [ -z $DEV_NODE ]; then
-  do_cmd do_modular_common.sh -d "$DEVICE_TYPE" -l "$TEST_LOOP" -a "\"do_cmd blk_device_dd_readwrite_test.sh -f "$FS_TYPE" -b "$DD_BUFSIZE" -c "$DD_CNT" -l "1" -d "$DEVICE_TYPE" \" " 
+  #do_cmd do_modular_common.sh -d "$DEVICE_TYPE" -l "$TEST_LOOP" -a "\"do_cmd blk_device_dd_readwrite_test.sh -f "$FS_TYPE" -b "$DD_BUFSIZE" -c "$DD_CNT" -l "1" -d "$DEVICE_TYPE" \" " 
+  do_cmd do_modular_common.sh -d "$DEVICE_TYPE" -l "$TEST_LOOP" -a "\"do_cmd blk_device_dd_readwrite_test.sh -b "$DD_BUFSIZE" -c "$DD_CNT" -l "1" -d "$DEVICE_TYPE" \" " 
 else
-  do_cmd do_modular_common.sh -d "$DEVICE_TYPE" -l "$TEST_LOOP" -a "\"do_cmd blk_device_dd_readwrite_test.sh -f "$FS_TYPE" -b "$DD_BUFSIZE" -c "$DD_CNT" -l "1" -d "$DEVICE_TYPE" -n "$DEV_NODE"\" " 
+  do_cmd do_modular_common.sh -d "$DEVICE_TYPE" -l "$TEST_LOOP" -a "\"do_cmd blk_device_dd_readwrite_test.sh -b "$DD_BUFSIZE" -c "$DD_CNT" -l "1" -d "$DEVICE_TYPE" -n "$DEV_NODE"\" " 
 fi
 #x=0
 #while [ $x -lt $TEST_LOOP ]
