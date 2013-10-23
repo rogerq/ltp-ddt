@@ -1,6 +1,7 @@
 armv7l
 am335x
 am335x-sk
+crypto/crypto-omap
 edma
 gpio
 graphics/fb0/DA8xx_FB_Drv
