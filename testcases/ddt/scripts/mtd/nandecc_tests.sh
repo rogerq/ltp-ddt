@@ -162,6 +162,8 @@ test_print_trc "The below are the errors in the nand page"
 test_print_trc "diff "$hexdump_original_w_oob" "$hexdump_corrupted_w_oob" "
 diff "$hexdump_original_w_oob" "$hexdump_corrupted_w_oob"
 
+sleep 5
+
 # Verify steps
 corrected_nanddump="$TMPDIR/testfile_nanddump.corrected"
 do_cmd "nanddump -l "$pagesize" -f "$corrected_nanddump" "$dev_node" " 

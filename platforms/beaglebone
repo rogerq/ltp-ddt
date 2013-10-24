@@ -3,6 +3,7 @@ am335x
 beaglebone
 crypto/crypto-omap
 edma
+gpio
 graphics/fb0/DA8xx_FB_Drv
 i2c/non_eeprom
 i2c/eeprom
