@@ -123,7 +123,7 @@ for BUFFER_SIZE in $BUFFER_SIZES; do
   fi
 	# find out what is FS in the device
 	if [ -z "$FS_TYPE" ]; then
-		FS_TYPE=`mount | grep $DEV_NODE | cut -d' ' -f5`
+		FS_TYPE=`mount | grep $DEV_NODE | cut -d' ' -f5 |head -1`
 		test_print_trc "existing FS_TYPE: ${FS_TYPE}"
 	fi
 
