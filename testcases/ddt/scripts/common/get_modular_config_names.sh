@@ -129,9 +129,9 @@ case $MACHINE in
 		sound='CONFIG_SND_OMAP_SOC_AM3517EVM:snd-soc-am3517evm';;
         omap5-evm)
                 sound='CONFIG_SND_SOC:snd-soc-core CONFIG_SND_OMAP_SOC:snd-soc-omap';;
-	am335x-evm|am335x-sk|beaglebone)
+	am335x-evm|am335x-sk|beaglebone|beaglebone-black)
 	        sound='CONFIG_SND_SOC_TLV320AIC3X:snd-soc-tlv320aic3x CONFIG_SND_AM335X_SOC_EVM:snd-soc-evm CONFIG_SND_DAVINCI_SOC_MCASP:snd-soc-davinci-mcasp CONFIG_SND_AM33XX_SOC:snd-soc-davinci'
-		usb='CONFIG_USB_MUSB_TI81XX_GLUE:ti81xx';;
+		usb='CONFIG_USB_MUSB_TI81XX_GLUE:musb';;
 	am180x-evm|am181x-evm|da850-omapl138-evm)
 		sound='CONFIG_SND_DA850_SOC_EVM:snd-soc-evm CONFIG_SND_DAVINCI_SOC:snd-soc-davinci CONFIG_SND_DAVINCI_SOC_MCASP:snd-soc-davinci-mcasp CONFIG_SND_SOC_TLV320AIC3X:snd-soc-tlv320aic3x';;
 	am180x-evm|am181x-evm|da850-omapl138-evm|am17x-evm|da830-omapl137-evm)
