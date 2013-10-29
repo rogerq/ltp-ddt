@@ -3,6 +3,6 @@
 # @requires net
 # @setup_requires 
 
-ETH_S_FUNC_PARALLEL_PROCESSING source 'common.sh';prepare_nfs_mount.sh "/mnt/nfs_mount"|| die "Mounting NFS Failed";multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/eth_ping -P $MACHINE -s ETH_S_FUNC_PING # dd if=/dev/urandom of=/mnt/nfs_mount/dd_test bs=1M count=100" -l "-n 2 -a 0x1 -d 1";unmount_nfs.sh "/nfs/mount"
+ETH_S_FUNC_PARALLEL_PROCESSING source 'common.sh';prepare_nfs_mount.sh "/mnt/nfs_mount"|| die "Mounting NFS Failed";multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/eth_ping -P $MACHINE -s ETH_S_FUNC_PING # dd if=/dev/urandom of=/mnt/nfs_mount/dd_test bs=1M count=100" -l "-n 2 -a 0x1 -d 1";unmount_nfs.sh "/mnt/nfs_mount"
 ETH_M_FUNC_PARALLEL_PROCESSING source 'common.sh';prepare_nfs_mount.sh "/mnt/nfs_mount"|| die "Mounting NFS Failed";multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/eth_ping -P $MACHINE -s ETH_M_FUNC_PING_300S # dd if=/dev/urandom of=/mnt/nfs_mount/dd_test bs=1M count=500" -l "-n 2 -a 0x1 -d 1";unmount_nfs.sh "/mnt/nfs_mount"
 ETH_M_STRESS_PARALLEL_PROCESSING source 'common.sh';prepare_nfs_mount.sh "/mnt/nfs_mount"|| die "Mounting NFS Failed";multi_run_processes.sh -s "/opt/ltp/runltp -f ddt/eth_ping -P $MACHINE -s ETH_S_FUNC_PING # dd if=/dev/urandom of=/mnt/nfs_mount/dd_test bs=1M count=100" -l "-n 10 -a 0x1 -d 1";unmount_nfs.sh "/mnt/nfs_mount"
