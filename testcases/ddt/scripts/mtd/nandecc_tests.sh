@@ -135,7 +135,7 @@ do_cmd dd if=/dev/urandom of="$testfile" bs=1 count=$pagesize
 
 # write to nand
 test_print_trc "Write testfile to nand..."
-do_cmd flash_erase "$dev_node" 0 0
+do_cmd flash_erase -q "$dev_node" 0 0
 do_cmd nandwrite -p "$dev_node" "$testfile"
 do_cmd nanddump -p -l "$pagesize" "$dev_node"
 orig_nanddump="$TMPDIR/testfile_nanddump.original"
@@ -150,7 +150,7 @@ modify_nanddump_file "$orig_nanddump_w_oob" "$corrupted_nanddump" "$rules"
 
 # write the corrupted nand file back
 test_print_trc "Write the corrupted nanddump file back..."
-do_cmd flash_erase "$dev_node" 0 0
+do_cmd flash_erase -q "$dev_node" 0 0
 do_cmd nandwrite -n -o "$dev_node" "$corrupted_nanddump"
 
 # Display the errors being injected
