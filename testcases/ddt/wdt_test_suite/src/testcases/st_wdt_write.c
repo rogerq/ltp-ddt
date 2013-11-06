@@ -46,7 +46,7 @@
 #include <st_log.h>
 #include "st_wdt_common.h"
 
-#define ST_WDT_WRITEBUFF_LEN 1
+#define ST_WDT_WRITEBUFF_LEN 2
 
 /****************************************************************************
  * Function             - st_wdt_write_test
@@ -62,7 +62,7 @@ int st_wdt_write_test(struct st_wdt_testparams *info, char *test_id, int fileDes
 	int retVal = 0;
 
 	do {
-		retVal = st_write(fileDesc, NULL, ST_WDT_WRITEBUFF_LEN);
+		retVal = st_write(fileDesc, "C\0", ST_WDT_WRITEBUFF_LEN);
 		if (FAILURE == retVal) {
 			TEST_PRINT_ERR("file write failed ");
 			result = FAILURE;
