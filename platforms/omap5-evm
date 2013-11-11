@@ -1,7 +1,6 @@
 armv7l
 omap5
 omap5-evm
-crypto/crypto-omap
 edma
 emmc
 gpio

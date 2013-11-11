@@ -1,0 +1,8 @@
+# @name Crypto AES Tests
+# @desc Run tcrypt module to exercise AES HW crypto operations
+# @requires crypto/crypto-omap && crypto/crypto-omap/aes
+# @setup_requires 
+
+CRYPTO_S_PERF_AES source 'common.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; echo /dev/null>/var/log/messages;modprobe tcrypt mode=500 sec=1; crypto_test.sh
+
+CRYPTO_L_PERF_AES source 'common.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; echo /dev/null>/var/log/messages; modprobe tcrypt mode=500 sec=30; crypto_test.sh

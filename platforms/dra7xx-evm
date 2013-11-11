@@ -2,6 +2,9 @@ armv7l
 dra7xx
 dra7xx-evm
 crypto/crypto-omap
+crypto/crypto-omap/aes
+crypto/crypto-omap/des
+crypto/crypto-omap/3des
 edma
 emmc
 gpio

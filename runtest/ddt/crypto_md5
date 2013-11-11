@@ -1,0 +1,6 @@
+# @name Crypto Tests
+# @desc Run tcrypt module to exercise HW crypto operations
+# @requires crypto/crypto-omap/md5
+# @setup_requires 
+
+CRYPTO_S_PERF_MD5 source 'common.sh'; config_options=`get_modular_config_names.sh crypto`; check_config_options "y" CONFIG_CRYPTO_HW $config_options; check_config_options "m" CONFIG_CRYPTO_TEST; check_config_options  "n" CONFIG_CRYPTO_MANAGER_DISABLE_TESTS; echo /dev/null>/var/log/messages; modprobe tcrypt mode=302 sec=1; crypto_test.sh
