@@ -1,6 +1,6 @@
 armv7l
-am437x
-am437x-epos
+am43xx
+am43xx-epos
 edma
 gpio
 graphics/fb0/DA8xx_FB_Drv
