@@ -118,6 +118,9 @@ case $MACHINE in
     # bank number starts from 1 and total 8 banks
     GPIO_NUM_IN_BANKS="22 29 0 0 0 14 0 0"
   ;;
+  am43xx-epos)
+    GPIO_NUM_IN_BANKS="0 0 0 0 0 0"
+  ;;
   *)
     die "The gpio numbers are not available for this platform $MACHINE"
 esac
