@@ -30,16 +30,38 @@ source "st_log.sh"
 
 ############# Do the work ###########################################
 usb_interface=$2
-if [ "$1" = "play" ]; then
- cmd="aplay -l"
-fi
-
+playcmd="aplay -l"
+reccmd="arecord -l"
+audioplaydev=`$playcmd | egrep "^card\s+[[:digit:]]+.+USB\s+Audio" | cut -d':' -f 1 | cut -d' ' -f 2`
+audiorecdev=`$reccmd | egrep "^card\s+[[:digit:]]+.+USB\s+Audio" | cut -d':' -f 1 | cut -d' ' -f 2`
 if [ "$1" = "record" -o "$1" = "loopback" ];
 then
-  cmd="arecord -l"
+  for reccard in $audiorecdev
+  do
+      for playcard in $audioplaydev
+      do
+        if [[ $reccard = $playcard ]]
+        then
+            #echo "Found a match $reccard and $playcard"
+           audiodev=$reccard
+           break
+        fi 
+      done
+  done
+else
+  for playcard in $audioplaydev                                                   
+  do                                                                            
+      for reccard in $audiorecdev                                             
+      do                                                                        
+        if [[ $playcard = $reccard ]]                                           
+        then                                                                    
+            #echo "Found a match $reccard and $playcard"                        
+           audiodev=$playcard                                                    
+           break                                                                
+        fi                                                                      
+      done                                                                      
+  done      
 fi
-
-audiodev=`$cmd | egrep "^card\s+[[:digit:]]+.+USB\s+Audio"| head -n 1 | cut -d':' -f 1 | cut -d' ' -f 2`
 # if udev is supported, using output to confirm controller that is to be used
 udev_present=""
 udev_present=`ps|grep -m 1 udevd|grep -v grep`
