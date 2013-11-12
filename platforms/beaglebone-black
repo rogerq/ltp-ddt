@@ -5,6 +5,7 @@ crypto/crypto-omap
 crypto/crypto-omap/aes
 crypto/crypto-omap/md5
 crypto/crypto-omap/sha1
+crypto/crypto-omap/sha224
 crypto/crypto-omap/sha256
 edma
 emmc

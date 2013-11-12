@@ -5,6 +5,11 @@ crypto/crypto-omap
 crypto/crypto-omap/aes
 crypto/crypto-omap/des
 crypto/crypto-omap/3des
+crypto/crypto-omap/sha1
+crypto/crypto-omap/sha256
+crypto/crypto-omap/sha224
+crypto/crypto-omap/sha384
+crypto/crypto-omap/sha512
 edma
 emmc
 gpio

@@ -1,6 +1,15 @@
 armv7l
 am43xx
 am43xx-gpevm
+crypto/crypto-omap
+crypto/crypto-omap/aes
+crypto/crypto-omap/des
+crypto/crypto-omap/3des
+crypto/crypto-omap/sha1
+crypto/crypto-omap/sha256
+crypto/crypto-omap/sha224
+crypto/crypto-omap/sha384
+crypto/crypto-omap/sha512
 edma
 gpio
 graphics/fb0/DA8xx_FB_Drv
