@@ -13,3 +13,7 @@ USB_L_PERF_BULK_OUT source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd
 
 USB_L_PERF_BULK_IN source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd modprobe -r g_zero; do_cmd modprobe -r usbtest; do_cmd modprobe usbtest pattern=2; do_cmd modprobe g_zero pattern=2 buflen=16384; do_cmd sleep 2;  do_cmd usb_test.sh -t in-perf
 
+USB_L_PERF_ISO_OUT source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd modprobe -r g_zero; do_cmd modprobe -r usbtest; do_cmd modprobe usbtest pattern=2 alt=1; do_cmd modprobe g_zero pattern=2 buflen=16384 isoc_interval=1 isoc_maxpacket=1024 isoc_mult=2 isoc_maxburst=15; do_cmd sleep 2;  do_cmd usb_test.sh -t iso-out-perf
+
+USB_L_PERF_ISO_IN source 'common.sh' ; do_cmd install_modules.sh 'usb'; do_cmd modprobe -r g_zero; do_cmd modprobe -r usbtest; do_cmd modprobe usbtest pattern=2 alt=1; do_cmd modprobe g_zero pattern=2 buflen=16384 isoc_interval=1 isoc_maxpacket=1024 isoc_mult=2 isoc_maxburst=15; do_cmd sleep 2;  do_cmd usb_test.sh -t iso-in-perf
+

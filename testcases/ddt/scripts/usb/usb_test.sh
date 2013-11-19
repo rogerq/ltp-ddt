@@ -26,7 +26,8 @@ usage()
 	cat <<-EOF >&2
 	usage: ./${0##*/} -t TEST_TYPE
 	-t TEST_TYPE	Test Type. Possible Values are:\
-	control,out,iso-out,in,iso-in,halt,unlink
+	control,out,iso-out,in,iso-in,out-perf,in-perf,iso-out-perf,\
+	iso-in-perf,halt,unlink
 	EOF
 	exit 1
 }
@@ -214,6 +215,30 @@ case "$TYPE" in
 	    B1=`echo "scale=3; 100/$T" | bc`
 	    test_print_trc "|PERFDATA|100MB|read(IN)|throughput:"`printf '%.2f' $B1`"MB/s|"
 	    ;;
+
+        iso-out-perf)
+            test_print_trc "** Host Write (ISO OUT) performance test case:"
+
+            # 100MB transfer
+	    COUNT=100
+	    BUFLEN=131072
+	    SGLEN=8
+            do_test -t 15 -g $SGLEN
+            B1=`echo "scale=3; 100/$T" | bc`
+            test_print_trc "|PERFDATA|100MB|write(ISO OUT)|throughput:"`printf '%.2f' $B1`"MB/s|"
+            ;;
+
+        iso-in-perf)
+            test_print_trc "** Host Write (ISO IN) performance test case:"
+
+            # 100MB transfer
+	    COUNT=100
+	    BUFLEN=131072
+	    SGLEN=8
+            do_test -t 16 -g $SGLEN
+            B1=`echo "scale=3; 100/$T" | bc`
+            test_print_trc "|PERFDATA|100MB|write(ISO IN)|throughput:"`printf '%.2f' $B1`"MB/s|"
+            ;;
 
 	*)
 	    test_print_trc "Don't understand test type $TYPE"
