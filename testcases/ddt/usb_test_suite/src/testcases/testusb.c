@@ -326,10 +326,7 @@ restart:
 
 		status = usbdev_ioctl (fd, dev->ifnum,
 				USBTEST_REQUEST, &dev->param);
-		if (status < 0 && errno == EOPNOTSUPP)
-			continue;
 
-		/* NOTE: each thread emits complete lines; no fragments! */
 		if (status < 0) {
 			char	buf [80];
 			int	err = errno;
@@ -340,7 +337,7 @@ restart:
 			}
 			printf ("%s test %d --> %d (%s)\n",
 				dev->name, i, errno, buf);
-			ret = errno;
+			ret = -1;
 			goto exit;
 		} else
 			printf ("%s test %d, %4d.%.06d secs\n", dev->name, i,
