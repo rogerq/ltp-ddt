@@ -33,7 +33,11 @@ usage()
 
 do_test ()
 {
-    do_cmd testusb -a -s $BUFLEN -c $COUNT $*
+    do_cmd testusb -a -s $BUFLEN -c $COUNT $* 1>/tmp/testusb_$$.log
+    T=`grep secs /tmp/testusb_$$.log | awk '{ print $4 }'`
+    cat /tmp/testusb_$$.log
+    test_print_trc "Test took $T secs"
+    rm /tmp/testusb_$$.log
 }
 
 
@@ -194,11 +198,8 @@ case "$TYPE" in
 	    COUNT=32
 	    BUFLEN=8192
 	    SGLEN=400
-	    T1=`date +%s%N`
 	    do_test -t 5 -g $SGLEN
-	    T2=`date +%s%N`
-	    B1=$((T2-T1))
-	    B1=`echo "scale=3; 100*1000000000/$B1" | bc`
+	    B1=`echo "scale=3; 100/$T" | bc`
 	    test_print_trc "|PERFDATA|100MB|write(OUT)|throughput:"`printf '%.2f' $B1`"MB/s|"
 	    ;;
 
@@ -209,11 +210,8 @@ case "$TYPE" in
 	    COUNT=32
 	    BUFLEN=8192
 	    SGLEN=400
-	    T1=`date +%s%N`
 	    do_test -t 6 -g $SGLEN
-	    T2=`date +%s%N`
-	    B1=$((T2-T1))
-	    B1=`echo "scale=3; 100*1000000000/$B1" | bc`
+	    B1=`echo "scale=3; 100/$T" | bc`
 	    test_print_trc "|PERFDATA|100MB|read(IN)|throughput:"`printf '%.2f' $B1`"MB/s|"
 	    ;;
 
