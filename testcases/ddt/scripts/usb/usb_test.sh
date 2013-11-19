@@ -93,7 +93,6 @@ case "$TYPE" in
 		;;
 
 	iso-out)
-	    check_config sink-src
 	    test_print_trc '** Host ISOCHRONOUS Write (OUT) test cases:'
 
 	    # at peak iso transfer rates:
@@ -120,7 +119,6 @@ case "$TYPE" in
 	    ;;
 
 	in)
-	    check_config sink-src
 	    test_print_trc '** Host Read (IN) test cases:'
 
 	    # NOTE:  these "variable size" reads are just multiples
@@ -146,7 +144,6 @@ case "$TYPE" in
 	    ;;
 
 	iso-in)
-	    check_config sink-src
 	    test_print_trc '** Host ISOCHRONOUS Read (IN) test cases:'
 
 	    # at peak iso transfer rates:
