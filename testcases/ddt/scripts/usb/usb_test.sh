@@ -195,9 +195,9 @@ case "$TYPE" in
 	    test_print_trc "** Host Write (OUT) performance test case:"
 
 	    # 100MB transfer
-	    COUNT=32
-	    BUFLEN=8192
-	    SGLEN=400
+	    COUNT=100
+	    BUFLEN=131072
+	    SGLEN=8
 	    do_test -t 5 -g $SGLEN
 	    B1=`echo "scale=3; 100/$T" | bc`
 	    test_print_trc "|PERFDATA|100MB|write(OUT)|throughput:"`printf '%.2f' $B1`"MB/s|"
@@ -207,9 +207,9 @@ case "$TYPE" in
 	    test_print_trc "** Host Read (IN) performance test case:"
 
 	    # 100MB transfer
-	    COUNT=32
-	    BUFLEN=8192
-	    SGLEN=400
+	    COUNT=100
+	    BUFLEN=131072
+	    SGLEN=8
 	    do_test -t 6 -g $SGLEN
 	    B1=`echo "scale=3; 100/$T" | bc`
 	    test_print_trc "|PERFDATA|100MB|read(IN)|throughput:"`printf '%.2f' $B1`"MB/s|"
