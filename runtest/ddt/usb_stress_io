@@ -6,26 +6,15 @@
 # For a complete list of compatible devices, see
 # http://lxr.free-electrons.com/source/drivers/usb/misc/usbtest.c#L2440
 
-USB_L_STRESS_OUT source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t out
+USB_L_STRESS_OUT source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "m" CONFIG_USB_TEST; check_config_options "m" CONFIG_USB_ZERO; do_cmd modprobe -r g_zero; do_cmd modprobe -r usbtest; do_cmd modprobe usbtest; do_cmd modprobe g_zero; do_cmd sleep 2; do_cmd usb_test.sh -t out
 
-USB_L_STRESS_ISO_OUT source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t iso-out
+USB_L_STRESS_IN source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "m" CONFIG_USB_TEST; check_config_options "m" CONFIG_USB_ZERO; do_cmd modprobe -r g_zero; do_cmd modprobe -r usbtest; do_cmd modprobe usbtest; do_cmd modprobe g_zero; do_cmd sleep 2; do_cmd usb_test.sh -t in
 
-USB_L_STRESS_IN source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t in
+USB_L_STRESS_ISO_OUT source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "m" CONFIG_USB_TEST; check_config_options "m" CONFIG_USB_ZERO; do_cmd modprobe -r g_zero; do_cmd modprobe -r usbtest; do_cmd modprobe usbtest alt=1; do_cmd modprobe g_zero isoc_interval=1 isoc_maxpacket=1024 isoc_mult=2 isoc_maxburst=15; do_cmd sleep 2; do_cmd usb_test.sh -t iso-out
 
-USB_L_STRESS_ISO_IN source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t iso-in
+USB_L_STRESS_ISO_IN source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "m" CONFIG_USB_TEST; check_config_options "m" CONFIG_USB_ZERO; do_cmd modprobe -r g_zero; do_cmd modprobe -r usbtest; do_cmd modprobe usbtest alt=1; do_cmd modprobe g_zero isoc_interval=1 isoc_maxpacket=1024 isoc_mult=2 isoc_maxburst=15; do_cmd sleep 2; do_cmd usb_test.sh -t iso-in
 
-USB_L_STRESS_HALT source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t halt
+USB_L_STRESS_HALT source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "m" CONFIG_USB_TEST; check_config_options "m" CONFIG_USB_ZERO; do_cmd modprobe -r g_zero; do_cmd modprobe -r usbtest; do_cmd modprobe usbtest; do_cmd modprobe g_zero; do_cmd sleep 2; do_cmd usb_test.sh -t halt
 
-USB_L_STRESS_UNLINK source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "y" CONFIG_USB_TEST; do_cmd "timeout 90 usb_test.sh -t unlink"
+USB_L_STRESS_UNLINK source 'common.sh' ; do_cmd install_modules.sh 'usb'; check_config_options "m" CONFIG_USB_TEST; check_config_options "m" CONFIG_USB_ZERO; do_cmd modprobe -r g_zero; do_cmd modprobe -r usbtest; do_cmd modprobe usbtest; do_cmd modprobe g_zero; do_cmd sleep 2; do_cmd "timeout 200 usb_test.sh -t unlink"
 
-USBXHCI_L_STRESS_OUT source 'common.sh' ; do_cmd install_modules.sh 'usbxhci'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t out
-
-USBXHCI_L_STRESS_ISO_OUT source 'common.sh' ; do_cmd install_modules.sh 'usbxhci'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t iso-out
-
-USBXHCI_L_STRESS_IN source 'common.sh' ; do_cmd install_modules.sh 'usbxhci'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t in
-
-USBXHCI_L_STRESS_ISO_IN source 'common.sh' ; do_cmd install_modules.sh 'usbxhci'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t iso-in
-
-USBXHCI_L_STRESS_HALT source 'common.sh' ; do_cmd install_modules.sh 'usbxhci'; check_config_options "y" CONFIG_USB_TEST; do_cmd usb_test.sh -t halt
-
-USBXHCI_L_STRESS_UNLINK source 'common.sh' ; do_cmd install_modules.sh 'usbxhci'; check_config_options "y" CONFIG_USB_TEST; do_cmd "timeout 90 usb_test.sh -t unlink"
